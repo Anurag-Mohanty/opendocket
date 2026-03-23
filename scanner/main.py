@@ -150,11 +150,132 @@ def scan_repo(url: str, output_dir: str = "reports", fmt: str = "markdown",
         cleanup_repo(repo_ctx.path)
 
 
+REPO_URLS = {
+    "medplum": "https://github.com/medplum/medplum",
+    "openemr": "https://github.com/openemr/openemr",
+    "hyperswitch": "https://github.com/juspay/hyperswitch",
+    "probo": "https://github.com/getprobo/probo",
+    "supabase": "https://github.com/supabase/supabase",
+    "vault": "https://github.com/hashicorp/vault",
+    "nocode": "https://github.com/kelseyhightower/nocode",
+    "failed_gate_example": "https://github.com/kelseyhightower/nocode",
+}
+
+
+def regenerate_all_html():
+    """Regenerate all HTML reports from markdown using current template."""
+    import re as _re
+    from scanner.agents.base_agent import Finding, Evidence, AgentResult
+    from scanner.domain_detector import DomainResult
+
+    reports_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "reports")
+    html_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "docs", "reports")
+    os.makedirs(html_dir, exist_ok=True)
+
+    for filename in sorted(os.listdir(reports_dir)):
+        if not filename.endswith("_report.md"):
+            continue
+        key = filename.replace("_report.md", "")
+        filepath = os.path.join(reports_dir, filename)
+        url = REPO_URLS.get(key, f"https://github.com/unknown/{key}")
+
+        with open(filepath, "r", errors="ignore") as f:
+            content = f.read()
+
+        print(f"[Regen] {filename}...")
+
+        if "DOES NOT QUALIFY" in content:
+            html_out = generate_failed_gate_html(key, url, ["Failed qualification gates"], {"status": "failed"})
+            for name in [f"{key}_report.html", "failed_gate_example.html"] if key == "nocode" else [f"{key}_report.html"]:
+                with open(os.path.join(html_dir, name), "w") as f:
+                    f.write(html_out)
+            print(f"  -> Gate report")
+            continue
+
+        # Parse domains
+        domains = []
+        for m in _re.finditer(r"\*\*(\w+)\*\* — Confidence: ([\d.]+)% \((\d+) signals", content):
+            domains.append(DomainResult(domain=m.group(1).lower(), confidence=float(m.group(2)),
+                                        signal_count=int(m.group(3)), signals_found=[]))
+
+        # Parse frameworks + findings
+        results = []
+        cur_result = None
+        cur_finding = None
+
+        for line in content.splitlines():
+            # Framework header
+            fw_m = _re.match(r"^## (\S+) Findings", line)
+            if fw_m:
+                if cur_finding and cur_result:
+                    cur_result.findings.append(cur_finding)
+                    cur_finding = None
+                if cur_result:
+                    results.append(cur_result)
+                cur_result = AgentResult(framework=fw_m.group(1))
+                continue
+
+            # Finding header
+            f_m = _re.match(r"^### ([\w-]+):\s*(.+)", line)
+            if f_m and cur_result is not None:
+                if cur_finding:
+                    cur_result.findings.append(cur_finding)
+                cur_finding = Finding(
+                    question_id=f_m.group(1), category=f_m.group(2).strip(),
+                    legal_question="", regulatory_standard="", evidence=[],
+                    finding_level="Medium Risk", finding_text="", remediation="",
+                )
+                continue
+
+            if cur_finding:
+                # Evidence
+                ev_m = _re.match(r"- `([^:]+):(\d+)`.*— `(.+)`", line)
+                if ev_m:
+                    cur_finding.evidence.append(Evidence(
+                        file_path=ev_m.group(1), line_number=int(ev_m.group(2)),
+                        content=ev_m.group(3), match_type="search_pattern"))
+                # Severity
+                if "High Risk**" in line:
+                    cur_finding.finding_level = "High Risk"
+                elif "Medium Risk**" in line:
+                    cur_finding.finding_level = "Medium Risk"
+                elif "Pattern of Concern**" in line:
+                    cur_finding.finding_level = "Pattern of Concern"
+                elif "No Issue Found**" in line:
+                    cur_finding.finding_level = "No Issue Found"
+                # Finding text
+                if not cur_finding.finding_text and len(line) > 40 and not line.startswith(("#", "*", "-", "|", ">", "---")):
+                    cur_finding.finding_text = line.strip()
+                # Remediation
+                if "**Remediation" in line:
+                    cur_finding.remediation = line.split(":**")[-1].strip() if ":**" in line else ""
+
+        if cur_finding and cur_result:
+            cur_result.findings.append(cur_finding)
+        if cur_result:
+            results.append(cur_result)
+
+        if not results:
+            print(f"  -> No findings parsed, skipping")
+            continue
+
+        total = sum(len(r.findings) for r in results)
+        high = sum(1 for r in results for f in r.findings if f.finding_level == "High Risk")
+        print(f"  -> {len(results)} frameworks, {total} findings, {high} high risk")
+
+        html_out = generate_html_report(key, url, domains, results)
+        with open(os.path.join(html_dir, f"{key}_report.html"), "w") as f:
+            f.write(html_out)
+        print(f"  -> HTML written")
+
+    print("[Regen] Done.")
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="OpenDocket - Compliance Scanner for Code Repositories"
     )
-    parser.add_argument("url", help="GitHub repository URL to scan")
+    parser.add_argument("url", nargs="?", help="GitHub repository URL to scan")
     parser.add_argument(
         "--output", "-o", default="reports",
         help="Output directory for reports (default: reports/)"
@@ -167,8 +288,20 @@ def main():
         "--frameworks", type=str, default=None,
         help="Comma-separated list of frameworks to scan (e.g., hipaa,soc2)"
     )
+    parser.add_argument(
+        "--regenerate-all", action="store_true",
+        help="Regenerate all HTML reports from existing markdown reports"
+    )
 
     args = parser.parse_args()
+
+    if args.regenerate_all:
+        regenerate_all_html()
+        return
+
+    if not args.url:
+        parser.error("url is required unless --regenerate-all is used")
+
     frameworks_filter = None
     if args.frameworks:
         frameworks_filter = [f.strip().lower() for f in args.frameworks.split(",")]
