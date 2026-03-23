@@ -498,7 +498,7 @@ def generate_html_report(
 <div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation">{html.escape(f.regulatory_standard)}</div></div><div>{verdict_html}</div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">{ev_text}</div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">{html.escape(f.finding_text)}</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">{html.escape(f.remediation)}</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">{html.escape(f.improved_remediation if f.improved_remediation else f.remediation)}</div>{'<div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>' if f.improved_remediation else ''}
 </div></div>\n'''
         framework_findings_html += '</div>\n'
 

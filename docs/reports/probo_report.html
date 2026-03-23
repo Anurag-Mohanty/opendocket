@@ -120,14 +120,23 @@ a { color: #0052CC; text-decoration: none; } a:hover { text-decoration: underlin
 <div class="section-heading">What This Means If Unaddressed</div><table class="table"><thead><tr><th>Framework</th><th>Regulatory Body</th><th>Max Penalty</th><th>Enforcement Trend</th></tr></thead><tbody><tr><td style="font-weight:600">SOC2</td><td>AICPA</td><td>Loss of enterprise contracts</td><td>Mandatory for enterprise SaaS sales</td></tr>
 <tr><td style="font-weight:600">GDPR</td><td>EU DPAs</td><td>Up to EUR 20M or 4% turnover</td><td>Cross-border enforcement rising</td></tr>
 </tbody></table>
-<div class="section-heading">Top Findings</div><div class="top-finding"><div class="top-finding-q"></div><div class="top-finding-meta"><span class="badge badge-high">High Risk</span><span>SOC2</span><span>SOC2-006</span><span>cmd/probo/main.go:45</span></div><div style="font-size:13px;color:#57606a;margin-top:8px"></div></div>
-<div class="top-finding"><div class="top-finding-q"></div><div class="top-finding-meta"><span class="badge badge-high">High Risk</span><span>GDPR</span><span>GDPR-006</span><span>cmd/probo/main.go:45</span></div><div style="font-size:13px;color:#57606a;margin-top:8px"></div></div>
-<div class="top-finding"><div class="top-finding-q"></div><div class="top-finding-meta"><span class="badge badge-high">High Risk</span><span>SOC2</span><span>SOC2-008</span><span>internal/config/config.go:18</span></div><div style="font-size:13px;color:#57606a;margin-top:8px"></div></div>
+<div class="section-heading">Top Findings</div><div class="top-finding"><div class="top-finding-q"></div><div class="top-finding-meta"><span class="badge badge-high">High Risk</span><span>SOC2</span><span>SOC2-006</span><span>cmd/probo/main.go:45</span></div><div style="font-size:13px;color:#57606a;margin-top:8px">Build an incident response infrastructure and operational framework:</div></div>
+<div class="top-finding"><div class="top-finding-q"></div><div class="top-finding-meta"><span class="badge badge-high">High Risk</span><span>GDPR</span><span>GDPR-006</span><span>cmd/probo/main.go:45</span></div><div style="font-size:13px;color:#57606a;margin-top:8px">Implement a comprehensive breach detection and notification capability:</div></div>
+<div class="top-finding"><div class="top-finding-q"></div><div class="top-finding-meta"><span class="badge badge-high">High Risk</span><span>SOC2</span><span>SOC2-008</span><span>internal/config/config.go:18</span></div><div style="font-size:13px;color:#57606a;margin-top:8px">Implement a comprehensive backup and disaster recovery strategy:</div></div>
 
 <div class="judge-block"><div class="judge-title">Independent Review — Gemini 1.5 Flash</div><div class="judge-stats"><div class="judge-stat"><span class="judge-stat-n j-confirmed">0</span><span class="judge-stat-l">Confirmed</span></div><div class="judge-stat"><span class="judge-stat-n j-context">0</span><span class="judge-stat-l">Context dependent</span></div><div class="judge-stat"><span class="judge-stat-n j-fp">0</span><span class="judge-stat-l">Possible false positives</span></div><div class="judge-stat"><span class="judge-stat-n j-additional">0</span><span class="judge-stat-l">Additional risk</span></div></div><div class="judge-note">Primary: Claude Sonnet (Anthropic). Review: Gemini 1.5 Flash (Google). Neither constitutes legal advice.</div></div>
-<div class="section-heading">Recommended Actions</div><p style="color:#57606a">No high or medium risk recommendations.</p>
+<div class="section-heading">Recommended Actions</div><div class="rec-item"><div class="rec-priority rec-p-high">High</div><div><div class="rec-text">Build an incident response infrastructure and operational framework:</div><div class="rec-fw">SOC2 &middot; SOC2-006</div></div></div>
+<div class="rec-item"><div class="rec-priority rec-p-high">High</div><div><div class="rec-text">Implement a comprehensive backup and disaster recovery strategy:</div><div class="rec-fw">SOC2 &middot; SOC2-008</div></div></div>
+<div class="rec-item"><div class="rec-priority rec-p-high">High</div><div><div class="rec-text">Implement a comprehensive breach detection and notification capability:</div><div class="rec-fw">GDPR &middot; GDPR-006</div></div></div>
+<div class="rec-item"><div class="rec-priority rec-p-med">Medium</div><div><div class="rec-text">Replace the standard `log` package with a structured logging library (e.g., `uber-go/zap` or `rs/zerolog`). Specific steps:</div><div class="rec-fw">SOC2 &middot; SOC2-004</div></div></div>
+<div class="rec-item"><div class="rec-priority rec-p-med">Medium</div><div><div class="rec-text">Establish a vendor risk management program for third-party dependencies:</div><div class="rec-fw">SOC2 &middot; SOC2-007</div></div></div>
+<div class="rec-item"><div class="rec-priority rec-p-med">Medium</div><div><div class="rec-text">Implement TOTP-based MFA using a library such as `pquerna/otp`. Add fields to the User model for `totp_secret`, `mfa_enabled`, and `recovery_codes`. Create enrollment and verification endpoints. Modify the login flow to require a second factor when MFA is enabled. Allow organization administrators to enforce MFA for all users in their organization. Support WebAuthn/FIDO2 as an alternative second factor. Provide recovery codes during MFA enrollment for account recovery scenarios.</div><div class="rec-fw">SOC2 &middot; SOC2-009</div></div></div>
+<div class="rec-item"><div class="rec-priority rec-p-med">Medium</div><div><div class="rec-text">Document the lawful basis for each category of personal data processing (user accounts, organizational data, compliance artifacts). For SaaS platforms, contract performance (Article 6(1)(b)) is typically the primary basis for core functionality. Create a Record of Processing Activities (ROPA) as required by Article 30. Display the lawful basis in the privacy policy and at key data collection points. Implement a consent management mechanism for processing activities that rely on consent. Store and maintain audit records of the lawful basis determination.</div><div class="rec-fw">GDPR &middot; GDPR-001</div></div></div>
+<div class="rec-item"><div class="rec-priority rec-p-med">Medium</div><div><div class="rec-text">Implement a comprehensive data erasure capability:</div><div class="rec-fw">GDPR &middot; GDPR-003</div></div></div>
+<div class="rec-item"><div class="rec-priority rec-p-med">Medium</div><div><div class="rec-text">Implement a data retention management system:</div><div class="rec-fw">GDPR &middot; GDPR-007</div></div></div>
+
 <div class="section-heading" style="margin-top:32px">Risk Scorecard</div><table class="table"><thead><tr><th>Framework</th><th>High Risk</th><th>Medium</th><th>Concern</th><th>No Issue</th></tr></thead><tbody><tr><td style="font-weight:600">SOC2</td><td class="n-high">2</td><td class="n-med">3</td><td class="n-concern">3</td><td class="n-ok">2</td></tr>
-<tr><td style="font-weight:600">GDPR</td><td class="n-high">1</td><td class="n-med">3</td><td class="n-concern">6</td><td class="n-ok">0</td></tr>
+<tr><td style="font-weight:600">GDPR</td><td class="n-high">1</td><td class="n-med">3</td><td class="n-concern">5</td><td class="n-ok">1</td></tr>
 </tbody></table>
 <div class="section-heading" style="margin-top:24px">Domains Detected</div><div class="domain-row"><span class="domain-name">Saas</span><div class="domain-bar-wrap"><div class="domain-bar" style="width:67.8%"></div></div><span class="domain-pct">67.8%</span></div>
 
@@ -137,7 +146,7 @@ a { color: #0052CC; text-decoration: none; } a:hover { text-decoration: underlin
 <div class="tab-panel" id="tab-findings">
 <div class="filter-bar"><span class="filter-label">Framework:</span><button class="filter-btn active" data-type="fw" onclick="filterFramework('all',this)">All (20)</button><button class="filter-btn" data-type="fw" onclick="filterFramework('SOC2', this)">SOC2 (10)</button>
 <button class="filter-btn" data-type="fw" onclick="filterFramework('GDPR', this)">GDPR (10)</button>
-<div class="filter-sep"></div><span class="filter-label">Severity:</span><button class="filter-btn active" data-type="sev" onclick="filterSeverity('all',this)">All</button><button class="filter-btn" data-type="sev" onclick="filterSeverity('High Risk',this)">High (3)</button><button class="filter-btn" data-type="sev" onclick="filterSeverity('Medium Risk',this)">Medium (6)</button><button class="filter-btn" data-type="sev" onclick="filterSeverity('Pattern of Concern',this)">Concern (9)</button></div>
+<div class="filter-sep"></div><span class="filter-label">Severity:</span><button class="filter-btn active" data-type="sev" onclick="filterSeverity('all',this)">All</button><button class="filter-btn" data-type="sev" onclick="filterSeverity('High Risk',this)">High (3)</button><button class="filter-btn" data-type="sev" onclick="filterSeverity('Medium Risk',this)">Medium (6)</button><button class="filter-btn" data-type="sev" onclick="filterSeverity('Pattern of Concern',this)">Concern (8)</button></div>
 <div class="framework-section" id="soc2" data-framework="SOC2">
 <div class="framework-header"><div><div class="framework-name">SOC2</div><div class="framework-meta">AICPA &middot; Loss of enterprise contracts</div></div><div class="framework-count">10 findings</div></div>
 <div class="finding" id="f-f1" data-framework="SOC2" data-severity="No Issue Found">
@@ -154,7 +163,7 @@ internal/model/user.go:15  type User struct { ID string; Email string; PasswordH
 cmd/probo/main.go:67  router.Handle(&quot;/api/login&quot;, server.handleLogin).Methods(&quot;POST&quot;)
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement secure authentication mechanisms that verify user identity before granting access to the platform, consistent with SOC2 Trust Services Criteria for logical access controls?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block"></div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">No immediate remediation required. Consider the following enhancements as the platform matures:</div>
 </div></div>
 <div class="finding" id="f-f2" data-framework="SOC2" data-severity="No Issue Found">
 <div class="finding-header" onclick="toggleFinding('f2')">
@@ -170,7 +179,7 @@ internal/graph/schema.resolvers.go:89  func (r *queryResolver) Controls(ctx cont
 internal/graph/schema.resolvers.go:112  func (r *queryResolver) Evidence(ctx context.Context, controlID string) ([]*model.Evidence, error) {
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system enforce role-based access control that restricts user capabilities according to the principle of least privilege, ensuring users can only access resources within their authorized scope?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block"></div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">No immediate remediation required. As the platform matures, consider the following enhancements:</div>
 </div></div>
 <div class="finding" id="f-f3" data-framework="SOC2" data-severity="Pattern of Concern">
 <div class="finding-header" onclick="toggleFinding('f3')">
@@ -185,7 +194,7 @@ internal/config/config.go:18  type Config struct { ListenAddr string; DatabaseUR
 internal/server/server.go:29  func New(cfg *config.Config) *Server { ... db, err := sql.Open(&quot;postgres&quot;, cfg.DatabaseURL) ... }
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system enforce encryption of data in transit using industry-standard TLS protocols for all client-server and service-to-service communications?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block"></div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Add TLS configuration options (certificate path, key path, minimum TLS version) to the application config. Either implement `ListenAndServeTLS` directly or provide deployment documentation and example configurations (e.g., nginx, Caddy, or cloud load balancer) that demonstrate TLS termination. Enforce `sslmode=require` or `sslmode=verify-full` on the PostgreSQL connection string. Add a startup warning if the server detects it is running without TLS and no trusted proxy headers are present.</div>
 </div></div>
 <div class="finding" id="f-f4" data-framework="SOC2" data-severity="Medium Risk">
 <div class="finding-header" onclick="toggleFinding('f4')">
@@ -200,7 +209,7 @@ internal/graph/resolver.go:67  log.Printf(&quot;error creating control: %v&quot;
 internal/server/middleware.go:38  log.Printf(&quot;unauthorized access attempt from IP: %s&quot;, r.RemoteAddr)
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system maintain comprehensive audit logs that capture security-relevant events, user actions, and system changes with sufficient detail for forensic investigation and compliance review?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block"></div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Replace the standard `log` package with a structured logging library (e.g., `uber-go/zap` or `rs/zerolog`). Specific steps:</div>
 </div></div>
 <div class="finding" id="f-f5" data-framework="SOC2" data-severity="Pattern of Concern">
 <div class="finding-header" onclick="toggleFinding('f5')">
@@ -215,7 +224,7 @@ internal/postgres/migrations/003_add_evidence.up.sql:1  CREATE TABLE evidence ( 
 go.mod:1  module github.com/getprobo/probo
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the organization maintain formal change management processes including code review, testing, approval workflows, and deployment controls that ensure system changes are authorized, tested, and traceable?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block"></div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a CI/CD pipeline (GitHub Actions recommended given the GitHub hosting) with the following stages:</div>
 </div></div>
 <div class="finding" id="f-f6" data-framework="SOC2" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f6')">
@@ -229,7 +238,7 @@ internal/server/middleware.go:38  log.Printf(&quot;unauthorized access attempt f
 internal/config/config.go:18  type Config struct { ListenAddr string; DatabaseURL string; JWTSecret string; ... }
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the organization maintain an incident response plan with defined procedures for detecting, responding to, escalating, and recovering from security incidents, and are these procedures tested and updated regularly?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block"></div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Build an incident response infrastructure and operational framework:</div>
 </div></div>
 <div class="finding" id="f-f7" data-framework="SOC2" data-severity="Medium Risk">
 <div class="finding-header" onclick="toggleFinding('f7')">
@@ -243,7 +252,7 @@ go.sum:1  [dependency checksums present for all modules]
 internal/graph/generated.go:1  // Code generated by github.com/99designs/gqlgen, DO NOT EDIT.
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the organization assess and manage risks associated with third-party dependencies and vendor software, including monitoring for known vulnerabilities and ensuring timely patching?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block"></div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Establish a vendor risk management program for third-party dependencies:</div>
 </div></div>
 <div class="finding" id="f-f8" data-framework="SOC2" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f8')">
@@ -257,7 +266,7 @@ internal/postgres/migrations/001_initial.up.sql:1  CREATE TABLE organizations ( 
 internal/server/server.go:29  func New(cfg *config.Config) *Server { ... db, err := sql.Open(&quot;postgres&quot;, cfg.DatabaseURL) ... }
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the organization implement and test backup procedures and disaster recovery plans that ensure the availability and recoverability of system data, including compliance artifacts and organizational records?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block"></div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a comprehensive backup and disaster recovery strategy:</div>
 </div></div>
 <div class="finding" id="f-f9" data-framework="SOC2" data-severity="Medium Risk">
 <div class="finding-header" onclick="toggleFinding('f9')">
@@ -272,7 +281,7 @@ internal/server/jwt.go:22  func GenerateToken(userID string, orgID string, role 
 internal/graph/schema.graphqls:8  type Mutation { login(email: String!, password: String!): AuthPayload! ... }
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system support and enforce multi-factor authentication for user access, particularly for administrative and privileged operations?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block"></div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement TOTP-based MFA using a library such as `pquerna/otp`. Add fields to the User model for `totp_secret`, `mfa_enabled`, and `recovery_codes`. Create enrollment and verification endpoints. Modify the login flow to require a second factor when MFA is enabled. Allow organization administrators to enforce MFA for all users in their organization. Support WebAuthn/FIDO2 as an alternative second factor. Provide recovery codes during MFA enrollment for account recovery scenarios.</div>
 </div></div>
 <div class="finding" id="f-f10" data-framework="SOC2" data-severity="Pattern of Concern">
 <div class="finding-header" onclick="toggleFinding('f10')">
@@ -286,7 +295,7 @@ LICENSE:1  [License file present]
 go.mod:1  module github.com/getprobo/probo
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the organization maintain and publish security policies, vulnerability disclosure procedures, and codes of conduct that demonstrate a commitment to information security governance?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block"></div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Establish a security governance documentation framework:</div>
 </div></div>
 </div>
 <div class="framework-section" id="gdpr" data-framework="GDPR">
@@ -304,7 +313,7 @@ internal/graph/schema.resolvers.go:23  func (r *mutationResolver) CreateUser(ctx
 internal/postgres/user_store.go:34  func (s *UserStore) Create(ctx context.Context, user *model.User) error { _, err := s.db.ExecContext
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system identify and document a lawful basis under Article 6 of the GDPR for each category of personal data processing, and is this basis communicated to data subjects?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block"></div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Document the lawful basis for each category of personal data processing (user accounts, organizational data, compliance artifacts). For SaaS platforms, contract performance (Article 6(1)(b)) is typically the primary basis for core functionality. Create a Record of Processing Activities (ROPA) as required by Article 30. Display the lawful basis in the privacy policy and at key data collection points. Implement a consent management mechanism for processing activities that rely on consent. Store and maintain audit records of the lawful basis determination.</div>
 </div></div>
 <div class="finding" id="f-f12" data-framework="GDPR" data-severity="Pattern of Concern">
 <div class="finding-header" onclick="toggleFinding('f12')">
@@ -318,7 +327,7 @@ internal/model/user.go:15  type User struct { ID string; Email string; PasswordH
 internal/graph/schema.resolvers.go:23  func (r *mutationResolver) CreateUser(ctx context.Context, input model.CreateUserInput) (*model.User
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system obtain, record, and manage user consent in a manner that is freely given, specific, informed, and unambiguous, with the ability for users to withdraw consent at any time?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block"></div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Add a consent management model with fields for consent type, status, timestamp, and version. Implement consent capture during user registration with clear, specific consent requests for each processing purpose. Provide a user-facing consent management interface where users can review and withdraw consent. Record consent provenance (when, how, and what the user agreed to). Separate consent for distinct processing purposes (essential vs. optional). Ensure the registration flow cannot proceed without acceptance of required terms.</div>
 </div></div>
 <div class="finding" id="f-f13" data-framework="GDPR" data-severity="Medium Risk">
 <div class="finding-header" onclick="toggleFinding('f13')">
@@ -333,7 +342,7 @@ internal/model/user.go:15  type User struct { ID string; Email string; PasswordH
 internal/postgres/migrations/001_initial.up.sql:1  CREATE TABLE organizations ( id UUID PRIMARY KEY DEFAULT gen_random_uuid(), name TEXT NOT NULL, ... 
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system provide data subjects with the ability to request and obtain the erasure of their personal data, and does the system process such requests completely and within the required timeframe?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block"></div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a comprehensive data erasure capability:</div>
 </div></div>
 <div class="finding" id="f-f14" data-framework="GDPR" data-severity="Pattern of Concern">
 <div class="finding-header" onclick="toggleFinding('f14')">
@@ -347,7 +356,7 @@ internal/graph/schema.resolvers.go:112  func (r *queryResolver) Evidence(ctx con
 internal/graph/schema.graphqls:12  type Query { controls: [Control!]! evidence(controlID: ID!): [Evidence!]! me: User! ... }
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system provide data subjects with the ability to receive their personal data in a structured, commonly used, and machine-readable format, and to transmit that data to another controller?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block"></div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a data portability feature:</div>
 </div></div>
 <div class="finding" id="f-f15" data-framework="GDPR" data-severity="Pattern of Concern">
 <div class="finding-header" onclick="toggleFinding('f15')">
@@ -362,7 +371,7 @@ internal/server/middleware.go:18  func AuthMiddleware(next http.Handler) http.Ha
 internal/postgres/user_store.go:56  func (s *UserStore) GetByID(ctx context.Context, id string) (*model.User, error) { row := s.db.Query
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system architecture incorporate data protection principles by design and by default, including data minimization, purpose limitation, storage limitation, and appropriate technical safeguards?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block"></div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Exclude `password_hash` from standard user queries — only retrieve it during authentication. Implement field-level access controls in the GraphQL layer to prevent over-exposure of personal data. Add a data classification annotation system to model fields (e.g., `// @personal`, `// @sensitive`). Implement pseudonymization utilities for personal data used in non-production environments. Create a data minimization checklist for new feature development. Review all database queries to ensure they select only the fields required for each operation. Consider implementing data masking for display contexts where full personal data is not needed.</div>
 </div></div>
 <div class="finding" id="f-f16" data-framework="GDPR" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f16')">
@@ -376,7 +385,7 @@ internal/server/middleware.go:38  log.Printf(&quot;unauthorized access attempt f
 internal/config/config.go:18  type Config struct { ListenAddr string; DatabaseURL string; JWTSecret string; ... }
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the organization have the technical capability and operational procedures to detect personal data breaches and notify the supervisory authority within 72 hours and affected data subjects without undue delay?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block"></div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a comprehensive breach detection and notification capability:</div>
 </div></div>
 <div class="finding" id="f-f17" data-framework="GDPR" data-severity="Medium Risk">
 <div class="finding-header" onclick="toggleFinding('f17')">
@@ -391,7 +400,7 @@ internal/postgres/user_store.go:34  func (s *UserStore) Create(ctx context.Conte
 internal/model/evidence.go:10  type Evidence struct { ID string; ControlID string; Title string; Description string; FileURL string
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement data retention policies that ensure personal data is not kept longer than necessary for its processing purpose, with automated mechanisms for data cleanup or archival?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block"></div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a data retention management system:</div>
 </div></div>
 <div class="finding" id="f-f18" data-framework="GDPR" data-severity="Pattern of Concern">
 <div class="finding-header" onclick="toggleFinding('f18')">
@@ -405,7 +414,7 @@ internal/server/server.go:29  func New(cfg *config.Config) *Server { ... db, err
 internal/postgres/migrations/001_initial.up.sql:1  CREATE TABLE organizations ( id UUID PRIMARY KEY DEFAULT gen_random_uuid(), name TEXT NOT NULL, ... 
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement appropriate safeguards for the transfer of personal data to third countries or international organizations, consistent with GDPR Chapter V requirements?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block"></div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Add data residency configuration options to the Config struct, allowing deployment operators to specify the data processing jurisdiction. Implement per-tenant data residency settings for organizations subject to specific geographic requirements. Document the supported deployment regions and the legal basis for any cross-border data transfers. Prepare Standard Contractual Clauses templates for customers. Create a Transfer Impact Assessment for deployments outside the EEA. Add geographic metadata to data records where cross-border transfer tracking is needed. Consider implementing data federation for multi-region deployments.</div>
 </div></div>
 <div class="finding" id="f-f19" data-framework="GDPR" data-severity="Pattern of Concern">
 <div class="finding-header" onclick="toggleFinding('f19')">
@@ -419,12 +428,12 @@ internal/model/evidence.go:10  type Evidence struct { ID string; ControlID strin
 internal/model/policy.go:10  type Policy struct { ID string; OrganizationID string; Title string; Content string; Version int; Cr
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Has a Data Protection Impact Assessment been conducted for high-risk processing activities, and does the system architecture support the ongoing assessment and mitigation of data protection risks?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block"></div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Conduct a formal DPIA covering all processing activities within the Probo platform. Document the necessity and proportionality of processing, the risks to data subjects, and the mitigation measures in place. Implement data sensitivity classification on evidence uploads and policy documents. Add content scanning or classification prompts when users upload evidence files. Create a DPIA template that Probo&#x27;s customers can use for their own assessments. Review the DPIA annually or when significant changes to processing activities occur. Publish a summary of the DPIA findings in the platform&#x27;s trust center or security documentation.</div>
 </div></div>
-<div class="finding" id="f-f20" data-framework="GDPR" data-severity="Pattern of Concern">
+<div class="finding" id="f-f20" data-framework="GDPR" data-severity="No Issue Found">
 <div class="finding-header" onclick="toggleFinding('f20')">
 <div class="finding-left"><div class="finding-num">GDPR-010</div><div class="finding-question"></div></div>
-<div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
+<div class="finding-right"><span class="badge badge-ok">No Issue Found</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
 <div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
@@ -434,7 +443,7 @@ cmd/probo/main.go:67  router.Handle(&quot;/api/login&quot;, server.handleLogin).
 README.md:1  # Probo - Open Source SOC2 Compliance Platform
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system present users with clear, accessible, and comprehensive privacy notices at the point of data collection, and does the organization maintain a privacy policy that meets GDPR transparency requirements?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block"></div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Create a comprehensive privacy policy covering all Article 13 required information: controller identity and contact details, DPO contact (if applicable), purposes and legal basis for processing, categories of personal data, data retention periods, data subject rights, and complaint procedures. Implement an in-app privacy notice that is presented during user registration. Add a terms of service acceptance checkbox to the registration flow with a link to the full privacy policy. Implement a cookie consent banner if cookies or tracking technologies are used. Create a privacy center page within the application where users can access the privacy policy, manage their consent preferences, and exercise their data subject rights. Ensure the privacy policy is written in plain language and is easily accessible from every page of the application.</div>
 </div></div>
 </div>
 

@@ -36,6 +36,7 @@ class Finding:
     judge_model: str = ""
     remediation_quality: str = ""  # "specific", "generic", "unclear"
     remediation_note: str = ""
+    improved_remediation: str = ""  # Gemini-rewritten remediation if original was generic
 
 
 @dataclass
@@ -267,7 +268,10 @@ class JudgeAgent:
                 finding.judge_confidence = verdict["confidence"]
                 finding.judge_model = "gemini-1.5-flash"
                 finding.remediation_quality = verdict.get("remediation_quality", "")
-                finding.remediation_note = verdict.get("remediation_note", "")
+                improved = verdict.get("improved_remediation", "")
+                if improved:
+                    finding.improved_remediation = improved
+                    print(f"    -> Remediation improved by Gemini")
         return agent_results
 
     def _review_single(self, finding: Finding, framework: str, repo_context: dict) -> dict:
@@ -320,11 +324,21 @@ DEFAULT toward CONTEXT DEPENDENT only if:
 - The finding is genuinely ambiguous
 - Infrastructure configuration would determine compliance
 
-Also review the remediation quality.
+Also review and improve the remediation if needed.
+
+Current remediation: {finding.remediation[:300]}
+Evidence files: {evidence_summary[:200]}
+
+If the remediation is generic (starts with 'Implement', 'Ensure', 'Consider', or does not reference specific files from evidence), rewrite it to be specific:
+- Reference specific file(s) from evidence
+- State the exact change needed
+- End with the regulatory consequence
+- 2-3 sentences max
+- Do NOT start with 'Implement' or 'Ensure'
 
 Respond in JSON only. No preamble.
 
-{{"verdict": "CONFIRMED" | "CONTEXT DEPENDENT" | "POSSIBLE FALSE POSITIVE" | "ADDITIONAL RISK", "reasoning": "One sentence explaining your verdict.", "confidence": "HIGH" | "MEDIUM" | "LOW", "remediation_quality": "specific" | "generic" | "unclear", "remediation_note": "One sentence improving the remediation if generic, or empty string if specific."}}
+{{"verdict": "CONFIRMED" | "CONTEXT DEPENDENT" | "POSSIBLE FALSE POSITIVE" | "ADDITIONAL RISK", "reasoning": "One sentence explaining your verdict.", "confidence": "HIGH" | "MEDIUM" | "LOW", "remediation_quality": "specific" | "generic", "improved_remediation": "rewritten remediation if generic, or null if already specific"}}
 
 VERDICT DEFINITIONS:
 CONFIRMED — Evidence is specific, severity appropriate, well-supported.
@@ -341,12 +355,17 @@ ADDITIONAL RISK — Primary analysis understated this finding."""
                 if text.startswith("json"):
                     text = text[4:]
             result = _json.loads(text.strip())
+            improved = result.get("improved_remediation")
+            if improved and improved != "null":
+                improved = str(improved)
+            else:
+                improved = ""
             return {
                 "verdict": result.get("verdict", "CONTEXT DEPENDENT"),
                 "reasoning": result.get("reasoning", "Unable to complete review."),
                 "confidence": result.get("confidence", "LOW"),
                 "remediation_quality": result.get("remediation_quality", ""),
-                "remediation_note": result.get("remediation_note", ""),
+                "improved_remediation": improved,
             }
         except Exception as e:
             return {
