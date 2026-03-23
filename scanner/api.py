@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scanner.database import (
     init_db, create_scan, update_scan_status, save_findings,
     get_scan, get_stats, increment_stat, add_to_waitlist,
-    get_directory_with_scores, get_recent_scans,
+    get_directory_with_scores, get_recent_scans, get_recent_scan,
     track_event, get_event_counts,
 )
 from scanner.repo_fetcher import fetch_and_qualify, cleanup_repo
@@ -47,7 +47,23 @@ AGENTS = {
 }
 
 app = Flask(__name__, static_folder="../docs", static_url_path="")
-CORS(app, origins=["https://opendocket.dev", "http://localhost:*", "http://127.0.0.1:*"])
+CORS(app, origins=[
+    "https://anurag-mohanty.github.io",
+    "https://opendocket.dev",
+    "http://localhost:3000",
+    "http://localhost:5000",
+    "http://localhost:8080",
+    "null",
+])
+
+
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    return response
+
 
 # Rate limiting
 _rate_limits: dict[str, list[float]] = defaultdict(list)
@@ -294,6 +310,25 @@ def start_scan():
             return jsonify({"error": limit_err, "byok_required": True}), 429
 
     repo_name = _extract_repo_name(repo_url)
+
+    # Check for cached scan within last 24 hours
+    cached = get_recent_scan(repo_name, hours=24)
+    if cached and not is_byok:
+        return jsonify({
+            "scan_id": cached["scan_id"],
+            "status": "complete",
+            "cached": True,
+            "message": f"Using scan from {cached.get('timestamp', 'recently')[:10]}",
+            "report_url": cached.get("report_url", ""),
+            "repo_name": repo_name,
+            "summary": {
+                "score": cached.get("opendocket_score", 0),
+                "high_risk": cached.get("finding_high", 0),
+                "medium_risk": cached.get("finding_medium", 0),
+                "frameworks": cached.get("frameworks_triggered", []),
+            },
+        })
+
     scan_id = create_scan(repo_url, repo_name, used_byok=is_byok)
 
     thread = threading.Thread(

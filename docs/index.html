@@ -188,6 +188,7 @@
       fetch(API_BASE_URL+'/api/scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
       .then(r=>r.json()).then(d=>{
         if(d.error){document.getElementById('scan-status').textContent=d.error;document.getElementById('scan-btn').disabled=false;return;}
+        if(d.cached){document.getElementById('scan-btn').disabled=false;document.getElementById('scan-status').innerHTML='<a href="'+d.report_url+'">View Report</a> — Cached scan from '+d.message.replace('Using scan from ','')+'. Rescan available after 24 hours.';return;}
         pollScan(d.scan_id);
       }).catch(e=>{document.getElementById('scan-status').textContent='Error: '+e.message;document.getElementById('scan-btn').disabled=false;});
     }

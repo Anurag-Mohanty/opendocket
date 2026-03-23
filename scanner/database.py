@@ -337,6 +337,28 @@ def get_repo_history(repo_name: str) -> dict | None:
     return None
 
 
+def get_recent_scan(repo_name: str, hours: int = 24) -> dict | None:
+    """Get a recent completed scan for a repo within the last N hours."""
+    cutoff = (datetime.utcnow() - timedelta(hours=hours)).isoformat()
+    with _get_conn() as conn:
+        row = conn.execute(
+            """SELECT * FROM scans
+               WHERE repo_name = ? AND status = 'complete' AND timestamp > ?
+               ORDER BY timestamp DESC LIMIT 1""",
+            (repo_name, cutoff),
+        ).fetchone()
+        if row:
+            d = dict(row)
+            for jf in ("domains_detected", "frameworks_triggered"):
+                if d.get(jf):
+                    try:
+                        d[jf] = json.loads(d[jf])
+                    except (json.JSONDecodeError, TypeError):
+                        pass
+            return d
+    return None
+
+
 def get_recent_scans(limit: int = 20) -> list[dict]:
     """Get recent scans for the dashboard."""
     with _get_conn() as conn:
