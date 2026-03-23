@@ -1,0 +1,212 @@
+framework: CCPA/CPRA
+full_name: California Consumer Privacy Act / California Privacy Rights Act
+description: >
+  The CCPA/CPRA establishes consumer privacy rights for California residents
+  including the right to know, delete, opt-out of sale, and data portability.
+  The CPRA expanded CCPA with data minimization, sensitive data controls,
+  and the California Privacy Protection Agency.
+regulatory_body: California Privacy Protection Agency
+risk_of_noncompliance: >
+  $2,500 per violation, $7,500 per intentional violation,
+  class action exposure up to $750 per consumer per incident.
+enforcement_trend: Accelerating — CPPA began active enforcement in 2023
+
+questions:
+  - id: CCPA-001
+    category: Right to Know
+    legal_question: >
+      Does the system provide California residents with the right to know
+      what personal information is collected about them, as required under
+      Cal. Civ. Code §1798.100 and CPRA §1798.110?
+    regulatory_standard: "Cal. Civ. Code §1798.100; CPRA §1798.110"
+    search_patterns:
+      - "privacy_request"
+      - "data_request"
+      - "right_to_know"
+      - "consumer_request"
+      - "privacy_rights"
+      - "data_subject_request"
+      - "dsr"
+      - "sar"
+      - "subject_access"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for endpoints or functions that handle consumer data access
+      requests, privacy request queues, or data disclosure mechanisms.
+
+  - id: CCPA-002
+    category: Do Not Sell or Share
+    legal_question: >
+      Does the system implement a 'Do Not Sell or Share My Personal
+      Information' opt-out mechanism as required under Cal. Civ. Code
+      §1798.120 and CPRA §1798.135?
+    regulatory_standard: "Cal. Civ. Code §1798.120; CPRA §1798.135"
+    search_patterns:
+      - "do_not_sell"
+      - "opt_out"
+      - "dnsmpi"
+      - "sale_opt_out"
+      - "sharing_opt_out"
+      - "do_not_share"
+      - "opt_out_sale"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for opt-out route handlers, preference storage for sale/sharing
+      opt-out, or Do Not Sell link implementations.
+
+  - id: CCPA-003
+    category: Right to Delete
+    legal_question: >
+      Does the system implement the right to delete personal information
+      upon consumer request as required under Cal. Civ. Code §1798.105?
+    regulatory_standard: "Cal. Civ. Code §1798.105; CPRA §1798.105"
+    search_patterns:
+      - "delete_user"
+      - "data_deletion"
+      - "right_to_delete"
+      - "consumer_deletion"
+      - "erase_data"
+      - "account_deletion"
+      - "purge_user"
+      - "gdpr_delete"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for deletion endpoints, cascading delete logic, and mechanisms
+      to propagate deletion to service providers.
+
+  - id: CCPA-004
+    category: Data Portability
+    legal_question: >
+      Does the system implement data portability allowing consumers to
+      obtain their personal information in a portable, machine-readable
+      format as required under Cal. Civ. Code §1798.100(d)?
+    regulatory_standard: "Cal. Civ. Code §1798.100(d); CPRA §1798.100"
+    search_patterns:
+      - "data_export"
+      - "download_data"
+      - "portability"
+      - "export_user_data"
+      - "to_json"
+      - "to_csv"
+      - "user_data_download"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for data export or download endpoints that provide user data
+      in structured formats.
+
+  - id: CCPA-005
+    category: Data Minimization
+    legal_question: >
+      Does the system limit collection of personal information to what
+      is reasonably necessary for the disclosed purpose as required
+      under CPRA §1798.100(a)(1)?
+    regulatory_standard: "CPRA §1798.100(a)(1)"
+    search_patterns:
+      - "data_minimization"
+      - "minimal_collection"
+      - "purpose_limitation"
+      - "necessary_data"
+      - "collect_only"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for collection scope controls, purpose tracking, and evidence
+      that data collection is limited to stated purposes.
+
+  - id: CCPA-006
+    category: Global Privacy Control
+    legal_question: >
+      Does the system honor Global Privacy Control (GPC) signals as an
+      automated opt-out mechanism as required under CPRA §1798.135(b)?
+    regulatory_standard: "CPRA §1798.135(b)"
+    search_patterns:
+      - "global_privacy_control"
+      - "gpc"
+      - "sec_gpc"
+      - "privacy_signal"
+      - "Sec-GPC"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for HTTP header Sec-GPC detection in middleware or request
+      processing logic.
+
+  - id: CCPA-007
+    category: Data Retention Limits
+    legal_question: >
+      Does the system implement data retention limits and delete personal
+      information when no longer needed for the disclosed purpose as
+      required under CPRA §1798.100(a)(2)?
+    regulatory_standard: "CPRA §1798.100(a)(2)"
+    search_patterns:
+      - "retention_policy"
+      - "data_retention"
+      - "expiry"
+      - "purge_old"
+      - "retention_period"
+      - "ttl"
+      - "scheduled_deletion"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for scheduled deletion jobs, retention period configuration,
+      or data lifecycle management.
+
+  - id: CCPA-008
+    category: Sensitive Personal Information
+    legal_question: >
+      Does the system implement controls for sensitive personal information
+      including precise geolocation, race, health data, and financial
+      information as required under CPRA §1798.121?
+    regulatory_standard: "CPRA §1798.121"
+    search_patterns:
+      - "sensitive_data"
+      - "geolocation"
+      - "precise_location"
+      - "racial_ethnic"
+      - "health_information"
+      - "biometric"
+      - "genetic"
+      - "sensitive_category"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for sensitive data classification, special handling controls,
+      and consent requirements for sensitive personal information.
+
+  - id: CCPA-009
+    category: Right to Correction
+    legal_question: >
+      Does the system provide consumers with the right to correct
+      inaccurate personal information as required under CPRA §1798.106?
+    regulatory_standard: "CPRA §1798.106"
+    search_patterns:
+      - "correct_data"
+      - "update_personal"
+      - "rectification"
+      - "data_correction"
+      - "edit_profile"
+      - "update_user"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for user data update endpoints with verification mechanisms.
+
+  - id: CCPA-010
+    category: Reasonable Security
+    legal_question: >
+      Does the system implement reasonable security measures to protect
+      personal information from unauthorized access as required under
+      Cal. Civ. Code §1798.150?
+    regulatory_standard: "Cal. Civ. Code §1798.150"
+    search_patterns:
+      - "encryption"
+      - "hashing"
+      - "bcrypt"
+      - "tls"
+      - "https"
+      - "security_middleware"
+      - "csrf"
+      - "xss"
+      - "sanitize"
+    absence_patterns:
+      - "http://"
+      - "plaintext"
+    evidence_guidance: >
+      Look for encryption at rest and in transit, input sanitization,
+      CSRF protection, and security middleware.

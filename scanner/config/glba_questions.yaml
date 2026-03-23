@@ -1,0 +1,158 @@
+framework: GLBA
+full_name: Gramm-Leach-Bliley Act
+description: >
+  The GLBA requires financial institutions to explain their information-sharing
+  practices and to safeguard sensitive data. The 2023 Safeguards Rule update
+  significantly expanded requirements including MFA and encryption mandates.
+regulatory_body: FTC / Federal Banking Regulators
+risk_of_noncompliance: >
+  Up to $100,000 per violation for institutions, $10,000 per violation
+  for individuals, criminal penalties up to 5 years imprisonment.
+enforcement_trend: FTC Safeguards Rule significantly expanded in 2023
+
+questions:
+  - id: GLBA-001
+    category: Information Security Program
+    legal_question: >
+      Does the system implement a comprehensive information security program
+      as required by the GLBA Safeguards Rule under 16 CFR §314.4?
+    regulatory_standard: "16 CFR §314.4"
+    search_patterns:
+      - "security_program"
+      - "information_security"
+      - "safeguards"
+      - "security_policy"
+      - "security_controls"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for security policy implementation, security controls, and
+      evidence of a structured security program.
+
+  - id: GLBA-002
+    category: Financial Data Encryption
+    legal_question: >
+      Does the system protect nonpublic personal financial information (NPI)
+      with appropriate encryption as required under 16 CFR §314.4(e)?
+    regulatory_standard: "16 CFR §314.4(e)"
+    search_patterns:
+      - "npi"
+      - "nonpublic_personal"
+      - "financial_encryption"
+      - "account_encryption"
+      - "encrypt"
+      - "aes"
+      - "kms"
+    absence_patterns:
+      - "plaintext"
+      - "unencrypted"
+    evidence_guidance: >
+      Look for encryption on financial data fields, account numbers,
+      and other nonpublic personal information.
+
+  - id: GLBA-003
+    category: Privacy Notice
+    legal_question: >
+      Does the system provide customers with clear privacy notices
+      explaining information sharing practices as required under
+      15 U.S.C. §6803?
+    regulatory_standard: "15 U.S.C. §6803"
+    search_patterns:
+      - "privacy_notice"
+      - "glba_notice"
+      - "information_sharing_notice"
+      - "financial_privacy"
+      - "privacy_policy"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for privacy notice delivery mechanisms and information
+      sharing disclosures.
+
+  - id: GLBA-004
+    category: Opt-Out for Third-Party Sharing
+    legal_question: >
+      Does the system allow customers to opt out of information sharing
+      with non-affiliated third parties as required under 15 U.S.C. §6802?
+    regulatory_standard: "15 U.S.C. §6802"
+    search_patterns:
+      - "opt_out_sharing"
+      - "third_party_sharing_opt_out"
+      - "glba_opt_out"
+      - "information_sharing_preference"
+      - "opt_out"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for sharing preference controls and opt-out mechanisms for
+      third-party data sharing.
+
+  - id: GLBA-005
+    category: Access Controls
+    legal_question: >
+      Does the system implement access controls limiting employee access
+      to customer financial information as required under 16 CFR §314.4(e)(1)?
+    regulatory_standard: "16 CFR §314.4(e)(1)"
+    search_patterns:
+      - "role_based_access"
+      - "employee_access_control"
+      - "financial_data_access"
+      - "need_to_know"
+      - "rbac"
+      - "authorization"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for RBAC on financial data endpoints and need-to-know
+      access controls.
+
+  - id: GLBA-006
+    category: Multi-Factor Authentication
+    legal_question: >
+      Does the system implement multi-factor authentication for financial
+      system access as required under the 2023 Safeguards Rule update
+      16 CFR §314.4(e)(2)?
+    regulatory_standard: "16 CFR §314.4(e)(2)"
+    search_patterns:
+      - "mfa"
+      - "multi_factor"
+      - "two_factor"
+      - "2fa"
+      - "totp"
+      - "authenticator"
+      - "otp"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for MFA implementation on financial data access points.
+
+  - id: GLBA-007
+    category: Incident Response
+    legal_question: >
+      Does the system implement incident response procedures for security
+      breaches involving customer financial data as required under
+      16 CFR §314.4(h)?
+    regulatory_standard: "16 CFR §314.4(h)"
+    search_patterns:
+      - "incident_response"
+      - "breach_notification"
+      - "security_incident"
+      - "glba_breach"
+      - "breach_detection"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for breach detection and notification logic, incident
+      response procedures, and escalation mechanisms.
+
+  - id: GLBA-008
+    category: Risk Assessment
+    legal_question: >
+      Does the system conduct risk assessments to identify security risks
+      to customer financial information as required under 16 CFR §314.4(b)?
+    regulatory_standard: "16 CFR §314.4(b)"
+    search_patterns:
+      - "risk_assessment"
+      - "security_assessment"
+      - "vulnerability_scan"
+      - "risk_analysis"
+      - "threat_model"
+      - "security_review"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for risk assessment tooling, vulnerability scanning
+      configurations, or security review documentation.

@@ -1,0 +1,158 @@
+framework: COPPA
+full_name: Children's Online Privacy Protection Act
+description: >
+  COPPA regulates the collection of personal information from children
+  under 13 by operators of websites and online services. It requires
+  verifiable parental consent, data minimization, and security controls
+  for children's data.
+regulatory_body: Federal Trade Commission (FTC)
+risk_of_noncompliance: >
+  Up to $51,744 per violation. Notable fines: TikTok $5.7M,
+  YouTube $170M, Musical.ly $5.7M.
+enforcement_trend: High — FTC actively pursuing cases involving children's data
+
+questions:
+  - id: COPPA-001
+    category: Age Verification
+    legal_question: >
+      Does the system implement age verification to identify users
+      under 13 as required under 15 U.S.C. §6502 and 16 CFR §312.5?
+    regulatory_standard: "15 U.S.C. §6502; 16 CFR §312.5"
+    search_patterns:
+      - "age_verification"
+      - "age_gate"
+      - "birth_date"
+      - "date_of_birth"
+      - "under_13"
+      - "age_check"
+      - "minimum_age"
+      - "dob"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for age gate logic, birthdate collection, or age verification
+      middleware that restricts access for users under 13.
+
+  - id: COPPA-002
+    category: Parental Consent
+    legal_question: >
+      Does the system obtain verifiable parental consent before collecting
+      personal information from children under 13 as required under
+      15 U.S.C. §6502(b)(1)(A)(ii) and 16 CFR §312.5?
+    regulatory_standard: "15 U.S.C. §6502(b)(1)(A)(ii); 16 CFR §312.5"
+    search_patterns:
+      - "parental_consent"
+      - "parent_consent"
+      - "guardian_consent"
+      - "verifiable_consent"
+      - "parent_email"
+      - "guardian_approval"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for parental consent collection and verification flows
+      including email verification or credit card verification methods.
+
+  - id: COPPA-003
+    category: Parental Access and Deletion
+    legal_question: >
+      Does the system provide parents with the ability to review and
+      delete their child's personal information as required under
+      15 U.S.C. §6502(b)(1)(B) and 16 CFR §312.6?
+    regulatory_standard: "15 U.S.C. §6502(b)(1)(B); 16 CFR §312.6"
+    search_patterns:
+      - "parent_review"
+      - "parental_access"
+      - "child_data_deletion"
+      - "parent_delete"
+      - "parent_portal"
+      - "child_account"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for parent portal, child data management, or parent-initiated
+      deletion mechanisms.
+
+  - id: COPPA-004
+    category: Data Minimization for Children
+    legal_question: >
+      Does the system limit data collection from children to what is
+      reasonably necessary for the activity as required under 16 CFR §312.7?
+    regulatory_standard: "16 CFR §312.7"
+    search_patterns:
+      - "child_data"
+      - "minor_data"
+      - "children_collection"
+      - "kid_profile"
+      - "child_account"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for child-specific data handling or collection limits that
+      restrict data gathered from users identified as minors.
+
+  - id: COPPA-005
+    category: Children's Privacy Notice
+    legal_question: >
+      Does the system have a clear privacy policy describing data practices
+      for children as required under 16 CFR §312.4?
+    regulatory_standard: "16 CFR §312.4"
+    search_patterns:
+      - "privacy_policy"
+      - "children_privacy"
+      - "coppa_notice"
+      - "kids_privacy"
+      - "child_privacy_policy"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for privacy policy routes or children-specific privacy notices.
+
+  - id: COPPA-006
+    category: Behavioral Advertising Restrictions
+    legal_question: >
+      Does the system prevent behavioral advertising targeting users
+      under 13 as required under 16 CFR §312.2?
+    regulatory_standard: "16 CFR §312.2"
+    search_patterns:
+      - "behavioral_ads"
+      - "targeted_advertising"
+      - "ad_tracking"
+      - "remarketing"
+      - "ad_personalization"
+      - "tracking_pixel"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for ad tracking code and whether it includes age-based
+      exclusion logic for users under 13.
+
+  - id: COPPA-007
+    category: Children's Data Retention
+    legal_question: >
+      Does the system implement data retention limits for children's
+      information as required under 16 CFR §312.10?
+    regulatory_standard: "16 CFR §312.10"
+    search_patterns:
+      - "child_retention"
+      - "minor_data_expiry"
+      - "children_purge"
+      - "retention_policy"
+      - "data_lifecycle"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for child account data expiration logic or retention policies
+      specific to minor users.
+
+  - id: COPPA-008
+    category: Children's Data Security
+    legal_question: >
+      Does the system protect the confidentiality, security, and integrity
+      of children's personal information as required under 16 CFR §312.8?
+    regulatory_standard: "16 CFR §312.8"
+    search_patterns:
+      - "encryption"
+      - "child_encryption"
+      - "minor_data_security"
+      - "children_protection"
+      - "encrypt"
+      - "bcrypt"
+      - "tls"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for enhanced security controls applied specifically to child
+      user data, or general encryption covering all user data.

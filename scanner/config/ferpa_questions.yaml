@@ -1,0 +1,155 @@
+framework: FERPA
+full_name: Family Educational Rights and Privacy Act
+description: >
+  FERPA protects the privacy of student education records and gives
+  parents and eligible students rights to access, review, and request
+  amendment of records. Ed-tech vendors accessing student data must
+  comply with FERPA requirements.
+regulatory_body: U.S. Department of Education
+risk_of_noncompliance: >
+  Loss of federal funding — catastrophic for institutions. No direct
+  fines but reputational and contractual exposure for ed-tech vendors.
+enforcement_trend: Increasing scrutiny of ed-tech vendors accessing student data
+
+questions:
+  - id: FERPA-001
+    category: Education Record Protection
+    legal_question: >
+      Does the system protect education records and limit access to
+      authorized school officials with legitimate educational interest
+      as required under 20 U.S.C. §1232g and 34 CFR §99.31?
+    regulatory_standard: "20 U.S.C. §1232g; 34 CFR §99.31"
+    search_patterns:
+      - "education_record"
+      - "student_record"
+      - "ferpa"
+      - "legitimate_interest"
+      - "school_official"
+      - "student_data"
+      - "academic_record"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for role-based access controls on student record endpoints
+      and authorization checks for educational interest.
+
+  - id: FERPA-002
+    category: Consent for Disclosure
+    legal_question: >
+      Does the system obtain student or parent consent before disclosing
+      education records to third parties as required under 20 U.S.C.
+      §1232g(b) and 34 CFR §99.30?
+    regulatory_standard: "20 U.S.C. §1232g(b); 34 CFR §99.30"
+    search_patterns:
+      - "student_consent"
+      - "parent_consent"
+      - "ferpa_consent"
+      - "record_disclosure"
+      - "third_party_sharing"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for consent flows before third-party data sharing of
+      student records.
+
+  - id: FERPA-003
+    category: Right to Inspect Records
+    legal_question: >
+      Does the system provide students and parents the right to inspect
+      and review education records as required under 20 U.S.C. §1232g(a)
+      and 34 CFR §99.10?
+    regulatory_standard: "20 U.S.C. §1232g(a); 34 CFR §99.10"
+    search_patterns:
+      - "record_access"
+      - "student_access"
+      - "view_records"
+      - "inspect_records"
+      - "transcript"
+      - "grade_report"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for student self-service record access or parent portal
+      for viewing education records.
+
+  - id: FERPA-004
+    category: Access Audit Logging
+    legal_question: >
+      Does the system maintain audit logs of who accessed student
+      education records and why as required under 34 CFR §99.32?
+    regulatory_standard: "34 CFR §99.32"
+    search_patterns:
+      - "access_log"
+      - "audit_trail"
+      - "record_access_log"
+      - "ferpa_log"
+      - "audit"
+      - "log_access"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for access logging on student data endpoints and audit
+      trail mechanisms.
+
+  - id: FERPA-005
+    category: Record Security
+    legal_question: >
+      Does the system implement appropriate security controls to protect
+      student education records as required under 34 CFR §99.31(a)(1)?
+    regulatory_standard: "34 CFR §99.31(a)(1)"
+    search_patterns:
+      - "encryption"
+      - "student_encryption"
+      - "education_record_security"
+      - "ferpa_security"
+      - "bcrypt"
+      - "tls"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for encryption on student data storage and transmission.
+
+  - id: FERPA-006
+    category: Right to Amendment
+    legal_question: >
+      Does the system allow students to request amendment of inaccurate
+      education records as required under 20 U.S.C. §1232g(a)(2) and
+      34 CFR §99.20?
+    regulatory_standard: "20 U.S.C. §1232g(a)(2); 34 CFR §99.20"
+    search_patterns:
+      - "amend_record"
+      - "correct_record"
+      - "dispute_record"
+      - "record_correction"
+      - "grade_dispute"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for student record update, dispute, or correction endpoints.
+
+  - id: FERPA-007
+    category: Purpose Limitation
+    legal_question: >
+      Does the system limit use of student data to the educational
+      purpose for which it was collected as required under
+      34 CFR §99.31(a)(1)(i)(B)?
+    regulatory_standard: "34 CFR §99.31(a)(1)(i)(B)"
+    search_patterns:
+      - "purpose_limitation"
+      - "educational_purpose"
+      - "data_use_restriction"
+      - "school_purpose"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for data use controls and purpose tracking that restrict
+      student data to educational contexts.
+
+  - id: FERPA-008
+    category: Directory Information Controls
+    legal_question: >
+      Does the system implement directory information controls allowing
+      students to opt out of disclosure as required under 34 CFR §99.37?
+    regulatory_standard: "34 CFR §99.37"
+    search_patterns:
+      - "directory_information"
+      - "directory_opt_out"
+      - "public_student_info"
+      - "student_directory"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for directory information preference controls allowing
+      students to opt out of public disclosure.

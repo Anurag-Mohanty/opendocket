@@ -63,6 +63,10 @@ python scanner/main.py https://github.com/org/repo --output ./my-reports
 | **GDPR** | EU Data Protection Authorities | European Union | Up to EUR 20M or 4% global annual turnover | 10 |
 | **TCPA** | FCC | United States | $500-$1,500 per violation, class action exposure | 8 |
 | **SOX** | SEC / PCAOB | United States | Criminal penalties, executive liability, delisting | 8 |
+| **CCPA/CPRA** | CA Privacy Protection Agency | California, US | $2,500-$7,500/violation + class action | 10 |
+| **COPPA** | FTC | United States | Up to $51,744 per violation | 8 |
+| **FERPA** | U.S. Dept. of Education | United States | Loss of federal funding | 8 |
+| **GLBA** | FTC / Banking Regulators | United States | $100K/violation + criminal penalties | 8 |
 
 ## OpenDocket Score
 

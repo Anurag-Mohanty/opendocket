@@ -21,6 +21,10 @@ from scanner.agents.pci_dss_agent import PCIDSSAgent
 from scanner.agents.gdpr_agent import GDPRAgent
 from scanner.agents.tcpa_agent import TCPAAgent
 from scanner.agents.sox_agent import SOXAgent
+from scanner.agents.ccpa_agent import CCPAAgent
+from scanner.agents.coppa_agent import COPPAAgent
+from scanner.agents.ferpa_agent import FERPAAgent
+from scanner.agents.glba_agent import GLBAAgent
 from scanner.report_generator import (
     generate_markdown_report,
     generate_html_report,
@@ -36,6 +40,10 @@ AGENTS = {
     "gdpr": GDPRAgent,
     "tcpa": TCPAAgent,
     "sox": SOXAgent,
+    "ccpa": CCPAAgent,
+    "coppa": COPPAAgent,
+    "ferpa": FERPAAgent,
+    "glba": GLBAAgent,
 }
 
 

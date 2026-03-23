@@ -56,6 +56,35 @@ DOMAIN_SIGNALS: dict[str, list[str]] = {
         "general_ledger", "sarbanes", "pcaob", "section_302",
         "section_404", "financial_reporting",
     ],
+    "ccpa": [
+        "california", "ccpa", "cpra", "cppa",
+        "do_not_sell", "consumer_rights",
+        "privacy_request", "gpc", "sec_gpc",
+        "opt_out_sale", "dnsmpi",
+    ],
+    "coppa": [
+        "coppa", "children", "child", "minor",
+        "under_13", "age_gate", "parental_consent",
+        "kids", "youth", "student", "school",
+        "parent_consent", "age_verification",
+        "guardian",
+    ],
+    "ferpa": [
+        "ferpa", "student", "enrollment",
+        "grade", "transcript", "education_record",
+        "school", "university", "college",
+        "lms", "learning_management",
+        "course", "gradebook", "roster",
+        "academic_record", "institution",
+    ],
+    "glba": [
+        "glba", "gramm_leach", "safeguards_rule",
+        "nonpublic_personal", "npi", "financial_institution",
+        "bank", "credit_union", "mortgage",
+        "financial_advisor", "broker_dealer",
+        "insurance", "investment_advisor",
+        "financial_privacy", "customer_financial",
+    ],
 }
 
 # File extensions to scan for signals

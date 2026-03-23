@@ -99,6 +99,26 @@ h2{font-size:20px;font-weight:600;margin-top:40px;margin-bottom:4px}
   </table>
   <a class="propose-link" href="https://github.com/Anurag-Mohanty/opendocket/issues/new?title=SOX+Question+Proposal&template=question_proposal.md">Propose a new question for SOX</a>
 
+  <h2>CCPA/CPRA — California Consumer Privacy Act</h2>
+  <div class="fw-meta">California Privacy Protection Agency &middot; California, US &middot; 10 questions</div>
+  <table class="q-table"><thead><tr><th>ID</th><th>Legal Question</th><th>Citation</th><th>Status</th></tr></thead><tbody id="ccpa-tbody"></tbody></table>
+  <a class="propose-link" href="https://github.com/Anurag-Mohanty/opendocket/issues/new?title=CCPA+Question+Proposal">Propose a new question for CCPA</a>
+
+  <h2>COPPA — Children's Online Privacy Protection Act</h2>
+  <div class="fw-meta">FTC &middot; United States &middot; 8 questions</div>
+  <table class="q-table"><thead><tr><th>ID</th><th>Legal Question</th><th>Citation</th><th>Status</th></tr></thead><tbody id="coppa-tbody"></tbody></table>
+  <a class="propose-link" href="https://github.com/Anurag-Mohanty/opendocket/issues/new?title=COPPA+Question+Proposal">Propose a new question for COPPA</a>
+
+  <h2>FERPA — Family Educational Rights and Privacy Act</h2>
+  <div class="fw-meta">U.S. Department of Education &middot; United States &middot; 8 questions</div>
+  <table class="q-table"><thead><tr><th>ID</th><th>Legal Question</th><th>Citation</th><th>Status</th></tr></thead><tbody id="ferpa-tbody"></tbody></table>
+  <a class="propose-link" href="https://github.com/Anurag-Mohanty/opendocket/issues/new?title=FERPA+Question+Proposal">Propose a new question for FERPA</a>
+
+  <h2>GLBA — Gramm-Leach-Bliley Act</h2>
+  <div class="fw-meta">FTC / Federal Banking Regulators &middot; United States &middot; 8 questions</div>
+  <table class="q-table"><thead><tr><th>ID</th><th>Legal Question</th><th>Citation</th><th>Status</th></tr></thead><tbody id="glba-tbody"></tbody></table>
+  <a class="propose-link" href="https://github.com/Anurag-Mohanty/opendocket/issues/new?title=GLBA+Question+Proposal">Propose a new question for GLBA</a>
+
   <div class="how-section">
     <h3>How questions get validated</h3>
     <ol>
@@ -187,6 +207,48 @@ const questions = {
     {id:"SOX-007",q:"Does the system provide documented internal controls over financial reporting?",cite:"SOX Section 404(a)"},
     {id:"SOX-008",q:"Does the system prevent unauthorized alteration or destruction of financial records?",cite:"SOX Section 802"},
   ],
+  ccpa: [
+    {id:"CCPA-001",q:"Does the system provide California residents with the right to know what personal information is collected?",cite:"Cal. Civ. Code §1798.100; CPRA §1798.110"},
+    {id:"CCPA-002",q:"Does the system implement a 'Do Not Sell or Share' opt-out mechanism?",cite:"Cal. Civ. Code §1798.120; CPRA §1798.135"},
+    {id:"CCPA-003",q:"Does the system implement the right to delete personal information?",cite:"Cal. Civ. Code §1798.105"},
+    {id:"CCPA-004",q:"Does the system implement data portability in a portable format?",cite:"Cal. Civ. Code §1798.100(d)"},
+    {id:"CCPA-005",q:"Does the system limit collection to what is necessary for the disclosed purpose?",cite:"CPRA §1798.100(a)(1)"},
+    {id:"CCPA-006",q:"Does the system honor Global Privacy Control (GPC) signals?",cite:"CPRA §1798.135(b)"},
+    {id:"CCPA-007",q:"Does the system implement data retention limits?",cite:"CPRA §1798.100(a)(2)"},
+    {id:"CCPA-008",q:"Does the system implement controls for sensitive personal information?",cite:"CPRA §1798.121"},
+    {id:"CCPA-009",q:"Does the system provide the right to correct inaccurate personal information?",cite:"CPRA §1798.106"},
+    {id:"CCPA-010",q:"Does the system implement reasonable security measures?",cite:"Cal. Civ. Code §1798.150"},
+  ],
+  coppa: [
+    {id:"COPPA-001",q:"Does the system implement age verification to identify users under 13?",cite:"15 U.S.C. §6502; 16 CFR §312.5"},
+    {id:"COPPA-002",q:"Does the system obtain verifiable parental consent before collecting children's data?",cite:"15 U.S.C. §6502(b)(1)(A)(ii); 16 CFR §312.5"},
+    {id:"COPPA-003",q:"Does the system provide parents with review and deletion of child's information?",cite:"15 U.S.C. §6502(b)(1)(B); 16 CFR §312.6"},
+    {id:"COPPA-004",q:"Does the system limit data collection from children to what is necessary?",cite:"16 CFR §312.7"},
+    {id:"COPPA-005",q:"Does the system have a privacy policy describing data practices for children?",cite:"16 CFR §312.4"},
+    {id:"COPPA-006",q:"Does the system prevent behavioral advertising targeting users under 13?",cite:"16 CFR §312.2"},
+    {id:"COPPA-007",q:"Does the system implement data retention limits for children's information?",cite:"16 CFR §312.10"},
+    {id:"COPPA-008",q:"Does the system protect the security of children's personal information?",cite:"16 CFR §312.8"},
+  ],
+  ferpa: [
+    {id:"FERPA-001",q:"Does the system protect education records and limit access to authorized officials?",cite:"20 U.S.C. §1232g; 34 CFR §99.31"},
+    {id:"FERPA-002",q:"Does the system obtain consent before disclosing education records to third parties?",cite:"20 U.S.C. §1232g(b); 34 CFR §99.30"},
+    {id:"FERPA-003",q:"Does the system provide students/parents the right to inspect education records?",cite:"20 U.S.C. §1232g(a); 34 CFR §99.10"},
+    {id:"FERPA-004",q:"Does the system maintain audit logs of who accessed student records?",cite:"34 CFR §99.32"},
+    {id:"FERPA-005",q:"Does the system implement security controls for student education records?",cite:"34 CFR §99.31(a)(1)"},
+    {id:"FERPA-006",q:"Does the system allow students to request amendment of inaccurate records?",cite:"20 U.S.C. §1232g(a)(2); 34 CFR §99.20"},
+    {id:"FERPA-007",q:"Does the system limit use of student data to the educational purpose?",cite:"34 CFR §99.31(a)(1)(i)(B)"},
+    {id:"FERPA-008",q:"Does the system implement directory information opt-out controls?",cite:"34 CFR §99.37"},
+  ],
+  glba: [
+    {id:"GLBA-001",q:"Does the system implement a comprehensive information security program?",cite:"16 CFR §314.4"},
+    {id:"GLBA-002",q:"Does the system protect nonpublic personal financial information with encryption?",cite:"16 CFR §314.4(e)"},
+    {id:"GLBA-003",q:"Does the system provide customers with clear privacy notices?",cite:"15 U.S.C. §6803"},
+    {id:"GLBA-004",q:"Does the system allow customers to opt out of third-party information sharing?",cite:"15 U.S.C. §6802"},
+    {id:"GLBA-005",q:"Does the system implement access controls on customer financial information?",cite:"16 CFR §314.4(e)(1)"},
+    {id:"GLBA-006",q:"Does the system implement multi-factor authentication for financial access?",cite:"16 CFR §314.4(e)(2)"},
+    {id:"GLBA-007",q:"Does the system implement incident response for financial data breaches?",cite:"16 CFR §314.4(h)"},
+    {id:"GLBA-008",q:"Does the system conduct risk assessments for customer financial information?",cite:"16 CFR §314.4(b)"},
+  ],
 };
 
 function renderTable(fw, tbodyId) {
@@ -203,6 +265,10 @@ renderTable('pcidss', 'pcidss-tbody');
 renderTable('gdpr', 'gdpr-tbody');
 renderTable('tcpa', 'tcpa-tbody');
 renderTable('sox', 'sox-tbody');
+renderTable('ccpa', 'ccpa-tbody');
+renderTable('coppa', 'coppa-tbody');
+renderTable('ferpa', 'ferpa-tbody');
+renderTable('glba', 'glba-tbody');
 </script>
 </body>
 </html>

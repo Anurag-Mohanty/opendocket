@@ -22,6 +22,10 @@ FRAMEWORK_META = {
     "GDPR": {"body": "EU DPAs", "risk": "Up to EUR 20M or 4% turnover", "trend": "Cross-border enforcement rising"},
     "TCPA": {"body": "FCC", "risk": "$500-$1,500 per violation", "trend": "Class action filings at record levels"},
     "SOX": {"body": "SEC / PCAOB", "risk": "Criminal penalties, delisting", "trend": "IT controls under increased scrutiny"},
+    "CCPA/CPRA": {"body": "CA Privacy Protection Agency", "risk": "$2,500-$7,500/violation + class action", "trend": "CPPA active enforcement since 2023"},
+    "COPPA": {"body": "FTC", "risk": "Up to $51,744 per violation", "trend": "FTC actively pursuing children's data cases"},
+    "FERPA": {"body": "U.S. Dept. of Education", "risk": "Loss of federal funding", "trend": "Ed-tech vendors under increased scrutiny"},
+    "GLBA": {"body": "FTC / Banking Regulators", "risk": "$100K/violation + criminal", "trend": "2023 Safeguards Rule expansion"},
 }
 
 
