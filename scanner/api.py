@@ -437,6 +437,15 @@ def serve_dashboard():
 
 def main():
     init_db()
+    # Auto-seed if database is empty (first boot on Railway)
+    stats = get_stats()
+    if stats.get("total_scans", 0) == 0:
+        print("[OpenDocket API] Empty database — running seed...")
+        try:
+            from scanner.seed_database import seed
+            seed()
+        except Exception as e:
+            print(f"[OpenDocket API] Seed failed: {e}")
     port = int(os.environ.get("PORT", 8080))
     debug = os.environ.get("FLASK_DEBUG", "0") == "1"
     print(f"[OpenDocket API] Starting on port {port}")
