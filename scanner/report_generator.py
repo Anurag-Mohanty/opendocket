@@ -191,10 +191,10 @@ def calculate_score(agent_results: list[AgentResult]) -> int:
 
 # ── CSS for light-mode reports ──
 _CSS = """*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.6; color: #1a1a1a; background: #ffffff; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.6; color: #0D1117; background: #F4F5F7; }
 a { color: #0052CC; text-decoration: none; } a:hover { text-decoration: underline; }
 .top-bar { height: 4px; background: #0052CC; }
-.nav { background: #fff; border-bottom: 1px solid #d0d7de; padding: 0 40px; height: 48px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 200; }
+.nav { background: #FFFFFF; box-shadow: 0 1px 0 #EAEEF2; padding: 0 40px; height: 48px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 200; }
 .nav-brand { font-size: 15px; font-weight: 700; color: #1a1a1a; text-decoration: none; display: flex; align-items: center; gap: 8px; }
 .nav-brand-shield { width: 20px; height: 24px; background: #0052CC; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); display: inline-block; }
 .nav-links { display: flex; gap: 24px; } .nav-links a { font-size: 13px; color: #57606a; text-decoration: none; } .nav-links a:hover { color: #0052CC; }
@@ -215,7 +215,7 @@ a { color: #0052CC; text-decoration: none; } a:hover { text-decoration: underlin
 .filter-btn:hover { border-color: #0052CC; color: #0052CC; } .filter-btn.active { background: #0052CC; color: #fff; border-color: #0052CC; }
 /* Layout */
 .page { max-width: 960px; margin: 0 auto; padding: 32px 40px; }
-.section { margin-bottom: 40px; scroll-margin-top: 160px; }
+.section { margin-bottom: 24px; scroll-margin-top: 160px; background: #FFFFFF; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); padding: 24px; }
 .section-heading { font-size: 13px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: #57606a; border-bottom: 1px solid #d0d7de; padding-bottom: 8px; margin-bottom: 20px; }
 .report-header { margin-bottom: 32px; }
 .report-eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #57606a; margin-bottom: 8px; }
@@ -239,8 +239,8 @@ a { color: #0052CC; text-decoration: none; } a:hover { text-decoration: underlin
 .domain-name { width: 130px; font-weight: 500; } .domain-bar-wrap { flex: 1; height: 6px; background: #eaeef2; border-radius: 3px; overflow: hidden; }
 .domain-bar { height: 100%; background: #0052CC; border-radius: 3px; } .domain-pct { width: 44px; text-align: right; font-size: 13px; color: #57606a; }
 /* Judge */
-.judge-block { background: #f0f5ff; border: 1px solid #d0d7de; border-left: 4px solid #0052CC; padding: 16px 20px; margin-bottom: 24px; }
-.judge-title { font-size: 12px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: #0052CC; margin-bottom: 12px; }
+.judge-block { background: #F3EEFF; border: 1px solid #D0D7DE; border-left: 4px solid #6E40C9; padding: 16px 20px; margin-bottom: 24px; }
+.judge-title { font-size: 12px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: #6E40C9; margin-bottom: 12px; }
 .judge-stats { display: flex; gap: 32px; flex-wrap: wrap; margin-bottom: 12px; } .judge-stat { text-align: center; }
 .judge-stat-n { font-size: 24px; font-weight: 700; display: block; line-height: 1.2; } .judge-stat-l { font-size: 12px; color: #57606a; display: block; }
 .j-confirmed { color: #1A7F37; } .j-context { color: #9A6700; } .j-fp { color: #cf222e; } .j-additional { color: #6E40C9; }
@@ -261,16 +261,19 @@ a { color: #0052CC; text-decoration: none; } a:hover { text-decoration: underlin
 .rec-text { font-size: 14px; color: #1a1a1a; line-height: 1.6; } .rec-fw { font-size: 12px; color: #57606a; margin-top: 3px; }
 /* Framework sections */
 .framework-section { margin-bottom: 36px; scroll-margin-top: 160px; }
-.framework-header { background: #f6f8fa; border: 1px solid #d0d7de; border-left: 4px solid #0052CC; padding: 12px 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-start; }
-.framework-name { font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; } .framework-meta { font-size: 12px; color: #57606a; }
-.framework-count { font-size: 13px; color: #57606a; white-space: nowrap; padding-left: 16px; }
+.framework-header { background: #0D1117; color: #FFFFFF; border: none; padding: 12px 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-start; }
+.framework-name { font-size: 15px; font-weight: 700; color: #FFFFFF; margin-bottom: 4px; } .framework-meta { font-size: 12px; color: #8B949E; }
+.framework-count { font-size: 13px; color: #8B949E; white-space: nowrap; padding-left: 16px; }
 /* Finding cards */
-.finding { border: 1px solid #d0d7de; margin-bottom: 8px; page-break-inside: avoid; }
+.finding { border: 1px solid #D0D7DE; margin-bottom: 8px; page-break-inside: avoid; background: #FFFFFF; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border-radius: 4px; overflow: hidden; }
 .finding[data-severity="High Risk"] { border-left: 4px solid #cf222e; }
 .finding[data-severity="Medium Risk"] { border-left: 4px solid #9A6700; }
 .finding[data-severity="Pattern of Concern"] { border-left: 4px solid #0052CC; }
 .finding[data-severity="No Issue Found"] { border-left: 4px solid #1A7F37; }
-.finding-header { display: flex; align-items: flex-start; justify-content: space-between; padding: 12px 16px; background: #f6f8fa; cursor: pointer; user-select: none; gap: 12px; } .finding-header:hover { background: #eaeef2; }
+.finding-header { display: flex; align-items: flex-start; justify-content: space-between; padding: 12px 16px; background: #FAFBFC; cursor: pointer; user-select: none; gap: 12px; transition: background 0.15s; } .finding-header:hover { background: #F0F1F3; }
+.finding[data-severity="High Risk"] .finding-header { background: #FFF5F5; } .finding[data-severity="High Risk"] .finding-header:hover { background: #FFECEC; }
+.finding[data-severity="Medium Risk"] .finding-header { background: #FFF8F0; }
+.finding[data-severity="Pattern of Concern"] .finding-header { background: #F0F5FF; }
 .finding-left { flex: 1; min-width: 0; } .finding-num { font-size: 11px; font-family: "SFMono-Regular", Consolas, monospace; color: #8c959f; margin-bottom: 4px; }
 .finding-question { font-size: 14px; font-weight: 600; color: #1a1a1a; line-height: 1.4; }
 .finding-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
@@ -284,7 +287,7 @@ a { color: #0052CC; text-decoration: none; } a:hover { text-decoration: underlin
 .verdict-label { font-size: 12px; font-weight: 700; text-transform: uppercase; }
 .v-confirmed { color: #1A7F37; } .v-context { color: #9A6700; } .v-fp { color: #cf222e; } .v-additional { color: #6E40C9; }
 .verdict-text { font-size: 13px; color: #57606a; margin-top: 4px; } .verdict-model { font-size: 11px; color: #8c959f; margin-top: 4px; }
-.evidence-block { background: #f6f8fa; border: 1px solid #d0d7de; border-left: 3px solid #0052CC; padding: 14px 16px; font-family: "SFMono-Regular", Consolas, monospace; font-size: 13px; color: #1a1a1a; white-space: pre-wrap; overflow-x: auto; margin-bottom: 16px; line-height: 1.5; }
+.evidence-block { background: #0D1117; border: 1px solid #30363D; border-left: 3px solid #0052CC; padding: 14px 16px; font-family: "SFMono-Regular", Consolas, monospace; font-size: 13px; color: #E6EDF3; white-space: pre-wrap; overflow-x: auto; margin-bottom: 16px; line-height: 1.5; }
 .remediation-block { background: #f0fff4; border: 1px solid #d0d7de; border-left: 3px solid #1A7F37; padding: 14px 16px; font-size: 14px; color: #1a1a1a; line-height: 1.7; }
 .questions-footer { border-top: 1px solid #d0d7de; padding: 20px 0; text-align: center; font-size: 13px; color: #57606a; margin-top: 40px; } .questions-footer a { color: #0052CC; }
 @media print { .top-bar, .nav, .action-bar, .tab-bar { display: none; } .tab-panel { display: block !important; } .finding-body { display: block !important; } body { font-size: 12px; } .finding { page-break-inside: avoid; } @page { margin: 2cm; } }

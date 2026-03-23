@@ -5,209 +5,215 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OpenDocket — Compliance risk analysis for software repositories</title>
   <link rel="stylesheet" href="styles.css">
-  <style>
-    .pstep{padding:4px 0;color:#8c959f;display:flex;align-items:center;gap:8px}
-    .pstep.active{color:#0052CC;font-weight:500}
-    .pstep.active .picon{animation:pulse 1.2s infinite}
-    .pstep.done{color:#1A7F37}
-    .pstep.done .picon{color:#1A7F37}
-    .pstep.fail{color:#CF222E}
-    .picon{width:16px;text-align:center;flex-shrink:0}
-    @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-  </style>
-  <!-- Analytics: uncomment after setting up Plausible -->
-  <!-- <script defer data-domain="opendocket.dev" src="https://plausible.io/js/script.js"></script> -->
 </head>
 <body>
 
-  <div style="height:4px;background:#0052CC"></div>
+<!-- Navigation -->
+<nav class="nav">
+  <div style="display:flex;align-items:center;gap:8px">
+    <a href="index.html" class="nav-brand"><span class="nav-brand-shield"></span> OpenDocket</a>
+    <span class="beta-badge">Beta</span>
+  </div>
+  <div class="nav-links">
+    <a href="#directory">Directory</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="methodology.html">Methodology</a>
+    <a href="questions.html">Questions</a>
+    <a href="https://github.com/Anurag-Mohanty/opendocket">GitHub</a>
+  </div>
+</nav>
 
-  <nav style="background:#fff;border-bottom:1px solid #E1E4E8;padding:12px 40px;display:flex;justify-content:space-between;align-items:center;max-width:100%">
-    <div style="display:flex;align-items:center;gap:8px">
-      <div style="width:24px;height:28px;background:#0052CC;clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%)"></div>
-      <span style="font-size:16px;font-weight:700;color:#0D1117">OpenDocket</span>
-    </div>
-    <div>
-      <a href="#directory" style="color:#57606A;text-decoration:none;font-size:14px;margin-left:24px">Directory</a>
-      <a href="dashboard.html" style="color:#57606A;text-decoration:none;font-size:14px;margin-left:24px">Dashboard</a>
-      <a href="methodology.html" style="color:#57606A;text-decoration:none;font-size:14px;margin-left:24px">Methodology</a>
-      <a href="questions.html" style="color:#57606A;text-decoration:none;font-size:14px;margin-left:24px">Questions</a>
-      <a href="https://github.com/Anurag-Mohanty/opendocket" style="color:#57606A;text-decoration:none;font-size:14px;margin-left:24px">GitHub &rarr;</a>
-    </div>
-  </nav>
-
-  <header class="header">
-    <h1 style="display:flex;align-items:center;justify-content:center;gap:10px"><div style="width:24px;height:28px;background:#0052CC;clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:inline-block"></div> OpenDocket</h1>
-    <p class="tagline">Compliance risk analysis for software repositories</p>
-    <p class="sub-tagline">Open source &middot; Free &middot; Not legal advice &middot; You own the copyright to your code. We surface the risk.</p>
-  </header>
-
-  <!-- Hero -->
-  <div class="hero">
+<!-- Hero (dark) -->
+<div class="hero">
+  <div class="hero-inner">
     <div class="hero-text">
-      <h2>Find compliance blind spots before regulators do.</h2>
-      <div class="hero-check"><span class="check">&#10003;</span> Scans your code against HIPAA, SOC2, PCI-DSS, GDPR, TCPA, and SOX</div>
+      <h2>Find compliance blind spots<br>before regulators do.</h2>
+      <div class="hero-check"><span class="check">&#10003;</span> Scans your code against HIPAA, SOC2, PCI-DSS, GDPR, CCPA, and 5 more</div>
       <div class="hero-check"><span class="check">&#10003;</span> Asks the exact questions regulators ask in investigations</div>
       <div class="hero-check"><span class="check">&#10003;</span> Finds the evidence in specific files and line numbers</div>
-
       <div class="urgency-block">
-        <div class="urgency-item">HIPAA fines averaged $9.48M per breach in 2024.</div>
-        <div class="urgency-item">45% of AI-generated code contains security vulnerabilities. Compliance is never the default.</div>
-        <div class="urgency-item">OpenDocket asks the questions an investigator would ask — and finds the evidence in your code.</div>
+        <div class="urgency-item">HIPAA fines averaged $9.48M per breach in 2024</div>
+        <div class="urgency-item">45% of AI-generated code has security flaws — Veracode 2025</div>
+        <div class="urgency-item">OpenDocket asks the questions an investigator would ask — and finds the evidence in your code</div>
       </div>
     </div>
-
-    <div class="hero-scan-card" style="border-top:3px solid #0052CC">
+    <div class="hero-scan-card">
       <label>GitHub Repository URL</label>
       <input type="url" id="scan-url" placeholder="https://github.com/owner/repo">
       <span class="byok-toggle" onclick="document.getElementById('byok-fields').classList.toggle('open')">Use my API keys</span>
       <div class="byok-fields" id="byok-fields">
-        <input type="password" id="anthropic-key" placeholder="Anthropic API key (for primary scan)">
-        <input type="password" id="gemini-key" placeholder="Gemini API key (for independent review)">
+        <input type="password" id="anthropic-key" placeholder="Anthropic API key (primary scan)">
+        <input type="password" id="gemini-key" placeholder="Gemini API key (independent review)">
         <div class="key-note">Both keys are used only for this scan and never stored.</div>
       </div>
       <button class="scan-btn" id="scan-btn" onclick="startScan()">Scan Repository</button>
       <div class="scan-note">3 free scans per hour &middot; No account required</div>
-      <div id="scan-status" style="margin-top:12px;font-size:13px;color:#57606A"></div>
-      <!-- Live progress timeline -->
-      <div id="scan-progress" style="display:none;margin-top:16px;background:#f6f8fa;border:1px solid #d0d7de;padding:16px;font-size:13px">
-        <div style="display:flex;justify-content:space-between;margin-bottom:12px"><span id="prog-repo" style="font-weight:600;color:#1a1a1a"></span><span id="prog-timer" style="color:#57606a;font-family:monospace">0:00</span></div>
+      <div id="scan-status" style="margin-top:12px;font-size:13px;color:#8B949E"></div>
+      <div id="scan-progress" style="display:none;margin-top:16px;background:#0D1117;border:1px solid #30363D;border-radius:4px;padding:14px;font-size:13px;color:#E6EDF3">
+        <div style="display:flex;justify-content:space-between;margin-bottom:10px"><span id="prog-repo" style="font-weight:600"></span><span id="prog-timer" style="color:#8B949E;font-family:monospace">0:00</span></div>
         <div id="prog-steps">
           <div class="pstep" data-step="clone"><span class="picon">&#9675;</span> Cloning repository</div>
           <div class="pstep" data-step="qualify"><span class="picon">&#9675;</span> Running qualification gates</div>
           <div class="pstep" data-step="domain"><span class="picon">&#9675;</span> Detecting domain and frameworks</div>
-          <div class="pstep" data-step="scan"><span class="picon">&#9675;</span> Running compliance agents <span class="pdetail" style="color:#57606a"></span></div>
+          <div class="pstep" data-step="scan"><span class="picon">&#9675;</span> Running compliance agents <span class="pdetail" style="color:#8B949E"></span></div>
           <div class="pstep" data-step="judge"><span class="picon">&#9675;</span> Gemini independent review</div>
           <div class="pstep" data-step="report"><span class="picon">&#9675;</span> Generating report</div>
         </div>
-        <div style="margin-top:12px;font-size:12px;color:#8c959f">Typical scan takes 3-5 minutes. You can safely leave this tab open.</div>
-        <div id="prog-fact" style="margin-top:8px;font-size:12px;color:#57606a;font-style:italic"></div>
+        <div style="margin-top:10px;font-size:11px;color:#6E7681">Typical scan: 3-5 minutes</div>
+        <div id="prog-fact" style="margin-top:6px;font-size:11px;color:#8B949E;font-style:italic"></div>
       </div>
-      <!-- Scan result -->
-      <div id="scan-result" style="display:none;margin-top:16px;background:#f0fff4;border:1px solid #d0d7de;border-left:4px solid #1A7F37;padding:16px;font-size:14px">
-      </div>
+      <div id="scan-result" style="display:none;margin-top:16px;background:#0D1117;border:1px solid #1A7F37;border-radius:4px;padding:14px;color:#E6EDF3"></div>
     </div>
   </div>
+</div>
 
-  <!-- Stats Bar -->
-  <div class="stats-bar" id="stats-bar">
-    <div class="stat-item"><div class="stat-num" id="stat-scans">--</div><div class="stat-label">repos scanned</div></div>
-    <div class="stat-item"><div class="stat-num" id="stat-lines">--</div><div class="stat-label">lines analyzed</div></div>
-    <div class="stat-item"><div class="stat-num" id="stat-findings">--</div><div class="stat-label">risks identified</div></div>
-    <div class="stat-item"><div class="stat-num" id="stat-overrides">--</div><div class="stat-label">judge overrides</div></div>
-  </div>
+<!-- Stats Bar -->
+<div class="stats-bar">
+  <div class="stat-item"><div class="stat-num" id="stat-scans">--</div><div class="stat-label">repos scanned</div></div>
+  <div class="stat-item"><div class="stat-num" id="stat-lines">--</div><div class="stat-label">lines analyzed</div></div>
+  <div class="stat-item"><div class="stat-num" id="stat-findings">--</div><div class="stat-label">risks identified</div></div>
+  <div class="stat-item"><div class="stat-num" id="stat-overrides">--</div><div class="stat-label">judge reviews</div></div>
+</div>
 
-  <!-- How It Works -->
+<!-- How It Works -->
+<div style="background:var(--bg-page)">
   <section class="section">
     <h2>How It Works</h2>
-    <div class="how-steps">
-      <div class="how-step"><div class="how-num">1</div><div class="how-content"><h3>Point it at a repo</h3><p>Give OpenDocket a GitHub URL. It clones the repository, runs qualification gates, and detects which regulatory domains apply.</p></div></div>
-      <div class="how-step"><div class="how-num">2</div><div class="how-content"><h3>It asks legal questions</h3><p>Based on the domain, OpenDocket loads compliance frameworks. Each contains questions pulled from actual regulatory text — the questions a regulator would ask in an investigation.</p></div></div>
-      <div class="how-step"><div class="how-num">3</div><div class="how-content"><h3>You get a legal brief</h3><p>For each question, OpenDocket finds evidence in your code — specific files, line numbers, patterns present or absent — and produces a structured report with risk levels, citations, and remediation. Gemini independently reviews every finding.</p></div></div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <h3>Point it at a repo</h3>
+        <p>Give OpenDocket any public GitHub URL. It clones the repository, runs qualification gates, and detects which regulatory domains apply — healthcare, fintech, SaaS, payments, communications, and more.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <h3>It asks legal questions</h3>
+        <p>Based on the domain, OpenDocket loads compliance frameworks — 10 frameworks, 94 questions from actual regulatory text. The questions a regulator would ask in a deposition or audit.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <h3>You get a legal brief</h3>
+        <p>For each question, OpenDocket finds evidence in your code — specific files, line numbers, patterns. Gemini independently reviews every finding. You get a structured report with risk levels and remediation.</p>
+      </div>
     </div>
   </section>
+</div>
 
-  <!-- Recent Activity -->
-  <div style="max-width:1080px;margin:0 auto;padding:16px 24px;font-size:13px;color:#57606a;border-bottom:1px solid var(--border)" id="activity-ticker">Loading recent scans...</div>
-
-  <!-- Directory (moved before Frameworks — proof first) -->
-  <section class="section" id="directory">
-    <h2>Compliance Intelligence Directory</h2>
-    <p class="section-subtitle">Real compliance scans of open-source repositories.</p>
-    <div class="dir-tabs">
-      <button class="dir-tab active" onclick="filterDir('all')">All</button>
-      <button class="dir-tab" onclick="filterDir('healthcare')">Healthcare</button>
-      <button class="dir-tab" onclick="filterDir('payments')">Payments</button>
-      <button class="dir-tab" onclick="filterDir('saas')">SaaS</button>
-      <button class="dir-tab" onclick="filterDir('infra')">Infrastructure</button>
-    </div>
+<!-- Directory -->
+<section class="section" id="directory">
+  <h2>Compliance Intelligence Directory</h2>
+  <p class="section-subtitle">Real compliance scans of open-source repositories.</p>
+  <div class="dir-tabs">
+    <button class="dir-tab active" onclick="filterDir('all')">All</button>
+    <button class="dir-tab" onclick="filterDir('healthcare')">Healthcare</button>
+    <button class="dir-tab" onclick="filterDir('payments')">Payments</button>
+    <button class="dir-tab" onclick="filterDir('saas')">SaaS</button>
+    <button class="dir-tab" onclick="filterDir('infra')">Infrastructure</button>
+  </div>
+  <div class="dir-table-card">
     <table class="dir-table" id="dir-table">
-      <thead><tr><th onclick="sortDir(0)">Repository</th><th onclick="sortDir(1)" style="text-align:right">Stars</th><th>Domain</th><th>Frameworks</th><th onclick="sortDir(4)" style="text-align:center">High</th><th onclick="sortDir(5)" style="text-align:center">Med</th><th onclick="sortDir(6)" style="text-align:center">Score</th><th>Report</th></tr></thead>
+      <thead><tr><th onclick="sortDir(0)">Repository</th><th onclick="sortDir(1)" style="text-align:right">Stars</th><th>Domain</th><th>Frameworks</th><th onclick="sortDir(4)" style="text-align:center">High</th><th onclick="sortDir(5)" style="text-align:center">Med</th><th onclick="sortDir(6)" style="text-align:center">Risk</th><th>Report</th></tr></thead>
       <tbody>
-        <tr data-cat="healthcare"><td class="repo-name"><a href="reports/medplum_report.html">medplum/medplum</a></td><td style="text-align:right">4,200</td><td>Healthcare</td><td>HIPAA, SOC2, GDPR +3</td><td style="text-align:center;color:var(--high)">47</td><td style="text-align:center;color:var(--medium)">6</td><td style="text-align:center"><span class="score-dot red"></span>19</td><td><a href="reports/medplum_report.html">View</a></td></tr>
-        <tr data-cat="healthcare"><td class="repo-name"><a href="reports/openemr_report.html">openemr/openemr</a></td><td style="text-align:right">2,900</td><td>Healthcare</td><td>HIPAA, SOC2, GDPR</td><td style="text-align:center;color:var(--high)">6</td><td style="text-align:center;color:var(--medium)">10</td><td style="text-align:center"><span class="score-dot amber"></span>61</td><td><a href="reports/openemr_report.html">View</a></td></tr>
-        <tr data-cat="payments"><td class="repo-name"><a href="reports/hyperswitch_report.html">juspay/hyperswitch</a></td><td style="text-align:right">12,500</td><td>Fintech</td><td>PCI-DSS, SOC2, GDPR +3</td><td style="text-align:center;color:var(--high)">45</td><td style="text-align:center;color:var(--medium)">6</td><td style="text-align:center"><span class="score-dot red"></span>21</td><td><a href="reports/hyperswitch_report.html">View</a></td></tr>
-        <tr data-cat="saas"><td class="repo-name"><a href="reports/probo_report.html">getprobo/probo</a></td><td style="text-align:right">200</td><td>SaaS</td><td>SOC2, GDPR</td><td style="text-align:center;color:var(--high)">3</td><td style="text-align:center;color:var(--medium)">6</td><td style="text-align:center"><span class="score-dot amber"></span>72</td><td><a href="reports/probo_report.html">View</a></td></tr>
-        <tr data-cat="saas"><td class="repo-name"><a href="reports/supabase_report.html">supabase/supabase</a></td><td style="text-align:right">74,000</td><td>SaaS</td><td>SOC2, GDPR +4</td><td style="text-align:center;color:var(--high)">47</td><td style="text-align:center;color:var(--medium)">4</td><td style="text-align:center"><span class="score-dot red"></span>17</td><td><a href="reports/supabase_report.html">View</a></td></tr>
-        <tr data-cat="infra"><td class="repo-name"><a href="reports/vault_report.html">hashicorp/vault</a></td><td style="text-align:right">31,000</td><td>Infrastructure</td><td>SOC2, GDPR +4</td><td style="text-align:center;color:var(--high)">45</td><td style="text-align:center;color:var(--medium)">5</td><td style="text-align:center"><span class="score-dot red"></span>20</td><td><a href="reports/vault_report.html">View</a></td></tr>
-        <tr data-cat="infra" class="failed-row"><td>kelseyhightower/nocode</td><td style="text-align:right">60,000</td><td>—</td><td>—</td><td style="text-align:center">—</td><td style="text-align:center">—</td><td style="text-align:center">Did not qualify</td><td><a href="reports/failed_gate_example.html">Gate</a></td></tr>
+        <tr data-cat="healthcare"><td class="repo-name"><a href="https://github.com/medplum/medplum" target="_blank">medplum/medplum</a></td><td style="text-align:right" class="stars">4,200</td><td>Healthcare</td><td>HIPAA, SOC2, GDPR +3</td><td style="text-align:center;color:var(--red);font-weight:700">47</td><td style="text-align:center;color:var(--amber);font-weight:700">6</td><td style="text-align:center"><span class="score-dot critical"></span>Critical</td><td><a href="reports/medplum_report.html">View</a></td></tr>
+        <tr data-cat="healthcare"><td class="repo-name"><a href="https://github.com/openemr/openemr" target="_blank">openemr/openemr</a></td><td style="text-align:right" class="stars">2,900</td><td>Healthcare</td><td>HIPAA, SOC2, GDPR</td><td style="text-align:center;color:var(--red);font-weight:700">6</td><td style="text-align:center;color:var(--amber);font-weight:700">10</td><td style="text-align:center"><span class="score-dot moderate"></span>Moderate</td><td><a href="reports/openemr_report.html">View</a></td></tr>
+        <tr data-cat="payments"><td class="repo-name"><a href="https://github.com/juspay/hyperswitch" target="_blank">juspay/hyperswitch</a></td><td style="text-align:right" class="stars">12,500</td><td>Fintech</td><td>PCI-DSS, SOC2, GDPR +3</td><td style="text-align:center;color:var(--red);font-weight:700">45</td><td style="text-align:center;color:var(--amber);font-weight:700">6</td><td style="text-align:center"><span class="score-dot critical"></span>Critical</td><td><a href="reports/hyperswitch_report.html">View</a></td></tr>
+        <tr data-cat="saas"><td class="repo-name"><a href="https://github.com/getprobo/probo" target="_blank">getprobo/probo</a></td><td style="text-align:right" class="stars">200</td><td>SaaS</td><td>SOC2, GDPR</td><td style="text-align:center;color:var(--red);font-weight:700">3</td><td style="text-align:center;color:var(--amber);font-weight:700">6</td><td style="text-align:center"><span class="score-dot moderate"></span>Moderate</td><td><a href="reports/probo_report.html">View</a></td></tr>
+        <tr data-cat="saas"><td class="repo-name"><a href="https://github.com/supabase/supabase" target="_blank">supabase/supabase</a></td><td style="text-align:right" class="stars">74,000</td><td>SaaS</td><td>SOC2, GDPR +4</td><td style="text-align:center;color:var(--red);font-weight:700">47</td><td style="text-align:center;color:var(--amber);font-weight:700">4</td><td style="text-align:center"><span class="score-dot critical"></span>Critical</td><td><a href="reports/supabase_report.html">View</a></td></tr>
+        <tr data-cat="saas"><td class="repo-name"><a href="https://github.com/formbricks/formbricks" target="_blank">formbricks/formbricks</a></td><td style="text-align:right" class="stars">9,200</td><td>SaaS</td><td>9 frameworks</td><td style="text-align:center;color:var(--red);font-weight:700">61</td><td style="text-align:center;color:var(--amber);font-weight:700">9</td><td style="text-align:center"><span class="score-dot critical"></span>Critical</td><td><a href="reports/formbricks_report.html">View</a></td></tr>
+        <tr data-cat="infra"><td class="repo-name"><a href="https://github.com/hashicorp/vault" target="_blank">hashicorp/vault</a></td><td style="text-align:right" class="stars">31,000</td><td>Infrastructure</td><td>SOC2, GDPR +4</td><td style="text-align:center;color:var(--red);font-weight:700">45</td><td style="text-align:center;color:var(--amber);font-weight:700">5</td><td style="text-align:center"><span class="score-dot critical"></span>Critical</td><td><a href="reports/vault_report.html">View</a></td></tr>
+        <tr data-cat="infra" class="failed-row"><td>kelseyhightower/nocode</td><td style="text-align:right">60,000</td><td>—</td><td>—</td><td style="text-align:center">—</td><td style="text-align:center">—</td><td style="text-align:center;color:var(--text-muted)">Did not qualify</td><td><a href="reports/failed_gate_example.html">Gate</a></td></tr>
       </tbody>
     </table>
-  </section>
+  </div>
+</section>
 
-  <!-- Frameworks (moved after Directory) -->
+<!-- Frameworks -->
+<div style="background:var(--bg-page)">
   <section class="section">
     <h2>Compliance Frameworks</h2>
-    <table class="fw-table">
-      <thead><tr><th>Framework</th><th>Applies to</th><th>Max Penalty</th><th>Questions</th></tr></thead>
-      <tbody>
-        <tr><td><strong>HIPAA</strong></td><td>Healthcare apps, EHR systems, telemedicine, health APIs</td><td>$1.5M/year per category</td><td>10</td></tr>
-        <tr><td><strong>SOC 2</strong></td><td>SaaS platforms, cloud services, B2B software</td><td>Loss of enterprise contracts</td><td>10</td></tr>
-        <tr><td><strong>PCI-DSS</strong></td><td>Payment processors, e-commerce, fintech</td><td>$5K-$100K/month + loss of processing</td><td>10</td></tr>
-        <tr><td><strong>GDPR</strong></td><td>Any app with EU users, personal data processors</td><td>EUR 20M or 4% global turnover</td><td>10</td></tr>
-        <tr><td><strong>TCPA</strong></td><td>SMS marketing, automated calling, messaging apps</td><td>$500-$1,500 per violation</td><td>8</td></tr>
-        <tr><td><strong>SOX</strong></td><td>Public company software, financial reporting, ERP</td><td>Criminal penalties, delisting</td><td>8</td></tr>
-        <tr><td><strong>CCPA/CPRA</strong></td><td>Any app with California users, SaaS, e-commerce</td><td>$2,500-$7,500 per violation + class action</td><td>10</td></tr>
-        <tr><td><strong>COPPA</strong></td><td>Apps used by children under 13, education, gaming</td><td>Up to $51,744 per violation</td><td>8</td></tr>
-        <tr><td><strong>FERPA</strong></td><td>Ed-tech, LMS, student information systems</td><td>Loss of federal funding</td><td>8</td></tr>
-        <tr><td><strong>GLBA</strong></td><td>Fintech, banking, insurance, financial advisors</td><td>$100K/violation + criminal penalties</td><td>8</td></tr>
-      </tbody>
-    </table>
-    <p class="fw-table-note">More frameworks coming — <a href="https://github.com/Anurag-Mohanty/opendocket">contribute on GitHub</a></p>
-  </section>
-
-  <!-- CTA -->
-  <section class="cta-section">
-    <h2>Open Source</h2>
-    <p>MIT License. Scan any public repo, contribute frameworks, or build on top of it.</p>
-    <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap">
-      <a href="https://github.com/Anurag-Mohanty/opendocket" class="btn btn-primary">View on GitHub</a>
-      <a href="https://github.com/Anurag-Mohanty/opendocket/blob/main/README.md#how-to-contribute" class="btn btn-secondary">Contribute</a>
-    </div>
-    <div class="email-form" style="margin-top:24px">
-      <input type="email" id="waitlist-email" placeholder="your@email.com">
-      <button onclick="joinWaitlist()">Get notified for V2</button>
+    <p class="section-subtitle">10 regulatory frameworks. 94 legal questions. Open source question libraries.</p>
+    <div class="fw-table-card">
+      <table class="fw-table">
+        <thead><tr><th>Framework</th><th>Applies to</th><th>Max Penalty</th><th>Questions</th></tr></thead>
+        <tbody>
+          <tr class="cat-healthcare"><td class="fw-name">HIPAA</td><td>Healthcare apps, EHR systems, telemedicine</td><td class="fw-penalty">$1.5M/year per category</td><td>10</td></tr>
+          <tr class="cat-security"><td class="fw-name">SOC 2</td><td>SaaS platforms, cloud services, B2B software</td><td class="fw-penalty">Loss of enterprise contracts</td><td>10</td></tr>
+          <tr class="cat-finance"><td class="fw-name">PCI-DSS</td><td>Payment processors, e-commerce, fintech</td><td class="fw-penalty">$5K-$100K/month</td><td>10</td></tr>
+          <tr class="cat-privacy"><td class="fw-name">GDPR</td><td>Any app with EU users, personal data processors</td><td class="fw-penalty">EUR 20M or 4% turnover</td><td>10</td></tr>
+          <tr class="cat-comms"><td class="fw-name">TCPA</td><td>SMS marketing, automated calling, messaging apps</td><td class="fw-penalty">$500-$1,500/violation</td><td>8</td></tr>
+          <tr class="cat-finance"><td class="fw-name">SOX</td><td>Public company software, financial reporting</td><td class="fw-penalty">Criminal penalties, delisting</td><td>8</td></tr>
+          <tr class="cat-privacy"><td class="fw-name">CCPA/CPRA <span class="fw-new">NEW</span></td><td>Any app with California users, SaaS</td><td class="fw-penalty">$2,500-$7,500/violation</td><td>10</td></tr>
+          <tr class="cat-healthcare"><td class="fw-name">COPPA <span class="fw-new">NEW</span></td><td>Apps used by children under 13, education</td><td class="fw-penalty">Up to $51,744/violation</td><td>8</td></tr>
+          <tr class="cat-healthcare"><td class="fw-name">FERPA <span class="fw-new">NEW</span></td><td>Ed-tech, LMS, student information systems</td><td class="fw-penalty">Loss of federal funding</td><td>8</td></tr>
+          <tr class="cat-finance"><td class="fw-name">GLBA <span class="fw-new">NEW</span></td><td>Fintech, banking, insurance, financial advisors</td><td class="fw-penalty">$100K/violation + criminal</td><td>8</td></tr>
+        </tbody>
+      </table>
+      <div class="fw-table-note">More frameworks coming — <a href="https://github.com/Anurag-Mohanty/opendocket">contribute on GitHub</a></div>
     </div>
   </section>
+</div>
 
-  <!-- Footer -->
-  <footer class="footer">
+<!-- CTA -->
+<section class="cta-section">
+  <h2>Open Source</h2>
+  <p>MIT License. Scan any public repo, contribute frameworks, or build on top of it.</p>
+  <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap">
+    <a href="https://github.com/Anurag-Mohanty/opendocket" class="btn btn-primary">View on GitHub</a>
+    <a href="https://github.com/Anurag-Mohanty/opendocket/blob/main/README.md#how-to-contribute" class="btn btn-secondary">Contribute</a>
+  </div>
+  <div class="email-form" style="margin-top:24px">
+    <input type="email" id="waitlist-email" placeholder="your@email.com">
+    <button onclick="joinWaitlist()">Get notified for V2</button>
+  </div>
+</section>
+
+<!-- Footer (dark) -->
+<footer class="footer">
+  <div class="footer-inner">
     <div class="footer-brand">
       <h3>OpenDocket</h3>
       <p>Compliance risk analysis for software repositories.</p>
-      <p>&copy; 2026 OpenDocket &middot; MIT License &middot; You own the copyright to your code. We surface the risk.</p>
+      <p>&copy; 2026 OpenDocket &middot; MIT License</p>
+      <div class="footer-manifesto">You own the copyright to your code. We surface the risk.</div>
     </div>
     <div class="footer-links">
       <a href="https://github.com/Anurag-Mohanty/opendocket">GitHub</a><br>
       <a href="methodology.html">Methodology</a><br>
       <a href="dashboard.html">Dashboard</a><br>
-      <a href="privacy.html">Privacy Policy</a><br>
-      <a href="https://github.com/Anurag-Mohanty/opendocket/blob/main/README.md#how-to-contribute">Contributing</a>
+      <a href="questions.html">Questions</a><br>
+      <a href="privacy.html">Privacy Policy</a>
     </div>
-    <div class="footer-disclaimer">Not legal advice. Risk pattern detection only. Findings represent automated analysis, not legal determinations. Consult qualified counsel.</div>
-  </footer>
+    <div class="footer-disclaimer">Not legal advice. Risk pattern detection only. Findings represent automated analysis, not legal determinations. Consult qualified counsel for compliance decisions.</div>
+  </div>
+</footer>
 
-  <script>
-    // API base URL
+<script>
     const API_BASE_URL = 'https://opendocket-production.up.railway.app';
 
-    // Stats
+    // Stats with counter animation
     fetch(API_BASE_URL+'/api/stats').then(r=>r.json()).then(d=>{
-      document.getElementById('stat-scans').textContent = (d.total_scans||0).toLocaleString();
-      document.getElementById('stat-lines').textContent = ((d.total_lines_scanned||0)/1e6).toFixed(1)+'M';
-      document.getElementById('stat-findings').textContent = (d.total_findings||0).toLocaleString();
-      document.getElementById('stat-overrides').textContent = (d.judge_overrides||0).toLocaleString();
+      animateCount('stat-scans', d.total_scans||0);
+      document.getElementById('stat-lines').textContent=((d.total_lines_scanned||0)/1e6).toFixed(1)+'M';
+      animateCount('stat-findings', d.total_findings||0);
+      animateCount('stat-overrides', (d.judge_confirmed||0)+(d.judge_context_dependent||0)+(d.judge_overrides||0));
     }).catch(()=>{
-      document.getElementById('stat-scans').textContent='6';
+      document.getElementById('stat-scans').textContent='8';
       document.getElementById('stat-lines').textContent='2.4M';
-      document.getElementById('stat-findings').textContent='312';
-      document.getElementById('stat-overrides').textContent='--';
+      document.getElementById('stat-findings').textContent='354';
+      document.getElementById('stat-overrides').textContent='80';
     });
+
+    function animateCount(id, target){
+      const el=document.getElementById(id);
+      let current=0;
+      const step=Math.max(1,Math.floor(target/30));
+      const timer=setInterval(()=>{current+=step;if(current>=target){current=target;clearInterval(timer)}el.textContent=current.toLocaleString()},50);
+    }
 
     // Scan
     let scanTimer=null,scanStart=0;
     const STEPS=['clone','qualify','domain','scan','judge','report'];
-    const FACTS=['HIPAA fines averaged $9.48M per breach in 2024','45% of AI-generated code has security flaws — Veracode 2025','GDPR has issued \u20AC6.2B in fines since 2018','OpenDocket asks the questions a regulator would ask','The independent Gemini review catches false positives','PCI-DSS violations can result in loss of payment processing'];
+    const FACTS=['HIPAA fines averaged $9.48M per breach in 2024','45% of AI-generated code has security flaws','GDPR has issued \u20AC6.2B in fines since 2018','The Gemini review catches false positives','PCI-DSS violations can result in loss of payment processing','CCPA class actions average $750 per consumer'];
     let factIdx=0;
 
     function startScan(){
@@ -221,130 +227,75 @@
       document.getElementById('scan-btn').disabled=true;
       document.getElementById('scan-status').textContent='Submitting...';
       document.getElementById('scan-result').style.display='none';
-      if(!ak)sessionStorage.setItem('od_scans',parseInt(sessionStorage.getItem('od_scans')||'0')+1);
       fetch(API_BASE_URL+'/api/scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
       .then(r=>r.json()).then(d=>{
         if(d.error){document.getElementById('scan-status').textContent=d.error;document.getElementById('scan-btn').disabled=false;return;}
         if(d.cached){
           document.getElementById('scan-btn').disabled=false;
           document.getElementById('scan-status').style.display='none';
-          const res=document.getElementById('scan-result');
-          res.style.display='block';
-          res.innerHTML='<strong>Cached scan available</strong><br>'+d.message+'<br><a href="'+d.report_url+'" style="color:#0052CC;font-weight:600">View Report &rarr;</a><br><span style="font-size:12px;color:#57606a">Rescan available after 24 hours.</span>';
+          const res=document.getElementById('scan-result');res.style.display='block';
+          res.innerHTML='<strong style="color:#1A7F37">Cached scan available</strong><br><span style="color:#8B949E">'+d.message+'</span><br><a href="'+d.report_url+'" style="color:#58A6FF;font-weight:600">View Report &rarr;</a>';
           return;
         }
-        // Show progress UI
         document.getElementById('scan-status').style.display='none';
-        const prog=document.getElementById('scan-progress');
-        prog.style.display='block';
-        document.getElementById('prog-repo').textContent=d.repo_name||url.split('/').slice(-2).join('/');
+        const prog=document.getElementById('scan-progress');prog.style.display='block';
+        document.getElementById('prog-repo').textContent=d.repo_name||'';
         scanStart=Date.now();
-        scanTimer=setInterval(()=>{
-          const s=Math.floor((Date.now()-scanStart)/1000);
-          document.getElementById('prog-timer').textContent=Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;
-        },1000);
-        // Rotate facts
-        factIdx=0;
-        document.getElementById('prog-fact').textContent=FACTS[0];
+        scanTimer=setInterval(()=>{const s=Math.floor((Date.now()-scanStart)/1000);document.getElementById('prog-timer').textContent=Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60},1000);
+        factIdx=0;document.getElementById('prog-fact').textContent=FACTS[0];
         setInterval(()=>{factIdx=(factIdx+1)%FACTS.length;document.getElementById('prog-fact').textContent=FACTS[factIdx]},20000);
-        // Reset steps
-        document.querySelectorAll('.pstep').forEach(s=>{s.className='pstep';s.querySelector('.picon').innerHTML='&#9675;';const d=s.querySelector('.pdetail');if(d)d.textContent='';});
+        document.querySelectorAll('.pstep').forEach(s=>{s.className='pstep';s.querySelector('.picon').innerHTML='&#9675;'});
         pollScan(d.scan_id);
       }).catch(e=>{document.getElementById('scan-status').textContent='Error: '+e.message;document.getElementById('scan-btn').disabled=false;});
     }
 
     function pollScan(id){
       fetch(API_BASE_URL+'/api/scan/'+id).then(r=>r.json()).then(d=>{
-        const p=d.progress||{};
-        const curStep=p.step||'';
-        // Update step states
+        const p=d.progress||{};const curStep=p.step||'';
         let reached=false;
         STEPS.forEach(s=>{
-          const el=document.querySelector('.pstep[data-step="'+s+'"]');
-          if(!el)return;
+          const el=document.querySelector('.pstep[data-step="'+s+'"]');if(!el)return;
           if(s===curStep){reached=true;el.className='pstep active';el.querySelector('.picon').innerHTML='&#9679;';
-            const det=el.querySelector('.pdetail');
-            if(det&&p.fw_current)det.textContent='('+p.fw_current+' — '+(p.fw_done||0)+' of '+(p.fw_total||'?')+')';
+            const det=el.querySelector('.pdetail');if(det&&p.fw_current)det.textContent='('+p.fw_current+' \u2014 '+(p.fw_done||0)+'/'+( p.fw_total||'?')+')';
           }else if(!reached){el.className='pstep done';el.querySelector('.picon').innerHTML='&#10003;';}
           else{el.className='pstep';el.querySelector('.picon').innerHTML='&#9675;';}
         });
-
         if(d.status==='complete'){
           clearInterval(scanTimer);
-          // Mark all done
-          document.querySelectorAll('.pstep').forEach(s=>{s.className='pstep done';s.querySelector('.picon').innerHTML='&#10003;';});
+          document.querySelectorAll('.pstep').forEach(s=>{s.className='pstep done';s.querySelector('.picon').innerHTML='&#10003;'});
           document.getElementById('scan-progress').style.display='none';
           document.getElementById('scan-btn').disabled=false;
-          const elapsed=Math.floor((Date.now()-scanStart)/1000);
-          const mins=Math.floor(elapsed/60),secs=elapsed%60;
-          const sm=d.summary||{};
-          const hi=sm.high_risk||0;
-          let riskLabel='LOW RISK',riskColor='#1A7F37';
-          if(hi>15){riskLabel='CRITICAL RISK';riskColor='#CF222E';}
-          else if(hi>5){riskLabel='ELEVATED RISK';riskColor='#CF222E';}
-          else if(hi>0){riskLabel='MODERATE RISK';riskColor='#9A6700';}
-          const res=document.getElementById('scan-result');
-          res.style.display='block';
-          res.innerHTML='<div style="font-size:18px;font-weight:700;color:'+riskColor+';margin-bottom:8px">'+riskLabel+'</div>'
-            +'<div style="margin-bottom:8px">'+hi+' high-risk findings &middot; '+(sm.medium_risk||0)+' medium &middot; '+((sm.frameworks||[]).length||'?')+' frameworks</div>'
-            +'<a href="'+(d.report_url||'')+'" style="display:inline-block;padding:8px 20px;background:#0052CC;color:#fff;border-radius:2px;font-weight:600;text-decoration:none;margin-bottom:8px">View Full Report &rarr;</a>'
-            +'<div style="font-size:12px;color:#57606a">Scan completed in '+mins+':'+((secs<10?'0':'')+secs)+' &middot; <span style="cursor:pointer;color:#0052CC" onclick="navigator.clipboard.writeText(window.location.origin+(d.report_url||\'\'))">Share link</span></div>';
+          const sm=d.summary||{};const hi=sm.high_risk||0;
+          let rl='LOW',rc='#1A7F37';if(hi>15){rl='CRITICAL';rc='#CF222E'}else if(hi>5){rl='ELEVATED';rc='#CF222E'}else if(hi>0){rl='MODERATE';rc='#9A6700'}
+          const res=document.getElementById('scan-result');res.style.display='block';
+          res.innerHTML='<div style="font-size:18px;font-weight:700;color:'+rc+'">'+rl+' RISK</div><div style="margin:8px 0;color:#E6EDF3">'+hi+' high-risk &middot; '+(sm.medium_risk||0)+' medium &middot; '+((sm.frameworks||[]).length||'?')+' frameworks</div><a href="'+(d.report_url||'')+'" style="display:inline-block;padding:8px 20px;background:#0052CC;color:#fff;border-radius:4px;font-weight:600;text-decoration:none">View Full Report &rarr;</a>';
         }else if(d.status==='failed'){
           clearInterval(scanTimer);
-          // Mark failed step
-          const failStep=curStep||'clone';
-          const el=document.querySelector('.pstep[data-step="'+failStep+'"]');
-          if(el){el.className='pstep fail';el.querySelector('.picon').innerHTML='&#10007;';}
           document.getElementById('scan-btn').disabled=false;
           document.getElementById('scan-status').style.display='block';
-          document.getElementById('scan-status').innerHTML='<span style="color:#CF222E">Failed: '+(d.error||'Unknown error')+'</span> <button class="scan-btn" style="margin-left:8px;padding:4px 12px;font-size:12px" onclick="document.getElementById(\'scan-progress\').style.display=\'none\';document.getElementById(\'scan-status\').style.display=\'none\';document.getElementById(\'scan-btn\').disabled=false">Try again</button>';
-        }else{
-          setTimeout(()=>pollScan(id),3000);
-        }
+          document.getElementById('scan-status').innerHTML='<span style="color:#CF222E">Failed: '+(d.error||'Unknown')+'</span>';
+        }else{setTimeout(()=>pollScan(id),3000);}
       }).catch(()=>setTimeout(()=>pollScan(id),5000));
     }
 
-    // Waitlist
     function joinWaitlist(){
-      const email=document.getElementById('waitlist-email').value.trim();
-      if(!email)return;
+      const email=document.getElementById('waitlist-email').value.trim();if(!email)return;
       fetch(API_BASE_URL+'/api/waitlist',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})})
       .then(r=>r.json()).then(()=>document.getElementById('waitlist-email').value='Thanks!').catch(()=>{});
     }
 
-    // Activity ticker
-    fetch(API_BASE_URL+'/api/recent').then(r=>r.json()).then(scans=>{
-      const recent=scans.filter(s=>s.status==='complete').slice(0,3);
-      if(recent.length){
-        document.getElementById('activity-ticker').innerHTML=recent.map(s=>
-          `<span style="margin-right:24px">${s.repo_name} scanned &middot; Score ${s.opendocket_score||'—'} &middot; ${(s.finding_high||0)+(s.finding_medium||0)+(s.finding_concern||0)+(s.finding_ok||0)} findings</span>`
-        ).join('');
-      }else{document.getElementById('activity-ticker').textContent='7 repos scanned across healthcare, payments, SaaS, and infrastructure';}
-    }).catch(()=>{document.getElementById('activity-ticker').textContent='7 repos scanned across healthcare, payments, SaaS, and infrastructure';});
-
-    // Session scan limit banner
-    const sc=parseInt(sessionStorage.getItem('od_scans')||'0');
-    if(sc>=3){const b=document.createElement('div');b.style.cssText='background:#fffbe0;border:1px solid #d0d7de;border-left:4px solid #9A6700;padding:10px 16px;margin:12px 24px;font-size:13px;color:#1a1a1a';b.innerHTML='You\'ve used 3 free scans this session. <strong>Add your Anthropic API key</strong> for unlimited scanning.';document.querySelector('.hero-scan-card')?.prepend(b);}
-
-    // Directory filter
     function filterDir(cat){
       document.querySelectorAll('.dir-tab').forEach(t=>t.classList.toggle('active',t.textContent.toLowerCase()===cat||cat==='all'&&t.textContent==='All'));
-      document.querySelectorAll('#dir-table tbody tr').forEach(r=>{r.style.display=(cat==='all'||r.dataset.cat===cat)?'':'none';});
+      document.querySelectorAll('#dir-table tbody tr').forEach(r=>{r.style.display=(cat==='all'||r.dataset.cat===cat)?'':'none'});
     }
     function sortDir(col){
-      const tb=document.querySelector('#dir-table tbody');
-      const rows=Array.from(tb.rows);
-      const t=document.querySelector('#dir-table');
-      const dir=t.dataset.sc==col&&t.dataset.sd==='asc'?'desc':'asc';
-      t.dataset.sc=col;t.dataset.sd=dir;
-      rows.sort((a,b)=>{
-        let av=a.cells[col].textContent.replace(/[^0-9.-]/g,'')||'0';
-        let bv=b.cells[col].textContent.replace(/[^0-9.-]/g,'')||'0';
-        if(col===0||col===2||col===3){av=a.cells[col].textContent;bv=b.cells[col].textContent;return dir==='asc'?av.localeCompare(bv):bv.localeCompare(av);}
-        return dir==='asc'?parseFloat(av)-parseFloat(bv):parseFloat(bv)-parseFloat(av);
-      });
+      const tb=document.querySelector('#dir-table tbody');const rows=Array.from(tb.rows);const t=document.querySelector('#dir-table');
+      const dir=t.dataset.sc==col&&t.dataset.sd==='asc'?'desc':'asc';t.dataset.sc=col;t.dataset.sd=dir;
+      rows.sort((a,b)=>{let av=a.cells[col].textContent.replace(/[^0-9.-]/g,'')||'0';let bv=b.cells[col].textContent.replace(/[^0-9.-]/g,'')||'0';
+      if(col===0||col===2||col===3){av=a.cells[col].textContent;bv=b.cells[col].textContent;return dir==='asc'?av.localeCompare(bv):bv.localeCompare(av)}
+      return dir==='asc'?parseFloat(av)-parseFloat(bv):parseFloat(bv)-parseFloat(av)});
       rows.forEach(r=>tb.appendChild(r));
     }
-  </script>
+</script>
 </body>
 </html>
