@@ -13,4 +13,4 @@
    - `MONTHLY_SCAN_LIMIT=2000`
 7. Railway will give you a URL like:
    `https://opendocket-production.up.railway.app`
-8. Update `API_BASE_URL` in `web/index.html` to this URL
+8. Update `API_BASE_URL` in `docs/index.html` to this URL

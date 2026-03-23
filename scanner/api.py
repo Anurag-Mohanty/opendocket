@@ -46,7 +46,7 @@ AGENTS = {
     "sox": SOXAgent,
 }
 
-app = Flask(__name__, static_folder="../web", static_url_path="")
+app = Flask(__name__, static_folder="../docs", static_url_path="")
 CORS(app, origins=["https://opendocket.dev", "http://localhost:*", "http://127.0.0.1:*"])
 
 # Rate limiting
@@ -118,7 +118,7 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
                     repo_ctx.qualification.reasons,
                     repo_ctx.qualification.stats,
                 )
-                report_path = os.path.join("web", "reports", f"{repo_ctx.name}_report.html")
+                report_path = os.path.join("docs", "reports", f"{repo_ctx.name}_report.html")
                 os.makedirs(os.path.dirname(report_path), exist_ok=True)
                 with open(report_path, "w") as f:
                     f.write(report)
@@ -188,7 +188,7 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
             update_scan_status(scan_id, "running", "Generating reports...")
 
             html_report = generate_html_report(repo_ctx.name, repo_url, domains, agent_results)
-            html_path = os.path.join("web", "reports", f"{repo_ctx.name}_report.html")
+            html_path = os.path.join("docs", "reports", f"{repo_ctx.name}_report.html")
             os.makedirs(os.path.dirname(html_path), exist_ok=True)
             with open(html_path, "w") as f:
                 f.write(html_report)

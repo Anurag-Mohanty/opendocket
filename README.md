@@ -8,7 +8,7 @@ Engineers build software that handles sensitive data every day — patient recor
 
 ## Compliance Intelligence Directory
 
-OpenDocket maintains a curated directory of compliance scans across healthcare, payments, SaaS, and infrastructure verticals. Browse the [web dashboard](web/index.html) with industry tabs, a sortable leaderboard, and detailed per-framework findings.
+OpenDocket maintains a curated directory of compliance scans across healthcare, payments, SaaS, and infrastructure verticals. Browse the [web dashboard](docs/index.html) with industry tabs, a sortable leaderboard, and detailed per-framework findings.
 
 ## How to Run It Locally
 
@@ -73,7 +73,7 @@ Every scanned repo receives an OpenDocket Score (0-100). Lower score = more risk
 - **Pattern of Concern:** -1 point
 - Scores are normalized by framework count so repos scanned against 6 frameworks aren't penalized vs 2.
 
-This is a relative risk pattern index, not a compliance certification. See the full [methodology](web/methodology.html).
+This is a relative risk pattern index, not a compliance certification. See the full [methodology](docs/methodology.html).
 
 ## Dual Model Review
 
@@ -120,7 +120,7 @@ opendocket/
 │       ├── tcpa_questions.yaml     # 8 TCPA legal questions
 │       └── sox_questions.yaml      # 8 SOX legal questions
 ├── reports/                        # Pre-generated markdown reports
-├── web/
+├── docs/
 │   ├── index.html                  # Directory + leaderboard + frameworks
 │   ├── styles.css                  # Professional minimal design system
 │   ├── methodology.html            # Scoring methodology
@@ -135,8 +135,8 @@ opendocket/
 ### Adding a Repo to the Directory
 
 1. Fork the repo and run a scan: `python scanner/main.py https://github.com/org/repo --format html`
-2. Copy the markdown report to `reports/` and HTML to `web/reports/`
-3. Add a card to `web/index.html` in the appropriate industry tab
+2. Copy the markdown report to `reports/` and HTML to `docs/reports/`
+3. Add a card to `docs/index.html` in the appropriate industry tab
 4. Submit a PR with the report files and updated index
 
 ### Adding a New Framework
