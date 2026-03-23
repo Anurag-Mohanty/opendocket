@@ -1,0 +1,251 @@
+framework: SOX
+full_name: Sarbanes-Oxley Act
+description: >
+  The Sarbanes-Oxley Act establishes requirements for financial reporting
+  integrity, internal controls, and audit oversight for publicly traded
+  companies. These questions assess code-level evidence of controls relevant
+  to SOX Sections 302, 404, and 802.
+regulatory_body: SEC / PCAOB
+risk_of_noncompliance: >
+  Criminal penalties up to 20 years imprisonment, fines up to $5 million
+  for individuals, executive personal liability under Section 302,
+  potential delisting from stock exchanges, and SEC enforcement actions.
+
+questions:
+  - id: SOX-001
+    category: Financial Data Integrity Controls
+    legal_question: >
+      Does the system implement controls to ensure the integrity, accuracy,
+      and completeness of financial data and transactions, consistent with
+      SOX Section 302 requirements for management certification of financial
+      statements?
+    regulatory_standard: "SOX Section 302 (Corporate Responsibility for Financial Reports)"
+    search_patterns:
+      - "transaction"
+      - "ledger"
+      - "general_ledger"
+      - "journal_entry"
+      - "financial"
+      - "balance"
+      - "reconciliation"
+      - "double_entry"
+      - "debit"
+      - "credit"
+      - "checksum"
+      - "integrity_check"
+      - "validation"
+      - "constraint"
+      - "atomic"
+      - "idempotent"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for transaction integrity mechanisms, data validation on financial
+      fields, atomic operations for financial writes, reconciliation logic,
+      and constraints that prevent data corruption in financial records.
+
+  - id: SOX-002
+    category: Access Controls to Financial Systems
+    legal_question: >
+      Does the system implement access controls that restrict access to
+      financial systems and data to authorized personnel, with appropriate
+      authentication and authorization mechanisms, as required under SOX
+      Section 404 internal controls?
+    regulatory_standard: "SOX Section 404 (Management Assessment of Internal Controls)"
+    search_patterns:
+      - "role"
+      - "rbac"
+      - "permission"
+      - "authorize"
+      - "access_control"
+      - "admin"
+      - "finance_role"
+      - "accountant"
+      - "controller"
+      - "auditor"
+      - "read_only"
+      - "approval"
+      - "workflow"
+      - "four_eyes"
+      - "dual_control"
+    absence_patterns: []
+    evidence_guidance: >
+      Examine access controls specific to financial modules, role definitions
+      for finance users, approval workflows for financial transactions, and
+      dual-control mechanisms for sensitive financial operations.
+
+  - id: SOX-003
+    category: Audit Trail for Financial Transactions
+    legal_question: >
+      Does the system maintain a complete and tamper-evident audit trail of
+      all financial transactions, modifications, and access events, sufficient
+      to support the audit requirements under SOX Section 802?
+    regulatory_standard: "SOX Section 802 (Criminal Penalties for Altering Documents)"
+    search_patterns:
+      - "audit"
+      - "audit_log"
+      - "audit_trail"
+      - "history"
+      - "changelog"
+      - "versioning"
+      - "immutable"
+      - "append_only"
+      - "event_source"
+      - "event_store"
+      - "transaction_log"
+      - "modified_by"
+      - "created_by"
+      - "timestamp"
+    absence_patterns: []
+    evidence_guidance: >
+      Search for audit logging on financial data operations, immutable event
+      stores, versioned records, and tamper-evident mechanisms. Check whether
+      all creates, updates, and deletes on financial records are tracked.
+
+  - id: SOX-004
+    category: Change Management for Financial Software
+    legal_question: >
+      Does the system implement change management controls for software that
+      processes financial data, including version control, code review, testing,
+      and controlled deployment, consistent with SOX IT general controls?
+    regulatory_standard: "SOX Section 404 (ITGC - Change Management Controls)"
+    search_patterns:
+      - "migration"
+      - "version"
+      - "changelog"
+      - "deploy"
+      - "deployment"
+      - "ci"
+      - "cd"
+      - "pipeline"
+      - "github_actions"
+      - "code_review"
+      - "approval"
+      - "pull_request"
+      - "staging"
+      - "production"
+      - "rollback"
+      - "release"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for CI/CD configurations, deployment approval gates, database
+      migration management, release processes, and rollback capabilities.
+      Check for evidence of review requirements before production deployment.
+
+  - id: SOX-005
+    category: Segregation of Duties Evidence
+    legal_question: >
+      Does the system implement segregation of duties controls that prevent
+      any single individual from having the ability to both authorize and
+      execute financial transactions, or to both develop and deploy changes
+      to financial systems?
+    regulatory_standard: "SOX Section 404 (Internal Controls - Segregation of Duties)"
+    search_patterns:
+      - "segregation"
+      - "separation_of_duties"
+      - "four_eyes"
+      - "dual_control"
+      - "approval"
+      - "approver"
+      - "maker_checker"
+      - "workflow"
+      - "authorization"
+      - "multi_sign"
+      - "threshold"
+      - "limit"
+      - "counter_sign"
+    absence_patterns: []
+    evidence_guidance: >
+      Search for dual-control mechanisms, maker-checker patterns, approval
+      workflows, multi-signature requirements for financial transactions,
+      and role separation between developers and deployers.
+
+  - id: SOX-006
+    category: Data Retention for Financial Records
+    legal_question: >
+      Does the system implement data retention policies that preserve financial
+      records, audit work papers, and supporting documentation for the minimum
+      retention period required under SOX Section 802 (not less than 7 years)?
+    regulatory_standard: "SOX Section 802 (Document Retention - 7 Year Minimum)"
+    search_patterns:
+      - "retention"
+      - "retention_policy"
+      - "archive"
+      - "backup"
+      - "preserve"
+      - "seven_year"
+      - "7_year"
+      - "long_term"
+      - "cold_storage"
+      - "glacier"
+      - "immutable"
+      - "worm"
+      - "compliance_hold"
+      - "legal_hold"
+    absence_patterns:
+      - "auto_delete"
+      - "ttl"
+    evidence_guidance: >
+      Look for data retention configurations for financial records, archival
+      strategies, immutable storage (WORM), legal hold capabilities, and
+      evidence that financial data is retained for at least 7 years.
+
+  - id: SOX-007
+    category: Internal Control Documentation
+    legal_question: >
+      Does the system provide evidence of documented internal controls over
+      financial reporting, including control objectives, control activities,
+      and monitoring procedures, as required under SOX Section 404(a)?
+    regulatory_standard: "SOX Section 404(a) (Management Assessment of Internal Controls)"
+    search_patterns:
+      - "internal_control"
+      - "control"
+      - "policy"
+      - "procedure"
+      - "compliance"
+      - "risk"
+      - "risk_management"
+      - "governance"
+      - "framework"
+      - "coso"
+      - "cobit"
+      - "sarbanes"
+      - "sox"
+      - "documentation"
+    absence_patterns: []
+    evidence_guidance: >
+      Search for internal control documentation, risk management frameworks,
+      policy definitions, control testing evidence, and references to COSO
+      or COBIT frameworks in documentation or code comments.
+
+  - id: SOX-008
+    category: Anti-Tampering Controls
+    legal_question: >
+      Does the system implement controls to prevent unauthorized alteration
+      or destruction of financial records, including integrity verification,
+      immutable storage, and tamper detection mechanisms, consistent with
+      SOX Section 802 anti-destruction requirements?
+    regulatory_standard: "SOX Section 802 (Criminal Penalties for Document Destruction/Alteration)"
+    search_patterns:
+      - "immutable"
+      - "tamper"
+      - "integrity"
+      - "hash"
+      - "checksum"
+      - "digital_signature"
+      - "append_only"
+      - "write_once"
+      - "worm"
+      - "blockchain"
+      - "merkle"
+      - "seal"
+      - "notarize"
+      - "prevent_delete"
+      - "soft_delete"
+    absence_patterns:
+      - "DELETE FROM"
+      - "drop_table"
+      - "truncate"
+    evidence_guidance: >
+      Look for immutable data structures, append-only logs, cryptographic
+      integrity verification, soft-delete patterns (vs hard delete), and
+      mechanisms that prevent unauthorized modification of financial records.

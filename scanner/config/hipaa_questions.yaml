@@ -1,0 +1,342 @@
+framework: HIPAA
+full_name: Health Insurance Portability and Accountability Act
+description: >
+  HIPAA establishes national standards for the protection of individually
+  identifiable health information (Protected Health Information / PHI).
+  These questions assess code-level compliance with the HIPAA Security Rule
+  and Privacy Rule requirements.
+
+questions:
+  - id: HIPAA-001
+    category: PHI Identification and Protection
+    legal_question: >
+      Does this system collect, store, process, or transmit individually
+      identifiable health information as defined under 45 CFR §160.103,
+      and if so, are adequate technical safeguards in place to protect
+      the confidentiality of such Protected Health Information?
+    regulatory_standard: "HIPAA Privacy Rule 45 CFR §160.103; Security Rule 45 CFR §164.312(a)(1)"
+    search_patterns:
+      - "patient"
+      - "diagnosis"
+      - "medical_record"
+      - "health_record"
+      - "ssn"
+      - "social_security"
+      - "date_of_birth"
+      - "dob"
+      - "insurance_id"
+      - "member_id"
+      - "mrn"
+      - "medical_record_number"
+      - "PHI"
+      - "phi"
+      - "protected_health"
+      - "patient_name"
+      - "patient_id"
+      - "clinical_data"
+      - "medication"
+      - "prescription"
+      - "rx"
+      - "lab_result"
+      - "vital_sign"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for database models, API payloads, form fields, or data structures
+      that contain health-related identifiers. Identify every location where
+      PHI fields appear and assess whether protection measures surround them.
+
+  - id: HIPAA-002
+    category: Encryption at Rest
+    legal_question: >
+      Is electronic Protected Health Information encrypted when stored at rest
+      using methods consistent with NIST Special Publication 800-111, as
+      required for addressable implementation under the HIPAA Security Rule?
+    regulatory_standard: "HIPAA Security Rule 45 CFR §164.312(a)(2)(iv); NIST SP 800-111"
+    search_patterns:
+      - "encrypt"
+      - "AES"
+      - "aes-256"
+      - "crypto"
+      - "bcrypt"
+      - "argon2"
+      - "scrypt"
+      - "hashlib"
+      - "cipher"
+      - "fernet"
+      - "kms"
+      - "vault"
+      - "encrypted_field"
+      - "at_rest"
+      - "column_encryption"
+      - "transparent_data_encryption"
+      - "pgcrypto"
+      - "encrypted"
+    absence_patterns:
+      - "plaintext"
+      - "plain_text"
+      - "base64"
+      - "unencrypted"
+    evidence_guidance: >
+      Search for encryption libraries, key management configurations,
+      database-level encryption settings, and encrypted field definitions.
+      Check if PHI fields identified in HIPAA-001 are stored with encryption.
+
+  - id: HIPAA-003
+    category: Encryption in Transit
+    legal_question: >
+      Are all transmissions of electronic Protected Health Information
+      encrypted using transport-level security consistent with NIST
+      guidelines, preventing unauthorized access during transmission
+      across electronic communications networks?
+    regulatory_standard: "HIPAA Security Rule 45 CFR §164.312(e)(1); 45 CFR §164.312(e)(2)(ii)"
+    search_patterns:
+      - "https"
+      - "ssl"
+      - "tls"
+      - "certificate"
+      - "cert"
+      - "SECURE_SSL_REDIRECT"
+      - "force_ssl"
+      - "ssl_context"
+      - "verify_ssl"
+      - "HSTS"
+      - "strict-transport-security"
+    absence_patterns:
+      - "http://"
+      - "verify=False"
+      - "ssl=False"
+      - "SECURE_SSL_REDIRECT = False"
+      - "insecure"
+    evidence_guidance: >
+      Check web server configuration, API client calls, database connection
+      strings, and any external service integrations for TLS/SSL enforcement.
+      Look for explicit HTTP URLs or disabled SSL verification.
+
+  - id: HIPAA-004
+    category: Access Controls and Authentication
+    legal_question: >
+      Does the system implement technical policies and procedures for
+      electronic information systems that maintain electronic Protected
+      Health Information to allow access only to those persons or software
+      programs that have been granted access rights as specified in
+      45 CFR §164.312(a)(1)?
+    regulatory_standard: "HIPAA Security Rule 45 CFR §164.312(a)(1); 45 CFR §164.312(a)(2)(i)"
+    search_patterns:
+      - "authentication"
+      - "authorize"
+      - "permission"
+      - "role"
+      - "rbac"
+      - "acl"
+      - "access_control"
+      - "login"
+      - "jwt"
+      - "token"
+      - "session"
+      - "oauth"
+      - "saml"
+      - "ldap"
+      - "password"
+      - "credential"
+      - "middleware"
+      - "guard"
+      - "policy"
+      - "is_authenticated"
+      - "require_auth"
+      - "protected_route"
+    absence_patterns: []
+    evidence_guidance: >
+      Examine authentication middleware, route protection, role definitions,
+      and access control lists. Determine whether PHI-accessing endpoints
+      require authentication and whether access is role-restricted.
+
+  - id: HIPAA-005
+    category: Session Management
+    legal_question: >
+      Does the system implement electronic procedures that terminate an
+      electronic session after a predetermined time of inactivity, as
+      required for PHI-accessing interfaces under the HIPAA Security Rule?
+    regulatory_standard: "HIPAA Security Rule 45 CFR §164.312(a)(2)(iii)"
+    search_patterns:
+      - "session_timeout"
+      - "session_expir"
+      - "idle_timeout"
+      - "inactivity"
+      - "auto_logout"
+      - "session_lifetime"
+      - "SESSION_COOKIE_AGE"
+      - "maxAge"
+      - "expires"
+      - "token_expir"
+      - "refresh_token"
+      - "SESSION_TIMEOUT"
+      - "timeout"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for session configuration, token expiration settings, automatic
+      logout mechanisms, and idle timeout handlers. Check both backend
+      session stores and frontend inactivity detection.
+
+  - id: HIPAA-006
+    category: Audit Logging
+    legal_question: >
+      Does the system implement hardware, software, and procedural mechanisms
+      that record and examine activity in information systems that contain
+      or use electronic Protected Health Information, as required under
+      the audit controls standard?
+    regulatory_standard: "HIPAA Security Rule 45 CFR §164.312(b)"
+    search_patterns:
+      - "audit"
+      - "audit_log"
+      - "audit_trail"
+      - "log_access"
+      - "access_log"
+      - "activity_log"
+      - "event_log"
+      - "logging"
+      - "logger"
+      - "log_event"
+      - "track_access"
+      - "record_access"
+      - "who_accessed"
+      - "phi_access"
+    absence_patterns: []
+    evidence_guidance: >
+      Search for audit logging implementations, particularly around PHI
+      access points. Check whether logs capture who accessed what data,
+      when, and from where. Look for log storage and retention configuration.
+
+  - id: HIPAA-007
+    category: Minimum Necessary Access
+    legal_question: >
+      Does the system limit the Protected Health Information disclosed or
+      accessed to the minimum necessary to accomplish the intended purpose,
+      consistent with the minimum necessary standard under the Privacy Rule?
+    regulatory_standard: "HIPAA Privacy Rule 45 CFR §164.502(b); 45 CFR §164.514(d)"
+    search_patterns:
+      - "select *"
+      - "SELECT *"
+      - "find_all"
+      - "fetch_all"
+      - "get_all"
+      - "serialize"
+      - "to_dict"
+      - "to_json"
+      - "fields"
+      - "exclude"
+      - "only"
+      - "select_related"
+      - "projection"
+      - "column"
+      - "scope"
+      - "field_mask"
+      - "sparse_fieldset"
+    absence_patterns:
+      - "field_filter"
+      - "column_select"
+      - "projection"
+    evidence_guidance: >
+      Check whether database queries return full records or only necessary
+      fields. Look for API responses that expose more PHI than needed.
+      Examine serializers and data transfer objects for field filtering.
+
+  - id: HIPAA-008
+    category: Business Associate Agreements
+    legal_question: >
+      Does the system integrate with third-party services that may receive,
+      maintain, or transmit Protected Health Information, and if so, is
+      there evidence that Business Associate Agreement requirements are
+      addressed in the code or configuration?
+    regulatory_standard: "HIPAA Privacy Rule 45 CFR §164.502(e); 45 CFR §164.504(e)"
+    search_patterns:
+      - "third_party"
+      - "vendor"
+      - "external_api"
+      - "webhook"
+      - "integration"
+      - "partner"
+      - "baa"
+      - "business_associate"
+      - "subprocessor"
+      - "stripe"
+      - "twilio"
+      - "sendgrid"
+      - "aws"
+      - "azure"
+      - "gcp"
+      - "s3"
+      - "sqs"
+      - "analytics"
+      - "tracking"
+      - "segment"
+      - "mixpanel"
+    absence_patterns: []
+    evidence_guidance: >
+      Identify all third-party service integrations. Check whether PHI
+      may be transmitted to these services. Look for BAA references in
+      configuration, documentation, or code comments.
+
+  - id: HIPAA-009
+    category: Data Retention and Disposal
+    legal_question: >
+      Does the system implement policies and procedures to address the
+      final disposition of electronic Protected Health Information and
+      the hardware or electronic media on which it is stored, as well
+      as removal of PHI before media is available for reuse?
+    regulatory_standard: "HIPAA Security Rule 45 CFR §164.310(d)(2)(i); 45 CFR §164.310(d)(2)(ii)"
+    search_patterns:
+      - "retention"
+      - "retention_policy"
+      - "delete"
+      - "purge"
+      - "expunge"
+      - "archive"
+      - "dispose"
+      - "disposal"
+      - "destroy"
+      - "ttl"
+      - "time_to_live"
+      - "soft_delete"
+      - "hard_delete"
+      - "data_lifecycle"
+      - "cleanup"
+      - "scheduled_deletion"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for data retention policies, scheduled deletion jobs, TTL
+      configurations, and data lifecycle management. Check whether PHI
+      has defined retention periods and secure deletion mechanisms.
+
+  - id: HIPAA-010
+    category: Breach Detection and Emergency Access
+    legal_question: >
+      Does the system implement procedures for detecting, reporting, and
+      responding to suspected or known security incidents involving
+      electronic Protected Health Information, and does it provide for
+      emergency access to PHI during system disruptions?
+    regulatory_standard: "HIPAA Security Rule 45 CFR §164.308(a)(6); 45 CFR §164.312(a)(2)(ii)"
+    search_patterns:
+      - "breach"
+      - "incident"
+      - "alert"
+      - "notification"
+      - "security_event"
+      - "intrusion"
+      - "anomaly"
+      - "suspicious"
+      - "emergency_access"
+      - "break_glass"
+      - "override"
+      - "failover"
+      - "disaster_recovery"
+      - "backup"
+      - "restore"
+      - "recovery"
+      - "monitoring"
+      - "watchdog"
+      - "health_check"
+    absence_patterns: []
+    evidence_guidance: >
+      Search for incident response procedures, security event monitoring,
+      alert configurations, and emergency access mechanisms. Look for
+      break-glass procedures and disaster recovery configurations.

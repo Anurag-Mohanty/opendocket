@@ -1,0 +1,343 @@
+framework: PCI-DSS
+full_name: Payment Card Industry Data Security Standard
+description: >
+  PCI DSS establishes security standards for organizations that handle branded
+  credit cards. These questions assess code-level compliance with PCI DSS v4.0
+  requirements for protecting cardholder data throughout the transaction lifecycle.
+regulatory_body: PCI Security Standards Council
+risk_of_noncompliance: >
+  Fines of $5,000-$100,000 per month, loss of ability to process payments,
+  mandatory forensic audit, increased transaction fees, and potential liability
+  for fraudulent transactions.
+
+questions:
+  - id: PCIDSS-001
+    category: Cardholder Data Storage and Protection
+    legal_question: >
+      Does this system store, process, or transmit cardholder data including
+      primary account numbers (PAN), and if so, are adequate protections in
+      place to render stored PAN unreadable, as required under PCI DSS
+      Requirement 3.5?
+    regulatory_standard: "PCI DSS v4.0 Requirement 3.5 (PAN Storage Protection)"
+    search_patterns:
+      - "card_number"
+      - "pan"
+      - "primary_account_number"
+      - "credit_card"
+      - "card_holder"
+      - "cardholder"
+      - "account_number"
+      - "card_data"
+      - "payment_card"
+      - "cc_number"
+      - "card_token"
+      - "tokenize"
+      - "detokenize"
+      - "mask"
+      - "truncate"
+      - "last_four"
+      - "bin_number"
+      - "expiry"
+      - "expiration_date"
+      - "cvv"
+      - "cvc"
+      - "security_code"
+    absence_patterns:
+      - "store_card"
+      - "save_card"
+      - "persist_pan"
+    evidence_guidance: >
+      Search for any storage of cardholder data fields. Check whether PAN is
+      rendered unreadable via truncation, tokenization, hashing, or strong
+      encryption. Look for CVV/CVC storage which is always prohibited post-auth.
+
+  - id: PCIDSS-002
+    category: Encryption of Card Data in Transit and at Rest
+    legal_question: >
+      Is cardholder data encrypted using strong cryptography during transmission
+      over open public networks and when stored at rest, consistent with PCI DSS
+      Requirements 3.5 and 4.2?
+    regulatory_standard: "PCI DSS v4.0 Requirements 3.5 (Encryption at Rest); 4.2 (Encryption in Transit)"
+    search_patterns:
+      - "encrypt"
+      - "AES"
+      - "aes-256"
+      - "crypto"
+      - "cipher"
+      - "kms"
+      - "vault"
+      - "fernet"
+      - "tls"
+      - "ssl"
+      - "https"
+      - "certificate"
+      - "HSTS"
+      - "pgcrypto"
+      - "transparent_data_encryption"
+      - "column_encryption"
+      - "encrypted"
+    absence_patterns:
+      - "http://"
+      - "plaintext"
+      - "unencrypted"
+      - "base64"
+      - "verify=False"
+    evidence_guidance: >
+      Verify that all transmission of cardholder data uses TLS 1.2+ or equivalent.
+      Check that stored PAN uses AES-256 or equivalent encryption. Look for key
+      management practices and whether encryption keys are stored separately.
+
+  - id: PCIDSS-003
+    category: Access Control to Cardholder Data
+    legal_question: >
+      Does the system restrict access to cardholder data to only those
+      individuals and systems whose job requires such access, implementing
+      role-based access controls consistent with PCI DSS Requirement 7?
+    regulatory_standard: "PCI DSS v4.0 Requirement 7 (Restrict Access by Business Need to Know)"
+    search_patterns:
+      - "role"
+      - "rbac"
+      - "permission"
+      - "authorize"
+      - "access_control"
+      - "acl"
+      - "policy"
+      - "middleware"
+      - "guard"
+      - "need_to_know"
+      - "least_privilege"
+      - "is_admin"
+      - "has_permission"
+      - "can_access"
+      - "protected_route"
+      - "require_auth"
+    absence_patterns: []
+    evidence_guidance: >
+      Examine authentication and authorization mechanisms protecting payment
+      endpoints. Check whether access to cardholder data is restricted by role
+      and whether the principle of least privilege is enforced.
+
+  - id: PCIDSS-004
+    category: Network Segmentation
+    legal_question: >
+      Does the system implement network segmentation to isolate the cardholder
+      data environment (CDE) from other network segments, reducing the scope
+      of PCI DSS compliance as described in Requirement 1?
+    regulatory_standard: "PCI DSS v4.0 Requirement 1 (Network Security Controls)"
+    search_patterns:
+      - "firewall"
+      - "network_policy"
+      - "security_group"
+      - "subnet"
+      - "vpc"
+      - "segmentation"
+      - "dmz"
+      - "ingress"
+      - "egress"
+      - "allowlist"
+      - "whitelist"
+      - "ip_filter"
+      - "cidr"
+      - "network_acl"
+      - "iptables"
+      - "nsg"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for network configuration, firewall rules, VPC definitions, security
+      group configurations, and network policies that segment the cardholder
+      data environment from untrusted networks.
+
+  - id: PCIDSS-005
+    category: Vulnerability Management
+    legal_question: >
+      Does the system demonstrate evidence of vulnerability management practices
+      including regular patching, dependency updates, and vulnerability scanning,
+      consistent with PCI DSS Requirement 6?
+    regulatory_standard: "PCI DSS v4.0 Requirement 6 (Develop and Maintain Secure Systems)"
+    search_patterns:
+      - "dependabot"
+      - "renovate"
+      - "snyk"
+      - "vulnerability"
+      - "cve"
+      - "security_advisory"
+      - "npm_audit"
+      - "safety"
+      - "bandit"
+      - "semgrep"
+      - "sonarqube"
+      - "patch"
+      - "upgrade"
+      - "version_constraint"
+      - "lockfile"
+      - "pin"
+    absence_patterns: []
+    evidence_guidance: >
+      Check for automated dependency scanning tools, security scanning in CI/CD,
+      lockfiles with pinned versions, and evidence of regular security updates.
+
+  - id: PCIDSS-006
+    category: Security Testing Evidence
+    legal_question: >
+      Does the system implement security testing controls including code review,
+      static analysis, and penetration testing practices, as required under
+      PCI DSS Requirement 6.3 and 11.4?
+    regulatory_standard: "PCI DSS v4.0 Requirements 6.3 (Security Vulnerabilities); 11.4 (Penetration Testing)"
+    search_patterns:
+      - "security_test"
+      - "pentest"
+      - "penetration"
+      - "sast"
+      - "dast"
+      - "code_review"
+      - "static_analysis"
+      - "lint"
+      - "eslint"
+      - "pylint"
+      - "semgrep"
+      - "codeql"
+      - "sonar"
+      - "owasp"
+      - "xss"
+      - "sql_injection"
+      - "csrf"
+      - "sanitize"
+      - "escape"
+      - "parameterized"
+    absence_patterns:
+      - "eval("
+      - "exec("
+      - "innerHTML"
+      - "dangerouslySetInnerHTML"
+    evidence_guidance: >
+      Search for security testing tools in CI/CD pipelines, static analysis
+      configurations, input sanitization functions, and parameterized queries.
+      Check for OWASP-related protections.
+
+  - id: PCIDSS-007
+    category: Audit Logging of Card Data Access
+    legal_question: >
+      Does the system implement audit trail mechanisms that record all individual
+      access to cardholder data, all actions taken by any individual with root
+      or administrative privileges, and all access to audit trails, as required
+      under PCI DSS Requirement 10?
+    regulatory_standard: "PCI DSS v4.0 Requirement 10 (Log and Monitor All Access)"
+    search_patterns:
+      - "audit"
+      - "audit_log"
+      - "audit_trail"
+      - "access_log"
+      - "logging"
+      - "logger"
+      - "log_event"
+      - "track_access"
+      - "record_access"
+      - "activity_log"
+      - "event_log"
+      - "siem"
+      - "splunk"
+      - "elk"
+      - "cloudtrail"
+      - "structured_log"
+    absence_patterns: []
+    evidence_guidance: >
+      Search for audit logging implementations around payment processing and
+      cardholder data access. Check whether logs capture who accessed what,
+      when, and from where. Look for tamper-proof log storage.
+
+  - id: PCIDSS-008
+    category: Key Management Practices
+    legal_question: >
+      Does the system implement cryptographic key management procedures including
+      key generation, distribution, storage, rotation, and destruction, consistent
+      with PCI DSS Requirement 3.6 and 3.7?
+    regulatory_standard: "PCI DSS v4.0 Requirements 3.6 (Key Management Procedures); 3.7 (Key Management Policies)"
+    search_patterns:
+      - "key_management"
+      - "key_rotation"
+      - "kms"
+      - "vault"
+      - "hsm"
+      - "key_store"
+      - "keyring"
+      - "secret_manager"
+      - "aws_kms"
+      - "azure_keyvault"
+      - "gcp_kms"
+      - "rotate_key"
+      - "key_expiry"
+      - "master_key"
+      - "encryption_key"
+      - "dek"
+      - "kek"
+    absence_patterns:
+      - "hardcoded_key"
+      - "key ="
+    evidence_guidance: >
+      Look for key management service integrations, key rotation policies,
+      hardware security module usage, and separation of encryption keys
+      from encrypted data. Check for hardcoded keys in source code.
+
+  - id: PCIDSS-009
+    category: Third Party Service Provider Controls
+    legal_question: >
+      Does the system manage third-party service providers that have access to
+      cardholder data with appropriate controls, agreements, and monitoring,
+      consistent with PCI DSS Requirement 12.8?
+    regulatory_standard: "PCI DSS v4.0 Requirement 12.8 (Third-Party Service Provider Management)"
+    search_patterns:
+      - "third_party"
+      - "vendor"
+      - "provider"
+      - "stripe"
+      - "adyen"
+      - "braintree"
+      - "paypal"
+      - "square"
+      - "mollie"
+      - "checkout"
+      - "payment_gateway"
+      - "processor"
+      - "acquirer"
+      - "webhook"
+      - "integration"
+      - "api_key"
+      - "secret_key"
+    absence_patterns: []
+    evidence_guidance: >
+      Identify all third-party payment service integrations. Check whether
+      cardholder data is shared with providers and whether API keys and
+      credentials are securely managed. Look for PCI-compliant providers.
+
+  - id: PCIDSS-010
+    category: Incident Response for Card Data Breach
+    legal_question: >
+      Does the system implement an incident response plan that addresses
+      suspected or confirmed cardholder data breaches, including detection,
+      containment, and notification procedures, as required under PCI DSS
+      Requirement 12.10?
+    regulatory_standard: "PCI DSS v4.0 Requirement 12.10 (Incident Response Plan)"
+    search_patterns:
+      - "incident"
+      - "breach"
+      - "alert"
+      - "notification"
+      - "security_event"
+      - "pagerduty"
+      - "opsgenie"
+      - "escalation"
+      - "respond"
+      - "remediate"
+      - "postmortem"
+      - "runbook"
+      - "playbook"
+      - "health_check"
+      - "monitoring"
+      - "watchdog"
+      - "circuit_breaker"
+      - "fraud_detection"
+    absence_patterns: []
+    evidence_guidance: >
+      Search for incident response procedures specific to payment data,
+      fraud detection mechanisms, alerting configurations, and escalation
+      procedures. Look for breach notification capabilities.

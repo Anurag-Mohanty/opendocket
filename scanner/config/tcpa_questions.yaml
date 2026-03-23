@@ -1,0 +1,217 @@
+framework: TCPA
+full_name: Telephone Consumer Protection Act
+description: >
+  The TCPA regulates telemarketing calls, auto-dialed calls, pre-recorded calls,
+  text messages, and unsolicited faxes. These questions assess code-level
+  compliance with TCPA requirements for SMS and telephone communication systems.
+regulatory_body: FCC
+risk_of_noncompliance: >
+  Statutory damages of $500-$1,500 per violation (per message or call),
+  class action exposure with potential aggregate damages in the millions,
+  FCC enforcement actions, and injunctive relief.
+
+questions:
+  - id: TCPA-001
+    category: Prior Express Written Consent for SMS
+    legal_question: >
+      Does the system obtain prior express written consent before sending
+      marketing or promotional text messages, including a clear and conspicuous
+      disclosure that consent is being sought, as required under 47 U.S.C.
+      §227(b)(1) and 47 CFR §64.1200(a)(2)?
+    regulatory_standard: "TCPA 47 U.S.C. §227(b)(1); 47 CFR §64.1200(a)(2)"
+    search_patterns:
+      - "consent"
+      - "opt_in"
+      - "sms_consent"
+      - "text_consent"
+      - "prior_express"
+      - "written_consent"
+      - "agree"
+      - "accept_terms"
+      - "consent_form"
+      - "consent_record"
+      - "consent_timestamp"
+      - "double_opt_in"
+    absence_patterns:
+      - "skip_consent"
+      - "default_opt_in"
+    evidence_guidance: >
+      Search for consent collection mechanisms before SMS sending, consent
+      storage with timestamps, double opt-in flows, and consent verification
+      before message dispatch. Check whether consent is recorded and auditable.
+
+  - id: TCPA-002
+    category: Opt-Out Mechanism Implementation
+    legal_question: >
+      Does the system provide a clear and easy mechanism for recipients to
+      opt out of receiving further messages, and does it honor opt-out
+      requests promptly, as required under TCPA and CTIA guidelines?
+    regulatory_standard: "TCPA 47 U.S.C. §227(b)(2)(E); CTIA Messaging Principles"
+    search_patterns:
+      - "opt_out"
+      - "unsubscribe"
+      - "stop"
+      - "cancel"
+      - "opt_out_keyword"
+      - "stop_keyword"
+      - "remove_subscriber"
+      - "blacklist"
+      - "suppression_list"
+      - "do_not_contact"
+      - "preference_center"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for STOP keyword handling in SMS flows, opt-out processing logic,
+      suppression list management, and mechanisms to immediately cease messaging
+      upon opt-out receipt. Check for preference management capabilities.
+
+  - id: TCPA-003
+    category: Do Not Call List Checking
+    legal_question: >
+      Does the system check phone numbers against the National Do Not Call
+      Registry and maintain an internal do-not-call list before initiating
+      outbound calls or messages, as required under 47 CFR §64.1200(c)?
+    regulatory_standard: "TCPA 47 CFR §64.1200(c) (Do Not Call Requirements)"
+    search_patterns:
+      - "do_not_call"
+      - "dnc"
+      - "dnc_list"
+      - "dnc_check"
+      - "registry"
+      - "blocked_number"
+      - "suppression"
+      - "exclusion_list"
+      - "ftc_dnc"
+      - "national_registry"
+      - "phone_validation"
+    absence_patterns: []
+    evidence_guidance: >
+      Search for Do Not Call registry integration, internal suppression list
+      management, phone number validation before outbound messaging, and
+      DNC checking logic in the messaging pipeline.
+
+  - id: TCPA-004
+    category: Message Frequency Disclosure
+    legal_question: >
+      Does the system disclose to consumers the expected frequency of messages
+      before obtaining consent, and does it enforce frequency limits consistent
+      with the disclosed rate, as recommended by CTIA guidelines?
+    regulatory_standard: "CTIA Messaging Principles and Best Practices; TCPA Consent Requirements"
+    search_patterns:
+      - "frequency"
+      - "rate_limit"
+      - "throttle"
+      - "message_limit"
+      - "daily_limit"
+      - "monthly_limit"
+      - "max_messages"
+      - "message_count"
+      - "send_limit"
+      - "cap"
+      - "quota"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for message frequency limiting logic, rate throttling configurations,
+      per-user message caps, and disclosure of messaging frequency in consent
+      flows. Check whether frequency limits are enforced programmatically.
+
+  - id: TCPA-005
+    category: Sender Identification in Messages
+    legal_question: >
+      Does the system include proper sender identification in all outbound
+      messages, including the identity of the entity sending the message
+      and how to contact them, consistent with TCPA and CTIA requirements?
+    regulatory_standard: "TCPA 47 U.S.C. §227(d); CTIA Messaging Principles"
+    search_patterns:
+      - "sender_id"
+      - "from_number"
+      - "short_code"
+      - "long_code"
+      - "sender_name"
+      - "business_name"
+      - "brand"
+      - "10dlc"
+      - "campaign_id"
+      - "message_template"
+      - "sms_template"
+    absence_patterns: []
+    evidence_guidance: >
+      Search for sender identification in message templates, registered
+      short codes or long codes, 10DLC campaign registration, and brand
+      identification in outbound messages.
+
+  - id: TCPA-006
+    category: Record Keeping of Consent
+    legal_question: >
+      Does the system maintain records of consent that would be sufficient
+      to demonstrate compliance in the event of a dispute, including the
+      date, time, method of consent, and the specific consent language
+      presented to the consumer?
+    regulatory_standard: "TCPA 47 CFR §64.1200; FCC Declaratory Rulings on Consent Records"
+    search_patterns:
+      - "consent_record"
+      - "consent_log"
+      - "consent_audit"
+      - "consent_timestamp"
+      - "consent_ip"
+      - "consent_source"
+      - "consent_version"
+      - "consent_text"
+      - "audit_trail"
+      - "proof_of_consent"
+      - "consent_history"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for consent record storage that captures timestamp, IP address,
+      consent language version, method of collection, and the specific
+      terms agreed to. Check for audit trail capabilities around consent.
+
+  - id: TCPA-007
+    category: Revocation of Consent Handling
+    legal_question: >
+      Does the system honor revocation of consent through any reasonable means
+      indicated by the consumer, not limited to specific keywords, and process
+      revocation within a reasonable timeframe, consistent with FCC guidance?
+    regulatory_standard: "TCPA 47 U.S.C. §227(b)(1)(A); FCC 2015 TCPA Omnibus Declaratory Ruling"
+    search_patterns:
+      - "revoke"
+      - "revocation"
+      - "withdraw_consent"
+      - "cancel_subscription"
+      - "unsubscribe"
+      - "opt_out"
+      - "stop"
+      - "remove"
+      - "deactivate"
+      - "disable_notifications"
+    absence_patterns: []
+    evidence_guidance: >
+      Search for consent revocation handling beyond simple STOP keyword,
+      including processing of various opt-out expressions, timely cessation
+      of messaging, and confirmation of revocation to the consumer.
+
+  - id: TCPA-008
+    category: Time of Day Restrictions
+    legal_question: >
+      Does the system enforce time-of-day restrictions for outbound calls
+      and messages, ensuring they are not sent before 8:00 AM or after
+      9:00 PM in the recipient's local time zone, as required under
+      47 CFR §64.1200(c)(1)?
+    regulatory_standard: "TCPA 47 CFR §64.1200(c)(1) (Time of Day Restrictions)"
+    search_patterns:
+      - "timezone"
+      - "time_zone"
+      - "local_time"
+      - "send_window"
+      - "quiet_hours"
+      - "business_hours"
+      - "schedule"
+      - "delayed_send"
+      - "send_at"
+      - "delivery_window"
+      - "time_restriction"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for timezone-aware message scheduling, quiet hours enforcement,
+      delivery window configurations, and time-of-day validation before
+      sending outbound calls or messages.

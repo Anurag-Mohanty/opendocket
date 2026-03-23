@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenDocket — Question Libraries</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:15px;line-height:1.6;color:#0D1117;background:#fff}
+a{color:#0052CC;text-decoration:none}a:hover{text-decoration:underline}
+.top-bar{height:4px;background:#0052CC}
+.nav{background:#fff;border-bottom:1px solid #d0d7de;padding:0 40px;height:48px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{font-size:15px;font-weight:700;color:#0D1117;text-decoration:none;display:flex;align-items:center;gap:8px}
+.nav-brand-shield{width:20px;height:24px;background:#0052CC;clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:inline-block}
+.nav-links a{color:#57606A;text-decoration:none;font-size:13px;margin-left:24px}.nav-links a:hover{color:#0052CC}
+.container{max-width:960px;margin:40px auto;padding:0 40px}
+h1{font-size:28px;font-weight:700;margin-bottom:8px}
+.subtitle{font-size:15px;color:#57606A;margin-bottom:40px}
+h2{font-size:20px;font-weight:600;margin-top:40px;margin-bottom:4px}
+.fw-meta{font-size:13px;color:#57606A;margin-bottom:16px}
+.q-table{width:100%;border-collapse:collapse;margin-bottom:32px}
+.q-table th{text-align:left;padding:8px 12px;background:#F6F8FA;border:1px solid #E1E4E8;font-size:12px;font-weight:600;color:#57606A;text-transform:uppercase;letter-spacing:.5px}
+.q-table td{padding:10px 12px;border:1px solid #E1E4E8;font-size:14px;vertical-align:top}
+.q-table tr:nth-child(even) td{background:#F6F8FA}
+.q-id{font-family:"SFMono-Regular",Consolas,monospace;font-size:12px;color:#57606A;white-space:nowrap}
+.q-question{font-size:13px;line-height:1.5}
+.q-cite{font-size:12px;color:#0052CC;font-style:italic}
+.status-active{color:#1A7F37;font-weight:600;font-size:12px}
+.status-proposed{color:#9A6700;font-weight:600;font-size:12px}
+.propose-link{display:inline-block;margin-bottom:16px;font-size:13px}
+.how-section{background:#F6F8FA;border:1px solid #E1E4E8;padding:24px;margin:40px 0;border-left:4px solid #0052CC}
+.how-section h3{font-size:16px;font-weight:600;margin-bottom:12px}
+.how-section ol{padding-left:20px}
+.how-section li{margin-bottom:8px;font-size:14px;color:#0D1117}
+@media print{.nav{display:none}.brand-bar{display:none}}
+@media(max-width:768px){.container{padding:0 16px}.nav{padding:12px 16px}}
+</style>
+</head>
+<body>
+<div class="top-bar"></div>
+<nav class="nav">
+  <a href="index.html" class="nav-brand"><span class="nav-brand-shield"></span> OpenDocket</a>
+  <div class="nav-links">
+    <a href="index.html">Directory</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="methodology.html">Methodology</a>
+    <a href="https://github.com/anthropics/opendocket">GitHub</a>
+  </div>
+</nav>
+<div class="container">
+  <h1>Question Libraries</h1>
+  <p class="subtitle">Legal questions derived from actual regulatory text. Open source and community maintained.</p>
+
+  <h2>HIPAA — Health Insurance Portability and Accountability Act</h2>
+  <div class="fw-meta">HHS / OCR &middot; United States &middot; 10 questions</div>
+  <table class="q-table">
+    <thead><tr><th>ID</th><th>Legal Question</th><th>Citation</th><th>Status</th></tr></thead>
+    <tbody id="hipaa-tbody"></tbody>
+  </table>
+  <a class="propose-link" href="https://github.com/anthropics/opendocket/issues/new?title=HIPAA+Question+Proposal&template=question_proposal.md">Propose a new question for HIPAA</a>
+
+  <h2>SOC 2 — System and Organization Controls</h2>
+  <div class="fw-meta">AICPA &middot; International &middot; 10 questions</div>
+  <table class="q-table">
+    <thead><tr><th>ID</th><th>Legal Question</th><th>Citation</th><th>Status</th></tr></thead>
+    <tbody id="soc2-tbody"></tbody>
+  </table>
+  <a class="propose-link" href="https://github.com/anthropics/opendocket/issues/new?title=SOC2+Question+Proposal&template=question_proposal.md">Propose a new question for SOC 2</a>
+
+  <h2>PCI-DSS — Payment Card Industry Data Security Standard</h2>
+  <div class="fw-meta">PCI SSC &middot; International &middot; 10 questions</div>
+  <table class="q-table">
+    <thead><tr><th>ID</th><th>Legal Question</th><th>Citation</th><th>Status</th></tr></thead>
+    <tbody id="pcidss-tbody"></tbody>
+  </table>
+  <a class="propose-link" href="https://github.com/anthropics/opendocket/issues/new?title=PCI-DSS+Question+Proposal&template=question_proposal.md">Propose a new question for PCI-DSS</a>
+
+  <h2>GDPR — General Data Protection Regulation</h2>
+  <div class="fw-meta">EU DPAs &middot; European Union &middot; 10 questions</div>
+  <table class="q-table">
+    <thead><tr><th>ID</th><th>Legal Question</th><th>Citation</th><th>Status</th></tr></thead>
+    <tbody id="gdpr-tbody"></tbody>
+  </table>
+  <a class="propose-link" href="https://github.com/anthropics/opendocket/issues/new?title=GDPR+Question+Proposal&template=question_proposal.md">Propose a new question for GDPR</a>
+
+  <h2>TCPA — Telephone Consumer Protection Act</h2>
+  <div class="fw-meta">FCC &middot; United States &middot; 8 questions</div>
+  <table class="q-table">
+    <thead><tr><th>ID</th><th>Legal Question</th><th>Citation</th><th>Status</th></tr></thead>
+    <tbody id="tcpa-tbody"></tbody>
+  </table>
+  <a class="propose-link" href="https://github.com/anthropics/opendocket/issues/new?title=TCPA+Question+Proposal&template=question_proposal.md">Propose a new question for TCPA</a>
+
+  <h2>SOX — Sarbanes-Oxley Act</h2>
+  <div class="fw-meta">SEC / PCAOB &middot; United States &middot; 8 questions</div>
+  <table class="q-table">
+    <thead><tr><th>ID</th><th>Legal Question</th><th>Citation</th><th>Status</th></tr></thead>
+    <tbody id="sox-tbody"></tbody>
+  </table>
+  <a class="propose-link" href="https://github.com/anthropics/opendocket/issues/new?title=SOX+Question+Proposal&template=question_proposal.md">Propose a new question for SOX</a>
+
+  <div class="how-section">
+    <h3>How questions get validated</h3>
+    <ol>
+      <li>Submit via GitHub issue using the question proposal template</li>
+      <li>Cite the exact regulation section (e.g., "45 CFR &sect;164.312(a)(1)")</li>
+      <li>A reviewer matches it against the source regulatory text</li>
+      <li>If accurate and not duplicated, it gets merged into the YAML library</li>
+      <li>The question enters Active status and is used in future scans</li>
+    </ol>
+    <p style="margin-top:12px;font-size:13px;color:#57606A">All questions include regulatory citations. Proposed questions are reviewed against source regulatory text before being merged.</p>
+  </div>
+
+  <p style="text-align:center;margin-top:32px;font-size:13px;color:#57606A">
+    <a href="https://github.com/anthropics/opendocket/tree/main/scanner/config">View YAML source files on GitHub</a>
+  </p>
+</div>
+
+<script>
+// Static question data — rendered from the YAML files at build time
+const questions = {
+  hipaa: [
+    {id:"HIPAA-001",q:"Does this system collect, store, process, or transmit individually identifiable health information (PHI), and if so, are adequate technical safeguards in place?",cite:"45 CFR §160.103; 45 CFR §164.312(a)(1)"},
+    {id:"HIPAA-002",q:"Is electronic PHI encrypted when stored at rest using methods consistent with NIST SP 800-111?",cite:"45 CFR §164.312(a)(2)(iv); NIST SP 800-111"},
+    {id:"HIPAA-003",q:"Are all transmissions of electronic PHI encrypted using transport-level security?",cite:"45 CFR §164.312(e)(1); 45 CFR §164.312(e)(2)(ii)"},
+    {id:"HIPAA-004",q:"Does the system implement access controls allowing access only to authorized persons?",cite:"45 CFR §164.312(a)(1); 45 CFR §164.312(a)(2)(i)"},
+    {id:"HIPAA-005",q:"Does the system terminate sessions after a predetermined time of inactivity?",cite:"45 CFR §164.312(a)(2)(iii)"},
+    {id:"HIPAA-006",q:"Does the system implement audit trail mechanisms for PHI access?",cite:"45 CFR §164.312(b)"},
+    {id:"HIPAA-007",q:"Does the system limit PHI to the minimum necessary for the intended purpose?",cite:"45 CFR §164.502(b); 45 CFR §164.514(d)"},
+    {id:"HIPAA-008",q:"Does the system address Business Associate Agreement requirements for third-party integrations?",cite:"45 CFR §164.502(e); 45 CFR §164.504(e)"},
+    {id:"HIPAA-009",q:"Does the system implement data retention and secure disposal policies for PHI?",cite:"45 CFR §164.310(d)(2)(i); 45 CFR §164.310(d)(2)(ii)"},
+    {id:"HIPAA-010",q:"Does the system implement breach detection, reporting, and emergency access procedures?",cite:"45 CFR §164.308(a)(6); 45 CFR §164.312(a)(2)(ii)"},
+  ],
+  soc2: [
+    {id:"SOC2-001",q:"Does the system implement logical access security controls over user authentication?",cite:"CC6.1 (Logical and Physical Access Controls)"},
+    {id:"SOC2-002",q:"Does the system implement role-based access controls with least privilege?",cite:"CC6.3 (Role-Based Access and Least Privilege)"},
+    {id:"SOC2-003",q:"Does the system protect data during transmission using encryption?",cite:"CC6.7 (Data Transmission Protection)"},
+    {id:"SOC2-004",q:"Does the system implement logging, monitoring, and alerting for security events?",cite:"CC7.2 (Monitoring of System Components)"},
+    {id:"SOC2-005",q:"Does the system demonstrate change management controls?",cite:"CC8.1 (Change Management)"},
+    {id:"SOC2-006",q:"Does the system implement incident detection and response procedures?",cite:"CC7.3/CC7.4 (Security Event Evaluation/Response)"},
+    {id:"SOC2-007",q:"Does the system manage third-party vendor and dependency risks?",cite:"CC9.2 (Third-Party Risk Management)"},
+    {id:"SOC2-008",q:"Does the system implement data backup and recovery controls?",cite:"A1.2 (Recovery of Infrastructure and Data)"},
+    {id:"SOC2-009",q:"Does the system implement multi-factor authentication?",cite:"CC6.1 (Logical Access - MFA)"},
+    {id:"SOC2-010",q:"Does the system demonstrate documented security policies?",cite:"CC1.1 (Integrity and Ethical Values)"},
+  ],
+  pcidss: [
+    {id:"PCIDSS-001",q:"Does this system store, process, or transmit cardholder data with adequate protections?",cite:"PCI DSS v4.0 Req 3.5"},
+    {id:"PCIDSS-002",q:"Is cardholder data encrypted in transit and at rest using strong cryptography?",cite:"PCI DSS v4.0 Req 3.5; 4.2"},
+    {id:"PCIDSS-003",q:"Does the system restrict access to cardholder data by business need to know?",cite:"PCI DSS v4.0 Req 7"},
+    {id:"PCIDSS-004",q:"Does the system implement network segmentation for the cardholder data environment?",cite:"PCI DSS v4.0 Req 1"},
+    {id:"PCIDSS-005",q:"Does the system demonstrate vulnerability management practices?",cite:"PCI DSS v4.0 Req 6"},
+    {id:"PCIDSS-006",q:"Does the system implement security testing including code review and static analysis?",cite:"PCI DSS v4.0 Req 6.3; 11.4"},
+    {id:"PCIDSS-007",q:"Does the system implement audit trail mechanisms for card data access?",cite:"PCI DSS v4.0 Req 10"},
+    {id:"PCIDSS-008",q:"Does the system implement key management procedures?",cite:"PCI DSS v4.0 Req 3.6; 3.7"},
+    {id:"PCIDSS-009",q:"Does the system manage third-party service providers with appropriate controls?",cite:"PCI DSS v4.0 Req 12.8"},
+    {id:"PCIDSS-010",q:"Does the system implement an incident response plan for card data breaches?",cite:"PCI DSS v4.0 Req 12.10"},
+  ],
+  gdpr: [
+    {id:"GDPR-001",q:"Does the system identify and implement a lawful basis for processing personal data?",cite:"GDPR Article 6"},
+    {id:"GDPR-002",q:"Does the system implement consent collection satisfying Article 7 conditions?",cite:"GDPR Article 7"},
+    {id:"GDPR-003",q:"Does the system implement the right to erasure (right to be forgotten)?",cite:"GDPR Article 17"},
+    {id:"GDPR-004",q:"Does the system provide data portability in machine-readable format?",cite:"GDPR Article 20"},
+    {id:"GDPR-005",q:"Does the system demonstrate data protection by design and by default?",cite:"GDPR Article 25"},
+    {id:"GDPR-006",q:"Does the system implement breach detection with 72-hour notification capability?",cite:"GDPR Articles 33; 34"},
+    {id:"GDPR-007",q:"Does the system implement data retention limits with automated deletion?",cite:"GDPR Article 5(1)(e)"},
+    {id:"GDPR-008",q:"Does the system implement safeguards for cross-border data transfers?",cite:"GDPR Chapter V, Articles 44-49"},
+    {id:"GDPR-009",q:"Has a Data Protection Impact Assessment been considered for high-risk processing?",cite:"GDPR Article 35"},
+    {id:"GDPR-010",q:"Does the system provide transparent privacy information to data subjects?",cite:"GDPR Articles 13; 14"},
+  ],
+  tcpa: [
+    {id:"TCPA-001",q:"Does the system obtain prior express written consent before sending marketing SMS?",cite:"47 U.S.C. §227(b)(1); 47 CFR §64.1200(a)(2)"},
+    {id:"TCPA-002",q:"Does the system provide a clear opt-out mechanism for recipients?",cite:"47 U.S.C. §227(b)(2)(E)"},
+    {id:"TCPA-003",q:"Does the system check against the National Do Not Call Registry?",cite:"47 CFR §64.1200(c)"},
+    {id:"TCPA-004",q:"Does the system disclose and enforce message frequency limits?",cite:"CTIA Messaging Principles"},
+    {id:"TCPA-005",q:"Does the system include proper sender identification in messages?",cite:"47 U.S.C. §227(d)"},
+    {id:"TCPA-006",q:"Does the system maintain auditable records of consent?",cite:"47 CFR §64.1200; FCC Rulings"},
+    {id:"TCPA-007",q:"Does the system honor consent revocation through any reasonable means?",cite:"47 U.S.C. §227(b)(1)(A)"},
+    {id:"TCPA-008",q:"Does the system enforce time-of-day restrictions for outbound messages?",cite:"47 CFR §64.1200(c)(1)"},
+  ],
+  sox: [
+    {id:"SOX-001",q:"Does the system implement controls for financial data integrity and accuracy?",cite:"SOX Section 302"},
+    {id:"SOX-002",q:"Does the system restrict access to financial systems to authorized personnel?",cite:"SOX Section 404"},
+    {id:"SOX-003",q:"Does the system maintain a tamper-evident audit trail for financial transactions?",cite:"SOX Section 802"},
+    {id:"SOX-004",q:"Does the system implement change management for financial software?",cite:"SOX Section 404 (ITGC)"},
+    {id:"SOX-005",q:"Does the system implement segregation of duties controls?",cite:"SOX Section 404 (SoD)"},
+    {id:"SOX-006",q:"Does the system preserve financial records for the minimum 7-year retention period?",cite:"SOX Section 802"},
+    {id:"SOX-007",q:"Does the system provide documented internal controls over financial reporting?",cite:"SOX Section 404(a)"},
+    {id:"SOX-008",q:"Does the system prevent unauthorized alteration or destruction of financial records?",cite:"SOX Section 802"},
+  ],
+};
+
+function renderTable(fw, tbodyId) {
+  const tbody = document.getElementById(tbodyId);
+  if (!tbody || !questions[fw]) return;
+  tbody.innerHTML = questions[fw].map(q =>
+    `<tr><td class="q-id">${q.id}</td><td class="q-question">${q.q}</td><td class="q-cite">${q.cite}</td><td><span class="status-active">Active</span></td></tr>`
+  ).join('');
+}
+
+renderTable('hipaa', 'hipaa-tbody');
+renderTable('soc2', 'soc2-tbody');
+renderTable('pcidss', 'pcidss-tbody');
+renderTable('gdpr', 'gdpr-tbody');
+renderTable('tcpa', 'tcpa-tbody');
+renderTable('sox', 'sox-tbody');
+</script>
+</body>
+</html>

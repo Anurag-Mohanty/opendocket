@@ -1,0 +1,345 @@
+framework: SOC2
+full_name: System and Organization Controls 2
+description: >
+  SOC 2 defines criteria for managing customer data based on five Trust
+  Services Criteria: Security, Availability, Processing Integrity,
+  Confidentiality, and Privacy. These questions assess code-level evidence
+  of controls aligned with SOC 2 Type II requirements.
+
+questions:
+  - id: SOC2-001
+    category: User Authentication Controls
+    legal_question: >
+      Does the system implement logical access security controls over
+      user authentication that are suitably designed and operating
+      effectively to restrict access to authorized users, consistent
+      with the Common Criteria CC6.1 requirement for logical and
+      physical access controls?
+    regulatory_standard: "SOC 2 Trust Services Criteria CC6.1 (Logical and Physical Access Controls)"
+    search_patterns:
+      - "authentication"
+      - "login"
+      - "signin"
+      - "sign_in"
+      - "password"
+      - "credential"
+      - "jwt"
+      - "token"
+      - "oauth"
+      - "saml"
+      - "sso"
+      - "single_sign_on"
+      - "passport"
+      - "auth0"
+      - "cognito"
+      - "firebase_auth"
+      - "bcrypt"
+      - "argon2"
+      - "password_hash"
+    absence_patterns: []
+    evidence_guidance: >
+      Examine authentication implementations, password hashing algorithms,
+      token-based auth flows, and identity provider integrations. Assess
+      whether authentication is enforced consistently across all entry points.
+
+  - id: SOC2-002
+    category: Role-Based Access Control
+    legal_question: >
+      Does the system implement role-based or attribute-based access
+      controls that restrict system functions and data access based on
+      authorized user roles, consistent with the principle of least
+      privilege as required under CC6.3?
+    regulatory_standard: "SOC 2 Trust Services Criteria CC6.3 (Role-Based Access and Least Privilege)"
+    search_patterns:
+      - "role"
+      - "rbac"
+      - "permission"
+      - "authorize"
+      - "authorization"
+      - "acl"
+      - "access_control"
+      - "policy"
+      - "guard"
+      - "middleware"
+      - "can_access"
+      - "has_permission"
+      - "is_admin"
+      - "is_authorized"
+      - "privilege"
+      - "scope"
+      - "grant"
+      - "deny"
+      - "admin"
+      - "superuser"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for role definitions, permission models, authorization middleware,
+      and access control checks on sensitive operations. Determine whether
+      roles follow least privilege principles.
+
+  - id: SOC2-003
+    category: Encryption in Transit
+    legal_question: >
+      Does the system protect data during transmission over networks
+      using encryption or other equivalent security measures, consistent
+      with the CC6.7 requirement for protection of information during
+      transmission?
+    regulatory_standard: "SOC 2 Trust Services Criteria CC6.7 (Data Transmission Protection)"
+    search_patterns:
+      - "https"
+      - "ssl"
+      - "tls"
+      - "certificate"
+      - "SECURE_SSL_REDIRECT"
+      - "force_ssl"
+      - "HSTS"
+      - "strict-transport-security"
+      - "wss://"
+      - "amqps://"
+      - "rediss://"
+      - "ssl_context"
+      - "grpc"
+      - "mutual_tls"
+      - "mtls"
+    absence_patterns:
+      - "http://"
+      - "verify=False"
+      - "ssl=False"
+      - "insecure"
+      - "ws://"
+    evidence_guidance: >
+      Check all network communication channels including HTTP, WebSocket,
+      message queue, database, and cache connections for TLS enforcement.
+      Look for certificates configuration and SSL redirect settings.
+
+  - id: SOC2-004
+    category: Logging and Monitoring
+    legal_question: >
+      Does the system implement logging, monitoring, and alerting
+      mechanisms that detect and record security events, anomalies,
+      and unauthorized activities, as required under CC7.2 for
+      monitoring system components for anomalies?
+    regulatory_standard: "SOC 2 Trust Services Criteria CC7.2 (Monitoring of System Components)"
+    search_patterns:
+      - "logging"
+      - "logger"
+      - "log_level"
+      - "audit"
+      - "audit_log"
+      - "monitor"
+      - "monitoring"
+      - "alert"
+      - "notification"
+      - "sentry"
+      - "datadog"
+      - "newrelic"
+      - "cloudwatch"
+      - "prometheus"
+      - "grafana"
+      - "elk"
+      - "splunk"
+      - "observability"
+      - "trace"
+      - "metric"
+      - "structured_log"
+    absence_patterns: []
+    evidence_guidance: >
+      Search for logging frameworks, monitoring service integrations,
+      alerting configurations, and structured logging implementations.
+      Check whether security-relevant events are captured with sufficient
+      detail for forensic analysis.
+
+  - id: SOC2-005
+    category: Change Management
+    legal_question: >
+      Does the system demonstrate evidence of change management controls
+      including version control, code review processes, and controlled
+      deployment procedures, as required under CC8.1 for managing changes
+      to infrastructure, data, software, and procedures?
+    regulatory_standard: "SOC 2 Trust Services Criteria CC8.1 (Change Management)"
+    search_patterns:
+      - "migration"
+      - "version"
+      - "changelog"
+      - "deploy"
+      - "deployment"
+      - "ci"
+      - "cd"
+      - "pipeline"
+      - "github_actions"
+      - "circleci"
+      - "jenkins"
+      - "terraform"
+      - "infrastructure"
+      - "pull_request"
+      - "code_review"
+      - "approval"
+      - "rollback"
+      - "feature_flag"
+      - "staging"
+      - "production"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for CI/CD configurations, deployment scripts, database migration
+      files, feature flags, and environment-specific configurations. Check
+      for evidence of review gates before production deployment.
+
+  - id: SOC2-006
+    category: Incident Response
+    legal_question: >
+      Does the system implement incident detection, response, and
+      recovery procedures that enable timely identification and
+      remediation of security incidents, consistent with CC7.3
+      requirements for evaluating security events and CC7.4 for
+      responding to identified incidents?
+    regulatory_standard: "SOC 2 Trust Services Criteria CC7.3 (Security Event Evaluation); CC7.4 (Incident Response)"
+    search_patterns:
+      - "incident"
+      - "alert"
+      - "on_call"
+      - "pager"
+      - "pagerduty"
+      - "opsgenie"
+      - "escalation"
+      - "severity"
+      - "critical"
+      - "breach"
+      - "security_event"
+      - "respond"
+      - "remediate"
+      - "postmortem"
+      - "runbook"
+      - "playbook"
+      - "health_check"
+      - "status_page"
+      - "circuit_breaker"
+    absence_patterns: []
+    evidence_guidance: >
+      Search for incident response configurations, alerting integrations,
+      health check endpoints, circuit breakers, and error escalation
+      mechanisms. Look for documented runbooks or playbook references.
+
+  - id: SOC2-007
+    category: Vendor and Dependency Risk
+    legal_question: >
+      Does the system assess and manage risks associated with third-party
+      vendors, libraries, and service providers, including dependency
+      vulnerability management, consistent with CC9.2 requirements for
+      risk assessment of third-party service providers?
+    regulatory_standard: "SOC 2 Trust Services Criteria CC9.2 (Third-Party Risk Management)"
+    search_patterns:
+      - "package.json"
+      - "requirements.txt"
+      - "Gemfile"
+      - "go.mod"
+      - "Cargo.toml"
+      - "pom.xml"
+      - "dependabot"
+      - "renovate"
+      - "snyk"
+      - "npm_audit"
+      - "safety"
+      - "vulnerability"
+      - "cve"
+      - "security_advisory"
+      - "lock"
+      - "lockfile"
+      - "pin"
+      - "version_constraint"
+    absence_patterns: []
+    evidence_guidance: >
+      Check for dependency management files, lockfiles, automated dependency
+      update tools (Dependabot, Renovate), vulnerability scanning integration,
+      and whether dependencies use pinned versions.
+
+  - id: SOC2-008
+    category: Data Backup and Recovery
+    legal_question: >
+      Does the system implement data backup, replication, and recovery
+      controls that ensure availability and recoverability of data,
+      consistent with the A1.2 criterion for recovery of infrastructure
+      and data to meet objectives?
+    regulatory_standard: "SOC 2 Trust Services Criteria A1.2 (Recovery of Infrastructure and Data)"
+    search_patterns:
+      - "backup"
+      - "restore"
+      - "recovery"
+      - "replication"
+      - "replica"
+      - "failover"
+      - "disaster_recovery"
+      - "dr_plan"
+      - "rto"
+      - "rpo"
+      - "snapshot"
+      - "dump"
+      - "export"
+      - "redundancy"
+      - "high_availability"
+      - "ha"
+      - "cluster"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for backup configurations, database replication settings,
+      disaster recovery documentation, snapshot schedules, and
+      high-availability architecture patterns.
+
+  - id: SOC2-009
+    category: Multi-Factor Authentication
+    legal_question: >
+      Does the system implement or support multi-factor authentication
+      for user access, particularly for privileged accounts and
+      administrative interfaces, consistent with CC6.1 requirements
+      for logical access security?
+    regulatory_standard: "SOC 2 Trust Services Criteria CC6.1 (Logical Access - MFA)"
+    search_patterns:
+      - "mfa"
+      - "multi_factor"
+      - "two_factor"
+      - "2fa"
+      - "totp"
+      - "hotp"
+      - "authenticator"
+      - "otp"
+      - "one_time_password"
+      - "u2f"
+      - "webauthn"
+      - "fido"
+      - "security_key"
+      - "sms_verification"
+      - "verification_code"
+      - "duo"
+    absence_patterns: []
+    evidence_guidance: >
+      Search for MFA implementation, TOTP/HOTP libraries, WebAuthn support,
+      SMS verification flows, and MFA enforcement policies. Check whether
+      MFA is required for admin access.
+
+  - id: SOC2-010
+    category: Security Policy Documentation
+    legal_question: >
+      Does the system demonstrate evidence of documented security policies,
+      including acceptable use, data classification, and access management
+      policies, as required under CC1.1 for the entity's commitment to
+      integrity and ethical values?
+    regulatory_standard: "SOC 2 Trust Services Criteria CC1.1 (COSO Principle 1 - Integrity and Ethical Values)"
+    search_patterns:
+      - "SECURITY.md"
+      - "security_policy"
+      - "security.txt"
+      - ".well-known/security"
+      - "CONTRIBUTING"
+      - "CODE_OF_CONDUCT"
+      - "responsible_disclosure"
+      - "bug_bounty"
+      - "security_contact"
+      - "vulnerability_reporting"
+      - "data_classification"
+      - "acceptable_use"
+      - "privacy_policy"
+      - "terms_of_service"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for security policy files (SECURITY.md, security.txt),
+      contribution guidelines, codes of conduct, responsible disclosure
+      policies, and references to organizational security documentation.

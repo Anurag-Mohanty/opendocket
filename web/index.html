@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenDocket — Compliance risk analysis for software repositories</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div style="height:4px;background:#0052CC"></div>
+
+  <nav style="background:#fff;border-bottom:1px solid #E1E4E8;padding:12px 40px;display:flex;justify-content:space-between;align-items:center;max-width:100%">
+    <div style="display:flex;align-items:center;gap:8px">
+      <div style="width:24px;height:28px;background:#0052CC;clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%)"></div>
+      <span style="font-size:16px;font-weight:700;color:#0D1117">OpenDocket</span>
+    </div>
+    <div>
+      <a href="#directory" style="color:#57606A;text-decoration:none;font-size:14px;margin-left:24px">Directory</a>
+      <a href="dashboard.html" style="color:#57606A;text-decoration:none;font-size:14px;margin-left:24px">Dashboard</a>
+      <a href="methodology.html" style="color:#57606A;text-decoration:none;font-size:14px;margin-left:24px">Methodology</a>
+      <a href="questions.html" style="color:#57606A;text-decoration:none;font-size:14px;margin-left:24px">Questions</a>
+      <a href="https://github.com/anthropics/opendocket" style="color:#57606A;text-decoration:none;font-size:14px;margin-left:24px">GitHub &rarr;</a>
+    </div>
+  </nav>
+
+  <header class="header">
+    <h1 style="display:flex;align-items:center;justify-content:center;gap:10px"><div style="width:24px;height:28px;background:#0052CC;clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:inline-block"></div> OpenDocket</h1>
+    <p class="tagline">Compliance risk analysis for software repositories</p>
+    <p class="sub-tagline">Open source &middot; Free &middot; Not legal advice &middot; You own the copyright to your code. We surface the risk.</p>
+  </header>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-text">
+      <h2>Find compliance blind spots before regulators do.</h2>
+      <div class="hero-check"><span class="check">&#10003;</span> Scans your code against HIPAA, SOC2, PCI-DSS, GDPR, TCPA, and SOX</div>
+      <div class="hero-check"><span class="check">&#10003;</span> Asks the exact questions regulators ask in investigations</div>
+      <div class="hero-check"><span class="check">&#10003;</span> Finds the evidence in specific files and line numbers</div>
+
+      <div class="urgency-block">
+        <div class="urgency-item">HIPAA fines averaged $9.48M per breach in 2024.</div>
+        <div class="urgency-item">45% of AI-generated code contains security vulnerabilities. Compliance is never the default.</div>
+        <div class="urgency-item">OpenDocket asks the questions an investigator would ask — and finds the evidence in your code.</div>
+      </div>
+    </div>
+
+    <div class="hero-scan-card" style="border-top:3px solid #0052CC">
+      <label>GitHub Repository URL</label>
+      <input type="url" id="scan-url" placeholder="https://github.com/owner/repo">
+      <span class="byok-toggle" onclick="document.getElementById('byok-fields').classList.toggle('open')">Use my API keys</span>
+      <div class="byok-fields" id="byok-fields">
+        <input type="password" id="anthropic-key" placeholder="Anthropic API key (for primary scan)">
+        <input type="password" id="gemini-key" placeholder="Gemini API key (for independent review)">
+        <div class="key-note">Both keys are used only for this scan and never stored.</div>
+      </div>
+      <button class="scan-btn" id="scan-btn" onclick="startScan()">Scan Repository</button>
+      <div class="scan-note">3 free scans per hour &middot; No account required</div>
+      <div id="scan-status" style="margin-top:12px;font-size:13px;color:#57606A"></div>
+    </div>
+  </div>
+
+  <!-- Stats Bar -->
+  <div class="stats-bar" id="stats-bar">
+    <div class="stat-item"><div class="stat-num" id="stat-scans">--</div><div class="stat-label">repos scanned</div></div>
+    <div class="stat-item"><div class="stat-num" id="stat-lines">--</div><div class="stat-label">lines analyzed</div></div>
+    <div class="stat-item"><div class="stat-num" id="stat-findings">--</div><div class="stat-label">risks identified</div></div>
+    <div class="stat-item"><div class="stat-num" id="stat-overrides">--</div><div class="stat-label">judge overrides</div></div>
+  </div>
+
+  <!-- How It Works -->
+  <section class="section">
+    <h2>How It Works</h2>
+    <div class="how-steps">
+      <div class="how-step"><div class="how-num">1</div><div class="how-content"><h3>Point it at a repo</h3><p>Give OpenDocket a GitHub URL. It clones the repository, runs qualification gates, and detects which regulatory domains apply.</p></div></div>
+      <div class="how-step"><div class="how-num">2</div><div class="how-content"><h3>It asks legal questions</h3><p>Based on the domain, OpenDocket loads compliance frameworks. Each contains questions pulled from actual regulatory text — the questions a regulator would ask in an investigation.</p></div></div>
+      <div class="how-step"><div class="how-num">3</div><div class="how-content"><h3>You get a legal brief</h3><p>For each question, OpenDocket finds evidence in your code — specific files, line numbers, patterns present or absent — and produces a structured report with risk levels, citations, and remediation. Gemini independently reviews every finding.</p></div></div>
+    </div>
+  </section>
+
+  <!-- Recent Activity -->
+  <div style="max-width:1080px;margin:0 auto;padding:16px 24px;font-size:13px;color:#57606a;border-bottom:1px solid var(--border)" id="activity-ticker">Loading recent scans...</div>
+
+  <!-- Directory (moved before Frameworks — proof first) -->
+  <section class="section" id="directory">
+    <h2>Compliance Intelligence Directory</h2>
+    <p class="section-subtitle">Real compliance scans of open-source repositories.</p>
+    <div class="dir-tabs">
+      <button class="dir-tab active" onclick="filterDir('all')">All</button>
+      <button class="dir-tab" onclick="filterDir('healthcare')">Healthcare</button>
+      <button class="dir-tab" onclick="filterDir('payments')">Payments</button>
+      <button class="dir-tab" onclick="filterDir('saas')">SaaS</button>
+      <button class="dir-tab" onclick="filterDir('infra')">Infrastructure</button>
+    </div>
+    <table class="dir-table" id="dir-table">
+      <thead><tr><th onclick="sortDir(0)">Repository</th><th onclick="sortDir(1)" style="text-align:right">Stars</th><th>Domain</th><th>Frameworks</th><th onclick="sortDir(4)" style="text-align:center">High</th><th onclick="sortDir(5)" style="text-align:center">Med</th><th onclick="sortDir(6)" style="text-align:center">Score</th><th>Report</th></tr></thead>
+      <tbody>
+        <tr data-cat="healthcare"><td class="repo-name"><a href="reports/medplum_report.html">medplum/medplum</a></td><td style="text-align:right">4,200</td><td>Healthcare</td><td>HIPAA, SOC2, GDPR +3</td><td style="text-align:center;color:var(--high)">47</td><td style="text-align:center;color:var(--medium)">6</td><td style="text-align:center"><span class="score-dot red"></span>19</td><td><a href="reports/medplum_report.html">View</a></td></tr>
+        <tr data-cat="healthcare"><td class="repo-name"><a href="reports/openemr_report.html">openemr/openemr</a></td><td style="text-align:right">2,900</td><td>Healthcare</td><td>HIPAA, SOC2, GDPR</td><td style="text-align:center;color:var(--high)">6</td><td style="text-align:center;color:var(--medium)">10</td><td style="text-align:center"><span class="score-dot amber"></span>61</td><td><a href="reports/openemr_report.html">View</a></td></tr>
+        <tr data-cat="payments"><td class="repo-name"><a href="reports/hyperswitch_report.html">juspay/hyperswitch</a></td><td style="text-align:right">12,500</td><td>Fintech</td><td>PCI-DSS, SOC2, GDPR +3</td><td style="text-align:center;color:var(--high)">45</td><td style="text-align:center;color:var(--medium)">6</td><td style="text-align:center"><span class="score-dot red"></span>21</td><td><a href="reports/hyperswitch_report.html">View</a></td></tr>
+        <tr data-cat="saas"><td class="repo-name"><a href="reports/probo_report.html">getprobo/probo</a></td><td style="text-align:right">200</td><td>SaaS</td><td>SOC2, GDPR</td><td style="text-align:center;color:var(--high)">3</td><td style="text-align:center;color:var(--medium)">6</td><td style="text-align:center"><span class="score-dot amber"></span>72</td><td><a href="reports/probo_report.html">View</a></td></tr>
+        <tr data-cat="saas"><td class="repo-name"><a href="reports/supabase_report.html">supabase/supabase</a></td><td style="text-align:right">74,000</td><td>SaaS</td><td>SOC2, GDPR +4</td><td style="text-align:center;color:var(--high)">47</td><td style="text-align:center;color:var(--medium)">4</td><td style="text-align:center"><span class="score-dot red"></span>17</td><td><a href="reports/supabase_report.html">View</a></td></tr>
+        <tr data-cat="infra"><td class="repo-name"><a href="reports/vault_report.html">hashicorp/vault</a></td><td style="text-align:right">31,000</td><td>Infrastructure</td><td>SOC2, GDPR +4</td><td style="text-align:center;color:var(--high)">45</td><td style="text-align:center;color:var(--medium)">5</td><td style="text-align:center"><span class="score-dot red"></span>20</td><td><a href="reports/vault_report.html">View</a></td></tr>
+        <tr data-cat="infra" class="failed-row"><td>kelseyhightower/nocode</td><td style="text-align:right">60,000</td><td>—</td><td>—</td><td style="text-align:center">—</td><td style="text-align:center">—</td><td style="text-align:center">Did not qualify</td><td><a href="reports/failed_gate_example.html">Gate</a></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Frameworks (moved after Directory) -->
+  <section class="section">
+    <h2>Compliance Frameworks</h2>
+    <table class="fw-table">
+      <thead><tr><th>Framework</th><th>Applies to</th><th>Max Penalty</th><th>Questions</th></tr></thead>
+      <tbody>
+        <tr><td><strong>HIPAA</strong></td><td>Healthcare apps, EHR systems, telemedicine, health APIs</td><td>$1.5M/year per category</td><td>10</td></tr>
+        <tr><td><strong>SOC 2</strong></td><td>SaaS platforms, cloud services, B2B software</td><td>Loss of enterprise contracts</td><td>10</td></tr>
+        <tr><td><strong>PCI-DSS</strong></td><td>Payment processors, e-commerce, fintech</td><td>$5K-$100K/month + loss of processing</td><td>10</td></tr>
+        <tr><td><strong>GDPR</strong></td><td>Any app with EU users, personal data processors</td><td>EUR 20M or 4% global turnover</td><td>10</td></tr>
+        <tr><td><strong>TCPA</strong></td><td>SMS marketing, automated calling, messaging apps</td><td>$500-$1,500 per violation</td><td>8</td></tr>
+        <tr><td><strong>SOX</strong></td><td>Public company software, financial reporting, ERP</td><td>Criminal penalties, delisting</td><td>8</td></tr>
+      </tbody>
+    </table>
+    <p class="fw-table-note">More frameworks coming — <a href="https://github.com/anthropics/opendocket">contribute on GitHub</a></p>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <h2>Open Source</h2>
+    <p>MIT License. Scan any public repo, contribute frameworks, or build on top of it.</p>
+    <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap">
+      <a href="https://github.com/anthropics/opendocket" class="btn btn-primary">View on GitHub</a>
+      <a href="https://github.com/anthropics/opendocket/blob/main/README.md#how-to-contribute" class="btn btn-secondary">Contribute</a>
+    </div>
+    <div class="email-form" style="margin-top:24px">
+      <input type="email" id="waitlist-email" placeholder="your@email.com">
+      <button onclick="joinWaitlist()">Get notified for V2</button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-brand">
+      <h3>OpenDocket</h3>
+      <p>Compliance risk analysis for software repositories.</p>
+      <p>&copy; 2026 OpenDocket &middot; MIT License &middot; You own the copyright to your code. We surface the risk.</p>
+    </div>
+    <div class="footer-links">
+      <a href="https://github.com/anthropics/opendocket">GitHub</a><br>
+      <a href="methodology.html">Methodology</a><br>
+      <a href="dashboard.html">Dashboard</a><br>
+      <a href="privacy.html">Privacy Policy</a><br>
+      <a href="https://github.com/anthropics/opendocket/blob/main/README.md#how-to-contribute">Contributing</a>
+    </div>
+    <div class="footer-disclaimer">Not legal advice. Risk pattern detection only. Findings represent automated analysis, not legal determinations. Consult qualified counsel.</div>
+  </footer>
+
+  <script>
+    // Stats
+    fetch('/api/stats').then(r=>r.json()).then(d=>{
+      document.getElementById('stat-scans').textContent = (d.total_scans||0).toLocaleString();
+      document.getElementById('stat-lines').textContent = ((d.total_lines_scanned||0)/1e6).toFixed(1)+'M';
+      document.getElementById('stat-findings').textContent = (d.total_findings||0).toLocaleString();
+      document.getElementById('stat-overrides').textContent = (d.judge_overrides||0).toLocaleString();
+    }).catch(()=>{
+      document.getElementById('stat-scans').textContent='6';
+      document.getElementById('stat-lines').textContent='2.4M';
+      document.getElementById('stat-findings').textContent='312';
+      document.getElementById('stat-overrides').textContent='--';
+    });
+
+    // Scan
+    function startScan(){
+      const url=document.getElementById('scan-url').value.trim();
+      if(!url){alert('Enter a GitHub URL');return;}
+      const body={repo_url:url};
+      const ak=document.getElementById('anthropic-key').value.trim();
+      const gk=document.getElementById('gemini-key').value.trim();
+      if(ak)body.anthropic_api_key=ak;
+      if(gk)body.gemini_api_key=gk;
+      document.getElementById('scan-btn').disabled=true;
+      document.getElementById('scan-status').textContent='Starting scan...';
+      if(!ak)sessionStorage.setItem('od_scans',parseInt(sessionStorage.getItem('od_scans')||'0')+1);
+      fetch('/api/scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+      .then(r=>r.json()).then(d=>{
+        if(d.error){document.getElementById('scan-status').textContent=d.error;document.getElementById('scan-btn').disabled=false;return;}
+        pollScan(d.scan_id);
+      }).catch(e=>{document.getElementById('scan-status').textContent='Error: '+e.message;document.getElementById('scan-btn').disabled=false;});
+    }
+    function pollScan(id){
+      fetch('/api/scan/'+id).then(r=>r.json()).then(d=>{
+        document.getElementById('scan-status').textContent=d.progress||d.status;
+        if(d.status==='complete'){
+          document.getElementById('scan-btn').disabled=false;
+          if(d.report_url)document.getElementById('scan-status').innerHTML='<a href="'+d.report_url+'">View Report</a> — Score: '+d.summary.score;
+        }else if(d.status==='failed'){
+          document.getElementById('scan-btn').disabled=false;
+          document.getElementById('scan-status').textContent='Failed: '+(d.error||'Unknown error');
+        }else{setTimeout(()=>pollScan(id),3000);}
+      });
+    }
+
+    // Waitlist
+    function joinWaitlist(){
+      const email=document.getElementById('waitlist-email').value.trim();
+      if(!email)return;
+      fetch('/api/waitlist',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})})
+      .then(r=>r.json()).then(()=>document.getElementById('waitlist-email').value='Thanks!').catch(()=>{});
+    }
+
+    // Activity ticker
+    fetch('/api/recent').then(r=>r.json()).then(scans=>{
+      const recent=scans.filter(s=>s.status==='complete').slice(0,3);
+      if(recent.length){
+        document.getElementById('activity-ticker').innerHTML=recent.map(s=>
+          `<span style="margin-right:24px">${s.repo_name} scanned &middot; Score ${s.opendocket_score||'—'} &middot; ${(s.finding_high||0)+(s.finding_medium||0)+(s.finding_concern||0)+(s.finding_ok||0)} findings</span>`
+        ).join('');
+      }else{document.getElementById('activity-ticker').textContent='7 repos scanned across healthcare, payments, SaaS, and infrastructure';}
+    }).catch(()=>{document.getElementById('activity-ticker').textContent='7 repos scanned across healthcare, payments, SaaS, and infrastructure';});
+
+    // Session scan limit banner
+    const sc=parseInt(sessionStorage.getItem('od_scans')||'0');
+    if(sc>=3){const b=document.createElement('div');b.style.cssText='background:#fffbe0;border:1px solid #d0d7de;border-left:4px solid #9A6700;padding:10px 16px;margin:12px 24px;font-size:13px;color:#1a1a1a';b.innerHTML='You\'ve used 3 free scans this session. <strong>Add your Anthropic API key</strong> for unlimited scanning.';document.querySelector('.hero-scan-card')?.prepend(b);}
+
+    // Directory filter
+    function filterDir(cat){
+      document.querySelectorAll('.dir-tab').forEach(t=>t.classList.toggle('active',t.textContent.toLowerCase()===cat||cat==='all'&&t.textContent==='All'));
+      document.querySelectorAll('#dir-table tbody tr').forEach(r=>{r.style.display=(cat==='all'||r.dataset.cat===cat)?'':'none';});
+    }
+    function sortDir(col){
+      const tb=document.querySelector('#dir-table tbody');
+      const rows=Array.from(tb.rows);
+      const t=document.querySelector('#dir-table');
+      const dir=t.dataset.sc==col&&t.dataset.sd==='asc'?'desc':'asc';
+      t.dataset.sc=col;t.dataset.sd=dir;
+      rows.sort((a,b)=>{
+        let av=a.cells[col].textContent.replace(/[^0-9.-]/g,'')||'0';
+        let bv=b.cells[col].textContent.replace(/[^0-9.-]/g,'')||'0';
+        if(col===0||col===2||col===3){av=a.cells[col].textContent;bv=b.cells[col].textContent;return dir==='asc'?av.localeCompare(bv):bv.localeCompare(av);}
+        return dir==='asc'?parseFloat(av)-parseFloat(bv):parseFloat(bv)-parseFloat(av);
+      });
+      rows.forEach(r=>tb.appendChild(r));
+    }
+  </script>
+</body>
+</html>

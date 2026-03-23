@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<title>OpenDocket — Scoring Methodology</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:15px;line-height:1.7;color:#1a1a1a;background:#fff}
+a{color:#0052CC;text-decoration:none}a:hover{text-decoration:underline}
+.top-bar{height:4px;background:#0052CC}
+.nav{background:#fff;border-bottom:1px solid #d0d7de;padding:0 40px;height:48px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{font-size:15px;font-weight:700;color:#1a1a1a;text-decoration:none;display:flex;align-items:center;gap:8px}
+.nav-brand-shield{width:20px;height:24px;background:#0052CC;clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:inline-block}
+.nav-links a{font-size:13px;color:#57606a;text-decoration:none;margin-left:24px}.nav-links a:hover{color:#0052CC}
+.container{max-width:720px;margin:40px auto;padding:0 40px 80px}
+h1{font-size:28px;font-weight:700;color:#1a1a1a;margin-bottom:8px}
+.subtitle{font-size:15px;color:#57606a;margin-bottom:40px}
+h2{font-size:22px;font-weight:600;color:#1a1a1a;margin-top:40px;margin-bottom:16px}
+h3{font-size:17px;font-weight:600;color:#1a1a1a;margin-top:28px;margin-bottom:12px}
+p{margin-bottom:16px}
+ul,ol{padding-left:24px;margin-bottom:16px}
+li{margin-bottom:8px}
+.card{background:#f6f8fa;border:1px solid #d0d7de;padding:20px;margin:20px 0}
+.card strong{color:#1a1a1a}
+.formula{background:#f6f8fa;border:1px solid #d0d7de;border-left:3px solid #0052CC;padding:16px;margin:20px 0;font-family:"SFMono-Regular",Consolas,monospace;font-size:14px;color:#1a1a1a}
+.score-example{display:flex;gap:16px;margin:20px 0;flex-wrap:wrap}
+.score-pill{padding:8px 20px;border-radius:4px;font-size:14px;font-weight:600}
+.score-good{background:#f0fff4;color:#1A7F37;border:1px solid #1A7F37}
+.score-mid{background:#fffbe0;color:#9A6700;border:1px solid #9A6700}
+.score-bad{background:#fff8f8;color:#cf222e;border:1px solid #cf222e}
+.warning{background:#fffbe0;border:1px solid #d0d7de;border-left:4px solid #9A6700;padding:16px;margin:20px 0;font-size:14px;color:#1a1a1a}
+.footer-link{text-align:center;margin-top:48px;padding-top:24px;border-top:1px solid #d0d7de;font-size:14px;color:#57606a}
+@media print{.nav,.top-bar{display:none}body{font-size:12px}}
+</style>
+</head>
+<body>
+<div class="top-bar"></div>
+<nav class="nav"><a href="index.html" class="nav-brand"><span class="nav-brand-shield"></span> OpenDocket</a><div class="nav-links"><a href="index.html">Directory</a><a href="dashboard.html">Dashboard</a><a href="questions.html">Questions</a><a href="https://github.com/anthropics/opendocket">GitHub</a></div></nav>
+<div class="container">
+<h1>Scoring Methodology</h1>
+<p class="subtitle">How OpenDocket calculates risk scores and what they mean.</p>
+
+<h2>What the OpenDocket Score Is</h2>
+<p>The OpenDocket Score is a <strong>relative risk pattern index</strong> from 0 to 100. A lower score means more high-severity risk patterns were found in the codebase.</p>
+<div class="card">
+<strong>The score is not:</strong>
+<ul style="margin-top:8px">
+<li>A compliance certification</li>
+<li>A legal determination</li>
+<li>A guarantee of security or insecurity</li>
+<li>A substitute for professional audit</li>
+</ul>
+<p style="margin-bottom:0">It is a <strong>blind spot indicator</strong> for engineering teams.</p>
+</div>
+
+<h2>How It Is Calculated</h2>
+<p>The score starts at 100 (best possible) and decreases based on findings:</p>
+<div class="formula">base_score = 100<br><br>penalty = (high_risk_count * 8) + (medium_risk_count * 3) + (concern_count * 1)<br><br>normalized_penalty = penalty / num_frameworks * 2<br><br>score = max(0, 100 - normalized_penalty)</div>
+
+<h3>Finding Weights</h3>
+<ul>
+<li><strong>High Risk:</strong> -8 points</li>
+<li><strong>Medium Risk:</strong> -3 points</li>
+<li><strong>Pattern of Concern:</strong> -1 point</li>
+<li><strong>No Issue Found:</strong> 0 points</li>
+</ul>
+
+<h3>Framework Normalization</h3>
+<p>The penalty is normalized by framework count. A repo scanned against 6 frameworks is evaluated on the same scale as one scanned against 2.</p>
+
+<h3>Score Ranges</h3>
+<div class="score-example">
+<div class="score-pill score-good">70-100: Low Risk</div>
+<div class="score-pill score-mid">40-69: Moderate Risk</div>
+<div class="score-pill score-bad">0-39: High Risk</div>
+</div>
+
+<h2>Why Two Models</h2>
+<p>OpenDocket uses a dual-model approach:</p>
+<div class="card">
+<strong>Primary Scan (Claude Sonnet)</strong>
+<p style="margin-top:8px">Analyzes code evidence against each regulatory question.</p>
+<strong>Independent Review (Gemini 1.5 Flash)</strong>
+<p style="margin-top:8px">A different model from a different company challenges each finding for false positives.</p>
+</div>
+
+<h2>What This Does Not Cover</h2>
+<div class="warning">OpenDocket scans source code only. Many compliance requirements are met through mechanisms not visible in code.</div>
+<ul>
+<li><strong>Infrastructure and deployment configuration</strong></li>
+<li><strong>Operational policies and procedures</strong></li>
+<li><strong>Business Associate Agreements</strong></li>
+<li><strong>Vendor contracts and DPAs</strong></li>
+<li><strong>Human processes and training</strong></li>
+</ul>
+
+<div class="footer-link"><a href="index.html">Home</a> &middot; <a href="privacy.html">Privacy</a> &middot; <a href="https://github.com/anthropics/opendocket">GitHub</a></div>
+</div>
+</body>
+</html>

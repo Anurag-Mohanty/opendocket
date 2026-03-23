@@ -1,0 +1,314 @@
+framework: GDPR
+full_name: General Data Protection Regulation
+description: >
+  The GDPR establishes rules for the protection of natural persons with regard
+  to the processing of personal data and the free movement of such data within
+  the European Union. These questions assess code-level evidence of GDPR
+  compliance controls and data subject rights implementation.
+regulatory_body: EU Data Protection Authorities
+risk_of_noncompliance: >
+  Administrative fines up to EUR 20 million or 4% of global annual turnover
+  (whichever is higher), data processing injunctions, mandatory breach
+  notification, and reputational damage.
+
+questions:
+  - id: GDPR-001
+    category: Lawful Basis for Processing Personal Data
+    legal_question: >
+      Does this system process personal data of EU residents, and if so, is
+      there evidence that a lawful basis for processing under Article 6 GDPR
+      has been identified and implemented for each processing activity?
+    regulatory_standard: "GDPR Article 6 (Lawfulness of Processing)"
+    search_patterns:
+      - "personal_data"
+      - "data_subject"
+      - "lawful_basis"
+      - "legitimate_interest"
+      - "consent"
+      - "contractual_necessity"
+      - "legal_obligation"
+      - "vital_interest"
+      - "public_interest"
+      - "gdpr"
+      - "processing_purpose"
+      - "data_processing"
+      - "user_data"
+      - "pii"
+      - "personally_identifiable"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for data processing declarations, consent mechanisms, purpose
+      limitation enforcement, and references to lawful basis in code comments,
+      configuration, or data models. Check whether processing activities
+      are documented with their legal justification.
+
+  - id: GDPR-002
+    category: Consent Collection and Management
+    legal_question: >
+      Does the system implement consent collection mechanisms that satisfy
+      the conditions for consent under Article 7, including freely given,
+      specific, informed, and unambiguous indication of the data subject's
+      wishes, with capability to withdraw consent?
+    regulatory_standard: "GDPR Article 7 (Conditions for Consent)"
+    search_patterns:
+      - "consent"
+      - "opt_in"
+      - "agree"
+      - "accept"
+      - "cookie_consent"
+      - "consent_banner"
+      - "consent_form"
+      - "withdraw_consent"
+      - "revoke_consent"
+      - "consent_record"
+      - "consent_timestamp"
+      - "consent_version"
+      - "granular_consent"
+      - "privacy_preference"
+      - "marketing_consent"
+    absence_patterns:
+      - "pre_checked"
+      - "default_opt_in"
+    evidence_guidance: >
+      Search for consent collection UI components, consent storage mechanisms,
+      consent versioning, withdrawal capabilities, and granular consent options.
+      Check whether consent is recorded with timestamp and version.
+
+  - id: GDPR-003
+    category: Right to Erasure Implementation
+    legal_question: >
+      Does the system implement the right to erasure (right to be forgotten)
+      under Article 17, allowing data subjects to request deletion of their
+      personal data without undue delay?
+    regulatory_standard: "GDPR Article 17 (Right to Erasure)"
+    search_patterns:
+      - "delete_account"
+      - "delete_user"
+      - "erase"
+      - "erasure"
+      - "right_to_be_forgotten"
+      - "forget"
+      - "remove_data"
+      - "purge"
+      - "anonymize"
+      - "pseudonymize"
+      - "data_deletion"
+      - "account_deletion"
+      - "gdpr_delete"
+      - "hard_delete"
+      - "soft_delete"
+      - "destroy"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for account deletion endpoints, data erasure workflows, cascade
+      deletion across related data stores, anonymization utilities, and
+      mechanisms to propagate deletion to third-party processors.
+
+  - id: GDPR-004
+    category: Data Portability Capability
+    legal_question: >
+      Does the system provide data subjects the right to receive their personal
+      data in a structured, commonly used, and machine-readable format, and to
+      transmit that data to another controller, as required under Article 20?
+    regulatory_standard: "GDPR Article 20 (Right to Data Portability)"
+    search_patterns:
+      - "export"
+      - "download_data"
+      - "data_export"
+      - "portability"
+      - "data_download"
+      - "takeout"
+      - "to_json"
+      - "to_csv"
+      - "serialize"
+      - "user_data_export"
+      - "archive"
+      - "machine_readable"
+      - "structured_data"
+    absence_patterns: []
+    evidence_guidance: >
+      Search for data export endpoints, user data download features, data
+      portability APIs, and mechanisms to provide personal data in structured
+      formats (JSON, CSV, XML). Check for bulk export capabilities.
+
+  - id: GDPR-005
+    category: Privacy by Design Evidence
+    legal_question: >
+      Does the system demonstrate evidence of data protection by design and
+      by default, implementing appropriate technical and organizational measures
+      to ensure only necessary personal data is processed, as required under
+      Article 25?
+    regulatory_standard: "GDPR Article 25 (Data Protection by Design and by Default)"
+    search_patterns:
+      - "privacy"
+      - "minimize"
+      - "minimization"
+      - "data_minimization"
+      - "purpose_limitation"
+      - "pseudonymize"
+      - "anonymize"
+      - "encrypt"
+      - "default_private"
+      - "privacy_setting"
+      - "data_classification"
+      - "field_mask"
+      - "redact"
+      - "sanitize"
+    absence_patterns:
+      - "collect_all"
+      - "track_everything"
+    evidence_guidance: >
+      Look for data minimization practices, pseudonymization, anonymization,
+      default privacy settings, data classification schemes, and evidence that
+      only necessary data is collected for each processing purpose.
+
+  - id: GDPR-006
+    category: Data Breach Detection and Notification
+    legal_question: >
+      Does the system implement mechanisms for detecting personal data breaches
+      and notifying the supervisory authority within 72 hours and affected data
+      subjects without undue delay, as required under Articles 33 and 34?
+    regulatory_standard: "GDPR Articles 33 (Notification to Authority); 34 (Communication to Data Subject)"
+    search_patterns:
+      - "breach"
+      - "breach_notification"
+      - "incident"
+      - "security_event"
+      - "alert"
+      - "monitoring"
+      - "intrusion_detection"
+      - "anomaly"
+      - "suspicious"
+      - "data_leak"
+      - "unauthorized_access"
+      - "notification"
+      - "72_hours"
+      - "supervisory_authority"
+      - "dpa_notification"
+    absence_patterns: []
+    evidence_guidance: >
+      Search for breach detection systems, incident response procedures,
+      notification mechanisms, and 72-hour response capabilities. Check for
+      data breach logging and communication templates.
+
+  - id: GDPR-007
+    category: Data Retention and Deletion Policies
+    legal_question: >
+      Does the system implement data retention policies that limit the storage
+      of personal data to what is necessary for the specified processing purpose,
+      with automated deletion or anonymization when the purpose is fulfilled,
+      consistent with the storage limitation principle under Article 5(1)(e)?
+    regulatory_standard: "GDPR Article 5(1)(e) (Storage Limitation Principle)"
+    search_patterns:
+      - "retention"
+      - "retention_policy"
+      - "ttl"
+      - "time_to_live"
+      - "expiry"
+      - "expire"
+      - "scheduled_deletion"
+      - "cleanup"
+      - "archive"
+      - "purge"
+      - "data_lifecycle"
+      - "retention_period"
+      - "auto_delete"
+      - "cron"
+      - "scheduled_job"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for data retention configurations, scheduled deletion jobs, TTL
+      settings, data lifecycle management, and evidence that retention periods
+      are defined and enforced for personal data categories.
+
+  - id: GDPR-008
+    category: Cross-Border Data Transfer Safeguards
+    legal_question: >
+      Does the system implement appropriate safeguards for transfers of personal
+      data to third countries or international organizations, such as Standard
+      Contractual Clauses or adequacy decisions, as required under Chapter V?
+    regulatory_standard: "GDPR Chapter V, Articles 44-49 (Transfers to Third Countries)"
+    search_patterns:
+      - "transfer"
+      - "cross_border"
+      - "eu_us"
+      - "data_transfer"
+      - "standard_contractual_clauses"
+      - "scc"
+      - "adequacy"
+      - "binding_corporate_rules"
+      - "region"
+      - "data_residency"
+      - "eu_region"
+      - "eu-west"
+      - "eu-central"
+      - "frankfurt"
+      - "ireland"
+      - "aws_region"
+      - "gcp_region"
+    absence_patterns:
+      - "us-east"
+      - "us-west"
+    evidence_guidance: >
+      Check for data residency configurations, cloud region settings, transfer
+      mechanism references (SCCs, adequacy decisions), and evidence that
+      personal data is stored within or transferred with safeguards to/from
+      the EU.
+
+  - id: GDPR-009
+    category: Data Protection Impact Assessment Indicators
+    legal_question: >
+      Does the system process personal data in a manner likely to result in
+      high risk to data subjects, and if so, is there evidence that a Data
+      Protection Impact Assessment has been considered, as required under
+      Article 35?
+    regulatory_standard: "GDPR Article 35 (Data Protection Impact Assessment)"
+    search_patterns:
+      - "dpia"
+      - "impact_assessment"
+      - "risk_assessment"
+      - "privacy_impact"
+      - "high_risk"
+      - "profiling"
+      - "automated_decision"
+      - "scoring"
+      - "tracking"
+      - "biometric"
+      - "special_category"
+      - "sensitive_data"
+      - "large_scale"
+      - "systematic_monitoring"
+    absence_patterns: []
+    evidence_guidance: >
+      Look for high-risk processing activities (profiling, automated decisions,
+      large-scale monitoring, biometric data) and evidence that DPIAs have been
+      conducted or referenced. Check for risk assessment documentation.
+
+  - id: GDPR-010
+    category: Privacy Policy and Notice Requirements
+    legal_question: >
+      Does the system provide transparent information to data subjects about
+      the processing of their personal data, including identity of the controller,
+      purposes of processing, and data subject rights, as required under
+      Articles 13 and 14?
+    regulatory_standard: "GDPR Articles 13 (Information at Collection); 14 (Information Not from Data Subject)"
+    search_patterns:
+      - "privacy_policy"
+      - "privacy_notice"
+      - "terms_of_service"
+      - "data_controller"
+      - "data_processor"
+      - "dpo"
+      - "data_protection_officer"
+      - "cookie_policy"
+      - "cookie_banner"
+      - "transparency"
+      - "inform"
+      - "notice"
+      - "rights"
+      - "subject_access"
+    absence_patterns: []
+    evidence_guidance: >
+      Search for privacy policy files, cookie notices, transparency mechanisms,
+      data controller identification, DPO references, and links to privacy
+      documentation within the application interface.

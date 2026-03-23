@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<title>OpenDocket — Privacy Policy</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:15px;line-height:1.7;color:#1a1a1a;background:#fff}
+a{color:#0052CC;text-decoration:none}a:hover{text-decoration:underline}
+.top-bar{height:4px;background:#0052CC}
+.nav{background:#fff;border-bottom:1px solid #d0d7de;padding:0 40px;height:48px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{font-size:15px;font-weight:700;color:#1a1a1a;text-decoration:none;display:flex;align-items:center;gap:8px}
+.nav-brand-shield{width:20px;height:24px;background:#0052CC;clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:inline-block}
+.nav-links a{font-size:13px;color:#57606a;text-decoration:none;margin-left:24px}.nav-links a:hover{color:#0052CC}
+.container{max-width:720px;margin:40px auto;padding:0 40px 80px}
+h1{font-size:28px;font-weight:700;color:#1a1a1a;margin-bottom:8px;border-bottom:1px solid #d0d7de;padding-bottom:12px}
+.updated{color:#57606a;font-size:13px;margin-bottom:32px}
+h2{font-size:20px;font-weight:600;color:#1a1a1a;margin-top:32px;margin-bottom:12px}
+p,li{margin-bottom:12px;font-size:15px}
+ul{padding-left:24px}
+.highlight{background:#f6f8fa;border:1px solid #d0d7de;padding:16px;margin:16px 0}
+.highlight strong{color:#1a1a1a}
+.contact{background:#f6f8fa;border:1px solid #d0d7de;padding:20px;margin-top:32px}
+.contact p{margin-bottom:8px}
+@media print{.nav,.top-bar{display:none}body{font-size:12px}}
+</style>
+</head>
+<body>
+<div class="top-bar"></div>
+<nav class="nav"><a href="index.html" class="nav-brand"><span class="nav-brand-shield"></span> OpenDocket</a><div class="nav-links"><a href="index.html">Directory</a><a href="methodology.html">Methodology</a><a href="https://github.com/anthropics/opendocket">GitHub</a></div></nav>
+<div class="container">
+<h1>Privacy Policy</h1>
+<p class="updated">Last updated: March 22, 2026</p>
+<p>OpenDocket is an open-source compliance scanning tool. This policy explains what data OpenDocket collects, what it never collects, and how any collected data is used.</p>
+
+<h2>What We Collect</h2>
+<div class="highlight"><strong>Anonymized pattern data only.</strong></div>
+<p>When you run OpenDocket against a repository, the scanner analyzes code patterns locally. The only data transmitted externally is:</p>
+<ul>
+<li><strong>Code snippets sent to the LLM for analysis</strong> — short evidence excerpts sent to the Anthropic API for compliance analysis. These are processed under Anthropic's API terms and are not used for model training.</li>
+<li><strong>Aggregate pattern statistics</strong> — signal counts, domain confidence scores, and finding severity distributions. These contain no source code or identifiable information.</li>
+</ul>
+
+<h2>What We Never Collect</h2>
+<div class="highlight"><strong>We never collect, store, or transmit:</strong></div>
+<ul>
+<li><strong>Your source code</strong> — repositories are cloned locally and deleted after scanning.</li>
+<li><strong>Identifiable developer information</strong> — no names, emails, or IP addresses.</li>
+<li><strong>Company-finding linkages</strong> — no association between company identity and findings.</li>
+<li><strong>Git history or credentials</strong> — no commit history, author info, or auth tokens.</li>
+</ul>
+
+<h2>How Pattern Data Is Used</h2>
+<p>Anonymized pattern data may be used to:</p>
+<ul>
+<li>Improve detection accuracy of compliance risk patterns</li>
+<li>Calibrate confidence scoring algorithms</li>
+<li>Identify common compliance gaps across domains</li>
+<li>Publish aggregate research on code-level compliance trends</li>
+</ul>
+
+<h2>Opt-In Badge Program (Future)</h2>
+<p>In a future version, OpenDocket plans to offer a voluntary public compliance badge program. Participation is entirely opt-in.</p>
+
+<h2>Third-Party Services</h2>
+<p>OpenDocket uses the Anthropic API (Claude) for primary analysis and Google Gemini for independent review. Both are governed by their respective terms of service.</p>
+
+<h2>Self-Hosted Scanning</h2>
+<p>OpenDocket is fully open source. You can run the entire pipeline on your own infrastructure with your own API keys.</p>
+
+<div class="contact">
+<h2>Contact</h2>
+<p><strong>Email:</strong> privacy@opendocket.dev</p>
+<p><strong>GitHub:</strong> <a href="https://github.com/anthropics/opendocket/issues">Open an issue</a></p>
+</div>
+</div>
+</body>
+</html>

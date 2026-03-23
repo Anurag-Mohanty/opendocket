@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenDocket Report: nocode (Did Not Qualify)</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:#0d1117; color:#c9d1d9; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif; margin:0; padding:0; }
+    .sticky-header {
+      position:sticky; top:0; z-index:100; background:#161b22; border-bottom:1px solid #30363d;
+      display:flex; align-items:center; justify-content:space-between; padding:12px 24px;
+    }
+    .sticky-header .logo { font-size:1.2em; font-weight:700; color:#c9d1d9; }
+    .sticky-header .logo span { color:#58a6ff; }
+    .sticky-header .repo-name { font-size:1em; color:#8b949e; }
+    .sticky-header .status { color:#f85149; font-weight:700; font-size:0.9em; }
+    .report-container { max-width:900px; margin:0 auto; padding:32px 24px; }
+    h1 { color:#f85149; border-bottom:1px solid #21262d; padding-bottom:12px; }
+    h2 { color:#c9d1d9; }
+    .meta { color:#8b949e; margin-bottom:24px; }
+    .disclaimer { background:#161b22; border:1px solid #30363d; border-radius:6px; padding:16px; margin:16px 0; color:#8b949e; font-size:0.9em; }
+    .gate-fail { background:rgba(248,81,73,0.1); border:1px solid #f85149; border-radius:6px; padding:20px; margin:20px 0; }
+    a { color:#58a6ff; text-decoration:none; }
+    .back-link { display:inline-block; margin-bottom:20px; }
+    @media print {
+      body { background:#fff; color:#000; }
+      .sticky-header { position:static; background:#fff; border-bottom:2px solid #000; }
+      .sticky-header .logo, .sticky-header .repo-name, .sticky-header .status { color:#000; }
+      .sticky-header .logo span { color:#000; }
+      .gate-fail { background:#fff; border-color:#ccc; }
+      .disclaimer { background:#f9f9f9; border-color:#ccc; }
+    }
+  </style>
+</head>
+<body>
+  <div class="sticky-header">
+    <div class="logo">Open<span>Docket</span></div>
+    <div class="repo-name">nocode</div>
+    <div class="status">DID NOT QUALIFY</div>
+  </div>
+  <div class="report-container">
+    <a href="../index.html" class="back-link">&larr; Back to OpenDocket</a>
+    <h1>Qualification Report: nocode</h1>
+    <div class="meta">
+      <p>Repository: <a href="https://github.com/kelseyhightower/nocode">https://github.com/kelseyhightower/nocode</a></p>
+      <p>Scan Date: 2026-03-22</p>
+    </div>
+    <div class="disclaimer">OpenDocket identifies risk patterns through automated code analysis. Findings represent potential areas of concern, not legal determinations. This report does not constitute legal advice. Regulatory compliance requires qualified legal and technical assessment. Consult a licensed attorney and certified compliance professional for definitive compliance determination.</div>
+    <div class="gate-fail">
+      <h2>DOES NOT QUALIFY FOR SCANNING</h2>
+      <p>This repository did not meet the minimum criteria required for a meaningful compliance scan.</p>
+      <h3>Failed Gates</h3>
+      <ul><li>Repository has only 0 application code files (minimum 10 required). A meaningful compliance scan requires sufficient application logic to analyze.</li>
+<li>No evidence of data handling found (database models, API calls, form inputs, or data field definitions). Compliance scanning requires code that processes or stores data.</li>
+</ul>
+      <h3>Repository Statistics</h3>
+      <ul><li><strong>readme_lines:</strong> 22</li>
+<li><strong>code_files:</strong> 0</li>
+<li><strong>has_data_handling:</strong> False</li>
+<li><strong>total_files:</strong> 5</li>
+</ul>
+    </div>
+    <p>To qualify for scanning, a repository must have: a README with more than 10 meaningful lines, at least 10 application code files, and evidence of data handling.</p>
+    <div class="disclaimer">OpenDocket identifies risk patterns through automated code analysis. Findings represent potential areas of concern, not legal determinations. This report does not constitute legal advice. Regulatory compliance requires qualified legal and technical assessment. Consult a licensed attorney and certified compliance professional for definitive compliance determination.</div>
+    <p style="text-align:center;margin-top:16px"><a href="../privacy.html">Privacy Policy</a></p>
+  </div>
+</body>
+</html>
