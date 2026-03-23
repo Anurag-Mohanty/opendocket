@@ -89,6 +89,14 @@ def init_db():
                 source TEXT DEFAULT 'web'
             );
 
+            CREATE TABLE IF NOT EXISTS repo_scan_history (
+                repo_name TEXT PRIMARY KEY,
+                scan_ids TEXT DEFAULT '[]',
+                first_scanned TEXT,
+                last_scanned TEXT,
+                finding_delta TEXT DEFAULT '{}'
+            );
+
             CREATE TABLE IF NOT EXISTS events (
                 event_id INTEGER PRIMARY KEY AUTOINCREMENT,
                 event_type TEXT NOT NULL,
@@ -271,6 +279,62 @@ def get_event_counts(days: int = 7) -> dict:
         ).fetchall()
         counts["top_repos"] = [{"repo": r["repo_name"], "views": r["cnt"]} for r in repo_rows]
         return counts
+
+
+def update_repo_history(repo_name: str, scan_id: str):
+    """Track scan history for a repo."""
+    now = datetime.utcnow().isoformat()
+    with _get_conn() as conn:
+        row = conn.execute("SELECT * FROM repo_scan_history WHERE repo_name = ?", (repo_name,)).fetchone()
+        if row:
+            scan_ids = json.loads(row["scan_ids"] or "[]")
+            scan_ids.append(scan_id)
+            conn.execute(
+                "UPDATE repo_scan_history SET scan_ids = ?, last_scanned = ? WHERE repo_name = ?",
+                (json.dumps(scan_ids), now, repo_name),
+            )
+        else:
+            conn.execute(
+                "INSERT INTO repo_scan_history (repo_name, scan_ids, first_scanned, last_scanned) VALUES (?, ?, ?, ?)",
+                (repo_name, json.dumps([scan_id]), now, now),
+            )
+
+
+def compare_scans(scan_id_1: str, scan_id_2: str) -> dict:
+    """Compare two scans of the same repo. Returns resolved/new/unchanged."""
+    with _get_conn() as conn:
+        rows1 = conn.execute("SELECT question_id, severity FROM findings WHERE scan_id = ?", (scan_id_1,)).fetchall()
+        rows2 = conn.execute("SELECT question_id, severity FROM findings WHERE scan_id = ?", (scan_id_2,)).fetchall()
+
+    ids1 = {r["question_id"] for r in rows1}
+    ids2 = {r["question_id"] for r in rows2}
+    high1 = sum(1 for r in rows1 if r["severity"] == "High Risk")
+    high2 = sum(1 for r in rows2 if r["severity"] == "High Risk")
+
+    resolved = sorted(ids1 - ids2)
+    new = sorted(ids2 - ids1)
+    unchanged = sorted(ids1 & ids2)
+    improvement = round((high1 - high2) / max(high1, 1) * 100) if high1 > 0 else 0
+
+    return {
+        "resolved": resolved,
+        "new": new,
+        "unchanged": unchanged,
+        "improvement": improvement,
+        "prev_high": high1,
+        "curr_high": high2,
+    }
+
+
+def get_repo_history(repo_name: str) -> dict | None:
+    """Get scan history for a repo."""
+    with _get_conn() as conn:
+        row = conn.execute("SELECT * FROM repo_scan_history WHERE repo_name = ?", (repo_name,)).fetchone()
+        if row:
+            d = dict(row)
+            d["scan_ids"] = json.loads(d.get("scan_ids", "[]"))
+            return d
+    return None
 
 
 def get_recent_scans(limit: int = 20) -> list[dict]:

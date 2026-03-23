@@ -1,6 +1,5 @@
 """
 Report generator that formats scan results into legal brief format.
-
 Outputs markdown and HTML reports.
 """
 
@@ -13,40 +12,29 @@ from scanner.domain_detector import DomainResult
 DISCLAIMER = (
     "OpenDocket identifies risk patterns through automated code analysis. "
     "Findings represent potential areas of concern, not legal determinations. "
-    "This report does not constitute legal advice. Regulatory compliance "
-    "requires qualified legal and technical assessment. Consult a licensed "
-    "attorney and certified compliance professional for definitive compliance "
-    "determination."
+    "This report does not constitute legal advice."
 )
 
 FRAMEWORK_META = {
-    "HIPAA": {"body": "HHS / OCR", "risk": "Fines up to $1.5M/year per category"},
-    "SOC2": {"body": "AICPA", "risk": "Loss of enterprise contracts"},
-    "PCI-DSS": {"body": "PCI SSC", "risk": "Fines $5K-$100K/month"},
-    "GDPR": {"body": "EU DPAs", "risk": "Up to EUR 20M or 4% turnover"},
-    "TCPA": {"body": "FCC", "risk": "$500-$1,500 per violation"},
-    "SOX": {"body": "SEC / PCAOB", "risk": "Criminal penalties, delisting"},
+    "HIPAA": {"body": "HHS / OCR", "risk": "Fines up to $1.5M/year per category", "trend": "Increasing enforcement, record penalties in 2024"},
+    "SOC2": {"body": "AICPA", "risk": "Loss of enterprise contracts", "trend": "Mandatory for enterprise SaaS sales"},
+    "PCI-DSS": {"body": "PCI SSC", "risk": "Fines $5K-$100K/month", "trend": "v4.0 enforcement accelerating"},
+    "GDPR": {"body": "EU DPAs", "risk": "Up to EUR 20M or 4% turnover", "trend": "Cross-border enforcement rising"},
+    "TCPA": {"body": "FCC", "risk": "$500-$1,500 per violation", "trend": "Class action filings at record levels"},
+    "SOX": {"body": "SEC / PCAOB", "risk": "Criminal penalties, delisting", "trend": "IT controls under increased scrutiny"},
 }
 
 
-def calculate_score(agent_results: list[AgentResult]) -> int:
-    if not agent_results:
-        return 100
-    all_findings = [f for r in agent_results for f in r.findings]
-    num_frameworks = len(agent_results)
-    raw_penalty = 0
-    for f in all_findings:
-        if f.finding_level == "High Risk":
-            raw_penalty += 8
-        elif f.finding_level == "Medium Risk":
-            raw_penalty += 3
-        elif f.finding_level == "Pattern of Concern":
-            raw_penalty += 1
-    if num_frameworks > 0:
-        normalized_penalty = raw_penalty / num_frameworks * 2
+def risk_classification(high_count: int) -> tuple[str, str, str]:
+    """Return (label, color, description) for risk classification."""
+    if high_count == 0:
+        return "LOW RISK", "#1A7F37", "No high-severity patterns found"
+    elif high_count <= 5:
+        return "MODERATE RISK", "#9A6700", f"{high_count} high-severity patterns require attention"
+    elif high_count <= 15:
+        return "ELEVATED RISK", "#CF222E", f"{high_count} high-severity patterns found — prioritize remediation"
     else:
-        normalized_penalty = raw_penalty
-    return max(0, round(100 - normalized_penalty))
+        return "CRITICAL RISK", "#CF222E", f"{high_count} high-severity patterns found — immediate attention required"
 
 
 def _severity_class(level: str) -> str:
@@ -57,6 +45,38 @@ def _severity_class(level: str) -> str:
 def _verdict_css(verdict: str) -> str:
     return {"CONFIRMED": "v-confirmed", "CONTEXT DEPENDENT": "v-context",
             "POSSIBLE FALSE POSITIVE": "v-fp", "ADDITIONAL RISK": "v-additional"}.get(verdict, "")
+
+
+def _select_top_findings(all_findings: list[Finding], n: int = 3) -> list[Finding]:
+    """Select top N findings: high risk first, confirmed preferred, spread across frameworks."""
+    scored = []
+    for f in all_findings:
+        s = 0
+        if f.finding_level == "High Risk":
+            s += 100
+        elif f.finding_level == "Medium Risk":
+            s += 50
+        if f.review_verdict == "CONFIRMED":
+            s += 30
+        elif f.review_verdict == "ADDITIONAL RISK":
+            s += 20
+        s += len(f.evidence) * 2  # evidence specificity
+        scored.append((s, f))
+    scored.sort(key=lambda x: x[0], reverse=True)
+
+    selected = []
+    seen_fw = set()
+    # First pass: one per framework
+    for _, f in scored:
+        fw = getattr(f, '_framework', '')
+        if fw not in seen_fw and len(selected) < n:
+            selected.append(f)
+            seen_fw.add(fw)
+    # Fill remaining
+    for _, f in scored:
+        if f not in selected and len(selected) < n:
+            selected.append(f)
+    return selected[:n]
 
 
 # ── Markdown Report ──
@@ -87,11 +107,14 @@ def generate_markdown_report(
     fw_names = [r.framework for r in agent_results]
     lines.append(f"## Frameworks Analyzed: {', '.join(fw_names)}")
     lines.append("")
-    lines.append("## Executive Summary")
+    all_findings = [f for r in agent_results for f in r.findings]
+    high = sum(1 for f in all_findings if f.finding_level == "High Risk")
+    label, _, desc = risk_classification(high)
+    lines.append(f"## Risk Pattern Index: {label}")
+    lines.append(f"{desc}")
     lines.append("")
     lines.append("| Finding Level | Count |")
     lines.append("|---|---|")
-    all_findings = [f for r in agent_results for f in r.findings]
     for level in ("High Risk", "Medium Risk", "Pattern of Concern", "No Issue Found"):
         count = sum(1 for f in all_findings if f.finding_level == level)
         lines.append(f"| {level} | {count} |")
@@ -102,15 +125,9 @@ def generate_markdown_report(
         for finding in result.findings:
             lines.append(f"### {finding.question_id}: {finding.category}")
             lines.append("")
-            lines.append("**LEGAL QUESTION**")
+            lines.append(f"**{finding.legal_question}**")
             lines.append("")
-            lines.append(finding.legal_question)
-            lines.append("")
-            lines.append("**REGULATORY STANDARD**")
-            lines.append("")
-            lines.append(finding.regulatory_standard)
-            lines.append("")
-            lines.append("**EVIDENCE**")
+            lines.append(f"*{finding.regulatory_standard}*")
             lines.append("")
             if finding.evidence:
                 for e in finding.evidence[:10]:
@@ -120,18 +137,16 @@ def generate_markdown_report(
             lines.append("")
             emoji = {"High Risk": "🔴", "Medium Risk": "🟠",
                      "Pattern of Concern": "🔵", "No Issue Found": "🟢"}.get(finding.finding_level, "")
-            lines.append(f"**FINDING: {emoji} {finding.finding_level}**")
+            lines.append(f"**{emoji} {finding.finding_level}**")
             lines.append("")
             lines.append(finding.finding_text)
             lines.append("")
-            lines.append("**REMEDIATION DIRECTION**")
-            lines.append("")
-            lines.append(finding.remediation)
-            lines.append("")
+            if finding.remediation:
+                lines.append(f"**Remediation:** {finding.remediation}")
+                lines.append("")
             lines.append("---")
             lines.append("")
     lines.append(f"**DISCLAIMER:** {DISCLAIMER}")
-    lines.append("")
     return "\n".join(lines)
 
 
@@ -160,114 +175,176 @@ def generate_failed_gate_report(
     return "\n".join(lines)
 
 
-# ── HTML Report — Complete Light Mode Rewrite ──
+# Keep calculate_score for backward compat but it's deprecated
+def calculate_score(agent_results: list[AgentResult]) -> int:
+    if not agent_results:
+        return 100
+    all_findings = [f for r in agent_results for f in r.findings]
+    high = sum(1 for f in all_findings if f.finding_level == "High Risk")
+    label, _, _ = risk_classification(high)
+    return {"LOW RISK": 95, "MODERATE RISK": 65, "ELEVATED RISK": 30, "CRITICAL RISK": 10}.get(label, 50)
 
+
+# ── CSS for light-mode reports ──
 _CSS = """*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.6; color: #1a1a1a; background: #ffffff; }
+a { color: #0052CC; text-decoration: none; } a:hover { text-decoration: underline; }
 .top-bar { height: 4px; background: #0052CC; }
-.nav { background: #ffffff; border-bottom: 1px solid #d0d7de; padding: 0 40px; height: 48px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 200; }
+.nav { background: #fff; border-bottom: 1px solid #d0d7de; padding: 0 40px; height: 48px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 200; }
 .nav-brand { font-size: 15px; font-weight: 700; color: #1a1a1a; text-decoration: none; display: flex; align-items: center; gap: 8px; }
 .nav-brand-shield { width: 20px; height: 24px; background: #0052CC; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); display: inline-block; }
-.nav-links { display: flex; gap: 24px; }
-.nav-links a { font-size: 13px; color: #57606a; text-decoration: none; } .nav-links a:hover { color: #0052CC; }
+.nav-links { display: flex; gap: 24px; } .nav-links a { font-size: 13px; color: #57606a; text-decoration: none; } .nav-links a:hover { color: #0052CC; }
 .action-bar { background: #f6f8fa; border-bottom: 1px solid #d0d7de; padding: 8px 40px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 48px; z-index: 190; }
 .action-bar-left { display: flex; gap: 8px; align-items: center; } .action-bar-right { display: flex; gap: 8px; }
-.filter-bar { background: #ffffff; border-bottom: 1px solid #d0d7de; padding: 8px 40px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; position: sticky; top: 96px; z-index: 180; }
+.btn { font-size: 13px; padding: 6px 14px; border: 1px solid #d0d7de; background: #fff; color: #1a1a1a; cursor: pointer; border-radius: 2px; font-family: inherit; } .btn:hover { background: #f6f8fa; }
+.btn-primary { background: #0052CC; color: #fff; border-color: #0052CC; } .btn-primary:hover { background: #0047B3; }
+/* Tabs */
+.tab-bar { display: flex; gap: 0; border-bottom: 1px solid #d0d7de; padding: 0 40px; background: #fff; position: sticky; top: 96px; z-index: 180; }
+.tab-btn { padding: 10px 20px; font-size: 14px; font-weight: 500; color: #57606a; border: none; background: none; cursor: pointer; border-bottom: 2px solid transparent; font-family: inherit; }
+.tab-btn:hover { color: #1a1a1a; } .tab-btn.active { color: #0052CC; border-bottom-color: #0052CC; font-weight: 600; }
+.tab-panel { display: none; } .tab-panel.active { display: block; }
+/* Filter bar inside findings tab */
+.filter-bar { background: #fff; border-bottom: 1px solid #d0d7de; padding: 8px 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
 .filter-label { font-size: 12px; font-weight: 600; color: #57606a; text-transform: uppercase; letter-spacing: 0.5px; }
 .filter-sep { width: 1px; height: 16px; background: #d0d7de; margin: 0 4px; }
-.filter-btn { font-size: 12px; padding: 3px 10px; border: 1px solid #d0d7de; background: #ffffff; color: #57606a; cursor: pointer; border-radius: 2px; font-family: inherit; }
-.filter-btn:hover { border-color: #0052CC; color: #0052CC; }
-.filter-btn.active { background: #0052CC; color: #ffffff; border-color: #0052CC; }
-.btn { font-size: 13px; padding: 6px 14px; border: 1px solid #d0d7de; background: #ffffff; color: #1a1a1a; cursor: pointer; border-radius: 2px; font-family: inherit; } .btn:hover { background: #f6f8fa; }
-.btn-primary { background: #0052CC; color: #ffffff; border-color: #0052CC; } .btn-primary:hover { background: #0047B3; }
-.page { display: grid; grid-template-columns: 220px 1fr; max-width: 1200px; margin: 0 auto; padding: 32px 40px; gap: 40px; }
-.sidebar { position: sticky; top: 150px; height: fit-content; }
-.sidebar-nav { list-style: none; } .sidebar-nav li { margin-bottom: 4px; }
-.sidebar-nav a { font-size: 13px; color: #57606a; text-decoration: none; display: block; padding: 4px 8px; border-radius: 2px; border-left: 2px solid transparent; }
-.sidebar-nav a:hover { color: #0052CC; background: #f6f8fa; }
-.sidebar-section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #8c959f; padding: 8px 8px 4px; margin-top: 8px; }
-.main { min-width: 0; }
+.filter-btn { font-size: 12px; padding: 3px 10px; border: 1px solid #d0d7de; background: #fff; color: #57606a; cursor: pointer; border-radius: 2px; font-family: inherit; }
+.filter-btn:hover { border-color: #0052CC; color: #0052CC; } .filter-btn.active { background: #0052CC; color: #fff; border-color: #0052CC; }
+/* Layout */
+.page { max-width: 960px; margin: 0 auto; padding: 32px 40px; }
 .section { margin-bottom: 40px; scroll-margin-top: 160px; }
 .section-heading { font-size: 13px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: #57606a; border-bottom: 1px solid #d0d7de; padding-bottom: 8px; margin-bottom: 20px; }
 .report-header { margin-bottom: 32px; }
 .report-eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #57606a; margin-bottom: 8px; }
 .report-title { font-size: 26px; font-weight: 700; color: #1a1a1a; margin-bottom: 8px; }
-.report-meta { font-size: 13px; color: #57606a; line-height: 1.8; } .report-meta a { color: #0052CC; text-decoration: none; }
+.report-meta { font-size: 13px; color: #57606a; line-height: 1.8; } .report-meta a { color: #0052CC; }
 .callout { padding: 14px 16px; margin-bottom: 16px; border: 1px solid #d0d7de; border-left-width: 4px; font-size: 13px; line-height: 1.6; color: #1a1a1a; } .callout strong { font-weight: 600; }
 .callout-blue { border-left-color: #0052CC; background: #f0f5ff; }
 .callout-yellow { border-left-color: #9A6700; background: #fffbe0; }
-.scope-list { list-style: none; margin: 8px 0 0 0; } .scope-list li { font-size: 13px; color: #57606a; padding: 3px 0; } .scope-list li::before { content: "\\2717  "; color: #cf222e; font-weight: 700; }
-.score-block { display: flex; align-items: center; gap: 20px; padding: 20px 24px; background: #f6f8fa; border: 1px solid #d0d7de; margin-bottom: 24px; }
-.score-number { font-size: 52px; font-weight: 700; line-height: 1; }
-.score-title { font-size: 16px; font-weight: 600; color: #1a1a1a; margin-bottom: 4px; }
-.score-desc { font-size: 13px; color: #57606a; } .score-desc a { color: #0052CC; }
+.callout-amber { border-left-color: #9A6700; background: #fffbe0; }
+/* Risk index */
+.risk-index { display: flex; align-items: center; gap: 16px; padding: 20px 24px; background: #f6f8fa; border: 1px solid #d0d7de; margin-bottom: 24px; }
+.risk-label { font-size: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+.risk-desc { font-size: 14px; color: #57606a; }
+/* Tables */
 .table { width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 20px; }
 .table th { text-align: left; padding: 8px 12px; background: #f6f8fa; border: 1px solid #d0d7de; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #57606a; }
-.table td { padding: 10px 12px; border: 1px solid #d0d7de; color: #1a1a1a; vertical-align: top; }
-.table tr:nth-child(even) td { background: #f6f8fa; }
+.table td { padding: 10px 12px; border: 1px solid #d0d7de; color: #1a1a1a; vertical-align: top; } .table tr:nth-child(even) td { background: #f6f8fa; }
 .n-high { color: #cf222e; font-weight: 700; } .n-med { color: #9A6700; font-weight: 700; } .n-concern { color: #0052CC; font-weight: 600; } .n-ok { color: #1A7F37; }
+/* Domain bars */
 .domain-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; font-size: 14px; }
-.domain-name { width: 130px; font-weight: 500; color: #1a1a1a; }
-.domain-bar-wrap { flex: 1; height: 6px; background: #eaeef2; border-radius: 3px; overflow: hidden; }
-.domain-bar { height: 100%; background: #0052CC; border-radius: 3px; }
-.domain-pct { width: 44px; text-align: right; font-size: 13px; color: #57606a; }
+.domain-name { width: 130px; font-weight: 500; } .domain-bar-wrap { flex: 1; height: 6px; background: #eaeef2; border-radius: 3px; overflow: hidden; }
+.domain-bar { height: 100%; background: #0052CC; border-radius: 3px; } .domain-pct { width: 44px; text-align: right; font-size: 13px; color: #57606a; }
+/* Judge */
 .judge-block { background: #f0f5ff; border: 1px solid #d0d7de; border-left: 4px solid #0052CC; padding: 16px 20px; margin-bottom: 24px; }
 .judge-title { font-size: 12px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: #0052CC; margin-bottom: 12px; }
 .judge-stats { display: flex; gap: 32px; flex-wrap: wrap; margin-bottom: 12px; } .judge-stat { text-align: center; }
 .judge-stat-n { font-size: 24px; font-weight: 700; display: block; line-height: 1.2; } .judge-stat-l { font-size: 12px; color: #57606a; display: block; }
 .j-confirmed { color: #1A7F37; } .j-context { color: #9A6700; } .j-fp { color: #cf222e; } .j-additional { color: #6E40C9; }
 .judge-note { font-size: 12px; color: #8c959f; border-top: 1px solid #d0d7de; padding-top: 10px; margin-top: 4px; }
+/* Top findings */
 .top-finding { border: 1px solid #d0d7de; border-left: 4px solid #cf222e; background: #fff8f8; padding: 14px 16px; margin-bottom: 10px; }
-.top-finding-q { font-size: 14px; font-weight: 600; color: #1a1a1a; margin-bottom: 6px; }
-.top-finding-meta { display: flex; gap: 12px; font-size: 12px; color: #57606a; }
+.top-finding-q { font-size: 14px; font-weight: 600; color: #1a1a1a; margin-bottom: 6px; line-height: 1.5; }
+.top-finding-meta { display: flex; gap: 12px; font-size: 12px; color: #57606a; flex-wrap: wrap; }
 .badge { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase; padding: 2px 8px; border-radius: 2px; }
 .badge-high { color: #cf222e; background: #fff0f0; border: 1px solid #cf222e; }
 .badge-med { color: #9A6700; background: #fffbe0; border: 1px solid #9A6700; }
 .badge-concern { color: #0052CC; background: #f0f5ff; border: 1px solid #0052CC; }
 .badge-ok { color: #1A7F37; background: #f0fff4; border: 1px solid #1A7F37; }
+/* Recs */
 .rec-item { display: flex; gap: 16px; padding: 14px 0; border-bottom: 1px solid #d0d7de; } .rec-item:last-child { border-bottom: none; }
 .rec-priority { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; min-width: 70px; padding-top: 2px; }
 .rec-p-high { color: #cf222e; } .rec-p-med { color: #9A6700; }
 .rec-text { font-size: 14px; color: #1a1a1a; line-height: 1.6; } .rec-fw { font-size: 12px; color: #57606a; margin-top: 3px; }
+/* Framework sections */
 .framework-section { margin-bottom: 36px; scroll-margin-top: 160px; }
 .framework-header { background: #f6f8fa; border: 1px solid #d0d7de; border-left: 4px solid #0052CC; padding: 12px 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-start; }
 .framework-name { font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; } .framework-meta { font-size: 12px; color: #57606a; }
 .framework-count { font-size: 13px; color: #57606a; white-space: nowrap; padding-left: 16px; }
+/* Finding cards */
 .finding { border: 1px solid #d0d7de; margin-bottom: 8px; page-break-inside: avoid; }
 .finding[data-severity="High Risk"] { border-left: 4px solid #cf222e; }
 .finding[data-severity="Medium Risk"] { border-left: 4px solid #9A6700; }
 .finding[data-severity="Pattern of Concern"] { border-left: 4px solid #0052CC; }
 .finding[data-severity="No Issue Found"] { border-left: 4px solid #1A7F37; }
 .finding-header { display: flex; align-items: flex-start; justify-content: space-between; padding: 12px 16px; background: #f6f8fa; cursor: pointer; user-select: none; gap: 12px; } .finding-header:hover { background: #eaeef2; }
-.finding-left { flex: 1; min-width: 0; }
-.finding-num { font-size: 11px; font-family: "SFMono-Regular", Consolas, monospace; color: #8c959f; margin-bottom: 4px; }
+.finding-left { flex: 1; min-width: 0; } .finding-num { font-size: 11px; font-family: "SFMono-Regular", Consolas, monospace; color: #8c959f; margin-bottom: 4px; }
 .finding-question { font-size: 14px; font-weight: 600; color: #1a1a1a; line-height: 1.4; }
 .finding-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-.chevron { font-size: 12px; color: #57606a; transition: transform 0.15s; display: inline-block; } .finding.open .chevron { transform: rotate(90deg); }
+.chevron { font-size: 12px; color: #57606a; transition: transform 0.15s; } .finding.open .chevron { transform: rotate(90deg); }
 .finding-body { display: none; padding: 20px; border-top: 1px solid #d0d7de; } .finding.open .finding-body { display: block; }
 .finding-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 16px; }
 .field-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #57606a; margin-bottom: 6px; }
 .field-value { font-size: 14px; color: #1a1a1a; line-height: 1.6; } .citation { font-size: 13px; color: #0052CC; font-style: italic; }
-.verdict-block { background: #f6f8fa; border: 1px solid #d0d7de; padding: 12px 14px; margin-bottom: 16px; }
+.verdict-block { background: #f6f8fa; border: 1px solid #d0d7de; padding: 12px 14px; }
 .verdict-header { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #57606a; margin-bottom: 8px; }
-.verdict-label { font-size: 12px; font-weight: 700; text-transform: uppercase; white-space: nowrap; }
+.verdict-label { font-size: 12px; font-weight: 700; text-transform: uppercase; }
 .v-confirmed { color: #1A7F37; } .v-context { color: #9A6700; } .v-fp { color: #cf222e; } .v-additional { color: #6E40C9; }
-.verdict-text { font-size: 13px; color: #57606a; line-height: 1.5; } .verdict-model { font-size: 11px; color: #8c959f; margin-top: 4px; }
+.verdict-text { font-size: 13px; color: #57606a; margin-top: 4px; } .verdict-model { font-size: 11px; color: #8c959f; margin-top: 4px; }
 .evidence-block { background: #f6f8fa; border: 1px solid #d0d7de; border-left: 3px solid #0052CC; padding: 14px 16px; font-family: "SFMono-Regular", Consolas, monospace; font-size: 13px; color: #1a1a1a; white-space: pre-wrap; overflow-x: auto; margin-bottom: 16px; line-height: 1.5; }
 .remediation-block { background: #f0fff4; border: 1px solid #d0d7de; border-left: 3px solid #1A7F37; padding: 14px 16px; font-size: 14px; color: #1a1a1a; line-height: 1.7; }
 .questions-footer { border-top: 1px solid #d0d7de; padding: 20px 0; text-align: center; font-size: 13px; color: #57606a; margin-top: 40px; } .questions-footer a { color: #0052CC; }
-@media print { .top-bar, .nav, .action-bar, .filter-bar, .sidebar { display: none; } .page { display: block; padding: 0; } .finding-body { display: block !important; } .finding-header { cursor: default; } body { font-size: 12px; } .section { page-break-inside: avoid; } .finding { page-break-inside: avoid; margin-bottom: 12px; } @page { margin: 2cm; } }
-@media (max-width: 768px) { .page { grid-template-columns: 1fr; } .sidebar { display: none; } .nav, .action-bar, .filter-bar { padding-left: 16px; padding-right: 16px; } }"""
+@media print { .top-bar, .nav, .action-bar, .tab-bar { display: none; } .tab-panel { display: block !important; } .finding-body { display: block !important; } body { font-size: 12px; } .finding { page-break-inside: avoid; } @page { margin: 2cm; } }
+@media (max-width: 768px) { .page { padding: 20px 16px; } .nav, .action-bar { padding-left: 16px; padding-right: 16px; } .tab-bar { padding: 0 16px; } .finding-grid { grid-template-columns: 1fr; } }"""
+
+
+# ── Methodology tab static content ──
+_METHODOLOGY_TAB = """
+<div class="section">
+<div class="section-heading">What This Analysis Covers</div>
+<p style="margin-bottom:16px">OpenDocket scans source code patterns — specifically whether code handles regulated data in compliance-aware ways. It searches for evidence of encryption, access controls, consent mechanisms, audit logging, and other patterns that regulators look for.</p>
+</div>
+<div class="section">
+<div class="section-heading">What It Does Not Cover</div>
+<ul style="padding-left:20px;margin-bottom:16px;font-size:14px;line-height:2;color:#57606a">
+<li>Only public repository content is analyzed</li>
+<li>Files in .gitignore are not scanned</li>
+<li>Infrastructure, deployment, and cloud configuration are outside scope</li>
+<li>Operational policies and procedures are outside scope</li>
+<li>This analysis covers code at time of scan — changes after scan date are not reflected</li>
+</ul>
+</div>
+<div class="section">
+<div class="section-heading">Legal Limitations</div>
+<ul style="padding-left:20px;margin-bottom:16px;font-size:14px;line-height:2;color:#57606a">
+<li><strong>This report is not defensible in court</strong></li>
+<li>It does not constitute legal advice</li>
+<li>It does not satisfy regulatory audit requirements</li>
+<li>To obtain a defensible compliance assessment, engage a licensed compliance attorney and certified auditor</li>
+<li>OpenDocket provides directional guidance only</li>
+</ul>
+</div>
+<div class="section">
+<div class="section-heading">How Findings Are Generated</div>
+<ul style="padding-left:20px;margin-bottom:16px;font-size:14px;line-height:2;color:#57606a">
+<li>Primary analysis by Claude Sonnet (Anthropic)</li>
+<li>Independent review by Gemini 1.5 Flash (Google)</li>
+<li>Question libraries are open source and community-maintained</li>
+<li>All questions cite regulatory source text</li>
+<li>Questions have not been validated by a licensed attorney</li>
+</ul>
+</div>
+<div class="section">
+<div class="section-heading">How to Use This Report</div>
+<ul style="padding-left:20px;margin-bottom:16px;font-size:14px;line-height:2;color:#1a1a1a">
+<li>Share with your engineering lead for remediation planning</li>
+<li>Share with your attorney as a starting point for compliance review</li>
+<li>Re-scan after remediation to track progress</li>
+<li><strong>Do not present this as proof of compliance</strong></li>
+</ul>
+</div>"""
 
 
 def generate_html_report(
     repo_name: str, repo_url: str,
     domains: list[DomainResult], agent_results: list[AgentResult],
 ) -> str:
-    """Generate a professional light-mode HTML compliance report."""
+    """Generate a professional light-mode HTML compliance report with tabs."""
     scan_date = datetime.now().strftime('%Y-%m-%d')
     all_findings = [f for r in agent_results for f in r.findings]
-    score = calculate_score(agent_results)
+    # Tag findings with framework for top-finding selection
+    for result in agent_results:
+        for f in result.findings:
+            f._framework = result.framework
     high = sum(1 for f in all_findings if f.finding_level == "High Risk")
     med = sum(1 for f in all_findings if f.finding_level == "Medium Risk")
     concern = sum(1 for f in all_findings if f.finding_level == "Pattern of Concern")
@@ -276,13 +353,40 @@ def generate_html_report(
     fw_names = [r.framework for r in agent_results]
     fw_names_str = ", ".join(fw_names)
 
-    # Score color
-    if score >= 70:
-        score_color = "#1A7F37"
-    elif score >= 40:
-        score_color = "#9A6700"
-    else:
-        score_color = "#cf222e"
+    # Risk classification (replaces score)
+    risk_label, risk_color, risk_desc = risk_classification(high)
+
+    # Executive summary paragraph (generated, not template)
+    top_fw_by_high = []
+    for r in agent_results:
+        h = sum(1 for f in r.findings if f.finding_level == "High Risk")
+        if h > 0:
+            top_fw_by_high.append((h, r.framework))
+    top_fw_by_high.sort(reverse=True)
+    top_fw_names = ", ".join(fw for _, fw in top_fw_by_high[:3]) if top_fw_by_high else fw_names_str
+
+    exec_para = (
+        f"This analysis identified {total} compliance risk patterns across {fw_names_str}. "
+        f"Of these, {high} are classified as high-severity — patterns consistent with potential non-compliance "
+        f"that regulators actively investigate. "
+    )
+    if high > 0:
+        exec_para += f"The most serious gaps were found in {top_fw_names}. "
+        if any(fw in top_fw_names for fw in ["HIPAA", "GDPR", "PCI-DSS"]):
+            exec_para += "Without remediation, these patterns could expose the organization to regulatory enforcement, financial penalties, and reputational damage."
+        else:
+            exec_para += "These patterns should be prioritized for remediation before production deployment."
+
+    # Consequence table
+    consequence_html = ""
+    for _, fw in top_fw_by_high[:3]:
+        meta = FRAMEWORK_META.get(fw, {})
+        consequence_html += (
+            f'<tr><td style="font-weight:600">{html.escape(fw)}</td>'
+            f'<td>{html.escape(meta.get("body", ""))}</td>'
+            f'<td>{html.escape(meta.get("risk", ""))}</td>'
+            f'<td>{html.escape(meta.get("trend", ""))}</td></tr>\n'
+        )
 
     # Scorecard rows
     scorecard_html = ""
@@ -293,15 +397,11 @@ def generate_html_report(
         o = sum(1 for f in result.findings if f.finding_level == "No Issue Found")
         scorecard_html += f'<tr><td style="font-weight:600">{html.escape(result.framework)}</td><td class="n-high">{h}</td><td class="n-med">{m}</td><td class="n-concern">{c}</td><td class="n-ok">{o}</td></tr>\n'
 
-    # Domains with progress bars
+    # Domains
     domains_html = ""
     for d in domains:
         pct = min(d.confidence, 100)
-        domains_html += (
-            f'<div class="domain-row"><span class="domain-name">{html.escape(d.domain.title())}</span>'
-            f'<div class="domain-bar-wrap"><div class="domain-bar" style="width:{pct}%"></div></div>'
-            f'<span class="domain-pct">{d.confidence}%</span></div>\n'
-        )
+        domains_html += f'<div class="domain-row"><span class="domain-name">{html.escape(d.domain.title())}</span><div class="domain-bar-wrap"><div class="domain-bar" style="width:{pct}%"></div></div><span class="domain-pct">{d.confidence}%</span></div>\n'
 
     # Judge counts
     judge_confirmed = sum(1 for f in all_findings if f.review_verdict == "CONFIRMED")
@@ -309,50 +409,51 @@ def generate_html_report(
     judge_fp = sum(1 for f in all_findings if f.review_verdict == "POSSIBLE FALSE POSITIVE")
     judge_additional = sum(1 for f in all_findings if f.review_verdict == "ADDITIONAL RISK")
 
-    # Top findings
-    sev_order = {"High Risk": 0, "Medium Risk": 1, "Pattern of Concern": 2, "No Issue Found": 3}
-    sorted_f = sorted(all_findings, key=lambda f: sev_order.get(f.finding_level, 3))
+    # Top 3 findings (cross-framework, confirmed preferred)
+    top3 = _select_top_findings(all_findings, 3)
     top_findings_html = ""
-    for f in sorted_f[:3]:
+    for f in top3:
         sev_cls = _severity_class(f.finding_level)
+        first_ev = f"{f.evidence[0].file_path}:{f.evidence[0].line_number}" if f.evidence else "No specific file cited"
+        verdict_tag = f' &middot; Review: {html.escape(f.review_verdict)}' if f.review_verdict else ""
         top_findings_html += (
-            f'<div class="top-finding"><div class="top-finding-q">{html.escape(f.legal_question[:140])}</div>'
+            f'<div class="top-finding"><div class="top-finding-q">{html.escape(f.legal_question)}</div>'
             f'<div class="top-finding-meta"><span class="badge badge-{sev_cls}">{html.escape(f.finding_level)}</span>'
-            f'<span>{html.escape(f.question_id)}</span></div></div>\n'
+            f'<span>{html.escape(getattr(f, "_framework", ""))}</span>'
+            f'<span>{html.escape(f.question_id)}</span>'
+            f'<span>{html.escape(first_ev)}</span>{verdict_tag}</div>'
+            f'<div style="font-size:13px;color:#57606a;margin-top:8px">{html.escape(f.remediation[:200]) if f.remediation else ""}</div>'
+            f'</div>\n'
         )
 
-    # Recommendations
+    # Recommendations (high risk first, then medium)
+    sev_order = {"High Risk": 0, "Medium Risk": 1, "Pattern of Concern": 2, "No Issue Found": 3}
+    sorted_f = sorted(all_findings, key=lambda f: sev_order.get(f.finding_level, 3))
     recommendations_html = ""
     for f in sorted_f:
         if f.finding_level == "High Risk" and f.remediation:
             recommendations_html += (
                 f'<div class="rec-item"><div class="rec-priority rec-p-high">High</div>'
                 f'<div><div class="rec-text">{html.escape(f.remediation)}</div>'
-                f'<div class="rec-fw">{html.escape(f.question_id)}</div></div></div>\n'
+                f'<div class="rec-fw">{html.escape(getattr(f, "_framework", ""))} &middot; {html.escape(f.question_id)}</div></div></div>\n'
             )
     for f in sorted_f:
         if f.finding_level == "Medium Risk" and f.remediation:
             recommendations_html += (
                 f'<div class="rec-item"><div class="rec-priority rec-p-med">Medium</div>'
                 f'<div><div class="rec-text">{html.escape(f.remediation)}</div>'
-                f'<div class="rec-fw">{html.escape(f.question_id)}</div></div></div>\n'
+                f'<div class="rec-fw">{html.escape(getattr(f, "_framework", ""))} &middot; {html.escape(f.question_id)}</div></div></div>\n'
             )
     if not recommendations_html:
         recommendations_html = '<p style="color:#57606a">No high or medium risk recommendations.</p>'
 
-    # Framework filter buttons
+    # Framework filter buttons (for findings tab)
     fw_filter_btns = ""
     for fw in fw_names:
         cnt = sum(1 for r in agent_results if r.framework == fw for _ in r.findings)
         fw_filter_btns += f'<button class="filter-btn" data-type="fw" onclick="filterFramework(\'{html.escape(fw)}\', this)">{html.escape(fw)} ({cnt})</button>\n'
 
-    # Sidebar links
-    sidebar_links = ""
-    for fw in fw_names:
-        fwid = fw.lower().replace(" ", "-").replace(".", "")
-        sidebar_links += f'<li><a href="#{fwid}">{html.escape(fw)}</a></li>\n'
-
-    # Framework sections with findings
+    # Framework findings
     framework_findings_html = ""
     finding_num = 0
     for result in agent_results:
@@ -369,14 +470,12 @@ def generate_html_report(
             finding_num += 1
             sev_cls = _severity_class(f.finding_level)
             fid = f"f{finding_num}"
-
             ev_text = ""
             if f.evidence:
                 for e in f.evidence[:8]:
                     ev_text += f"{html.escape(e.file_path)}:{e.line_number}  {html.escape(e.content[:100])}\n"
             else:
                 ev_text = "No matching code patterns found.\n"
-
             verdict_html = ""
             if f.review_verdict:
                 v_cls = _verdict_css(f.review_verdict)
@@ -386,7 +485,6 @@ def generate_html_report(
                 if f.judge_confidence:
                     verdict_html += f'<div class="verdict-model">Gemini 1.5 Flash &middot; Confidence: {html.escape(f.judge_confidence)}</div>'
                 verdict_html += '</div>'
-
             framework_findings_html += f'''<div class="finding" id="f-{fid}" data-framework="{html.escape(result.framework)}" data-severity="{html.escape(f.finding_level)}">
 <div class="finding-header" onclick="toggleFinding('{fid}')">
 <div class="finding-left"><div class="finding-num">{html.escape(f.question_id)}</div><div class="finding-question">{html.escape(f.legal_question[:130])}</div></div>
@@ -412,24 +510,39 @@ def generate_html_report(
 <body>
 <div class="top-bar"></div>
 <nav class="nav"><a href="../index.html" class="nav-brand"><span class="nav-brand-shield"></span> OpenDocket</a><div class="nav-links"><a href="../index.html">Directory</a><a href="../dashboard.html">Dashboard</a><a href="../methodology.html">Methodology</a><a href="../questions.html">Questions</a></div></nav>
-<div class="action-bar"><div class="action-bar-left"><span style="font-size:13px;color:#57606a;font-weight:600">{e(repo_name)}</span><span style="font-size:13px;color:#8c959f">&middot; {total} findings &middot; Score: {score}</span></div><div class="action-bar-right"><button class="btn" onclick="expandAll()">Expand all</button><button class="btn" onclick="collapseAll()">Collapse all</button><button class="btn btn-primary" onclick="window.print()">Print / PDF</button></div></div>
-<div class="filter-bar"><span class="filter-label">Framework:</span><button class="filter-btn active" data-type="fw" onclick="filterFramework('all', this)">All ({total})</button>{fw_filter_btns}<div class="filter-sep"></div><span class="filter-label">Severity:</span><button class="filter-btn active" data-type="sev" onclick="filterSeverity('all', this)">All</button><button class="filter-btn" data-type="sev" onclick="filterSeverity('High Risk', this)">High ({high})</button><button class="filter-btn" data-type="sev" onclick="filterSeverity('Medium Risk', this)">Medium ({med})</button><button class="filter-btn" data-type="sev" onclick="filterSeverity('Pattern of Concern', this)">Concern ({concern})</button></div>
+<div class="action-bar"><div class="action-bar-left"><span style="font-size:13px;color:#57606a;font-weight:600">{e(repo_name)}</span><span style="font-size:13px;color:#8c959f">&middot; {total} findings &middot; {e(risk_label)}</span></div><div class="action-bar-right"><button class="btn" onclick="expandAll()">Expand all</button><button class="btn" onclick="collapseAll()">Collapse all</button><button class="btn btn-primary" onclick="window.print()">Print / PDF</button></div></div>
+<div class="tab-bar"><button class="tab-btn active" onclick="showTab('overview',this)">Overview</button><button class="tab-btn" onclick="showTab('findings',this)">Findings</button><button class="tab-btn" onclick="showTab('methodology',this)">Methodology &amp; Limitations</button></div>
 <div class="page">
-<aside class="sidebar"><ul class="sidebar-nav"><li class="sidebar-section-label">Overview</li><li><a href="#summary">Executive Summary</a></li><li><a href="#judge">Independent Review</a></li><li><a href="#recommendations">Recommendations</a></li><li class="sidebar-section-label">Findings</li>{sidebar_links}<li class="sidebar-section-label">About</li><li><a href="../methodology.html">Methodology</a></li><li><a href="../questions.html">Questions</a></li></ul></aside>
-<main class="main">
-<div class="report-header section" id="header"><div class="report-eyebrow">Compliance Risk Analysis</div><div class="report-title">{e(repo_name)}</div><div class="report-meta"><a href="{e(repo_url)}">{e(repo_url)}</a><br>Scanned {scan_date} &middot; OpenDocket V1<br>Primary: Claude Sonnet (Anthropic) &middot; Review: Gemini 1.5 Flash (Google)</div></div>
-<div style="background:#f6f8fa;border:1px solid #d0d7de;padding:12px 16px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px"><div style="font-size:13px;color:#57606a">Share this report:</div><div style="display:flex;gap:8px"><button class="btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{{this.textContent='Copied!';setTimeout(()=>this.textContent='Copy link',2000)}})">Copy link</button><a class="btn" href="https://twitter.com/intent/tweet?text=OpenDocket+compliance+scan+of+{e(repo_name)}:+{high}+high+risk+patterns.+Score:+{score}/100&amp;url=https://opendocket.dev/reports/{e(repo_name)}_report.html" target="_blank">Share on X</a><a class="btn" href="https://github.com/{e(repo_name)}/issues/new?title=OpenDocket+Compliance+Scan+Results&amp;body=OpenDocket+found+{high}+high-risk+compliance+patterns.+Full+report:+https://opendocket.dev/reports/{e(repo_name)}_report.html" target="_blank">Open GitHub Issue</a></div></div>
-<div style="background:#f6f8fa;border:1px solid #d0d7de;padding:10px 16px;margin-bottom:24px;font-size:12px;color:#57606a">Add to your README: <code style="background:#eaeef2;padding:2px 6px;border-radius:2px;font-size:11px">[![OpenDocket Score](https://opendocket.dev/badge/{score}.svg)](https://opendocket.dev/reports/{e(repo_name)}_report.html)</code></div>
-<div class="callout callout-blue" style="margin-bottom:12px"><strong>Not legal advice.</strong> This report identifies risk patterns through automated code analysis. It is the starting point for a compliance conversation — not the end of one.</div>
-<div class="callout callout-yellow" style="margin-bottom:32px"><strong>Scope:</strong> Source code patterns only.<ul class="scope-list"><li>Whether features work as intended (use your test suite)</li><li>Cloud config, network security, deployed infrastructure</li><li>Internal policies, staff training, vendor contracts</li></ul><div style="margin-top:8px;font-size:13px"><strong>Example:</strong> If you send SMS, OpenDocket checks consent handling. It does not check whether the SMS reached the recipient.</div></div>
-<div class="section" id="summary"><div class="section-heading">Executive Summary</div><p style="font-size:15px;line-height:1.8;margin-bottom:24px">This analysis identified <strong>{total} findings</strong> across <strong>{e(fw_names_str)}</strong>. Of these, <strong style="color:#cf222e">{high} represent high-severity risk patterns</strong> consistent with potential non-compliance. The OpenDocket Score is {score}/100.</p><div class="score-block"><div class="score-number" style="color:{score_color}">{score}</div><div><div class="score-title">OpenDocket Score</div><div class="score-desc">Lower = more risk patterns. <a href="../methodology.html">How calculated</a></div></div></div><div class="section-heading">Risk Scorecard</div><table class="table"><thead><tr><th>Framework</th><th>High Risk</th><th>Medium</th><th>Concern</th><th>No Issue</th></tr></thead><tbody>{scorecard_html}</tbody></table><div class="section-heading" style="margin-top:24px">Domains Detected</div>{domains_html}</div>
-<div class="judge-block section" id="judge"><div class="judge-title">Independent Review — Gemini 1.5 Flash</div><div class="judge-stats"><div class="judge-stat"><span class="judge-stat-n j-confirmed">{judge_confirmed}</span><span class="judge-stat-l">Confirmed</span></div><div class="judge-stat"><span class="judge-stat-n j-context">{judge_context}</span><span class="judge-stat-l">Context dependent</span></div><div class="judge-stat"><span class="judge-stat-n j-fp">{judge_fp}</span><span class="judge-stat-l">Possible false positives</span></div><div class="judge-stat"><span class="judge-stat-n j-additional">{judge_additional}</span><span class="judge-stat-l">Additional risk</span></div></div><div class="judge-note">Primary: Claude Sonnet (Anthropic). Review: Gemini 1.5 Flash (Google). Neither constitutes legal advice.</div></div>
-<div class="section" id="top-findings"><div class="section-heading">Top Findings</div>{top_findings_html}</div>
-<div class="section" id="recommendations"><div class="section-heading">Recommended Actions</div>{recommendations_html}</div>
-<div class="section" id="findings"><div class="section-heading">Detailed Findings</div>{framework_findings_html}</div>
+<div class="report-header"><div class="report-eyebrow">Compliance Risk Analysis</div><div class="report-title">{e(repo_name)}</div><div class="report-meta"><a href="{e(repo_url)}">{e(repo_url)}</a><br>Scanned {scan_date} &middot; OpenDocket V1 &middot; Primary: Claude Sonnet &middot; Review: Gemini 1.5 Flash</div></div>
+
+<!-- TAB 1: OVERVIEW -->
+<div class="tab-panel active" id="tab-overview">
+<div class="callout callout-amber" style="margin-bottom:24px;padding:20px 24px"><div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#9A6700;margin-bottom:12px">Important Limitations of This Report</div><div style="font-size:13px;line-height:1.8"><strong>This report is not legal advice and is not defensible in court.</strong> It provides directional guidance only. To obtain a defensible compliance assessment, engage a licensed attorney and certified auditor.<br><br><strong>Scope limitations:</strong> Only public repository content was analyzed. Infrastructure configuration, deployment settings, operational policies, vendor contracts, and staff training are outside scope.<br><br><strong>A true compliance audit</strong> would also review: vendor contracts and BAAs, staff training records, incident response procedures, physical security controls, and system audit logs — none of which are visible in source code.</div></div>
+<div class="section" id="summary"><div class="section-heading">Risk Assessment</div><p style="font-size:15px;line-height:1.8;margin-bottom:24px">{e(exec_para)}</p>
+<div class="risk-index"><div class="risk-label" style="color:{risk_color}">{e(risk_label)}</div><div class="risk-desc">{e(risk_desc)}</div></div>
+{'<div class="section-heading">What This Means If Unaddressed</div><table class="table"><thead><tr><th>Framework</th><th>Regulatory Body</th><th>Max Penalty</th><th>Enforcement Trend</th></tr></thead><tbody>' + consequence_html + '</tbody></table>' if consequence_html else ''}
+<div class="section-heading">Top Findings</div>{top_findings_html}
+<div class="judge-block"><div class="judge-title">Independent Review — Gemini 1.5 Flash</div><div class="judge-stats"><div class="judge-stat"><span class="judge-stat-n j-confirmed">{judge_confirmed}</span><span class="judge-stat-l">Confirmed</span></div><div class="judge-stat"><span class="judge-stat-n j-context">{judge_context}</span><span class="judge-stat-l">Context dependent</span></div><div class="judge-stat"><span class="judge-stat-n j-fp">{judge_fp}</span><span class="judge-stat-l">Possible false positives</span></div><div class="judge-stat"><span class="judge-stat-n j-additional">{judge_additional}</span><span class="judge-stat-l">Additional risk</span></div></div><div class="judge-note">Primary: Claude Sonnet (Anthropic). Review: Gemini 1.5 Flash (Google). Neither constitutes legal advice.</div></div>
+<div class="section-heading">Recommended Actions</div>{recommendations_html}
+<div class="section-heading" style="margin-top:32px">Risk Scorecard</div><table class="table"><thead><tr><th>Framework</th><th>High Risk</th><th>Medium</th><th>Concern</th><th>No Issue</th></tr></thead><tbody>{scorecard_html}</tbody></table>
+<div class="section-heading" style="margin-top:24px">Domains Detected</div>{domains_html}
+</div></div>
+
+<!-- TAB 2: FINDINGS -->
+<div class="tab-panel" id="tab-findings">
+<div class="filter-bar"><span class="filter-label">Framework:</span><button class="filter-btn active" data-type="fw" onclick="filterFramework('all',this)">All ({total})</button>{fw_filter_btns}<div class="filter-sep"></div><span class="filter-label">Severity:</span><button class="filter-btn active" data-type="sev" onclick="filterSeverity('all',this)">All</button><button class="filter-btn" data-type="sev" onclick="filterSeverity('High Risk',this)">High ({high})</button><button class="filter-btn" data-type="sev" onclick="filterSeverity('Medium Risk',this)">Medium ({med})</button><button class="filter-btn" data-type="sev" onclick="filterSeverity('Pattern of Concern',this)">Concern ({concern})</button></div>
+{framework_findings_html}
+</div>
+
+<!-- TAB 3: METHODOLOGY -->
+<div class="tab-panel" id="tab-methodology">
+{_METHODOLOGY_TAB}
+</div>
+
 <div class="questions-footer">Findings based on OpenDocket's open source question libraries. <a href="../questions.html">View and contribute</a></div>
-</main></div>
+</div>
 <script>
+function showTab(name,btn){{document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));document.getElementById('tab-'+name).classList.add('active');document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active')}}
 function toggleFinding(id){{document.getElementById('f-'+id).classList.toggle('open')}}
 function expandAll(){{document.querySelectorAll('.finding').forEach(f=>f.classList.add('open'))}}
 function collapseAll(){{document.querySelectorAll('.finding').forEach(f=>f.classList.remove('open'))}}
@@ -459,7 +572,7 @@ def generate_failed_gate_html(
 <title>OpenDocket: {html.escape(repo_name)} (Did Not Qualify)</title>
 <style>
 *{{box-sizing:border-box;margin:0;padding:0}}
-body{{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:15px;line-height:1.6;color:#1a1a1a;background:#ffffff}}
+body{{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:15px;line-height:1.6;color:#1a1a1a;background:#fff}}
 a{{color:#0052CC;text-decoration:none}}
 .top-bar{{height:4px;background:#0052CC}}
 .nav{{background:#fff;border-bottom:1px solid #d0d7de;padding:0 40px;height:48px;display:flex;align-items:center;justify-content:space-between}}

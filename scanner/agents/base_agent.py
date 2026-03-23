@@ -34,6 +34,8 @@ class Finding:
     judge_reasoning: str = ""
     judge_confidence: str = ""
     judge_model: str = ""
+    remediation_quality: str = ""  # "specific", "generic", "unclear"
+    remediation_note: str = ""
 
 
 @dataclass
@@ -148,7 +150,13 @@ FINDING_LEVEL: [One of: High Risk / Medium Risk / Pattern of Concern / No Issue 
 
 FINDING_TEXT: [2-3 sentences. Never use the word "violation". Instead say "risk pattern consistent with non-compliance under [standard]". Be specific about what was or wasn't found.]
 
-REMEDIATION: [One paragraph max. Plain English for the engineer. What would need to change.]
+REMEDIATION: [Generate specific, actionable remediation. Requirements:
+1. Reference specific files from the evidence where possible — e.g. "In src/auth/session.ts, the session handler does not enforce timeout"
+2. Give a concrete code-level recommendation — not "implement X" but "add Y middleware before the route in Z file"
+3. If no specific files available, reference the pattern type and typical location
+4. Maximum 3 sentences
+5. Do NOT start with "Implement" or "Ensure" — these are generic. Start with the specific action.
+6. End with the regulatory consequence — one sentence, specific fine range or enforcement action]
 
 Rules:
 - If no evidence was found for required controls, that IS a finding (High Risk or Medium Risk)
@@ -258,6 +266,8 @@ class JudgeAgent:
                 finding.judge_reasoning = verdict["reasoning"]
                 finding.judge_confidence = verdict["confidence"]
                 finding.judge_model = "gemini-1.5-flash"
+                finding.remediation_quality = verdict.get("remediation_quality", "")
+                finding.remediation_note = verdict.get("remediation_note", "")
         return agent_results
 
     def _review_single(self, finding: Finding, framework: str, repo_context: dict) -> dict:
@@ -293,22 +303,34 @@ FINDING FROM PRIMARY ANALYSIS:
 - Primary reasoning: {finding.finding_text[:300]}
 
 YOUR TASK:
-Review this finding critically. Consider:
-1. Is the evidence specific enough to support this finding?
-2. Could this be a false positive — present but not creating regulatory risk?
-3. Is the severity level appropriate, or overstated?
-4. Are there deployment or infrastructure factors not visible in code?
-5. Is the regulatory citation accurate and applicable?
+Review this finding critically. Your job is to find false positives. Be aggressive in identifying them.
+
+DECISION RULES:
+DEFAULT toward POSSIBLE FALSE POSITIVE if:
+- Evidence is only from config files, documentation, or test files
+- The pattern is a common false positive for this type of repository
+- The finding assumes context not visible in code
+
+DEFAULT toward CONFIRMED if:
+- Evidence includes actual application code files (not just config/docs)
+- The pattern is a well-known compliance risk
+- Multiple file paths are cited as evidence
+
+DEFAULT toward CONTEXT DEPENDENT only if:
+- The finding is genuinely ambiguous
+- Infrastructure configuration would determine compliance
+
+Also review the remediation quality.
 
 Respond in JSON only. No preamble.
 
-{{"verdict": "CONFIRMED" | "CONTEXT DEPENDENT" | "POSSIBLE FALSE POSITIVE" | "ADDITIONAL RISK", "reasoning": "One sentence explaining your verdict.", "confidence": "HIGH" | "MEDIUM" | "LOW"}}
+{{"verdict": "CONFIRMED" | "CONTEXT DEPENDENT" | "POSSIBLE FALSE POSITIVE" | "ADDITIONAL RISK", "reasoning": "One sentence explaining your verdict.", "confidence": "HIGH" | "MEDIUM" | "LOW", "remediation_quality": "specific" | "generic" | "unclear", "remediation_note": "One sentence improving the remediation if generic, or empty string if specific."}}
 
 VERDICT DEFINITIONS:
 CONFIRMED — Evidence is specific, severity appropriate, well-supported.
-CONTEXT DEPENDENT — May be valid but depends on deployment/infrastructure not visible in code.
+CONTEXT DEPENDENT — Genuinely ambiguous, depends on deployment/infrastructure.
 POSSIBLE FALSE POSITIVE — Pattern exists but likely does not create regulatory risk in context.
-ADDITIONAL RISK — Primary analysis understated this finding. Risk is more serious."""
+ADDITIONAL RISK — Primary analysis understated this finding."""
 
         try:
             response = self.model.generate_content(prompt)
@@ -323,6 +345,8 @@ ADDITIONAL RISK — Primary analysis understated this finding. Risk is more seri
                 "verdict": result.get("verdict", "CONTEXT DEPENDENT"),
                 "reasoning": result.get("reasoning", "Unable to complete review."),
                 "confidence": result.get("confidence", "LOW"),
+                "remediation_quality": result.get("remediation_quality", ""),
+                "remediation_note": result.get("remediation_note", ""),
             }
         except Exception as e:
             return {

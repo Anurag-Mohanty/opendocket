@@ -54,27 +54,17 @@ li{margin-bottom:8px}
 <p style="margin-bottom:0">It is a <strong>blind spot indicator</strong> for engineering teams.</p>
 </div>
 
-<h2>How It Is Calculated</h2>
-<p>The score starts at 100 (best possible) and decreases based on findings:</p>
-<div class="formula">base_score = 100<br><br>penalty = (high_risk_count * 8) + (medium_risk_count * 3) + (concern_count * 1)<br><br>normalized_penalty = penalty / num_frameworks * 2<br><br>score = max(0, 100 - normalized_penalty)</div>
-
-<h3>Finding Weights</h3>
-<ul>
-<li><strong>High Risk:</strong> -8 points</li>
-<li><strong>Medium Risk:</strong> -3 points</li>
-<li><strong>Pattern of Concern:</strong> -1 point</li>
-<li><strong>No Issue Found:</strong> 0 points</li>
-</ul>
-
-<h3>Framework Normalization</h3>
-<p>The penalty is normalized by framework count. A repo scanned against 6 frameworks is evaluated on the same scale as one scanned against 2.</p>
-
-<h3>Score Ranges</h3>
-<div class="score-example">
-<div class="score-pill score-good">70-100: Low Risk</div>
-<div class="score-pill score-mid">40-69: Moderate Risk</div>
-<div class="score-pill score-bad">0-39: High Risk</div>
+<h2>Risk Classification</h2>
+<p>OpenDocket uses a categorical risk classification based on the number of high-severity patterns found:</p>
+<div class="card" style="margin:20px 0">
+<table style="width:100%;border-collapse:collapse;font-size:14px">
+<tr style="border-bottom:1px solid #d0d7de"><td style="padding:8px"><strong style="color:#1A7F37">LOW RISK</strong></td><td style="padding:8px">0 high-severity findings</td><td style="padding:8px;color:#57606a">No immediate regulatory concern detected in code</td></tr>
+<tr style="border-bottom:1px solid #d0d7de"><td style="padding:8px"><strong style="color:#9A6700">MODERATE RISK</strong></td><td style="padding:8px">1-5 high-severity findings</td><td style="padding:8px;color:#57606a">Targeted remediation recommended</td></tr>
+<tr style="border-bottom:1px solid #d0d7de"><td style="padding:8px"><strong style="color:#CF222E">ELEVATED RISK</strong></td><td style="padding:8px">6-15 high-severity findings</td><td style="padding:8px;color:#57606a">Prioritize remediation before production</td></tr>
+<tr><td style="padding:8px"><strong style="color:#CF222E">CRITICAL RISK</strong></td><td style="padding:8px">16+ high-severity findings</td><td style="padding:8px;color:#57606a">Immediate attention required</td></tr>
+</table>
 </div>
+<p>This classification is based on pattern count only. A CRITICAL classification for a large repo with many frameworks does not mean the repo is non-compliant — it means many areas warrant review. Compliance is often managed through infrastructure, policies, and vendor agreements not visible in source code.</p>
 
 <h2>Why Two Models</h2>
 <p>OpenDocket uses a dual-model approach:</p>

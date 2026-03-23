@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OpenDocket — Compliance risk analysis for software repositories</title>
   <link rel="stylesheet" href="styles.css">
+  <!-- Analytics: uncomment after setting up Plausible -->
+  <!-- <script defer data-domain="opendocket.dev" src="https://plausible.io/js/script.js"></script> -->
 </head>
 <body>
 
@@ -155,8 +157,12 @@
   </footer>
 
   <script>
+    // API base URL — change to Railway URL after deployment
+    const API_BASE_URL = '';
+    // const API_BASE_URL = 'https://your-app.railway.app';
+
     // Stats
-    fetch('/api/stats').then(r=>r.json()).then(d=>{
+    fetch(API_BASE_URL+'/api/stats').then(r=>r.json()).then(d=>{
       document.getElementById('stat-scans').textContent = (d.total_scans||0).toLocaleString();
       document.getElementById('stat-lines').textContent = ((d.total_lines_scanned||0)/1e6).toFixed(1)+'M';
       document.getElementById('stat-findings').textContent = (d.total_findings||0).toLocaleString();
@@ -180,14 +186,14 @@
       document.getElementById('scan-btn').disabled=true;
       document.getElementById('scan-status').textContent='Starting scan...';
       if(!ak)sessionStorage.setItem('od_scans',parseInt(sessionStorage.getItem('od_scans')||'0')+1);
-      fetch('/api/scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+      fetch(API_BASE_URL+'/api/scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
       .then(r=>r.json()).then(d=>{
         if(d.error){document.getElementById('scan-status').textContent=d.error;document.getElementById('scan-btn').disabled=false;return;}
         pollScan(d.scan_id);
       }).catch(e=>{document.getElementById('scan-status').textContent='Error: '+e.message;document.getElementById('scan-btn').disabled=false;});
     }
     function pollScan(id){
-      fetch('/api/scan/'+id).then(r=>r.json()).then(d=>{
+      fetch(API_BASE_URL+'/api/scan/'+id).then(r=>r.json()).then(d=>{
         document.getElementById('scan-status').textContent=d.progress||d.status;
         if(d.status==='complete'){
           document.getElementById('scan-btn').disabled=false;
@@ -203,12 +209,12 @@
     function joinWaitlist(){
       const email=document.getElementById('waitlist-email').value.trim();
       if(!email)return;
-      fetch('/api/waitlist',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})})
+      fetch(API_BASE_URL+'/api/waitlist',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})})
       .then(r=>r.json()).then(()=>document.getElementById('waitlist-email').value='Thanks!').catch(()=>{});
     }
 
     // Activity ticker
-    fetch('/api/recent').then(r=>r.json()).then(scans=>{
+    fetch(API_BASE_URL+'/api/recent').then(r=>r.json()).then(scans=>{
       const recent=scans.filter(s=>s.status==='complete').slice(0,3);
       if(recent.length){
         document.getElementById('activity-ticker').innerHTML=recent.map(s=>
