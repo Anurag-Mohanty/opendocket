@@ -16,7 +16,7 @@ OpenDocket maintains a curated directory of compliance scans across healthcare, 
 
 ```bash
 # Clone the repo
-git clone https://github.com/your-org/opendocket.git
+git clone https://github.com/Anurag-Mohanty/opendocket.git
 cd opendocket
 
 # Create virtual environment and install dependencies
