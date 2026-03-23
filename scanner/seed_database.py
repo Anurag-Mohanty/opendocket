@@ -108,7 +108,8 @@ def seed():
         repo_key = filename.replace("_report.md", "")
         filepath = os.path.join(REPORTS_DIR, filename)
         repo_url = REPO_URLS.get(repo_key, f"https://github.com/unknown/{repo_key}")
-        repo_name = repo_url.rstrip("/").split("/")[-1]
+        parts = repo_url.rstrip("/").split("/")
+        repo_name = f"{parts[-2]}/{parts[-1]}"
 
         print(f"[Seed] Processing {filename}...")
         data = parse_report(filepath)
@@ -117,7 +118,7 @@ def seed():
         with open(filepath, "r") as f:
             content = f.read()
         if "DOES NOT QUALIFY" in content:
-            scan_id = create_scan(repo_url, repo_key)
+            scan_id = create_scan(repo_url, repo_name)
             update_scan_status(
                 scan_id, "complete",
                 progress="Did not qualify",
@@ -133,7 +134,7 @@ def seed():
         raw_penalty = data["high"] * 8 + data["medium"] * 3 + data["concern"] * 1
         score = max(0, round(100 - raw_penalty / num_fw * 2))
 
-        scan_id = create_scan(repo_url, repo_key)
+        scan_id = create_scan(repo_url, repo_name)
         update_scan_status(
             scan_id, "complete",
             progress="Seeded from existing report",

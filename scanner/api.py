@@ -117,18 +117,29 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
         if gemini_key:
             os.environ["GEMINI_API_KEY"] = gemini_key
 
-        update_scan_status(scan_id, "running", "Cloning repository...")
+        import json as _json
+
+        def _prog(step, detail="", fw_done=None, fw_total=None, fw_current=""):
+            """Build structured progress string."""
+            p = {"step": step, "detail": detail}
+            if fw_done is not None:
+                p["fw_done"] = fw_done
+                p["fw_total"] = fw_total
+                p["fw_current"] = fw_current
+            return _json.dumps(p)
+
+        update_scan_status(scan_id, "running", _prog("clone", "Cloning repository"))
         repo_ctx = fetch_and_qualify(repo_url)
 
         try:
+            update_scan_status(scan_id, "running", _prog("qualify", "Running qualification gates"))
             if not repo_ctx.qualification.qualified:
                 update_scan_status(
                     scan_id, "complete",
-                    progress="Repository did not qualify",
+                    progress=_prog("qualify", "Repository did not qualify"),
                     error_message="; ".join(repo_ctx.qualification.reasons),
                     scan_duration_seconds=time.time() - start_time,
                 )
-                # Generate failed gate HTML
                 report = generate_failed_gate_html(
                     repo_ctx.name, repo_url,
                     repo_ctx.qualification.reasons,
@@ -144,11 +155,11 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
                 increment_stat("scans_this_month")
                 return
 
-            update_scan_status(scan_id, "running", "Detecting domains...")
+            update_scan_status(scan_id, "running", _prog("domain", "Detecting domains and frameworks"))
             domains = detect_domains(repo_ctx.path)
 
             update_scan_status(
-                scan_id, "running", "Mapping frameworks...",
+                scan_id, "running", _prog("domain", "Mapping frameworks"),
                 domains_detected=[{"domain": d.domain, "confidence": d.confidence} for d in domains],
                 files_scanned=len(repo_ctx.file_index),
             )
@@ -159,26 +170,28 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
 
             update_scan_status(
                 scan_id, "running",
-                progress=f"Scanning {len(frameworks)} frameworks...",
+                progress=_prog("scan", f"Starting {len(frameworks)} frameworks", 0, len(frameworks)),
                 frameworks_triggered=frameworks,
             )
 
             agent_results = []
+            fw_complete = []
             for i, fw in enumerate(frameworks):
                 agent_class = AGENTS.get(fw)
                 if agent_class:
                     update_scan_status(
                         scan_id, "running",
-                        progress=f"Running {fw.upper()} agent ({i+1}/{len(frameworks)})...",
+                        progress=_prog("scan", f"Running {fw.upper()} agent", i, len(frameworks), fw.upper()),
                     )
                     agent = agent_class()
                     result = agent.scan(repo_ctx.path, repo_ctx.file_index, repo_ctx.readme_content)
                     agent_results.append(result)
+                    fw_complete.append(fw.upper())
 
             # Independent review pass (Gemini)
             g_key = gemini_key or os.environ.get("GEMINI_API_KEY")
             if g_key:
-                update_scan_status(scan_id, "running", "Running Gemini independent review...")
+                update_scan_status(scan_id, "running", _prog("judge", "Running Gemini independent review"))
                 try:
                     from scanner.agents.base_agent import JudgeAgent
                     judge = JudgeAgent(g_key)
@@ -190,7 +203,7 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
                 except Exception as e:
                     print(f"[OpenDocket] Gemini review failed: {e}")
             else:
-                update_scan_status(scan_id, "running", "Skipping independent review (no Gemini key)...")
+                update_scan_status(scan_id, "running", _prog("judge", "Skipping (no Gemini key)"))
 
             # Calculate stats
             all_findings = [f for r in agent_results for f in r.findings]
@@ -201,7 +214,7 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
             score = calculate_score(agent_results)
 
             # Generate reports
-            update_scan_status(scan_id, "running", "Generating reports...")
+            update_scan_status(scan_id, "running", _prog("report", "Generating reports"))
 
             html_report = generate_html_report(repo_ctx.name, repo_url, domains, agent_results)
             html_path = os.path.join("docs", "reports", f"{repo_ctx.name}_report.html")
@@ -353,11 +366,19 @@ def get_scan_status(scan_id):
     if not scan:
         return jsonify({"error": "Scan not found"}), 404
 
+    import json as _json
+    progress_raw = scan.get("progress", "")
+    progress = {}
+    try:
+        progress = _json.loads(progress_raw) if progress_raw.startswith("{") else {"step": "", "detail": progress_raw}
+    except Exception:
+        progress = {"step": "", "detail": str(progress_raw)}
+
     response = {
         "scan_id": scan["scan_id"],
         "repo_name": scan["repo_name"],
         "status": scan["status"],
-        "progress": scan.get("progress", ""),
+        "progress": progress,
     }
 
     if scan["status"] == "complete":

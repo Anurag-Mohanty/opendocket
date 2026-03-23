@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OpenDocket — Compliance risk analysis for software repositories</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    .pstep{padding:4px 0;color:#8c959f;display:flex;align-items:center;gap:8px}
+    .pstep.active{color:#0052CC;font-weight:500}
+    .pstep.active .picon{animation:pulse 1.2s infinite}
+    .pstep.done{color:#1A7F37}
+    .pstep.done .picon{color:#1A7F37}
+    .pstep.fail{color:#CF222E}
+    .picon{width:16px;text-align:center;flex-shrink:0}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+  </style>
   <!-- Analytics: uncomment after setting up Plausible -->
   <!-- <script defer data-domain="opendocket.dev" src="https://plausible.io/js/script.js"></script> -->
 </head>
@@ -59,6 +69,23 @@
       <button class="scan-btn" id="scan-btn" onclick="startScan()">Scan Repository</button>
       <div class="scan-note">3 free scans per hour &middot; No account required</div>
       <div id="scan-status" style="margin-top:12px;font-size:13px;color:#57606A"></div>
+      <!-- Live progress timeline -->
+      <div id="scan-progress" style="display:none;margin-top:16px;background:#f6f8fa;border:1px solid #d0d7de;padding:16px;font-size:13px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:12px"><span id="prog-repo" style="font-weight:600;color:#1a1a1a"></span><span id="prog-timer" style="color:#57606a;font-family:monospace">0:00</span></div>
+        <div id="prog-steps">
+          <div class="pstep" data-step="clone"><span class="picon">&#9675;</span> Cloning repository</div>
+          <div class="pstep" data-step="qualify"><span class="picon">&#9675;</span> Running qualification gates</div>
+          <div class="pstep" data-step="domain"><span class="picon">&#9675;</span> Detecting domain and frameworks</div>
+          <div class="pstep" data-step="scan"><span class="picon">&#9675;</span> Running compliance agents <span class="pdetail" style="color:#57606a"></span></div>
+          <div class="pstep" data-step="judge"><span class="picon">&#9675;</span> Gemini independent review</div>
+          <div class="pstep" data-step="report"><span class="picon">&#9675;</span> Generating report</div>
+        </div>
+        <div style="margin-top:12px;font-size:12px;color:#8c959f">Typical scan takes 3-5 minutes. You can safely leave this tab open.</div>
+        <div id="prog-fact" style="margin-top:8px;font-size:12px;color:#57606a;font-style:italic"></div>
+      </div>
+      <!-- Scan result -->
+      <div id="scan-result" style="display:none;margin-top:16px;background:#f0fff4;border:1px solid #d0d7de;border-left:4px solid #1A7F37;padding:16px;font-size:14px">
+      </div>
     </div>
   </div>
 
@@ -174,6 +201,11 @@
     });
 
     // Scan
+    let scanTimer=null,scanStart=0;
+    const STEPS=['clone','qualify','domain','scan','judge','report'];
+    const FACTS=['HIPAA fines averaged $9.48M per breach in 2024','45% of AI-generated code has security flaws — Veracode 2025','GDPR has issued \u20AC6.2B in fines since 2018','OpenDocket asks the questions a regulator would ask','The independent Gemini review catches false positives','PCI-DSS violations can result in loss of payment processing'];
+    let factIdx=0;
+
     function startScan(){
       const url=document.getElementById('scan-url').value.trim();
       if(!url){alert('Enter a GitHub URL');return;}
@@ -183,26 +215,89 @@
       if(ak)body.anthropic_api_key=ak;
       if(gk)body.gemini_api_key=gk;
       document.getElementById('scan-btn').disabled=true;
-      document.getElementById('scan-status').textContent='Starting scan...';
+      document.getElementById('scan-status').textContent='Submitting...';
+      document.getElementById('scan-result').style.display='none';
       if(!ak)sessionStorage.setItem('od_scans',parseInt(sessionStorage.getItem('od_scans')||'0')+1);
       fetch(API_BASE_URL+'/api/scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
       .then(r=>r.json()).then(d=>{
         if(d.error){document.getElementById('scan-status').textContent=d.error;document.getElementById('scan-btn').disabled=false;return;}
-        if(d.cached){document.getElementById('scan-btn').disabled=false;document.getElementById('scan-status').innerHTML='<a href="'+d.report_url+'">View Report</a> — Cached scan from '+d.message.replace('Using scan from ','')+'. Rescan available after 24 hours.';return;}
+        if(d.cached){
+          document.getElementById('scan-btn').disabled=false;
+          document.getElementById('scan-status').style.display='none';
+          const res=document.getElementById('scan-result');
+          res.style.display='block';
+          res.innerHTML='<strong>Cached scan available</strong><br>'+d.message+'<br><a href="'+d.report_url+'" style="color:#0052CC;font-weight:600">View Report &rarr;</a><br><span style="font-size:12px;color:#57606a">Rescan available after 24 hours.</span>';
+          return;
+        }
+        // Show progress UI
+        document.getElementById('scan-status').style.display='none';
+        const prog=document.getElementById('scan-progress');
+        prog.style.display='block';
+        document.getElementById('prog-repo').textContent=d.repo_name||url.split('/').slice(-2).join('/');
+        scanStart=Date.now();
+        scanTimer=setInterval(()=>{
+          const s=Math.floor((Date.now()-scanStart)/1000);
+          document.getElementById('prog-timer').textContent=Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;
+        },1000);
+        // Rotate facts
+        factIdx=0;
+        document.getElementById('prog-fact').textContent=FACTS[0];
+        setInterval(()=>{factIdx=(factIdx+1)%FACTS.length;document.getElementById('prog-fact').textContent=FACTS[factIdx]},20000);
+        // Reset steps
+        document.querySelectorAll('.pstep').forEach(s=>{s.className='pstep';s.querySelector('.picon').innerHTML='&#9675;';const d=s.querySelector('.pdetail');if(d)d.textContent='';});
         pollScan(d.scan_id);
       }).catch(e=>{document.getElementById('scan-status').textContent='Error: '+e.message;document.getElementById('scan-btn').disabled=false;});
     }
+
     function pollScan(id){
       fetch(API_BASE_URL+'/api/scan/'+id).then(r=>r.json()).then(d=>{
-        document.getElementById('scan-status').textContent=d.progress||d.status;
+        const p=d.progress||{};
+        const curStep=p.step||'';
+        // Update step states
+        let reached=false;
+        STEPS.forEach(s=>{
+          const el=document.querySelector('.pstep[data-step="'+s+'"]');
+          if(!el)return;
+          if(s===curStep){reached=true;el.className='pstep active';el.querySelector('.picon').innerHTML='&#9679;';
+            const det=el.querySelector('.pdetail');
+            if(det&&p.fw_current)det.textContent='('+p.fw_current+' — '+(p.fw_done||0)+' of '+(p.fw_total||'?')+')';
+          }else if(!reached){el.className='pstep done';el.querySelector('.picon').innerHTML='&#10003;';}
+          else{el.className='pstep';el.querySelector('.picon').innerHTML='&#9675;';}
+        });
+
         if(d.status==='complete'){
+          clearInterval(scanTimer);
+          // Mark all done
+          document.querySelectorAll('.pstep').forEach(s=>{s.className='pstep done';s.querySelector('.picon').innerHTML='&#10003;';});
+          document.getElementById('scan-progress').style.display='none';
           document.getElementById('scan-btn').disabled=false;
-          if(d.report_url)document.getElementById('scan-status').innerHTML='<a href="'+d.report_url+'">View Report</a> — Score: '+d.summary.score;
+          const elapsed=Math.floor((Date.now()-scanStart)/1000);
+          const mins=Math.floor(elapsed/60),secs=elapsed%60;
+          const sm=d.summary||{};
+          const hi=sm.high_risk||0;
+          let riskLabel='LOW RISK',riskColor='#1A7F37';
+          if(hi>15){riskLabel='CRITICAL RISK';riskColor='#CF222E';}
+          else if(hi>5){riskLabel='ELEVATED RISK';riskColor='#CF222E';}
+          else if(hi>0){riskLabel='MODERATE RISK';riskColor='#9A6700';}
+          const res=document.getElementById('scan-result');
+          res.style.display='block';
+          res.innerHTML='<div style="font-size:18px;font-weight:700;color:'+riskColor+';margin-bottom:8px">'+riskLabel+'</div>'
+            +'<div style="margin-bottom:8px">'+hi+' high-risk findings &middot; '+(sm.medium_risk||0)+' medium &middot; '+((sm.frameworks||[]).length||'?')+' frameworks</div>'
+            +'<a href="'+(d.report_url||'')+'" style="display:inline-block;padding:8px 20px;background:#0052CC;color:#fff;border-radius:2px;font-weight:600;text-decoration:none;margin-bottom:8px">View Full Report &rarr;</a>'
+            +'<div style="font-size:12px;color:#57606a">Scan completed in '+mins+':'+((secs<10?'0':'')+secs)+' &middot; <span style="cursor:pointer;color:#0052CC" onclick="navigator.clipboard.writeText(window.location.origin+(d.report_url||\'\'))">Share link</span></div>';
         }else if(d.status==='failed'){
+          clearInterval(scanTimer);
+          // Mark failed step
+          const failStep=curStep||'clone';
+          const el=document.querySelector('.pstep[data-step="'+failStep+'"]');
+          if(el){el.className='pstep fail';el.querySelector('.picon').innerHTML='&#10007;';}
           document.getElementById('scan-btn').disabled=false;
-          document.getElementById('scan-status').textContent='Failed: '+(d.error||'Unknown error');
-        }else{setTimeout(()=>pollScan(id),3000);}
-      });
+          document.getElementById('scan-status').style.display='block';
+          document.getElementById('scan-status').innerHTML='<span style="color:#CF222E">Failed: '+(d.error||'Unknown error')+'</span> <button class="scan-btn" style="margin-left:8px;padding:4px 12px;font-size:12px" onclick="document.getElementById(\'scan-progress\').style.display=\'none\';document.getElementById(\'scan-status\').style.display=\'none\';document.getElementById(\'scan-btn\').disabled=false">Try again</button>';
+        }else{
+          setTimeout(()=>pollScan(id),3000);
+        }
+      }).catch(()=>setTimeout(()=>pollScan(id),5000));
     }
 
     // Waitlist
