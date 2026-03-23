@@ -482,24 +482,45 @@ def generate_html_report(
             f'</div>\n'
         )
 
-    # Recommendations (high risk first, then medium)
-    sev_order = {"High Risk": 0, "Medium Risk": 1, "Pattern of Concern": 2, "No Issue Found": 3}
-    sorted_f = sorted(all_findings, key=lambda f: sev_order.get(f.finding_level, 3))
+    # Recommendations — top 5 only, confirmed findings preferred
+    rec_candidates = [f for f in all_findings if f.remediation and f.finding_level in ("High Risk", "Medium Risk")]
+    # Score: confirmed high > unconfirmed high > confirmed medium > unconfirmed medium
+    def _rec_score(f):
+        s = 0
+        if f.finding_level == "High Risk":
+            s += 100
+        elif f.finding_level == "Medium Risk":
+            s += 50
+        if f.review_verdict == "CONFIRMED":
+            s += 30
+        elif f.review_verdict == "ADDITIONAL RISK":
+            s += 20
+        if f.review_verdict == "POSSIBLE FALSE POSITIVE":
+            s -= 50  # push FP findings to bottom
+        return -s
+    rec_candidates.sort(key=_rec_score)
+
     recommendations_html = ""
-    for f in sorted_f:
-        if f.finding_level == "High Risk" and f.remediation:
-            recommendations_html += (
-                f'<div class="rec-item"><div class="rec-priority rec-p-high">High</div>'
-                f'<div><div class="rec-text">{html.escape(f.remediation)}</div>'
-                f'<div class="rec-fw">{html.escape(getattr(f, "_framework", ""))} &middot; {html.escape(f.question_id)}</div></div></div>\n'
-            )
-    for f in sorted_f:
-        if f.finding_level == "Medium Risk" and f.remediation:
-            recommendations_html += (
-                f'<div class="rec-item"><div class="rec-priority rec-p-med">Medium</div>'
-                f'<div><div class="rec-text">{html.escape(f.remediation)}</div>'
-                f'<div class="rec-fw">{html.escape(getattr(f, "_framework", ""))} &middot; {html.escape(f.question_id)}</div></div></div>\n'
-            )
+    rec_count = 0
+    for f in rec_candidates:
+        if rec_count >= 5:
+            break
+        if f.review_verdict == "POSSIBLE FALSE POSITIVE":
+            continue  # skip false positives from recommendations
+        rem_text = f.improved_remediation if f.improved_remediation else f.remediation
+        priority_cls = "rec-p-high" if f.finding_level == "High Risk" else "rec-p-med"
+        priority_label = "High" if f.finding_level == "High Risk" else "Medium"
+        recommendations_html += (
+            f'<div class="rec-item"><div class="rec-priority {priority_cls}">{priority_label}</div>'
+            f'<div><div class="rec-text">{html.escape(rem_text)}</div>'
+            f'<div class="rec-fw">{html.escape(getattr(f, "_framework", ""))} &middot; {html.escape(f.question_id)}'
+            f'{" &middot; <span style=color:#1A7F37>Confirmed</span>" if f.review_verdict == "CONFIRMED" else ""}'
+            f'</div></div></div>\n'
+        )
+        rec_count += 1
+    remaining = sum(1 for f in rec_candidates if f.review_verdict != "POSSIBLE FALSE POSITIVE") - rec_count
+    if remaining > 0:
+        recommendations_html += f'<div style="font-size:13px;color:#57606a;padding:12px 0;border-top:1px solid #d0d7de">+ {remaining} more recommendations in the Findings tab</div>\n'
     if not recommendations_html:
         recommendations_html = '<p style="color:#57606a">No high or medium risk recommendations.</p>'
 
