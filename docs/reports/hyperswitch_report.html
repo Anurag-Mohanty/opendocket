@@ -113,7 +113,7 @@ a { color: #0052CC; text-decoration: none; } a:hover { text-decoration: underlin
 <div class="action-bar"><div class="action-bar-left"><span style="font-size:13px;color:#57606a;font-weight:600">hyperswitch</span><span style="font-size:13px;color:#8c959f">&middot; 56 findings &middot; CRITICAL RISK</span></div><div class="action-bar-right"><button class="btn" onclick="expandAll()">Expand all</button><button class="btn" onclick="collapseAll()">Collapse all</button><button class="btn btn-primary" onclick="window.print()">Print / PDF</button></div></div>
 <div class="tab-bar"><button class="tab-btn active" onclick="showTab('overview',this)">Overview</button><button class="tab-btn" onclick="showTab('findings',this)">Findings</button><button class="tab-btn" onclick="showTab('methodology',this)">Methodology &amp; Limitations</button></div>
 <div class="page">
-<div class="report-header"><div class="report-eyebrow">Compliance Risk Analysis</div><div class="report-title">hyperswitch</div><div class="report-meta"><a href="https://github.com/juspay/hyperswitch">https://github.com/juspay/hyperswitch</a><br>Scanned 2026-03-23 &middot; OpenDocket V1 &middot; Primary: Claude Sonnet &middot; Review: Gemini 1.5 Flash</div></div>
+<div class="report-header"><div class="report-eyebrow">Compliance Risk Analysis</div><div class="report-title">hyperswitch</div><div class="report-meta"><a href="https://github.com/juspay/hyperswitch">https://github.com/juspay/hyperswitch</a><br>Scanned 2026-03-23 &middot; OpenDocket V1 &middot; Primary: Claude Sonnet &middot; Review: Gemini 2.5 Flash</div></div>
 
 <!-- TAB 1: OVERVIEW -->
 <div class="tab-panel active" id="tab-overview">
@@ -127,11 +127,11 @@ a { color: #0052CC; text-decoration: none; } a:hover { text-decoration: underlin
 <tr><td style="font-weight:600">PCI-DSS <span style="color:#CF222E;font-size:12px">(7 high)</span></td><td>PCI SSC</td><td style="color:#CF222E;font-weight:600">Fines $5K-$100K/month</td><td>v4.0 enforcement accelerating</td></tr>
 <tr><td style="font-weight:600">HIPAA <span style="color:#CF222E;font-size:12px">(7 high)</span></td><td>HHS / OCR</td><td style="color:#CF222E;font-weight:600">Fines up to $1.5M/year per category</td><td>Increasing enforcement, record penalties in 2024</td></tr>
 </tbody></table>
-<div class="section-heading">Top Findings</div><div class="top-finding"><div class="top-finding-q"></div><div class="top-finding-meta"><span class="badge badge-high">High Risk</span><span>GDPR</span><span>GDPR-001</span><span>add_connector.md:34</span></div><div style="font-size:13px;color:#57606a;margin-top:8px">The development team must conduct a comprehensive data processing inventory to identify all personal data processing activities, determine the appropriate lawful basis under Article 6 GDPR for each ac</div></div>
-<div class="top-finding"><div class="top-finding-q"></div><div class="top-finding-meta"><span class="badge badge-high">High Risk</span><span>HIPAA</span><span>HIPAA-002</span><span>.dockerignore:216</span></div><div style="font-size:13px;color:#57606a;margin-top:8px">Implement NIST SP 800-111 compliant encryption for all PHI stored at rest, including database encryption using AES-256 or equivalent approved algorithms. Replace plaintext connection configurations wi</div></div>
-<div class="top-finding"><div class="top-finding-q"></div><div class="top-finding-meta"><span class="badge badge-high">High Risk</span><span>PCI-DSS</span><span>PCIDSS-001</span><span>.clippy.toml:3</span></div><div style="font-size:13px;color:#57606a;margin-top:8px">Implement strong cryptographic protection for all stored PAN data by encrypting card numbers before storage using industry-standard encryption algorithms with proper key management. Replace the curren</div></div>
+<div class="section-heading">Top Findings</div><div class="top-finding"><div class="top-finding-q"></div><div class="top-finding-meta"><span class="badge badge-high">High Risk</span><span>GDPR</span><span>GDPR-001</span><span>add_connector.md:34</span> &middot; Review: CONFIRMED</div><div style="font-size:13px;color:#57606a;margin-top:8px">The development team must conduct a comprehensive data processing inventory to identify all personal data processing activities, determine the appropriate lawful basis under Article 6 GDPR for each ac</div></div>
+<div class="top-finding"><div class="top-finding-q"></div><div class="top-finding-meta"><span class="badge badge-high">High Risk</span><span>HIPAA</span><span>HIPAA-010</span><span>.dockerignore:143</span> &middot; Review: CONFIRMED</div><div style="font-size:13px;color:#57606a;margin-top:8px">Implement comprehensive security incident response procedures including automated monitoring for PHI access anomalies, formal incident reporting workflows, and documented emergency access protocols. A</div></div>
+<div class="top-finding"><div class="top-finding-q"></div><div class="top-finding-meta"><span class="badge badge-high">High Risk</span><span>PCI-DSS</span><span>PCIDSS-004</span><span>aws/hyperswitch_aws_setup.sh:167</span> &middot; Review: CONFIRMED</div><div style="font-size:13px;color:#57606a;margin-top:8px">Implement restrictive CIDR blocks instead of 0.0.0.0/0 to limit access to only necessary IP ranges. Create separate VPCs or subnets for the cardholder data environment with dedicated security groups t</div></div>
 
-<div class="judge-block"><div class="judge-title">Independent Review — Gemini 1.5 Flash</div><div class="judge-stats"><div class="judge-stat"><span class="judge-stat-n j-confirmed">0</span><span class="judge-stat-l">Confirmed</span></div><div class="judge-stat"><span class="judge-stat-n j-context">0</span><span class="judge-stat-l">Context dependent</span></div><div class="judge-stat"><span class="judge-stat-n j-fp">0</span><span class="judge-stat-l">Possible false positives</span></div><div class="judge-stat"><span class="judge-stat-n j-additional">0</span><span class="judge-stat-l">Additional risk</span></div></div><div class="judge-note">Primary: Claude Sonnet (Anthropic). Review: Gemini 1.5 Flash (Google). Neither constitutes legal advice.</div></div>
+<div class="judge-block"><div class="judge-title">Independent Review — Gemini 2.5 Flash</div><div class="judge-stats"><div class="judge-stat"><span class="judge-stat-n j-confirmed">14</span><span class="judge-stat-l">Confirmed</span></div><div class="judge-stat"><span class="judge-stat-n j-context">0</span><span class="judge-stat-l">Context dependent</span></div><div class="judge-stat"><span class="judge-stat-n j-fp">42</span><span class="judge-stat-l">Possible false positives</span></div><div class="judge-stat"><span class="judge-stat-n j-additional">0</span><span class="judge-stat-l">Additional risk</span></div></div><div class="judge-note">Primary: Claude Sonnet (Anthropic). Review: Gemini 2.5 Flash (Google). Neither constitutes legal advice.</div></div>
 <div class="section-heading">Recommended Actions</div><div class="rec-item"><div class="rec-priority rec-p-high">High</div><div><div class="rec-text">The development team must conduct a comprehensive data processing inventory to identify all personal data processing activities, determine the appropriate lawful basis under Article 6 GDPR for each activity (such as consent, contract performance, legitimate interests, etc.), and implement clear documentation and technical controls that demonstrate the lawful basis for each processing operation. This should include updating privacy policies, consent mechanisms where applicable, and ensuring the codebase reflects the identified lawful bases through appropriate data handling procedures.</div><div class="rec-fw">GDPR &middot; GDPR-001</div></div></div>
 <div class="rec-item"><div class="rec-priority rec-p-high">High</div><div><div class="rec-text">Implement a comprehensive consent management system that includes: (1) clear consent collection interfaces with specific opt-in checkboxes for different data processing purposes, (2) plain language privacy notices explaining what data is collected and how it&#x27;s used, (3) mechanisms for users to withdraw consent as easily as they gave it, (4) audit logging of all consent actions with timestamps, and (5) regular consent refresh workflows. The system should store consent preferences per user and respect withdrawal requests immediately across all data processing activities.</div><div class="rec-fw">GDPR &middot; GDPR-002</div></div></div>
 <div class="rec-item"><div class="rec-priority rec-p-high">High</div><div><div class="rec-text">Implement a comprehensive right to erasure system that includes: (1) a user-facing mechanism for data subjects to submit deletion requests, (2) automated workflows to process these requests within the required timeframes, (3) comprehensive data deletion across all storage systems including databases, logs, and backups, (4) verification and audit capabilities to confirm complete erasure, and (5) proper handling of exceptions where deletion may not be required (such as legal compliance). The existing masking infrastructure can be leveraged, but a complete end-to-end erasure process must be built on top of it.</div><div class="rec-fw">GDPR &middot; GDPR-003</div></div></div>
@@ -218,7 +218,7 @@ a { color: #0052CC; text-decoration: none; } a:hover { text-decoration: underlin
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">Evidence clearly indicates processing of PII and awareness of GDPR, particularly with a &#x27;pii-migration&#x27; in the database schema, but lacks explicit documentation or implementation of a lawful basis under Article 6 GDPR for these activities.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">add_connector.md:34  * Enforce PII best practices (Secret wrappers, common\_utils::pii types) and robust error-handling
 api-reference/locker-api-reference/overview.mdx:5  Hyperswitch Card Vault is built with a GDPR compliant personal identifiable information (PII) storag
 api-reference/locker-api-reference/overview.mdx:5  Hyperswitch Card Vault is built with a GDPR compliant personal identifiable information (PII) storag
@@ -229,7 +229,7 @@ aws/hyperswitch_aws_setup.sh:257  echo &quot;cat &lt;&lt; EOF &gt;&gt; .env&quot
 aws/hyperswitch_aws_setup.sh:258  echo &quot;ROUTER__REDIS__HOST=$REDIS_ENDPOINT&quot; &gt;&gt; user_data.sh
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does this system process personal data of EU residents, and if so, is there evidence that a lawful basis for processing under Article 6 GDPR has been identified and implemented for each processing activity?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The development team must conduct a comprehensive data processing inventory to identify all personal data processing activities, determine the appropriate lawful basis under Article 6 GDPR for each activity (such as consent, contract performance, legitimate interests, etc.), and implement clear documentation and technical controls that demonstrate the lawful basis for each processing operation. This should include updating privacy policies, consent mechanisms where applicable, and ensuring the codebase reflects the identified lawful bases through appropriate data handling procedures.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Update documentation, such as `api-reference/locker-api-reference/overview.mdx`, to explicitly state the identified lawful basis under Article 6 GDPR for all PII processing activities, including those involved in the `pii-migration` defined in `aws/beta_schema.sql`, to demonstrate compliance with GDPR&#x27;s lawfulness principle.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f2" data-framework="GDPR" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f2')">
@@ -237,7 +237,7 @@ aws/hyperswitch_aws_setup.sh:258  echo &quot;ROUTER__REDIS__HOST=$REDIS_ENDPOINT
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence exclusively cites GitHub Actions workflow configuration files (.yml), which are part of the CI/CD pipeline and do not handle end-user consent collection mechanisms as required by GDPR Article 7, making the finding irrelevant to the cited code.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.github/workflows/hotfix-pr-check.yml:66  is_pull_request=&quot;$(gh api -H &quot;Accept: application/vnd.github+json&quot; -H &quot;X-GitHub-Api-Version: 2022-11
 .github/workflows/pr-convention-checks.yml:9  # acceptable use of this trigger.
 .github/workflows/pr-convention-checks.yml:155  files_changed=&quot;$(gh api --header &quot;Accept: application/vnd.github+json&quot; --header &quot;X-GitHub-Api-Versio
@@ -248,7 +248,7 @@ LICENSE:136  the terms of any separate license agreement you may have executed
 LICENSE:145  agreed to in writing, Licensor provides the Work (and each
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement consent collection mechanisms that satisfy the conditions for consent under Article 7, including freely given, specific, informed, and unambiguous indication of the data subject&#x27;s wishes, with capability to withdraw consent?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a comprehensive consent management system that includes: (1) clear consent collection interfaces with specific opt-in checkboxes for different data processing purposes, (2) plain language privacy notices explaining what data is collected and how it&#x27;s used, (3) mechanisms for users to withdraw consent as easily as they gave it, (4) audit logging of all consent actions with timestamps, and (5) regular consent refresh workflows. The system should store consent preferences per user and respect withdrawal requests immediately across all data processing activities.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">No code changes are required in the `.github/workflows/*.yml` files as they are CI/CD configurations and are not responsible for user-facing consent collection and management, therefore they do not directly impact GDPR Article 7 compliance.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f3" data-framework="GDPR" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f3')">
@@ -256,7 +256,7 @@ LICENSE:145  agreed to in writing, Licensor provides the Work (and each
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The code references to `hyperswitch_masking::ErasedMaskSerialize` confirm that data masking or erasure is a consideration within the application, but these snippets alone do not provide sufficient evidence of a comprehensive, user-initiated right to erasure workflow that includes full data deletion as required by GDPR Article 17, thus the high risk of incomplete implementation remains plausible.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">connector-template/mod.rs:593  ) -&gt; CustomResult&lt;Box&lt;dyn hyperswitch_masking::ErasedMaskSerialize&gt;, errors::ConnectorError&gt; {
 crates/common_utils/src/request.rs:68  Json(Box&lt;dyn hyperswitch_masking::ErasedMaskSerialize + Send&gt;),
 crates/common_utils/src/request.rs:69  FormUrlEncoded(Box&lt;dyn hyperswitch_masking::ErasedMaskSerialize + Send&gt;),
@@ -267,7 +267,7 @@ crates/euclid/src/dssa/state_machine.rs:117  fn destroy(&amp;self, context: &amp
 crates/euclid/src/dssa/state_machine.rs:196  fn destroy(&amp;self, context: &amp;mut types::ConjunctiveContext&lt;&#x27;a&gt;) {
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement the right to erasure (right to be forgotten) under Article 17, allowing data subjects to request deletion of their personal data without undue delay?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a comprehensive right to erasure system that includes: (1) a user-facing mechanism for data subjects to submit deletion requests, (2) automated workflows to process these requests within the required timeframes, (3) comprehensive data deletion across all storage systems including databases, logs, and backups, (4) verification and audit capabilities to confirm complete erasure, and (5) proper handling of exceptions where deletion may not be required (such as legal compliance). The existing masking infrastructure can be leveraged, but a complete end-to-end erasure process must be built on top of it.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Develop a user-facing mechanism for data subjects to submit deletion requests and integrate this workflow with the `hyperswitch_masking::ErasedMaskSerialize` functionality found in `connector-template/mod.rs` and `crates/common_utils/src/request.rs`. This will ensure comprehensive and irreversible data deletion across all storage systems, as mandated by GDPR Article 17.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f4" data-framework="GDPR" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f4')">
@@ -275,7 +275,7 @@ crates/euclid/src/dssa/state_machine.rs:196  fn destroy(&amp;self, context: &amp
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited consists solely of `.dockerignore` and `.github/workflows` configuration files, which contain &#x27;export&#x27; keywords related to environment variables for CI/CD or file exclusion for Docker builds, not actual user data export functionality as required by GDPR Article 20.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.dockerignore:72  com_crashlytics_export_strings.xml
 .dockerignore:80  # Android studio 3.1+ serialized cache file
 .github/workflows/cypress-tests-runner.yml:1029  export ${CONNECTOR_ENV_VAR}=&quot;http://localhost:3010/${connector}&quot;
@@ -286,7 +286,7 @@ crates/euclid/src/dssa/state_machine.rs:196  fn destroy(&amp;self, context: &amp
 .gitignore:80  # Android studio 3.1+ serialized cache file
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system provide data subjects the right to receive their personal data in a structured, commonly used, and machine-readable format, and to transmit that data to another controller, as required under Article 20?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a data portability feature that allows users to request and receive their personal data in structured formats like JSON, CSV, or XML. This should include an API endpoint for programmatic data export, a user interface for self-service data requests, and backend functionality to compile all personal data associated with a user account. The export should include all personal data categories processed by the system and provide the data in a format that can be easily imported by other data controllers.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Review the primary analysis tool&#x27;s logic for GDPR-004 as the &#x27;export&#x27; keywords in `.github/workflows` files set environment variables for CI/CD processes, and `.dockerignore` entries specify build exclusions. These do not represent a user-facing data portability mechanism, therefore no code changes are required in these specific files to address the GDPR Article 20 finding.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f5" data-framework="GDPR" data-severity="Medium Risk">
 <div class="finding-header" onclick="toggleFinding('f5')">
@@ -294,7 +294,7 @@ crates/euclid/src/dssa/state_machine.rs:196  fn destroy(&amp;self, context: &amp
 <div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited exclusively consists of CI/CD workflow files (.github/workflows/*.yml) and a .dockerignore entry, which are configuration or build-related files, not application source code directly demonstrating a lack of privacy by design for personal data processing.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.dockerignore:216  Thumbs.db:encryptable
 .github/workflows/archive/connector-ui-sanity-tests.yml:85  - name: Download Encrypted TOML from S3 and Decrypt
 .github/workflows/cypress-tests-runner.yml:283  - name: Download Encrypted TOML from S3 and Decrypt
@@ -305,7 +305,7 @@ crates/euclid/src/dssa/state_machine.rs:196  fn destroy(&amp;self, context: &amp
 .gitignore:216  Thumbs.db:encryptable
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system demonstrate evidence of data protection by design and by default, implementing appropriate technical and organizational measures to ensure only necessary personal data is processed, as required under Article 25?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement and document data minimization controls such as automated data retention policies, purpose-based data collection limits, and privacy-by-default configuration settings. Add code-level evidence of data processing limitations, such as field-level access controls, automated data purging mechanisms, and configuration files that default to minimal data collection. Document technical measures that ensure only necessary personal data fields are processed for each specific business purpose, and implement audit trails showing compliance with data minimization principles.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">While `.github/workflows/*.yml` steps indicate data encryption during transfer (e.g., &#x27;Download Encrypted TOML&#x27;), such infrastructure configurations do not constitute direct evidence of privacy by design within application logic. To comply with GDPR Article 25, ensure application source code explicitly defines and enforces data minimization and purpose limitation for personal data processing.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f6" data-framework="GDPR" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f6')">
@@ -313,7 +313,7 @@ crates/euclid/src/dssa/state_machine.rs:196  fn destroy(&amp;self, context: &amp
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence provided consists solely of configuration and documentation files (.dockerignore, .gitignore, .github/CODEOWNERS, README.md, LICENSE), which mention &#x27;monitoring&#x27; but do not provide specific application source code demonstrating mechanisms for personal data breach detection or automated notification workflows as required by GDPR Articles 33 and 34.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.dockerignore:251  monitoring/*.tmp/
 .github/CODEOWNERS:155  monitoring/ @juspay/hyperswitch-infra
 .gitignore:252  monitoring/*.tmp/
@@ -324,7 +324,7 @@ api-reference/essentials/go-live.mdx:32  - [ ] [Configure your webhook endpoint]
 api-reference/essentials/rate_limit.mdx:17  - To proactively manage these errors, monitoring tools can help track usage patterns and provide ins
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement mechanisms for detecting personal data breaches and notifying the supervisory authority within 72 hours and affected data subjects without undue delay, as required under Articles 33 and 34?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement dedicated personal data breach detection mechanisms that can identify unauthorized access, disclosure, or loss of personal data. Create automated notification workflows that can alert supervisory authorities within 72 hours and notify affected data subjects without undue delay. This should include breach severity assessment logic, notification templates, contact management systems for authorities and data subjects, and audit logging of all breach notifications. The existing monitoring infrastructure in Grafana could be extended to include data breach detection rules and automated notification capabilities.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The &#x27;monitoring&#x27; component mentioned in `README.md` and managed by `@juspay/hyperswitch-infra` (per `.github/CODEOWNERS`) requires explicit mechanisms within its design for detecting personal data breaches and triggering automated notification workflows. Absence of such demonstrable features would constitute a violation of GDPR Articles 33 and 34 regarding breach detection and reporting.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f7" data-framework="GDPR" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f7')">
@@ -332,7 +332,7 @@ api-reference/essentials/rate_limit.mdx:17  - To proactively manage these errors
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited, specifically `retention-days: 1` in GitHub Actions workflow files, refers to the retention of workflow artifacts and logs, not the application&#x27;s personal data storage, therefore not directly addressing the GDPR requirement for personal data retention policies.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.github/PULL_REQUEST_TEMPLATE.md:39  that will have little conversation).
 .github/workflows/archive/connector-sanity-tests.yml:9  - cron: &quot;5 0 * * *&quot;
 .github/workflows/cypress-tests-runner.yml:151  retention-days: 1
@@ -343,7 +343,7 @@ api-reference/essentials/rate_limit.mdx:17  - To proactively manage these errors
 .github/workflows/cypress-tests-runner.yml:857  retention-days: 1
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement data retention policies that limit the storage of personal data to what is necessary for the specified processing purpose, with automated deletion or anonymization when the purpose is fulfilled, consistent with the storage limitation principle under Article 5(1)(e)?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement comprehensive data retention policies for all personal data processed by the payment system. This should include: (1) defining retention periods for different types of personal data based on processing purposes, (2) implementing automated deletion or anonymization processes when retention periods expire, (3) creating database cleanup jobs or scheduled tasks that regularly purge expired personal data, and (4) documenting these policies in code comments and configuration files. Consider adding data lifecycle management modules that can track data age and automatically trigger deletion when legal or business retention requirements are met.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The `retention-days: 1` settings in `.github/workflows/cypress-tests-runner.yml` are correctly configured for GitHub Actions workflow artifact retention and do not pertain to the application&#x27;s personal data retention policies. Therefore, no changes are required in the cited files concerning GDPR data retention, as these files do not manage personal data directly in a way that would incur a GDPR violation.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f8" data-framework="GDPR" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f8')">
@@ -351,7 +351,7 @@ api-reference/essentials/rate_limit.mdx:17  - To proactively manage these errors
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence points to CI/CD configuration files referencing `sccache` for caching compilation artifacts, which does not inherently involve the processing or transfer of personal data, thus not directly triggering GDPR Chapter V cross-border transfer requirements.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.github/workflows/CI-pr.yml:90  # Use `sccache` for caching compilation artifacts
 .github/workflows/CI-pr.yml:91  # RUSTC_WRAPPER: sccache
 .github/workflows/CI-pr.yml:141  # Use `sccache` for caching compilation artifacts
@@ -362,7 +362,7 @@ api-reference/essentials/rate_limit.mdx:17  - To proactively manage these errors
 .github/workflows/CI-push.yml:99  #     tool: sccache
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement appropriate safeguards for transfers of personal data to third countries or international organizations, such as Standard Contractual Clauses or adequacy decisions, as required under Chapter V?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement appropriate transfer safeguards before any cross-border personal data processing. This requires: (1) conducting a transfer impact assessment to identify all international data flows, (2) implementing Standard Contractual Clauses with data processors/recipients in third countries, (3) documenting adequacy decisions where applicable, (4) adding configuration parameters to enforce transfer restrictions, and (5) creating data processing agreements that specify transfer safeguards. Update the AWS deployment scripts and configuration files to include transfer mechanism validation before processing personal data across regions.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The lines in `.github/workflows/CI-pr.yml` and `.github/workflows/CI-push.yml` referencing `sccache` are for build artifact caching and do not, by themselves, constitute a cross-border personal data transfer. Review the actual data cached by `sccache` to confirm no personal data is included; otherwise, this evidence does not indicate a violation of GDPR Chapter V safeguards.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f9" data-framework="GDPR" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f9')">
@@ -370,7 +370,7 @@ api-reference/essentials/rate_limit.mdx:17  - To proactively manage these errors
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The &#x27;aws/beta_schema.sql&#x27; file directly defines a &#x27;tracking_data&#x27; JSON column, indicating the system&#x27;s design to store potentially personal data which, especially in fintech and e-commerce domains, necessitates a Data Protection Impact Assessment under GDPR Article 35.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">LICENSE:58  and issue tracking systems that are managed by, or on behalf of, the
 aws/beta_schema.sql:487  tracking_data JSON NOT NULL,
 config/grafana.ini:212  # Google Analytics universal tracking code, only enabled if you specify an id here
@@ -381,7 +381,7 @@ config/redis.conf:853  # tracking-table-max-keys 1000000
 config/redis.conf:1842  ################################ LATENCY TRACKING ##############################
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system process personal data in a manner likely to result in high risk to data subjects, and if so, is there evidence that a Data Protection Impact Assessment has been considered, as required under Article 35?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Conduct a formal Data Protection Impact Assessment to evaluate the risks associated with the tracking systems, analytics integration, and personal data processing workflows identified in the codebase. Document the DPIA process, findings, and any necessary safeguards or mitigation measures. Consider whether the current data processing activities require additional consent mechanisms or privacy controls, and ensure the DPIA documentation is maintained alongside the code repository for compliance verification.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The `aws/beta_schema.sql` file defines a `tracking_data` JSON column, which implies processing of personal data likely to pose a high risk to data subjects, mandating a formal Data Protection Impact Assessment (DPIA) as per GDPR Article 35. Conduct a DPIA for all processing activities involving `tracking_data` and any analytics (e.g., as configured in `config/grafana.ini`) to ensure compliance and mitigate identified risks.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f10" data-framework="GDPR" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f10')">
@@ -389,7 +389,7 @@ config/redis.conf:1842  ################################ LATENCY TRACKING ######
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence provided consists solely of configuration files (.devcontainer/devcontainer.json, .dockerignore, .github/CODEOWNERS) whose content does not relate to or demonstrate a lack of privacy notices as required by GDPR Articles 13 and 14.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.devcontainer/devcontainer.json:23  // Use &#x27;forwardPorts&#x27; to make a list of ports inside the container available locally.
 .devcontainer/devcontainer.json:24  &quot;forwardPorts&quot;: [8080]
 .dockerignore:179  # More information here https://doc.rust-lang.org/cargo/guide/cargo-toml-vs-cargo-lock.html
@@ -400,7 +400,7 @@ config/redis.conf:1842  ################################ LATENCY TRACKING ######
 .github/api-migration-compatibility/.oasdiff-severity-levels.yaml:60  endpoint-deprecated: WARN
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system provide transparent information to data subjects about the processing of their personal data, including identity of the controller, purposes of processing, and data subject rights, as required under Articles 13 and 14?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement comprehensive privacy notices that include: (1) clear identification of the data controller (Juspay/Hyperswitch), (2) specific purposes for processing personal data, (3) legal basis for processing, (4) data retention periods, (5) complete data subject rights information including access, rectification, erasure, and portability rights, (6) contact information for data protection inquiries, and (7) information about data transfers to third parties. These notices must be prominently displayed in the application interface and easily accessible to users at the point of data collection and in account/profile sections.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The listed files (.devcontainer/devcontainer.json, .dockerignore, .github/CODEOWNERS) are not the appropriate location for defining privacy policies or data subject notices. No specific code changes are required in these configuration files to comply with GDPR Articles 13 and 14 concerning transparency, as they do not contain user-facing information relevant to the privacy policy.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 </div>
 <div class="framework-section" id="hipaa" data-framework="HIPAA">
@@ -411,7 +411,7 @@ config/redis.conf:1842  ################################ LATENCY TRACKING ######
 <div class="finding-right"><span class="badge badge-ok">No Issue Found</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence consists of geographical state abbreviations found within a `.typos.toml` configuration file, which do not constitute Protected Health Information in isolation and do not directly indicate PHI collection or processing.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.typos.toml:18  AGS = &quot;AGS&quot; # philippines state abbreviation
 .typos.toml:19  AgusanDelSur = &quot;AgusanDelSur&quot; # philippines state abbreviation
 .typos.toml:20  CamarinesSur = &quot;CamarinesSur&quot; # philippines state abbreviation
@@ -422,7 +422,7 @@ config/redis.conf:1842  ################################ LATENCY TRACKING ######
 .typos.toml:25  SurigaoDelSur = &quot;SurigaoDelSur&quot; # philippines state abbreviation
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does this system collect, store, process, or transmit individually identifiable health information as defined under 45 CFR §160.103, and if so, are adequate technical safeguards in place to protect the confidentiality of such Protected Health Information?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">No immediate remediation required based on current evidence. However, if this payments system will process health-related transactions or integrate with healthcare providers in the future, conduct a comprehensive HIPAA risk assessment to identify potential PHI touchpoints and implement appropriate technical safeguards under 45 CFR §164.312(a)(1) including access controls, encryption, and audit logging mechanisms.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The geographic state abbreviations in `.typos.toml` (lines 18-22) are not considered individually identifiable health information by themselves. No specific change is needed for these lines, as they do not constitute a direct HIPAA violation under 45 CFR §160.103.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f12" data-framework="HIPAA" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f12')">
@@ -430,7 +430,7 @@ config/redis.conf:1842  ################################ LATENCY TRACKING ######
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited consists solely of CI/CD workflow configuration files and a `.dockerignore` entry, which are not application source code and do not directly demonstrate a lack of encryption for PHI stored at rest; in fact, the workflows explicitly mention downloading and decrypting &#x27;Encrypted TOML&#x27;.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.dockerignore:216  Thumbs.db:encryptable
 .github/workflows/archive/connector-ui-sanity-tests.yml:85  - name: Download Encrypted TOML from S3 and Decrypt
 .github/workflows/archive/connector-ui-sanity-tests.yml:85  - name: Download Encrypted TOML from S3 and Decrypt
@@ -441,7 +441,7 @@ config/redis.conf:1842  ################################ LATENCY TRACKING ######
 .github/workflows/cypress-tests-runner.yml:20  OPTIONAL_PAYMENTS_CONNECTORS_BATCH_1: &quot;cryptopay finix nexixpay&quot;
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Is electronic Protected Health Information encrypted when stored at rest using methods consistent with NIST Special Publication 800-111, as required for addressable implementation under the HIPAA Security Rule?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement NIST SP 800-111 compliant encryption for all PHI stored at rest, including database encryption using AES-256 or equivalent approved algorithms. Replace plaintext connection configurations with encrypted alternatives, ensure all sensitive data uses proper encryption rather than base64 encoding, and establish key management procedures that meet NIST standards. Document encryption implementations and conduct verification that all PHI storage locations use appropriate cryptographic controls before processing any protected health information.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The workflows in `.github/workflows/archive/connector-ui-sanity-tests.yml` and `.github/workflows/cypress-tests-runner.yml` show steps to &#x27;Download Encrypted TOML from S3 and Decrypt&#x27;, suggesting that data is already handled in an encrypted manner within these CI/CD processes. Based on this evidence, no specific change is needed to address missing encryption of PHI at rest, which, if present, would violate HIPAA Security Rule requirements for data protection.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f13" data-framework="HIPAA" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f13')">
@@ -449,7 +449,7 @@ config/redis.conf:1842  ################################ LATENCY TRACKING ######
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited (comments in `.devcontainer/devcontainer.json` and entries in `.dockerignore`) relates solely to development environment setup or files to be ignored, and does not provide any insight into the application&#x27;s data transmission encryption practices relevant to HIPAA-003.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.devcontainer/devcontainer.json:1  // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 .devcontainer/devcontainer.json:2  // README at: https://github.com/devcontainers/templates/tree/main/src/docker-existing-dockerfile
 .devcontainer/devcontainer.json:20  // Features to add to the dev container. More info: https://containers.dev/features.
@@ -460,7 +460,7 @@ config/redis.conf:1842  ################################ LATENCY TRACKING ######
 .dockerignore:84  # Comment Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-215987721
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Are all transmissions of electronic Protected Health Information encrypted using transport-level security consistent with NIST guidelines, preventing unauthorized access during transmission across electronic communications networks?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement transport-level security by configuring HTTPS/TLS encryption for all data transmissions, ensuring compliance with NIST guidelines (such as TLS 1.2 minimum). Replace all HTTP protocol references in configuration files with HTTPS equivalents, implement proper SSL/TLS certificates, and add code that enforces encrypted connections for any PHI transmission. Add configuration files showing TLS implementation, security headers, and certificate management. Include unit tests that verify encryption is properly implemented before any PHI data transmission occurs.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The lines in `.devcontainer/devcontainer.json` and `.dockerignore` are configuration details for the development environment or files to ignore, and do not present evidence of unencrypted data transmission. Therefore, no specific changes are required in these files regarding transport-level security for HIPAA-003, avoiding misapplication of regulatory standards based on irrelevant evidence.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f14" data-framework="HIPAA" data-severity="Medium Risk">
 <div class="finding-header" onclick="toggleFinding('f14')">
@@ -468,7 +468,7 @@ config/redis.conf:1842  ################################ LATENCY TRACKING ######
 <div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The evidence directly cites Rust source code files related to &#x27;authentication&#x27; and &#x27;user_role&#x27; within a repository that lists &#x27;healthcare&#x27; as a domain, making the HIPAA Access Control requirement (45 CFR §164.312(a)(1)) highly relevant for ensuring proper access to ePHI.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.github/CODEOWNERS:129  crates/router/src/services/authentication.rs @juspay/hyperswitch-dashboard
 .github/CODEOWNERS:98  crates/api_models/src/user_role.rs @juspay/hyperswitch-dashboard
 .github/CODEOWNERS:99  crates/api_models/src/events/user_role.rs @juspay/hyperswitch-dashboard
@@ -479,7 +479,7 @@ config/redis.conf:1842  ################################ LATENCY TRACKING ######
 .github/CODEOWNERS:122  crates/router/src/db/user_role.rs @juspay/hyperswitch-dashboard
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement technical policies and procedures for electronic information systems that maintain electronic Protected Health Information to allow access only to those persons or software programs that have been granted access rights as specified in 45 CFR §164.312(a)(1)?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement and document specific technical access controls that demonstrate compliance with HIPAA&#x27;s access restriction requirements. This should include role-based access control mechanisms with documented permission matrices, authentication logs, and automated access enforcement procedures. The existing user role infrastructure in the codebase provides a foundation, but needs enhancement with explicit PHI access controls, audit trails, and technical procedures that clearly restrict system access to only those persons or software programs granted specific access rights.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Review `crates/router/src/services/authentication.rs`, `crates/api_models/src/user_role.rs`, `crates/api_models/src/events/user_role.rs`, `crates/diesel_models/src/query/user_role.rs`, and `crates/diesel_models/src/user_role.rs` to verify and implement robust technical role-based access controls and documented permission matrices that restrict access to electronic Protected Health Information (ePHI). This is mandatory to comply with 45 CFR §164.312(a)(1) and prevent unauthorized access.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f15" data-framework="HIPAA" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f15')">
@@ -487,7 +487,7 @@ config/redis.conf:1842  ################################ LATENCY TRACKING ######
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited consists of CI/CD workflow configuration files referring to network health checks and transient network timeouts, which are distinct from user session inactivity timeouts for PHI access required by HIPAA-005. The files are config files, not application source code for session management.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.github/workflows/CI-pr.yml:28  # from transient network timeouts or other issues.
 .github/workflows/CI-push.yml:31  # from transient network timeouts or other issues.
 .github/workflows/archive/connector-sanity-tests.yml:34  # from transient network timeouts or other issues.
@@ -506,7 +506,7 @@ config/redis.conf:1842  ################################ LATENCY TRACKING ######
 <div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited exclusively consists of a Makefile and documentation files, not application source code, making it insufficient to confirm specific audit control implementation for ePHI as per the mandatory decision rules.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">Makefile:25  audit \
 README.md:69  Advanced observability tools to audit, monitor, and optimize your payment costs. Detect hidden fees,
 README.md:85  Automate 2-way and 3-way reconciliation with backdated support, staggered scheduling, and customizab
@@ -517,7 +517,7 @@ add_connector.md:837  router_env::logger::info!(connector_response=?response);
 config/config.example.toml:1187  audit_events_topic = &quot;topic&quot;             # Kafka topic to be used for Payment Audit events
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement hardware, software, and procedural mechanisms that record and examine activity in information systems that contain or use electronic Protected Health Information, as required under the audit controls standard?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement comprehensive audit logging mechanisms that specifically capture all access to and activity within systems containing ePHI. This should include user authentication events, data access attempts, modifications, deletions, and system-level security events. Ensure audit logs are tamper-resistant, automatically generated, and include required data elements such as user identification, event type, date/time, success/failure status, and source of access. The existing Kafka-based audit infrastructure appears to be payment-focused and should be extended or supplemented with HIPAA-compliant audit controls that specifically address ePHI handling requirements.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Review the logging mechanisms referenced in `add_connector.md` (e.g., `router_env::logger::info!`) and verify in the underlying source code that they comprehensively capture all access to and activity within systems containing ePHI, if applicable, including user authentication events, data access, modifications, and deletions. Without demonstrable logging for ePHI-related activities, the system risks non-compliance with HIPAA audit control standards (HIPAA-006).</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f17" data-framework="HIPAA" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f17')">
@@ -525,7 +525,7 @@ config/config.example.toml:1187  audit_events_topic = &quot;topic&quot;         
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The cited evidence from `.dockerignore` (build exclusions) and `.github/CODEOWNERS` (code ownership) does not directly demonstrate a failure to limit Protected Health Information (PHI) access to the minimum necessary, as these files do not control runtime data access or disclosure.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.dockerignore:80  # Android studio 3.1+ serialized cache file
 .dockerignore:35  # When using Gradle or Maven with auto-import, you should exclude module files,
 .dockerignore:241  # hyperswitch Project specific excludes
@@ -536,7 +536,7 @@ config/config.example.toml:1187  audit_events_topic = &quot;topic&quot;         
 .github/api-migration-compatibility/migration-rules.yaml:11  drop_column:
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system limit the Protected Health Information disclosed or accessed to the minimum necessary to accomplish the intended purpose, consistent with the minimum necessary standard under the Privacy Rule?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement role-based access controls that restrict PHI access based on user roles and specific business purposes. Add data filtering mechanisms that automatically limit the amount of PHI returned in API responses based on the requesting user&#x27;s role and the intended purpose of the request. Create audit logging to track what PHI is accessed by whom and for what purpose. Establish technical safeguards that prevent users from accessing more PHI than necessary to complete their assigned functions.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Given that the cited `.dockerignore` and `.github/CODEOWNERS` files do not directly demonstrate PHI access violations, no specific change to these files is warranted for this finding. If PHI is handled by the system (e.g., within `crates/router/src/configs/defaults/payment_connector_required_fields.rs`), explicit data masking or access checks within the relevant application code would be required to ensure only minimum necessary PHI is accessed or disclosed, preventing HIPAA Privacy Rule violations.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f18" data-framework="HIPAA" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f18')">
@@ -544,7 +544,7 @@ config/config.example.toml:1187  audit_events_topic = &quot;topic&quot;         
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited in `.dockerignore` files only indicates the exclusion of developer IDE configuration for AWS and Azure from Docker builds, which does not demonstrate actual application integration with third-party services that may process Protected Health Information (PHI) or a lack of Business Associate Agreements (BAAs).</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.dockerignore:15  # AWS User-specific
 .dockerignore:16  .idea/**/aws.xml
 .dockerignore:113  # Azure Toolkit for IntelliJ plugin
@@ -555,7 +555,7 @@ config/config.example.toml:1187  audit_events_topic = &quot;topic&quot;         
 .github/CODEOWNERS:32  crates/api_models/src/events.rs @juspay/hyperswitch-analytics
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system integrate with third-party services that may receive, maintain, or transmit Protected Health Information, and if so, is there evidence that Business Associate Agreement requirements are addressed in the code or configuration?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement documentation and configuration management for Business Associate Agreements with all third-party services that may handle PHI. This should include: (1) maintaining copies of executed BAAs in a secure repository location, (2) adding configuration checks or environment variables that verify BAA compliance status before allowing data transmission to third parties, (3) implementing data classification controls to ensure PHI is only sent to covered third-party services, and (4) adding logging/auditing capabilities to track when PHI is shared with business associates. Consider creating a compliance configuration file that maps each third-party integration to its BAA status and required safeguards.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The entries in `.dockerignore` for `aws.xml` and `azureSettings.xml` correctly exclude developer IDE configurations from the build artifact, which is a sound practice. This specific evidence does not indicate application integration with third parties processing PHI; therefore, no direct changes are required to these `.dockerignore` lines to address HIPAA BAA requirements.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f19" data-framework="HIPAA" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f19')">
@@ -563,7 +563,7 @@ config/config.example.toml:1187  audit_events_topic = &quot;topic&quot;         
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence provided consists solely of configuration and documentation files, which mention general data deletion or temporary file handling, but contain no specific references to Protected Health Information (PHI) or HIPAA-specific data retention and disposal policies within the code snippets.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.dockerignore:127  # temporary files which can be created if a process still has a handle open of a deleted file
 .github/PULL_REQUEST_TEMPLATE.md:39  that will have little conversation).
 .github/api-migration-compatibility/migration-rules.yaml:15  delete_data:
@@ -574,7 +574,7 @@ config/config.example.toml:1187  audit_events_topic = &quot;topic&quot;         
 .github/workflows/cypress-tests-runner.yml:151  retention-days: 1
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement policies and procedures to address the final disposition of electronic Protected Health Information and the hardware or electronic media on which it is stored, as well as removal of PHI before media is available for reuse?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement and document comprehensive data retention and disposal policies that specify retention periods for different types of PHI, secure deletion procedures that ensure data cannot be recovered, and media sanitization controls for hardware reuse. Create automated processes for secure PHI deletion at end-of-life, establish procedures for cryptographic key destruction, and implement logging mechanisms to track disposal activities. Document these procedures in policy files within the repository and ensure they cover both logical deletion of data and physical media sanitization before reuse or disposal.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Update procedures related to temporary file handling, as referenced in `.dockerignore:127`, and enhance data deletion practices identified in `.github/api-migration-compatibility/migration-rules.yaml`. These updates must explicitly define secure sanitization methods for all forms of electronic Protected Health Information (ePHI) across any media or storage, ensuring full compliance with HIPAA data retention and disposal standards.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f20" data-framework="HIPAA" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f20')">
@@ -582,7 +582,7 @@ config/config.example.toml:1187  audit_events_topic = &quot;topic&quot;         
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The finding is confirmed as application source code, `crates/external_services/src/grpc_client/health_check_client.rs`, is cited in the evidence, and HIPAA-010 represents a known compliance risk pattern for the detected healthcare domain, aligning with mandatory decision rules.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.dockerignore:143  .LSOverride
 .dockerignore:182  # These are backup files generated by rustfmt
 .dockerignore:251  monitoring/*.tmp/
@@ -593,7 +593,7 @@ config/config.example.toml:1187  audit_events_topic = &quot;topic&quot;         
 .gitignore:182  # These are backup files generated by rustfmt
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement procedures for detecting, reporting, and responding to suspected or known security incidents involving electronic Protected Health Information, and does it provide for emergency access to PHI during system disruptions?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement comprehensive security incident response procedures including automated monitoring for PHI access anomalies, formal incident reporting workflows, and documented emergency access protocols. Add incident detection mechanisms that can identify unauthorized PHI access patterns, create emergency access procedures that maintain audit trails during system disruptions, and establish clear escalation paths for suspected breaches. Document all procedures and ensure they are integrated into the existing monitoring infrastructure referenced in the codebase.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Update `.github/CODEOWNERS:155` to explicitly assign `@juspay/hyperswitch-infra` responsibility for HIPAA-compliant incident response procedures related to `monitoring/`. Implement specific detection logic, potentially within `crates/external_services/src/grpc_client/health_check_client.rs` or integrated with it, to address breach detection and emergency ePHI access requirements, preventing non-compliance with HIPAA-010.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 </div>
 <div class="framework-section" id="pci-dss" data-framework="PCI-DSS">
@@ -604,7 +604,7 @@ config/config.example.toml:1187  audit_events_topic = &quot;topic&quot;         
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence provided consists solely of configuration files (.clippy.toml, .github/*.yaml) which do not directly demonstrate whether primary account numbers (PAN) are stored, or if stored, whether they lack adequate protection to render them unreadable as required by PCI DSS Requirement 3.5.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.clippy.toml:3  allow-panic-in-tests = true
 .github/api-migration-compatibility/migration-rules.yaml:19  truncate_table:
 .github/api-migration-compatibility/migration-rules.yaml:20  pattern: &#x27;TRUNCATE\s+&#x27;
@@ -615,7 +615,7 @@ config/config.example.toml:1187  audit_events_topic = &quot;topic&quot;         
 .github/cocogitto-changelog-template:16  {% set to_shorthand = version.id | truncate(length=7, end=&quot;&quot;) -%}
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does this system store, process, or transmit cardholder data including primary account numbers (PAN), and if so, are adequate protections in place to render stored PAN unreadable, as required under PCI DSS Requirement 3.5?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement strong cryptographic protection for all stored PAN data by encrypting card numbers before storage using industry-standard encryption algorithms with proper key management. Replace the current card storage mechanism in the payment methods module with tokenization or format-preserving encryption. Ensure that any PAN data referenced in configuration files like gateway_status_map.csv is properly protected and that the &quot;clear_pan_possible&quot; functionality is restricted to authorized processes only. Conduct a comprehensive audit of all data flows to identify and remediate any additional locations where PAN may be stored or transmitted in unprotected form.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Confirm that `truncate_table` operations specified in `.github/api-migration-compatibility/migration-rules.yaml`, if applied to tables containing primary account numbers (PAN), are preceded by or include verification that PAN data is tokenized or strongly encrypted, satisfying PCI DSS Requirement 3.5 for rendering stored PAN unreadable.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f22" data-framework="PCI-DSS" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f22')">
@@ -623,7 +623,7 @@ config/config.example.toml:1187  audit_events_topic = &quot;topic&quot;         
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence provided consists solely of comments in development configuration files and an ignore pattern for a non-cardholder-data file (`Thumbs.db`) in `.dockerignore`, none of which indicate a lack of encryption for cardholder data at rest or in transit as per PCI DSS Requirements 3.5 and 4.2.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.devcontainer/devcontainer.json:1  // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 .devcontainer/devcontainer.json:2  // README at: https://github.com/devcontainers/templates/tree/main/src/docker-existing-dockerfile
 .devcontainer/devcontainer.json:20  // Features to add to the dev container. More info: https://containers.dev/features.
@@ -634,7 +634,7 @@ config/config.example.toml:1187  audit_events_topic = &quot;topic&quot;         
 .dockerignore:6  # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Is cardholder data encrypted using strong cryptography during transmission over open public networks and when stored at rest, consistent with PCI DSS Requirements 3.5 and 4.2?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement strong encryption (AES-256 or equivalent) for all stored cardholder data and enforce TLS 1.2+ for all network communications handling payment data. Replace all HTTP references in test configurations with HTTPS endpoints, and ensure that any payment processing endpoints use encrypted connections. Add configuration files showing encryption key management, TLS certificate implementation, and database encryption settings. Conduct a comprehensive audit to identify all locations where cardholder data flows through the system and verify encryption controls are properly implemented.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">No changes are required to the `.devcontainer/devcontainer.json` or `.dockerignore` files based on the presented evidence, as `Thumbs.db:encryptable` does not indicate cardholder data handling and the referenced lines in `devcontainer.json` are comments. This specific evidence does not impact PCI DSS Requirements 3.5 and 4.2 regarding cardholder data encryption.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f23" data-framework="PCI-DSS" data-severity="Pattern of Concern">
 <div class="finding-header" onclick="toggleFinding('f23')">
@@ -642,7 +642,7 @@ config/config.example.toml:1187  audit_events_topic = &quot;topic&quot;         
 <div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The `.github/CODEOWNERS` file directly points to application source code files (`user_role.rs` in multiple crates) that are fundamental to defining and implementing role-based access controls, which is a known and critical PCI-DSS requirement (Requirement 7) for protecting cardholder data in a fintech environment.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.github/CODEOWNERS:98  crates/api_models/src/user_role.rs @juspay/hyperswitch-dashboard
 .github/CODEOWNERS:99  crates/api_models/src/events/user_role.rs @juspay/hyperswitch-dashboard
 .github/CODEOWNERS:104  crates/diesel_models/src/query/user_role.rs @juspay/hyperswitch-dashboard
@@ -653,7 +653,7 @@ config/config.example.toml:1187  audit_events_topic = &quot;topic&quot;         
 .github/CODEOWNERS:127  crates/router/src/routes/user_role.rs @juspay/hyperswitch-dashboard
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system restrict access to cardholder data to only those individuals and systems whose job requires such access, implementing role-based access controls consistent with PCI DSS Requirement 7?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Document and implement specific role-based access controls that explicitly restrict cardholder data access to authorized personnel only. The existing user_role infrastructure should be enhanced with clear access policies, role definitions tied to business need-to-know principles, and technical controls that enforce these restrictions at the data access layer. Provide evidence of access control testing, role assignment procedures, and monitoring mechanisms to ensure cardholder data is protected according to PCI DSS requirements.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Review the definitions and logic within `crates/api_models/src/user_role.rs`, `crates/api_models/src/events/user_role.rs`, and other `user_role.rs` files to verify that role-based access controls explicitly restrict cardholder data access to authorized personnel based on a strict need-to-know, thereby addressing PCI DSS Requirement 7.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f24" data-framework="PCI-DSS" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f24')">
@@ -661,7 +661,7 @@ config/config.example.toml:1187  audit_events_topic = &quot;topic&quot;         
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The `aws/hyperswitch_aws_setup.sh` script directly configures AWS security group ingress rules for critical ports (80, 22) and an RDS instance, which are fundamental aspects of network segmentation within the Cardholder Data Environment and directly impacts PCI-DSS Requirement 1.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">aws/hyperswitch_aws_setup.sh:167  --vpc-security-group-ids $RDS_SG_ID)&quot;
 aws/hyperswitch_aws_setup.sh:51  echo &quot;Creating Security Group ingress for port 80...&quot;
 aws/hyperswitch_aws_setup.sh:53  echo &quot;$(aws ec2 authorize-security-group-ingress \
@@ -672,7 +672,7 @@ aws/hyperswitch_aws_setup.sh:71  echo &quot;Security Group ingress for port 22 C
 aws/hyperswitch_aws_setup.sh:92  echo &quot;$(aws ec2 authorize-security-group-ingress \
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement network segmentation to isolate the cardholder data environment (CDE) from other network segments, reducing the scope of PCI DSS compliance as described in Requirement 1?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement restrictive CIDR blocks instead of 0.0.0.0/0 to limit access to only necessary IP ranges. Create separate VPCs or subnets for the cardholder data environment with dedicated security groups that deny inter-segment communication by default. Configure security group rules to allow only specific required traffic between network segments, and implement additional network controls like NACLs or firewalls to enforce segmentation boundaries. Document the network segmentation architecture and regularly audit security group configurations to ensure CDE isolation is maintained.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Update the security group ingress rules in `aws/hyperswitch_aws_setup.sh` at lines 51-62 and ensure the `$RDS_SG_ID` configuration on line 167 uses the principle of least privilege. Replace any broad `0.0.0.0/0` CIDR blocks with restrictive, necessary IP ranges or other security groups to prevent unauthorized network access to the CDE, as mandated by PCI-DSS Requirement 1.1.2 to restrict inbound and outbound traffic.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f25" data-framework="PCI-DSS" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f25')">
@@ -680,7 +680,7 @@ aws/hyperswitch_aws_setup.sh:92  echo &quot;$(aws ec2 authorize-security-group-i
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence from .dockerignore entries pertains to excluding development environment artifacts from Docker images, which does not directly indicate a lack of vulnerability management practices or a compliance risk under PCI DSS Requirement 6.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.dockerignore:95  # SonarQube Plugin
 .dockerignore:96  # https://plugins.jetbrains.com/plugin/7238-sonarqube-community-plugin
 .dockerignore:83  ### CLion Patch ###
@@ -691,7 +691,7 @@ aws/hyperswitch_aws_setup.sh:92  echo &quot;$(aws ec2 authorize-security-group-i
 .github/api-migration-compatibility/migration-rules.yaml:9  description: &quot;Dropping a table removes data and breaks existing queries&quot;
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system demonstrate evidence of vulnerability management practices including regular patching, dependency updates, and vulnerability scanning, consistent with PCI DSS Requirement 6?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement comprehensive vulnerability management processes including: automated dependency vulnerability scanning in CI/CD pipelines, regular security updates for all system components and dependencies, documented patch management procedures with defined timelines, and integration of security scanning tools like OWASP Dependency Check or Snyk into the build process. Add GitHub Actions workflows that scan for vulnerabilities on every build and block deployments with critical security issues. Establish regular security assessment schedules and maintain an inventory of all system components with their current patch levels.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The `.dockerignore` file entries (lines 83, 95, 96, 168, 202) are exclusions for development tooling and operating system patches, which is a standard practice for clean Docker builds. Confirm that these exclusions do not interfere with the organization&#x27;s overarching vulnerability management program, including regular patching and scanning, as required by PCI DSS Requirement 6.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f26" data-framework="PCI-DSS" data-severity="Medium Risk">
 <div class="finding-header" onclick="toggleFinding('f26')">
@@ -699,7 +699,7 @@ aws/hyperswitch_aws_setup.sh:92  echo &quot;$(aws ec2 authorize-security-group-i
 <div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The exclusion of SonarLint IDE configuration from a `.dockerignore` file (lines 68-93) is standard practice for optimizing Docker image size and relevance, and does not provide evidence for or against the implementation of security testing controls like static analysis in the CI/CD pipeline or formal code review processes, as required by PCI DSS Requirements 6.3 and 11.4.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.dockerignore:68  # SonarLint plugin
 .dockerignore:69  .idea/sonarlint/
 .dockerignore:91  # Sonarlint plugin
@@ -710,7 +710,7 @@ aws/hyperswitch_aws_setup.sh:92  echo &quot;$(aws ec2 authorize-security-group-i
 .dockerignore:91  # Sonarlint plugin
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement security testing controls including code review, static analysis, and penetration testing practices, as required under PCI DSS Requirement 6.3 and 11.4?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement missing security testing controls by establishing formal code review requirements in pull request workflows, integrating automated static analysis scans (beyond linting) into the CI/CD pipeline, and implementing regular penetration testing procedures with documented results. Address the detected anti-patterns in the configs.rs file through proper code review processes. Document all security testing procedures and ensure they cover vulnerability identification, remediation tracking, and compliance reporting as required by PCI DSS standards.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">To prevent misinterpretation of the exclusion of SonarLint development files in `.dockerignore` (lines 68-93) as a lack of static analysis, update a central security policy or `SECURITY.md` within the repository, clearly detailing the formal static analysis tools and processes implemented in the CI/CD pipeline, thereby addressing PCI DSS Requirements 6.3 and 11.4.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f27" data-framework="PCI-DSS" data-severity="Medium Risk">
 <div class="finding-header" onclick="toggleFinding('f27')">
@@ -718,7 +718,7 @@ aws/hyperswitch_aws_setup.sh:92  echo &quot;$(aws ec2 authorize-security-group-i
 <div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The evidence, specifically the logging function `router_env::logger::info!(connector_response=?response);` identified in `add_connector.md`, indicates a system behavior of logging connector responses for debugging in a fintech context. This pattern presents a clear compliance risk regarding the proper implementation and security of audit trails for cardholder data access under PCI DSS Requirement 10, even if presented in a documentation file, as it demonstrates an active code pattern.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">Makefile:25  audit \
 README.md:69  Advanced observability tools to audit, monitor, and optimize your payment costs. Detect hidden fees,
 README.md:85  Automate 2-way and 3-way reconciliation with backdated support, staggered scheduling, and customizab
@@ -729,7 +729,7 @@ add_connector.md:837  router_env::logger::info!(connector_response=?response);
 config/config.example.toml:1187  audit_events_topic = &quot;topic&quot;             # Kafka topic to be used for Payment Audit events
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement audit trail mechanisms that record all individual access to cardholder data, all actions taken by any individual with root or administrative privileges, and all access to audit trails, as required under PCI DSS Requirement 10?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement comprehensive audit logging that specifically captures: (1) all individual access attempts to cardholder data with user identification, timestamps, and data accessed; (2) all actions performed by users with root or administrative privileges including login attempts, configuration changes, and system modifications; and (3) all access to the audit logs themselves with tamper-evident controls. Ensure the existing Kafka audit events infrastructure is configured to capture these specific event types and verify that logging covers all system components that store, process, or transmit cardholder data.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The logging of `connector_response` identified in `add_connector.md:647` for debugging purposes must either be secured and configured as part of a PCI DSS Requirement 10-compliant audit trail for cardholder data access, or be updated to redact sensitive payment data from logs. Non-compliance could lead to severe penalties under PCI DSS.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f28" data-framework="PCI-DSS" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f28')">
@@ -737,7 +737,7 @@ config/config.example.toml:1187  audit_events_topic = &quot;topic&quot;         
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence provided consists solely of a config file (.typos.toml) and documentation (README.md), neither of which constitutes application source code demonstrating the implementation of cryptographic key management procedures as required by PCI DSS 3.6 and 3.7.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.typos.toml:115  kms = &quot;kms&quot; # Key management service
 README.md:76  - **Vault**
 README.md:77  A PCI-compliant vault service to store cards, tokens, wallets, and bank credentials. Provides a unif
@@ -748,7 +748,7 @@ api-reference/introduction.mdx:19  &lt;Card title=&quot;Save a payment method&qu
 api-reference/locker-api-reference/locker-general-purpose-storage/add-data-in-locker.mdx:2  openapi: locker-v2 post /api/v2/vault/add
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement cryptographic key management procedures including key generation, distribution, storage, rotation, and destruction, consistent with PCI DSS Requirement 3.6 and 3.7?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement comprehensive cryptographic key management procedures covering all lifecycle phases required by PCI DSS 3.6/3.7. This includes: documented key generation using cryptographically strong methods, secure key distribution protocols, encrypted key storage with access controls, automated key rotation schedules, and secure key destruction procedures. Remove all hardcoded keys from configuration files and replace with references to secure key management systems. Establish formal key management policies with role-based access controls, audit logging, and regular key lifecycle reviews. All sample configurations should use placeholder values rather than actual key material.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Update `README.md` to reference specific application source code files that demonstrate the implementation of cryptographic key management procedures, including key generation, distribution, storage, rotation, and destruction. Relying solely on a claim of &#x27;PCI-compliant vault service&#x27; in documentation is insufficient to confirm adherence to PCI DSS Requirements 3.6 and 3.7.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f29" data-framework="PCI-DSS" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f29')">
@@ -756,7 +756,7 @@ api-reference/locker-api-reference/locker-general-purpose-storage/add-data-in-lo
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The evidence, particularly the CODEOWNERS entries linking to application source code for Stripe and Adyen connectors, directly confirms the system&#x27;s integration with major third-party payment processors, making PCI DSS Requirement 12.8 (Third Party Service Provider Controls) highly relevant and a confirmed risk area.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.github/CODEOWNERS:188  crates/hyperswitch_connectors/src/connectors/stripe/transformers/connect.rs @juspay/hyperswitch-payo
 .github/CODEOWNERS:184  crates/hyperswitch_connectors/src/connectors/adyenplatform/ @juspay/hyperswitch-payouts
 .github/CODEOWNERS:185  crates/hyperswitch_connectors/src/connectors/adyenplatform.rs @juspay/hyperswitch-payouts
@@ -767,7 +767,7 @@ api-reference/locker-api-reference/locker-general-purpose-storage/add-data-in-lo
 .github/data/gateway_status_map.csv:6  stripe,Payment,Authorize,card_declined,Your card was declined.,failure,,do_default,2025-12-02 13:36:
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system manage third-party service providers that have access to cardholder data with appropriate controls, agreements, and monitoring, consistent with PCI DSS Requirement 12.8?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a comprehensive third-party service provider management program that includes: formal written agreements with security requirements for all payment processors (Stripe, Adyen, etc.), annual PCI compliance validation from each provider, documented security assessments, and ongoing monitoring procedures. Create a service provider inventory, establish incident response coordination protocols, and document all security controls and responsibilities in contractual agreements before processing cardholder data through these integrations.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Verify that all third-party service providers, especially payment processors like Stripe and Adyen whose connectors are owned as per `.github/CODEOWNERS` (e.g., `crates/hyperswitch_connectors/src/connectors/stripe/transformers/connect.rs`), have current formal agreements, annual PCI compliance validations, and documented security assessments. Failure to maintain these controls would result in non-compliance with PCI DSS Requirement 12.8.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f30" data-framework="PCI-DSS" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f30')">
@@ -775,7 +775,7 @@ api-reference/locker-api-reference/locker-general-purpose-storage/add-data-in-lo
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence provided consists primarily of configuration files (.dockerignore, .gitignore, .github/CODEOWNERS) and a documentation template (.github/PULL_REQUEST_TEMPLATE.md), which do not directly demonstrate the presence, absence, or sufficiency of a formal incident response plan for cardholder data breaches as required by PCI DSS Requirement 12.10.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.dockerignore:251  monitoring/*.tmp/
 .github/CODEOWNERS:77  crates/external_services/src/grpc_client/health_check_client.rs @juspay/hyperswitch-routing
 .github/CODEOWNERS:155  monitoring/ @juspay/hyperswitch-infra
@@ -786,7 +786,7 @@ LICENSE:159  incidental, or consequential damages of any character arising as a
 README.md:113  - **Full**: Includes monitoring + schedulers
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement an incident response plan that addresses suspected or confirmed cardholder data breaches, including detection, containment, and notification procedures, as required under PCI DSS Requirement 12.10?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a comprehensive incident response plan that specifically addresses cardholder data breaches. This should include: (1) documented procedures for detecting potential cardholder data compromise, (2) containment steps to limit breach impact, (3) notification procedures for relevant parties including payment brands and regulatory bodies, (4) roles and responsibilities during incident response, and (5) regular testing and updates of the plan. The plan should be stored in the repository as documentation and integrated with the existing monitoring infrastructure to enable automated detection capabilities.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Create a `docs/incident-response-plan.md` document detailing comprehensive procedures for detecting, containing, and notifying relevant parties of cardholder data breaches. This plan must explicitly cover the monitoring capabilities suggested by the `.dockerignore` and `.github/CODEOWNERS` entries for the `monitoring/` directory, to ensure full compliance with PCI DSS Requirement 12.10 and avoid potential regulatory penalties.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 </div>
 <div class="framework-section" id="soc2" data-framework="SOC2">
@@ -797,7 +797,7 @@ README.md:113  - **Full**: Includes monitoring + schedulers
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The evidence cites application source code files (`.rs`) directly pertaining to user authentication and JWT services, which are critical components for access controls and a known compliance risk in a fintech repository.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.github/CODEOWNERS:129  crates/router/src/services/authentication.rs @juspay/hyperswitch-dashboard
 .github/CODEOWNERS:132  crates/router/src/services/jwt.rs @juspay/hyperswitch-dashboard
 .github/CODEOWNERS:90  crates/router/src/core/payments/tokenization.rs @juspay/hyperswitch-payment-methods
@@ -808,7 +808,7 @@ README.md:113  - **Full**: Includes monitoring + schedulers
 .github/workflows/CI-pr.yml:47  - name: Checkout repository with token
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement logical access security controls over user authentication that are suitably designed and operating effectively to restrict access to authorized users, consistent with the Common Criteria CC6.1 requirement for logical and physical access controls?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The development team needs to provide comprehensive documentation and evidence of their user authentication implementation including: authentication method configurations (multi-factor authentication, password policies, session management), access control matrices showing user roles and permissions, code review of the actual authentication service implementations, security testing results for authentication flows, and operational procedures for user access provisioning and deprovisioning. Additionally, implement code-level security controls such as input validation, secure token handling, and proper session management that can be audited against SOC 2 requirements.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">For the user authentication and JWT services defined by `crates/router/src/services/authentication.rs` and `crates/router/src/services/jwt.rs`, prepare documentation detailing multi-factor authentication, password policies, and session management. This documentation is crucial to demonstrate suitable design and effective operation of logical access controls, fulfilling SOC2 CC6.1 requirements.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f32" data-framework="SOC2" data-severity="Pattern of Concern">
 <div class="finding-header" onclick="toggleFinding('f32')">
@@ -816,7 +816,7 @@ README.md:113  - **Full**: Includes monitoring + schedulers
 <div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The evidence directly cites application source code files (.rs) related to user roles and access, indicating the presence of RBAC implementation which requires verification against SOC2 CC6.3&#x27;s principle of least privilege.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.dockerignore:207  # Support for Project snippet scope
 .github/CODEOWNERS:98  crates/api_models/src/user_role.rs @juspay/hyperswitch-dashboard
 .github/CODEOWNERS:99  crates/api_models/src/events/user_role.rs @juspay/hyperswitch-dashboard
@@ -827,7 +827,7 @@ README.md:113  - **Full**: Includes monitoring + schedulers
 .github/CODEOWNERS:122  crates/router/src/db/user_role.rs @juspay/hyperswitch-dashboard
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement role-based or attribute-based access controls that restrict system functions and data access based on authorized user roles, consistent with the principle of least privilege as required under CC6.3?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Provide access to the actual source code content of the identified role-based access control files to enable verification of proper implementation. The analysis should include reviewing the role definition structures, permission matrices, access enforcement logic, and validation that system functions are appropriately restricted based on user roles with least privilege principles applied.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Review `crates/api_models/src/user_role.rs`, `crates/api_models/src/events/user_role.rs`, `crates/diesel_models/src/query/user_role.rs`, and `crates/diesel_models/src/user_role.rs` to verify that role definitions and access enforcement logic restrict system functions and data access consistent with the principle of least privilege, as required by SOC2 CC6.3.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f33" data-framework="SOC2" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f33')">
@@ -835,7 +835,7 @@ README.md:113  - **Full**: Includes monitoring + schedulers
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited, `.devcontainer/devcontainer.json` and `.dockerignore`, are configuration files related to the development environment and Docker image building, not directly to the application&#x27;s runtime implementation of encryption in transit as required by SOC2 CC6.7.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.devcontainer/devcontainer.json:1  // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 .devcontainer/devcontainer.json:2  // README at: https://github.com/devcontainers/templates/tree/main/src/docker-existing-dockerfile
 .devcontainer/devcontainer.json:20  // Features to add to the dev container. More info: https://containers.dev/features.
@@ -846,7 +846,7 @@ README.md:113  - **Full**: Includes monitoring + schedulers
 .dockerignore:84  # Comment Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-215987721
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system protect data during transmission over networks using encryption or other equivalent security measures, consistent with the CC6.7 requirement for protection of information during transmission?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement TLS/HTTPS encryption for all data transmission endpoints and update all test configurations to use HTTPS instead of HTTP protocols. Add configuration files demonstrating encryption settings, SSL/TLS certificate management, and secure communication channels. Document encryption standards and protocols used for data in transit, and ensure all application endpoints enforce encrypted connections with appropriate cipher suites and certificate validation.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Based on the provided evidence, the `.devcontainer/devcontainer.json` and `.dockerignore` files are not relevant locations to implement or verify encryption in transit, which is a critical control for protecting data transmission as required by SOC2 CC6.7.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f34" data-framework="SOC2" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f34')">
@@ -854,7 +854,7 @@ README.md:113  - **Full**: Includes monitoring + schedulers
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited consists solely of configuration and documentation files, which do not directly demonstrate a lack of logging and monitoring mechanisms; in fact, some evidence suggests the presence of monitoring components and an expectation of log data.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.dockerignore:251  monitoring/*.tmp/
 .dockerignore:251  monitoring/*.tmp/
 .github/CODEOWNERS:155  monitoring/ @juspay/hyperswitch-infra
@@ -865,7 +865,7 @@ README.md:113  - **Full**: Includes monitoring + schedulers
 .github/workflows/CI-push.yml:34  # Don&#x27;t emit giant backtraces in the CI logs.
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement logging, monitoring, and alerting mechanisms that detect and record security events, anomalies, and unauthorized activities, as required under CC7.2 for monitoring system components for anomalies?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement comprehensive logging and monitoring infrastructure including: security event logging (authentication attempts, authorization failures, data access), anomaly detection systems, real-time alerting mechanisms for suspicious activities, and centralized log management. The existing monitoring directory should be populated with actual monitoring configurations, dashboards, and alert definitions. Consider implementing structured logging throughout the application code, security information and event management (SIEM) integration, and automated threat detection capabilities to meet CC7.2 requirements for system component monitoring.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Clarify the purpose of `monitoring/*.tmp/` in `.dockerignore:251` by adding a comment explaining that these are non-essential temporary files and that all required security logs and monitoring data are properly persisted and processed, ensuring compliance with SOC2 CC7.2 regarding log retention and availability for audits.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f35" data-framework="SOC2" data-severity="Medium Risk">
 <div class="finding-header" onclick="toggleFinding('f35')">
@@ -873,7 +873,7 @@ README.md:113  - **Full**: Includes monitoring + schedulers
 <div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited consists solely of configuration files (.toml, .json, .dockerignore) which do not directly demonstrate the presence or absence of formal change management controls like version control, code review processes, or controlled deployment procedures.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: MEDIUM</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.deepsource.toml:1  version = 1
 .devcontainer/devcontainer.json:29  // Configure tool-specific properties.
 .dockerignore:8  # User-specific stuff
@@ -884,7 +884,7 @@ README.md:113  - **Full**: Includes monitoring + schedulers
 .github/CODEOWNERS:21  v2_migrations/ @juspay/hyperswitch-framework
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system demonstrate evidence of change management controls including version control, code review processes, and controlled deployment procedures, as required under CC8.1 for managing changes to infrastructure, data, software, and procedures?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement and document formal code review processes with approval workflows, establish controlled deployment procedures with staging environments and rollback capabilities, and create comprehensive change management documentation that covers all changes to infrastructure, data, software, and procedures. Add pull request templates, deployment checklists, and change approval matrices to demonstrate systematic change control processes beyond the basic CODEOWNERS file currently in place.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Update `.deepsource.toml`, `.devcontainer/devcontainer.json`, and `.dockerignore` to include inline comments referencing the formal change management documentation location, demonstrating that these configuration files are subject to version control and code review processes as required by SOC2 CC8.1 for controlled changes.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f36" data-framework="SOC2" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f36')">
@@ -892,7 +892,7 @@ README.md:113  - **Full**: Includes monitoring + schedulers
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence primarily cites configuration and documentation files (.github/CODEOWNERS, .github/PULL_REQUEST_TEMPLATE.md, .github/workflows/CI-pr.yml, Dockerfile, LICENSE), and while an application source code file (.rs) is mentioned, the specific line of evidence provided is from a CODEOWNERS file, not directly from the source code demonstrating a deficiency in incident response procedures.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.github/CODEOWNERS:77  crates/external_services/src/grpc_client/health_check_client.rs @juspay/hyperswitch-routing
 .github/PULL_REQUEST_TEMPLATE.md:23  Provide links to the files with corresponding changes.
 .github/workflows/CI-pr.yml:232  name: Spell check specific critical directories
@@ -903,7 +903,7 @@ add_connector.md:550  #### Critical Response Fields
 add_connector.md:563  Each critical response field requires specific implementation patterns to ensure consistent behavior
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement incident detection, response, and recovery procedures that enable timely identification and remediation of security incidents, consistent with CC7.3 requirements for evaluating security events and CC7.4 for responding to identified incidents?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement comprehensive incident response procedures including: automated security event detection and logging mechanisms, defined incident classification and escalation procedures, documented response playbooks for different incident types, recovery procedures with defined RTO/RPO objectives, and incident post-mortem processes. Add monitoring dashboards for security events, integrate with SIEM tools for event correlation, and establish clear communication channels for incident response team coordination. Document all procedures and ensure they are regularly tested through tabletop exercises.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The team responsible for `crates/external_services/src/grpc_client/health_check_client.rs` (as designated in `.github/CODEOWNERS`) must document clear incident response procedures for failures detected by this health check client. These procedures should include defined escalation paths and recovery steps, crucial for timely identification and remediation of security incidents as required by SOC2 CC7.3 and CC7.4.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f37" data-framework="SOC2" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f37')">
@@ -911,7 +911,7 @@ add_connector.md:563  Each critical response field requires specific implementat
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence, which includes `Cargo.lock` being included in the Docker build via `.dockerignore` and assigned code owners in `.github/CODEOWNERS`, indicates practices that contribute to good dependency management and reproducibility, rather than a high risk or lack of assessment for third-party dependencies.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.dockerignore:178  # Remove Cargo.lock from gitignore if creating an executable, leave it for libraries
 .dockerignore:179  # More information here https://doc.rust-lang.org/cargo/guide/cargo-toml-vs-cargo-lock.html
 .dockerignore:180  !Cargo.lock
@@ -922,7 +922,7 @@ add_connector.md:563  Each critical response field requires specific implementat
 .github/api-migration-compatibility/migration-rules.yaml:13  description: &quot;Dropping a column breaks applications expecting it&quot;
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system assess and manage risks associated with third-party vendors, libraries, and service providers, including dependency vulnerability management, consistent with CC9.2 requirements for risk assessment of third-party service providers?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a formal third-party risk management program that includes: automated dependency vulnerability scanning tools integrated into the CI/CD pipeline, documented risk assessment procedures for evaluating new third-party libraries and vendors, regular security reviews of existing dependencies, and established criteria for approving or rejecting third-party components based on security posture. Add dependency scanning tools like cargo-audit for Rust dependencies and create policies documenting how third-party risks are identified, assessed, and mitigated throughout the software development lifecycle.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Develop and document the formal procedure for assessing and managing vulnerabilities identified within `Cargo.lock`&#x27;s dependencies, as referenced in `.dockerignore` and owned by `@juspay/hyperswitch-framework` in `.github/CODEOWNERS`. Failure to establish clear processes for regular dependency vulnerability scanning and risk assessment could result in non-compliance with SOC2 CC9.2 requirements.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f38" data-framework="SOC2" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f38')">
@@ -930,7 +930,7 @@ add_connector.md:563  Each critical response field requires specific implementat
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited, primarily configuration files like .devcontainer/devcontainer.json and .dockerignore, is irrelevant to the system&#x27;s data backup and recovery controls. The lines in .dockerignore refer to excluding temporary development-related backup or dump files from a Docker image, not to the implementation or lack of critical application data backup and recovery, rendering the finding unsupported by the provided evidence.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.devcontainer/devcontainer.json:32  // Uncomment to connect as an existing user other than the container default. More info: https://aka
 .dockerignore:182  # These are backup files generated by rustfmt
 .dockerignore:220  # Dump file
@@ -941,7 +941,7 @@ add_connector.md:563  Each critical response field requires specific implementat
 .dockerignore:127  # temporary files which can be created if a process still has a handle open of a deleted file
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement data backup, replication, and recovery controls that ensure availability and recoverability of data, consistent with the A1.2 criterion for recovery of infrastructure and data to meet objectives?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement comprehensive data backup and recovery controls including: automated backup procedures with defined schedules and retention policies, database replication configurations, disaster recovery runbooks, backup verification and testing procedures, and recovery time/point objectives documentation. These controls should be implemented in infrastructure configuration files, documented in operational procedures, and include automated testing of backup and recovery processes to ensure data availability requirements are met.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">To address SOC2-008, no specific changes are required to `.devcontainer/devcontainer.json` (line 32) or `.dockerignore` (lines 72, 182, 220-221) as these files concern development environment configuration and exclusion of temporary build artifacts, not the application&#x27;s comprehensive data backup and recovery controls, which must be established to ensure data availability and recoverability.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f39" data-framework="SOC2" data-severity="Pattern of Concern">
 <div class="finding-header" onclick="toggleFinding('f39')">
@@ -949,7 +949,7 @@ add_connector.md:563  Each critical response field requires specific implementat
 <div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The evidence clearly shows the system supports MFA but defaults to *not* forcing it through `force_two_factor_auth = false` in `config/config.example.toml`, which is a direct compliance gap for SOC2 CC6.1 given the sensitive nature of the repository domains.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.dockerignore:159  .com.apple.timemachine.donotpresent
 .gitignore:159  .com.apple.timemachine.donotpresent
 aws/beta_schema.sql:216  &#x27;otp&#x27;,
@@ -960,7 +960,7 @@ config/config.example.toml:503  totp_issuer_name = &quot;Hyperswitch&quot;     #
 config/config.example.toml:503  totp_issuer_name = &quot;Hyperswitch&quot;     # Name of the issuer for TOTP
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement or support multi-factor authentication for user access, particularly for privileged accounts and administrative interfaces, consistent with CC6.1 requirements for logical access security?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Ensure multi-factor authentication is consistently enforced across all environments, not just production. Update all configuration files to set &quot;force_two_factor_auth = true&quot; by default, particularly for administrative and privileged user access. Implement role-based MFA requirements that specifically mandate two-factor authentication for all administrative interfaces and privileged accounts, regardless of deployment environment. Consider reducing the two_factor_auth_expiry_in_secs from 300 seconds for high-privilege operations to enhance security posture.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">In `config/config.example.toml`, change `force_two_factor_auth = false` to `force_two_factor_auth = true` to ensure multi-factor authentication is forced by default for all users, aligning with SOC2 CC6.1 requirements for logical access security, especially for privileged user accounts.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f40" data-framework="SOC2" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f40')">
@@ -968,7 +968,7 @@ config/config.example.toml:503  totp_issuer_name = &quot;Hyperswitch&quot;     #
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited, which are references to &#x27;Contributing Guidelines&#x27; within issue template YAML files, does not directly demonstrate the absence of comprehensive security policies (acceptable use, data classification, access management) required by SOC2 CC1.1.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.github/ISSUE_TEMPLATE/bug_report.yml:88  id: read-contributing-guidelines
 .github/ISSUE_TEMPLATE/bug_report.yml:90  label: Have you read the Contributing Guidelines?
 .github/ISSUE_TEMPLATE/bug_report.yml:92  - label: I have read the [Contributing Guidelines](https://github.com/juspay/hyperswitch/blob/main/d
@@ -979,7 +979,7 @@ README.md:193  ## Contributing
 README.md:197  Please read our [contributing guidelines](https://github.com/juspay/hyperswitch/blob/main/docs/CONTR
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system demonstrate evidence of documented security policies, including acceptable use, data classification, and access management policies, as required under CC1.1 for the entity&#x27;s commitment to integrity and ethical values?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Create and document comprehensive security policies that demonstrate the organization&#x27;s commitment to integrity and ethical values. This should include: (1) an acceptable use policy defining appropriate system and data usage, (2) a data classification policy establishing how sensitive information is categorized and handled, and (3) an access management policy outlining user provisioning, authentication, and authorization procedures. These policies should be stored in accessible documentation within the repository and referenced in operational procedures to satisfy SOC 2 CC1.1 requirements.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Update `.github/ISSUE_TEMPLATE/bug_report.yml` and `.github/ISSUE_TEMPLATE/feature_request.yml` to include a clear reference to the organization&#x27;s documented security policies (e.g., acceptable use, data classification, and access management) alongside the contributing guidelines. This modification would demonstrate a clearer commitment to integrity and ethical values as required under SOC2 CC1.1.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 </div>
 <div class="framework-section" id="sox" data-framework="SOX">
@@ -990,7 +990,7 @@ README.md:197  Please read our [contributing guidelines](https://github.com/jusp
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited consists solely of configuration and documentation files (.dockerignore, .github/CODEOWNERS, .github/ISSUE_TEMPLATE) rather than direct application source code, which is required to confirm the implementation status of financial data integrity controls.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.dockerignore:81  .idea/caches/build_file_checksums.ser
 .github/CODEOWNERS:61  crates/router/src/core/connector_validation.rs @juspay/hyperswitch-connector
 .github/CODEOWNERS:64  crates/hyperswitch_constraint_graph @juspay/hyperswitch-routing
@@ -1001,7 +1001,7 @@ README.md:197  Please read our [contributing guidelines](https://github.com/jusp
 .github/ISSUE_TEMPLATE/bug_report.yml:60  validations:
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement controls to ensure the integrity, accuracy, and completeness of financial data and transactions, consistent with SOX Section 302 requirements for management certification of financial statements?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement comprehensive financial data integrity controls including: automated validation rules for all financial transactions, audit logging with immutable trails, data checksums/hashing for integrity verification, automated reconciliation processes, and role-based access controls with approval workflows. All financial data processing modules should include input validation, business rule enforcement, and exception handling with proper logging. Consider implementing database triggers, stored procedures with validation logic, and automated testing specifically for financial data accuracy and completeness scenarios.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Review `crates/router/src/core/connector_validation.rs` and other core financial processing modules to confirm the explicit implementation of automated validation rules for financial transactions and to ensure comprehensive, immutable audit logging. Absence of these direct application-level controls would constitute a violation of SOX Section 302 requirements for financial data integrity.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f42" data-framework="SOX" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f42')">
@@ -1009,7 +1009,7 @@ README.md:197  Please read our [contributing guidelines](https://github.com/jusp
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cites `.github/CODEOWNERS`, a configuration file defining code ownership for review processes, which is a governance control over code changes, not a direct implementation of runtime access controls for financial systems as implied by SOX-002.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.github/CODEOWNERS:98  crates/api_models/src/user_role.rs @juspay/hyperswitch-dashboard
 .github/CODEOWNERS:99  crates/api_models/src/events/user_role.rs @juspay/hyperswitch-dashboard
 .github/CODEOWNERS:104  crates/diesel_models/src/query/user_role.rs @juspay/hyperswitch-dashboard
@@ -1020,7 +1020,7 @@ README.md:197  Please read our [contributing guidelines](https://github.com/jusp
 .github/CODEOWNERS:127  crates/router/src/routes/user_role.rs @juspay/hyperswitch-dashboard
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement access controls that restrict access to financial systems and data to authorized personnel, with appropriate authentication and authorization mechanisms, as required under SOX Section 404 internal controls?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement and document comprehensive access control mechanisms including multi-factor authentication, role-based authorization with least privilege principles, session management, and audit logging for all financial system access. Ensure user role implementations include proper authentication validation, authorization checks before accessing financial data, and maintain detailed access logs. Add specific access control tests and documentation demonstrating compliance with SOX Section 404 internal control requirements for financial system access.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">To strengthen change management controls over access to financial systems, update `.github/CODEOWNERS` at lines 98, 99, 104, 108, and 110 to require explicit review from a dedicated compliance or security team for any changes to `crates/**/user_role.rs` files. This ensures rigorous oversight of modifications impacting user access definitions, aligning with SOX Section 404 internal control requirements.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f43" data-framework="SOX" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f43')">
@@ -1028,7 +1028,7 @@ README.md:197  Please read our [contributing guidelines](https://github.com/jusp
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited, primarily `.dockerignore` and a `.github` issue template, pertains to local development history or feature tracking, not the implementation or absence of financial transaction audit trails as required by SOX Section 802.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.dockerignore:196  # Local History for Visual Studio Code
 .dockerignore:197  .history/
 .dockerignore:203  # Ignore all local history of files
@@ -1039,7 +1039,7 @@ README.md:197  Please read our [contributing guidelines](https://github.com/jusp
 .github/cocogitto-changelog-template:55  **Full Changelog:** [`{{ from_shorthand ~ &quot;...&quot; ~ to_shorthand }}`]({{ compare_base_url ~ from_short
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system maintain a complete and tamper-evident audit trail of all financial transactions, modifications, and access events, sufficient to support the audit requirements under SOX Section 802?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement comprehensive audit logging functionality that captures all financial transactions, data modifications, and system access events with immutable timestamps, user identification, and cryptographic integrity controls. Add database audit triggers, application-level transaction logging, and tamper-evident storage mechanisms that meet SOX requirements for financial audit trails. Ensure all audit logs are automatically generated, cannot be altered without detection, and include sufficient detail to reconstruct any financial transaction or data change.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The files `.dockerignore` and `.github/ISSUE_TEMPLATE/feature_request.yml` do not contain code related to financial transaction audit trails; therefore, no changes are needed to these specific files to address SOX Section 802 audit requirements for financial transaction audit trails.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f44" data-framework="SOX" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f44')">
@@ -1047,7 +1047,7 @@ README.md:197  Please read our [contributing guidelines](https://github.com/jusp
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The provided evidence consists solely of configuration files that do not directly demonstrate deficiencies in comprehensive change management controls (version control, code review, testing, deployment) for financial software.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.deepsource.toml:1  version = 1
 .devcontainer/devcontainer.json:29  // Configure tool-specific properties.
 .devcontainer/devcontainer.json:27  // &quot;postCreateCommand&quot;: &quot;cat /etc/os-release&quot;,
@@ -1058,7 +1058,7 @@ README.md:197  Please read our [contributing guidelines](https://github.com/jusp
 .github/CODEOWNERS:20  migrations/ @juspay/hyperswitch-framework
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement change management controls for software that processes financial data, including version control, code review, testing, and controlled deployment, consistent with SOX IT general controls?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement comprehensive change management controls including: mandatory pull request workflows with required reviewers for all code changes, automated testing pipelines that must pass before deployment, formal code review processes with documented approval chains, controlled deployment procedures with rollback capabilities, and segregation of duties between development and production environments. Configure branch protection rules in GitHub and establish formal testing and deployment documentation that demonstrates compliance with SOX IT general controls for all software components that process financial data.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">To bolster change management controls for financial software, ensure `.deepsource.toml` mandates specific checks for financial data integrity and security vulnerabilities, integrating these automated analyses as required gates in the CI/CD pipeline. This enhances the &#x27;testing&#x27; component of SOX IT general controls by preventing high-risk changes from proceeding without adequate automated scrutiny.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f45" data-framework="SOX" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f45')">
@@ -1066,7 +1066,7 @@ README.md:197  Please read our [contributing guidelines](https://github.com/jusp
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The evidence directly points to `CODEOWNERS` entries for application source code files that manage financial workflows and authorization, indicating a potential lack of segregation of duties between development and approval/execution of changes to critical financial systems, which is a clear SOX risk.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.github/CODEOWNERS:89  crates/router/src/workflows/payment_method_status_update.rs @juspay/hyperswitch-payment-methods
 .github/CODEOWNERS:166  crates/router/src/workflows/attach_payout_account_workflow.rs @juspay/hyperswitch-payouts
 .github/CODEOWNERS:130  crates/router/src/services/authorization @juspay/hyperswitch-dashboard
@@ -1077,7 +1077,7 @@ README.md:197  Please read our [contributing guidelines](https://github.com/jusp
 .github/workflows/CI-pr.yml:10  group: ${{ github.workflow }}-${{ github.ref }}
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement segregation of duties controls that prevent any single individual from having the ability to both authorize and execute financial transactions, or to both develop and deploy changes to financial systems?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a comprehensive segregation of duties framework that separates authorization from execution roles and development from deployment functions. This should include: (1) role-based access control (RBAC) system with defined financial transaction approval hierarchies, (2) separate user accounts and permissions for developers versus deployers, (3) mandatory multi-person approval workflows for all financial system changes, (4) audit trails showing who authorized versus who executed each financial transaction, and (5) regular access reviews to ensure no single individual has conflicting permissions across the financial transaction lifecycle.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Modify `.github/CODEOWNERS` to establish distinct ownership groups for financial transaction workflows (e.g., `crates/router/src/workflows/payment_method_status_update.rs`) and authorization services (`crates/router/src/services/authorization.rs`). This ensures no single team controls both the development of financial logic and its associated authorization or sensitive data configuration, preventing individuals from unilaterally authorizing and executing changes to critical financial systems, thereby mitigating SOX-related fraud and error risks.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f46" data-framework="SOX" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f46')">
@@ -1085,7 +1085,7 @@ README.md:197  Please read our [contributing guidelines](https://github.com/jusp
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence files, including .dockerignore and .github/workflows, relate to temporary code formatting backups and CI/CD artifact retention (retention-days: 1 for workflow logs), which are not financial records or audit documentation requiring a 7-year SOX retention period.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.dockerignore:182  # These are backup files generated by rustfmt
 .github/workflows/cypress-tests-runner.yml:151  retention-days: 1
 .github/workflows/cypress-tests-runner.yml:209  retention-days: 1
@@ -1096,7 +1096,7 @@ README.md:197  Please read our [contributing guidelines](https://github.com/jusp
 .github/workflows/cypress-tests-runner.yml:866  retention-days: 1
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement data retention policies that preserve financial records, audit work papers, and supporting documentation for the minimum retention period required under SOX Section 802 (not less than 7 years)?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement comprehensive data retention policies that specifically address financial records, audit trails, and supporting documentation with a minimum 7-year retention period. Configure automated archival systems for financial data beyond the current 7-day AWS backup retention. Document retention schedules in policy files within the codebase, establish automated compliance monitoring for retention periods, and ensure all financial transaction data and audit logs are preserved according to SOX requirements rather than relying on short-term backup configurations.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The `retention-days: 1` settings in `.github/workflows/cypress-tests-runner.yml` control CI/CD artifact retention and are unrelated to SOX financial record retention. Instead, establish and configure specific data retention policies for financial records, audit trails, and supporting documentation within relevant data storage systems (e.g., databases, cloud storage) for a minimum of 7 years, to ensure compliance with SOX Section 802.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f47" data-framework="SOX" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f47')">
@@ -1104,7 +1104,7 @@ README.md:197  Please read our [contributing guidelines](https://github.com/jusp
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cites a `.github/CODEOWNERS` file, a configuration file indicating code review responsibilities, which does not directly provide evidence for or against the *documentation* of internal controls over financial reporting as required by SOX 404(a).</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.github/CODEOWNERS:14  config/ @juspay/hyperswitch-framework
 .github/CODEOWNERS:15  crates/ @juspay/hyperswitch-framework
 .github/CODEOWNERS:16  crates/router/src/types/ @juspay/hyperswitch-framework
@@ -1115,7 +1115,7 @@ README.md:197  Please read our [contributing guidelines](https://github.com/jusp
 .github/CODEOWNERS:21  v2_migrations/ @juspay/hyperswitch-framework
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system provide evidence of documented internal controls over financial reporting, including control objectives, control activities, and monitoring procedures, as required under SOX Section 404(a)?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement and document comprehensive internal controls over financial reporting within the codebase or associated documentation. This should include: (1) documented control objectives that clearly map to financial reporting risks, (2) specific control activities such as automated validation rules, segregation of duties matrices, and approval workflows for financially-relevant transactions, and (3) monitoring procedures including automated testing, audit trails, and periodic control effectiveness assessments. Consider creating dedicated directories like `/controls/` or `/compliance/` with structured documentation that demonstrates how the system prevents material misstatements in financial reporting.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The ownership defined in `.github/CODEOWNERS` for financial-critical paths like `crates/router/src/db/` and `crates/router/src/services/` should be formally incorporated and documented within the system&#x27;s overall internal controls over financial reporting, detailing how this code ownership contributes to control objectives and ensures compliance with SOX Section 404(a).</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f48" data-framework="SOX" data-severity="Medium Risk">
 <div class="finding-header" onclick="toggleFinding('f48')">
@@ -1123,7 +1123,7 @@ README.md:197  Please read our [contributing guidelines](https://github.com/jusp
 <div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence primarily cites configuration files related to CI/CD checksums and a Docker ignore rule for build caches, which pertains to code and build artifact integrity rather than direct anti-tampering controls or immutable storage specifically for financial records as required by SOX Section 802.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.dockerignore:81  .idea/caches/build_file_checksums.ser
 .github/workflows/CI-pr.yml:199  checksum: true
 .github/workflows/CI-pr.yml:287  checksum: true
@@ -1134,7 +1134,7 @@ README.md:197  Please read our [contributing guidelines](https://github.com/jusp
 .github/workflows/CI-push.yml:199  checksum: true
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement controls to prevent unauthorized alteration or destruction of financial records, including integrity verification, immutable storage, and tamper detection mechanisms, consistent with SOX Section 802 anti-destruction requirements?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement additional controls to complement the existing checksum verification: establish immutable audit trails for financial record changes, add database-level constraints preventing unauthorized deletion of financial data, implement comprehensive logging of all record access and modification attempts, and review the migration rules to ensure DROP TABLE and TRUNCATE operations on financial data require explicit approval workflows and maintain backup copies. Consider implementing write-once-read-many (WORM) storage for critical financial records and add real-time tamper detection alerts.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">While the `checksum: true` configurations in `.github/workflows/CI-pr.yml` and `.github/workflows/CI-push.yml` contribute to code integrity, they do not directly establish controls for immutable storage or tamper detection of financial records. To meet SOX Section 802 anti-destruction requirements for financial records, implement explicit immutable audit trails and database-level constraints for financial data storage.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 </div>
 <div class="framework-section" id="tcpa" data-framework="TCPA">
@@ -1145,7 +1145,7 @@ README.md:197  Please read our [contributing guidelines](https://github.com/jusp
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited exclusively pertains to the project&#x27;s &#x27;LICENSE&#x27; file, detailing software licensing terms and agreements (&#x27;agreed to in writing,&#x27; &#x27;separate license agreement&#x27;), which are entirely unrelated to the operational procedures for obtaining consumer consent for marketing or promotional SMS messages under TCPA.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">LICENSE:136  the terms of any separate license agreement you may have executed
 LICENSE:145  agreed to in writing, Licensor provides the Work (and each
 LICENSE:157  negligent acts) or agreed to in writing, shall any Contributor be
@@ -1156,7 +1156,7 @@ api-reference/essentials/go-live.mdx:13  - [ ] Ensure that the Hyperswitch servi
 config/dashboard.toml:11  agreement_url=&quot;&quot;
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system obtain prior express written consent before sending marketing or promotional text messages, including a clear and conspicuous disclosure that consent is being sought, as required under 47 U.S.C. §227(b)(1) and 47 CFR §64.1200(a)(2)?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a comprehensive SMS consent management system that captures prior express written consent before sending any marketing or promotional text messages. This should include: clear and conspicuous disclosure language explaining what the user is consenting to, a mechanism to capture and store consent records with timestamps, opt-out instructions in all marketing messages, and validation logic to prevent SMS sending without verified consent. Consider extending the existing agreement framework patterns found in the dashboard metadata to include SMS-specific consent workflows.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The evidence found in the &#x27;LICENSE&#x27; file pertains to software licensing agreements and terms, which are unrelated to TCPA-001&#x27;s requirement for obtaining prior express written consent for SMS messages. Therefore, no changes are needed within the &#x27;LICENSE&#x27; file regarding SMS consent management, preventing misapplication of regulatory efforts based on this evidence.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f50" data-framework="TCPA" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f50')">
@@ -1164,7 +1164,7 @@ config/dashboard.toml:11  agreement_url=&quot;&quot;
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The &#x27;cancel-in-progress: true&#x27; setting in GitHub Actions workflow configuration files is unrelated to customer communication opt-out mechanisms regulated by TCPA/CTIA; it manages CI/CD pipeline concurrency.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.github/workflows/CI-pr.yml:11  cancel-in-progress: true
 .github/workflows/CI-push.yml:14  cancel-in-progress: true
 .github/workflows/api-migrations-compatibility.yml:26  cancel-in-progress: true
@@ -1175,7 +1175,7 @@ config/dashboard.toml:11  agreement_url=&quot;&quot;
 .github/workflows/migration-check.yaml:12  cancel-in-progress: true
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system provide a clear and easy mechanism for recipients to opt out of receiving further messages, and does it honor opt-out requests promptly, as required under TCPA and CTIA guidelines?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a comprehensive opt-out mechanism that includes: (1) clear unsubscribe links or keywords in all automated messages, (2) an opt-out request processing system that honors requests within the required timeframe, (3) a suppression list management system to prevent future messages to opted-out recipients, and (4) audit logging of all opt-out requests and processing. Add API endpoints for managing user communication preferences and ensure all messaging workflows check opt-out status before sending communications.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The cited files, such as `.github/workflows/CI-pr.yml` and `.github/workflows/CI-push.yml`, define CI/CD workflow concurrency and are not involved in user communication or opt-out processing, meaning no changes are needed in these specific files to address TCPA or CTIA compliance.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f51" data-framework="TCPA" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f51')">
@@ -1183,7 +1183,7 @@ config/dashboard.toml:11  agreement_url=&quot;&quot;
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited, including references to &#x27;NationalRegistryOfLegalEntities&#x27; and &#x27;national registry of natural persons&#x27; in Brazil, and an &#x27;idncafe.com&#x27; entry in a `blocker_emails.txt` file, pertains to identity verification for payment processing and email blocking, respectively, and does not relate to phone number Do Not Call list checks required by TCPA for outbound calls or messages.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">crates/hyperswitch_connectors/src/connectors/ebanx/transformers.rs:80  NationalRegistryOfLegalEntities,
 crates/hyperswitch_connectors/src/connectors/ebanx/transformers.rs:120  EbanxDocumentType::NationalRegistryOfLegalEntities
 crates/hyperswitch_connectors/src/connectors/facilitapay/requests.rs:86  /// which is the national registry of legal entities in Brazil used as a unique identifier for Brazi
@@ -1194,7 +1194,7 @@ crates/router_env/src/logger/formatter.rs:19  registry::{LookupSpan, SpanRef},
 crates/router_env/src/logger/setup.rs:65  let subscriber = tracing_subscriber::registry()
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system check phone numbers against the National Do Not Call Registry and maintain an internal do-not-call list before initiating outbound calls or messages, as required under 47 CFR §64.1200(c)?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement Do Not Call Registry integration by adding functionality to check phone numbers against the National Do Not Call Registry before initiating any outbound calls or messages. Create and maintain an internal do-not-call list with appropriate data storage and lookup mechanisms. Add validation logic in the outbound communication pipeline to verify numbers against both the national registry and internal suppression lists before processing calls or SMS messages.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Review customer communication workflows to determine if outbound calls are initiated. If so, integrate functionality within relevant modules, potentially near where `crates/hyperswitch_connectors/src/connectors/ebanx/transformers.rs` or `crates/hyperswitch_connectors/src/connectors/facilitapay/requests.rs` process user contact data, to check phone numbers against the National Do Not Call Registry. Additionally, establish and maintain a dedicated internal do-not-call list for phone numbers, separate from the email blocklist in `crates/router/src/utils/user/blocker_emails.txt`, to ensure compliance with 47 CFR §64.1200(c).</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f52" data-framework="TCPA" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f52')">
@@ -1202,7 +1202,7 @@ crates/router_env/src/logger/setup.rs:65  let subscriber = tracing_subscriber::r
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited includes a GitHub workflow configuration file (.yml) and a Markdown documentation file (.md). These files contain snippets related to internal workflow comments and payment authorization/capture processes, which are entirely irrelevant to consumer messaging consent or message frequency disclosure as required by TCPA.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.github/workflows/release-nightly-version-reusable.yml:107  #                                                              The 2nd capture group contains the mi
 add_connector.md:141  - Payment authorization and capture
 add_connector.md:203  | **Authorization**     | Authorize and immediately capture payment        | [crates/hyperswitch_int
@@ -1213,7 +1213,7 @@ add_connector.md:405  settle: item.router_data.request.is_auto_capture()?,
 add_connector.md:466  | `Authorized`           | `AttemptStatus::Authorized`   | Payment authorized, awaiting capture |
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system disclose to consumers the expected frequency of messages before obtaining consent, and does it enforce frequency limits consistent with the disclosed rate, as recommended by CTIA guidelines?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a consumer consent interface that clearly displays message frequency expectations (e.g., &quot;You will receive up to 5 messages per week&quot;) before collecting opt-in consent. Add backend enforcement mechanisms to track and limit message sending based on disclosed frequencies. Create audit trails for consent collection that include timestamp, frequency disclosed, and consumer acceptance. Consider adding configuration management for different message types and their respective frequency limits to ensure compliance with CTIA messaging principles.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">No modifications are required in `.github/workflows/release-nightly-version-reusable.yml` or `add_connector.md` concerning TCPA message frequency disclosure, as these files do not pertain to consumer communications, thus avoiding any regulatory consequence related to this specific finding.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f53" data-framework="TCPA" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f53')">
@@ -1221,7 +1221,7 @@ add_connector.md:466  | `Authorized`           | `AttemptStatus::Authorized`   |
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited (card brands, device brands, and internal branding configuration within documentation, API specifications, configuration files, and analytics scripts) does not relate to the sender identification of outbound communications (calls, text messages) as regulated by the TCPA. The primary analysis appears to have misinterpreted the keyword &#x27;brand&#x27; in these contexts.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">add_connector.md:1000  - `get_card_issuer()` – Returns card brand (Visa, Mastercard, etc.)
 api-reference/rust_locker_open_api_spec.yml:314  card_brand:
 config/dashboard.toml:17  branding=false
@@ -1232,7 +1232,7 @@ crates/analytics/docs/clickhouse/scripts/authentications.sql:254  device_brand,
 crates/analytics/src/auth_events/core.rs:194  AuthEventDimensions::DeviceBrand =&gt; fil.device_brand,
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system include proper sender identification in all outbound messages, including the identity of the entity sending the message and how to contact them, consistent with TCPA and CTIA requirements?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement sender identification functionality for all outbound messages by adding message templates or headers that include the sending entity&#x27;s name and contact information. This should include creating configuration parameters for sender details, modifying message composition functions to automatically append required identification information, and ensuring all SMS, email, or other communications include clear sender identity and contact methods as required by TCPA regulations.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Review `config/dashboard.toml` and associated modules to confirm that the `branding=false` setting pertains solely to internal product UI or feature branding and does not inadvertently disable sender identification in any external communication channels, which would violate TCPA requirements for clear sender disclosure.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f54" data-framework="TCPA" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f54')">
@@ -1240,12 +1240,12 @@ crates/analytics/src/auth_events/core.rs:194  AuthEventDimensions::DeviceBrand =
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence consists solely of a configuration file and documentation indicating an &#x27;audit_trail&#x27;, which does not inherently prove or detail the specific, legally required elements for TCPA consent record-keeping (date, time, method, specific language).</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">config/dashboard.toml:25  audit_trail=true
 crates/analytics/docs/README.md:146  audit_trail=true
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system maintain records of consent that would be sufficient to demonstrate compliance in the event of a dispute, including the date, time, method of consent, and the specific consent language presented to the consumer?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a comprehensive consent management system that captures and permanently stores all required TCPA consent elements. This should include database schemas and API endpoints to record the precise timestamp of consent, the communication channel through which consent was obtained (web form, SMS, voice call, etc.), and the exact text of the consent language displayed to the consumer. Add functionality to retrieve and export these records in a format suitable for regulatory disputes or audits.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Verify that the `audit_trail=true` setting in `config/dashboard.toml` and as documented in `crates/analytics/docs/README.md` ensures the capture of all required TCPA consent elements, including date, time, method, and specific consent language. If existing functionality is insufficient, extend the associated audit logic to record these details, as inadequate consent records could lead to significant TCPA penalties.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f55" data-framework="TCPA" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f55')">
@@ -1253,7 +1253,7 @@ crates/analytics/docs/README.md:146  audit_trail=true
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited, consisting of `.dockerignore` and API deprecation configuration files (`.oasdiff-severity-levels.yaml`), has no direct relevance to the implementation or handling of consumer consent revocation mechanisms under TCPA-007.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.dockerignore:136  # .nfs files are created when an open file is removed but is still being accessed
 .dockerignore:178  # Remove Cargo.lock from gitignore if creating an executable, leave it for libraries
 .github/api-migration-compatibility/.oasdiff-severity-levels.yaml:1  api-path-removed-without-deprecation: ERR
@@ -1264,7 +1264,7 @@ crates/analytics/docs/README.md:146  audit_trail=true
 .github/api-migration-compatibility/.oasdiff-severity-levels.yaml:6  api-tag-removed: WARN
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system honor revocation of consent through any reasonable means indicated by the consumer, not limited to specific keywords, and process revocation within a reasonable timeframe, consistent with FCC guidance?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a comprehensive consent revocation system that accepts and processes opt-out requests through multiple channels (SMS replies like &quot;STOP&quot;, email unsubscribe, web interface, phone calls). The system should use flexible keyword recognition beyond just &quot;STOP&quot; (including variations like &quot;quit&quot;, &quot;cancel&quot;, &quot;unsubscribe&quot;), process revocations immediately upon receipt, maintain an updated suppression list, and ensure all communication systems check this list before sending messages. Add logging and audit trails for all revocation requests and processing times to demonstrate compliance with FCC guidance on reasonable timeframes.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The `.dockerignore` and `.github/api-migration-compatibility/.oasdiff-severity-levels.yaml` files are configuration assets unrelated to application-level consent revocation logic. No changes to these specific files are applicable for addressing TCPA-007 requirements, which necessitate modifications within communication handling code to ensure timely and flexible processing of opt-out requests, preventing FCC non-compliance.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f56" data-framework="TCPA" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f56')">
@@ -1272,7 +1272,7 @@ crates/analytics/docs/README.md:146  audit_trail=true
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The &#x27;scheduler&#x27; component identified in application source code (`crates/router/src/scheduler/`) within relevant domains (fintech, ecommerce, communication) presents a clear risk of violating TCPA time-of-day restrictions if it does not enforce recipient-local time zone validation for outbound communications.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.github/CODEOWNERS:150  crates/router/src/scheduler/ @juspay/hyperswitch-process-tracker
 .github/workflows/archive/connector-sanity-tests.yml:8  schedule:
 .github/workflows/release-nightly-version.yml:4  schedule:
@@ -1283,7 +1283,7 @@ Dockerfile:70  SCHEDULER_FLOW=${SCHEDULER_FLOW} \
 README.md:113  - **Full**: Includes monitoring + schedulers
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system enforce time-of-day restrictions for outbound calls and messages, ensuring they are not sent before 8:00 AM or after 9:00 PM in the recipient&#x27;s local time zone, as required under 47 CFR §64.1200(c)(1)?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement time-of-day validation controls within the scheduler system that check recipient local time zones before sending any outbound calls or messages. Add configuration parameters to enforce the 8:00 AM to 9:00 PM window, integrate timezone lookup functionality for recipients, and create validation logic that blocks or delays communications outside permitted hours. The scheduler components identified in the codebase should be enhanced with these TCPA compliance checks before any outbound communication processing.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Update `crates/router/src/scheduler/` to integrate logic that checks the recipient&#x27;s local time zone before initiating outbound calls or messages, enforcing the 8:00 AM to 9:00 PM restriction. Failure to implement these controls risks non-compliance with 47 CFR §64.1200(c)(1) under the TCPA.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 </div>
 
@@ -1320,7 +1320,7 @@ README.md:113  - **Full**: Includes monitoring + schedulers
 <div class="section-heading">How Findings Are Generated</div>
 <ul style="padding-left:20px;margin-bottom:16px;font-size:14px;line-height:2;color:#57606a">
 <li>Primary analysis by Claude Sonnet (Anthropic)</li>
-<li>Independent review by Gemini 1.5 Flash (Google)</li>
+<li>Independent review by Gemini 2.5 Flash (Google)</li>
 <li>Question libraries are open source and community-maintained</li>
 <li>All questions cite regulatory source text</li>
 <li>Questions have not been validated by a licensed attorney</li>

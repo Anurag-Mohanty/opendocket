@@ -113,7 +113,7 @@ a { color: #0052CC; text-decoration: none; } a:hover { text-decoration: underlin
 <div class="action-bar"><div class="action-bar-left"><span style="font-size:13px;color:#57606a;font-weight:600">supabase</span><span style="font-size:13px;color:#8c959f">&middot; 56 findings &middot; CRITICAL RISK</span></div><div class="action-bar-right"><button class="btn" onclick="expandAll()">Expand all</button><button class="btn" onclick="collapseAll()">Collapse all</button><button class="btn btn-primary" onclick="window.print()">Print / PDF</button></div></div>
 <div class="tab-bar"><button class="tab-btn active" onclick="showTab('overview',this)">Overview</button><button class="tab-btn" onclick="showTab('findings',this)">Findings</button><button class="tab-btn" onclick="showTab('methodology',this)">Methodology &amp; Limitations</button></div>
 <div class="page">
-<div class="report-header"><div class="report-eyebrow">Compliance Risk Analysis</div><div class="report-title">supabase</div><div class="report-meta"><a href="https://github.com/supabase/supabase">https://github.com/supabase/supabase</a><br>Scanned 2026-03-23 &middot; OpenDocket V1 &middot; Primary: Claude Sonnet &middot; Review: Gemini 1.5 Flash</div></div>
+<div class="report-header"><div class="report-eyebrow">Compliance Risk Analysis</div><div class="report-title">supabase</div><div class="report-meta"><a href="https://github.com/supabase/supabase">https://github.com/supabase/supabase</a><br>Scanned 2026-03-23 &middot; OpenDocket V1 &middot; Primary: Claude Sonnet &middot; Review: Gemini 2.5 Flash</div></div>
 
 <!-- TAB 1: OVERVIEW -->
 <div class="tab-panel active" id="tab-overview">
@@ -127,11 +127,11 @@ a { color: #0052CC; text-decoration: none; } a:hover { text-decoration: underlin
 <tr><td style="font-weight:600">PCI-DSS <span style="color:#CF222E;font-size:12px">(7 high)</span></td><td>PCI SSC</td><td style="color:#CF222E;font-weight:600">Fines $5K-$100K/month</td><td>v4.0 enforcement accelerating</td></tr>
 <tr><td style="font-weight:600">HIPAA <span style="color:#CF222E;font-size:12px">(7 high)</span></td><td>HHS / OCR</td><td style="color:#CF222E;font-weight:600">Fines up to $1.5M/year per category</td><td>Increasing enforcement, record penalties in 2024</td></tr>
 </tbody></table>
-<div class="section-heading">Top Findings</div><div class="top-finding"><div class="top-finding-q"></div><div class="top-finding-meta"><span class="badge badge-high">High Risk</span><span>GDPR</span><span>GDPR-001</span><span>.claude/skills/telemetry-standards/SKILL.md:61</span></div><div style="font-size:13px;color:#57606a;margin-top:8px">Conduct a comprehensive data processing audit to identify all personal data processing activities (authentication, user profiles, analytics, AI interactions, etc.) and document the specific Article 6 </div></div>
-<div class="top-finding"><div class="top-finding-q"></div><div class="top-finding-meta"><span class="badge badge-high">High Risk</span><span>HIPAA</span><span>HIPAA-004</span><span>.agents/skills/vitest/references/core-describe.md:40</span></div><div style="font-size:13px;color:#57606a;margin-top:8px">Implement comprehensive technical access controls including user authentication systems, role-based access control (RBAC), session management, and authorization mechanisms that restrict access to elec</div></div>
-<div class="top-finding"><div class="top-finding-q"></div><div class="top-finding-meta"><span class="badge badge-high">High Risk</span><span>PCI-DSS</span><span>PCIDSS-002</span><span>.agents/skills/vitest/SKILL.md:7</span></div><div style="font-size:13px;color:#57606a;margin-top:8px">Implement strong encryption (AES-256 minimum) for all cardholder data at rest in databases and file systems. Ensure all cardholder data transmission occurs over encrypted channels (TLS 1.2+ with stron</div></div>
+<div class="section-heading">Top Findings</div><div class="top-finding"><div class="top-finding-q"></div><div class="top-finding-meta"><span class="badge badge-high">High Risk</span><span>TCPA</span><span>TCPA-006</span><span>No specific file cited</span> &middot; Review: CONFIRMED</div><div style="font-size:13px;color:#57606a;margin-top:8px">Implement a comprehensive consent management system that captures and stores all required TCPA consent elements in a structured database. This should include creating database schemas to store consent</div></div>
+<div class="top-finding"><div class="top-finding-q"></div><div class="top-finding-meta"><span class="badge badge-high">High Risk</span><span>GDPR</span><span>GDPR-001</span><span>.claude/skills/telemetry-standards/SKILL.md:61</span> &middot; Review: POSSIBLE FALSE POSITIVE</div><div style="font-size:13px;color:#57606a;margin-top:8px">Conduct a comprehensive data processing audit to identify all personal data processing activities (authentication, user profiles, analytics, AI interactions, etc.) and document the specific Article 6 </div></div>
+<div class="top-finding"><div class="top-finding-q"></div><div class="top-finding-meta"><span class="badge badge-high">High Risk</span><span>HIPAA</span><span>HIPAA-004</span><span>.agents/skills/vitest/references/core-describe.md:40</span> &middot; Review: POSSIBLE FALSE POSITIVE</div><div style="font-size:13px;color:#57606a;margin-top:8px">Implement comprehensive technical access controls including user authentication systems, role-based access control (RBAC), session management, and authorization mechanisms that restrict access to elec</div></div>
 
-<div class="judge-block"><div class="judge-title">Independent Review — Gemini 1.5 Flash</div><div class="judge-stats"><div class="judge-stat"><span class="judge-stat-n j-confirmed">0</span><span class="judge-stat-l">Confirmed</span></div><div class="judge-stat"><span class="judge-stat-n j-context">0</span><span class="judge-stat-l">Context dependent</span></div><div class="judge-stat"><span class="judge-stat-n j-fp">0</span><span class="judge-stat-l">Possible false positives</span></div><div class="judge-stat"><span class="judge-stat-n j-additional">0</span><span class="judge-stat-l">Additional risk</span></div></div><div class="judge-note">Primary: Claude Sonnet (Anthropic). Review: Gemini 1.5 Flash (Google). Neither constitutes legal advice.</div></div>
+<div class="judge-block"><div class="judge-title">Independent Review — Gemini 2.5 Flash</div><div class="judge-stats"><div class="judge-stat"><span class="judge-stat-n j-confirmed">3</span><span class="judge-stat-l">Confirmed</span></div><div class="judge-stat"><span class="judge-stat-n j-context">2</span><span class="judge-stat-l">Context dependent</span></div><div class="judge-stat"><span class="judge-stat-n j-fp">51</span><span class="judge-stat-l">Possible false positives</span></div><div class="judge-stat"><span class="judge-stat-n j-additional">0</span><span class="judge-stat-l">Additional risk</span></div></div><div class="judge-note">Primary: Claude Sonnet (Anthropic). Review: Gemini 2.5 Flash (Google). Neither constitutes legal advice.</div></div>
 <div class="section-heading">Recommended Actions</div><div class="rec-item"><div class="rec-priority rec-p-high">High</div><div><div class="rec-text">Conduct a comprehensive data processing audit to identify all personal data processing activities (authentication, user profiles, analytics, AI interactions, etc.) and document the specific Article 6 lawful basis for each (likely consent for optional features, contract performance for service delivery, or legitimate interests for security/fraud prevention). Create a legal basis register mapping each processing purpose to its lawful basis, implement privacy notices explaining these bases to users, and ensure technical controls align with the documented legal bases. Consider adding data processing documentation to your privacy policy or terms of service to demonstrate compliance.</div><div class="rec-fw">GDPR &middot; GDPR-001</div></div></div>
 <div class="rec-item"><div class="rec-priority rec-p-high">High</div><div><div class="rec-text">The system needs to implement a comprehensive consent management framework that includes: user-facing consent collection interfaces with clear, specific language about data processing purposes; backend systems to store and track consent status per user and processing purpose; mechanisms for users to easily withdraw consent; and audit trails showing when consent was given, modified, or withdrawn. This should include both UI components for consent collection and API endpoints for consent management operations.</div><div class="rec-fw">GDPR &middot; GDPR-002</div></div></div>
 <div class="rec-item"><div class="rec-priority rec-p-high">High</div><div><div class="rec-text">Implement a comprehensive right to erasure system including: user-facing request mechanisms (API endpoints, UI forms) for data subjects to request deletion; backend processing workflows to identify and delete personal data across all system components within required timeframes; verification and confirmation processes for deletion requests; logging and audit trails for erasure activities; and integration with existing authentication and database systems to ensure complete data removal while maintaining system integrity.</div><div class="rec-fw">GDPR &middot; GDPR-003</div></div></div>
@@ -218,7 +218,7 @@ a { color: #0052CC; text-decoration: none; } a:hover { text-decoration: underlin
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence provided primarily consists of documentation instructing against tracking PII in telemetry, which suggests an intent to reduce personal data processing, rather than directly indicating an absence of a lawful basis for all existing processing activities.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.claude/skills/telemetry-standards/SKILL.md:61  **Never track PII** (emails, names, IPs, etc.) in event properties.
 .claude/skills/telemetry-standards/SKILL.md:169  - [ ] No PII in event properties (emails, names, IPs, etc.)
 .github/instructions/studio-telemetry.instructions.md:46  - Never track PII
@@ -229,7 +229,7 @@ apps/docs/content/guides/auth/auth-web3.mdx:37  It defines the wallet address, t
 apps/docs/content/guides/auth/auth-web3.mdx:185  Providing a `statement` is required for most Solana wallets and this message will be shown to the us
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does this system process personal data of EU residents, and if so, is there evidence that a lawful basis for processing under Article 6 GDPR has been identified and implemented for each processing activity?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Conduct a comprehensive data processing audit to identify all personal data processing activities (authentication, user profiles, analytics, AI interactions, etc.) and document the specific Article 6 lawful basis for each (likely consent for optional features, contract performance for service delivery, or legitimate interests for security/fraud prevention). Create a legal basis register mapping each processing purpose to its lawful basis, implement privacy notices explaining these bases to users, and ensure technical controls align with the documented legal bases. Consider adding data processing documentation to your privacy policy or terms of service to demonstrate compliance.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">While `.claude/skills/telemetry-standards/SKILL.md` and `.github/instructions/studio-telemetry.instructions.md` correctly instruct against tracking PII, document the Article 6 lawful basis for all *other* personal data processing activities not covered by these instructions, such as user account management, to fully address GDPR-001 requirements and avoid non-compliance fines under GDPR.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f2" data-framework="GDPR" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f2')">
@@ -237,7 +237,7 @@ apps/docs/content/guides/auth/auth-web3.mdx:185  Providing a `statement` is requ
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence provided consists entirely of documentation and internal rule files (.md), which describe internal development practices and API usage (e.g., PR acceptance, mutation options) rather than demonstrating the absence or presence of user consent collection mechanisms in the application&#x27;s functional code.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.cursor/rules/studio/queries/RULE.md:139  - accepts `UseCustomMutationOptions` (omit `mutationFn`)
 .cursor/rules/testing/e2e-studio/RULE.md:117  // ✅ Acceptable - waiting for client-side debounce
 CONTRIBUTING.md:25  - We will always try to accept the first viable PR that resolves the Issue.
@@ -248,7 +248,7 @@ LICENSE:144  agreed to in writing, Licensor provides the Work (and each
 LICENSE:156  negligent acts) or agreed to in writing, shall any Contributor be
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement consent collection mechanisms that satisfy the conditions for consent under Article 7, including freely given, specific, informed, and unambiguous indication of the data subject&#x27;s wishes, with capability to withdraw consent?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The system needs to implement a comprehensive consent management framework that includes: user-facing consent collection interfaces with clear, specific language about data processing purposes; backend systems to store and track consent status per user and processing purpose; mechanisms for users to easily withdraw consent; and audit trails showing when consent was given, modified, or withdrawn. This should include both UI components for consent collection and API endpoints for consent management operations.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">To address GDPR Article 7 regarding valid consent, update `CONTRIBUTING.md` and `DEVELOPERS.md` to include explicit guidelines for developers on implementing user consent collection and management in new features or data processing flows introduced via accepted contributions, thereby ensuring internal development practices support regulatory compliance.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f3" data-framework="GDPR" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f3')">
@@ -256,7 +256,7 @@ LICENSE:156  negligent acts) or agreed to in writing, shall any Contributor be
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The provided evidence consists solely of documentation files and configuration files, none of which contain application source code or specific logic directly related to the implementation of the right to erasure under Article 17 GDPR.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">apps/design-system/tailwind.config.js:8  // purge styles from grid library
 apps/docs/DEVELOPERS.md:22  4. Visit http://localhost:3001/docs in your browser - don&#x27;t forget to append the `/docs` to the end
 apps/docs/content/errorCodes/authErrorCodes.toml:64  description = &quot;PKCE flow state to which the API request relates no longer exists. Flow states expire
@@ -267,7 +267,7 @@ apps/docs/content/guides/ai/quickstarts/hello-world.mdx:48  SQLAlchemy requires 
 apps/docs/content/guides/ai/quickstarts/text-deduplication.mdx:48  SQLAlchemy requires the connection string to start with `postgresql://` (instead of `postgres://`). 
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement the right to erasure (right to be forgotten) under Article 17, allowing data subjects to request deletion of their personal data without undue delay?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a comprehensive right to erasure system including: user-facing request mechanisms (API endpoints, UI forms) for data subjects to request deletion; backend processing workflows to identify and delete personal data across all system components within required timeframes; verification and confirmation processes for deletion requests; logging and audit trails for erasure activities; and integration with existing authentication and database systems to ensure complete data removal while maintaining system integrity.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Update `apps/docs/DEVELOPERS.md` and `apps/docs/content/guides/ai/going-to-prod.mdx` to detail the process and API endpoints for data subjects to exercise their right to erasure. This change is necessary to ensure clear communication of compliance with Article 17 GDPR.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f4" data-framework="GDPR" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f4')">
@@ -275,7 +275,7 @@ apps/docs/content/guides/ai/quickstarts/text-deduplication.mdx:48  SQLAlchemy re
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited exclusively points to Markdown files containing testing framework configurations, which are documentation or reference materials, not application source code responsible for implementing data portability functionality as required by GDPR Article 20.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/references/advanced-environments.md:146  export default &lt;Environment&gt;{
 .agents/skills/vitest/references/advanced-environments.md:178  export default &lt;Environment&gt;{
 .agents/skills/vitest/references/advanced-projects.md:61  export default defineConfig({
@@ -286,7 +286,7 @@ apps/docs/content/guides/ai/quickstarts/text-deduplication.mdx:48  SQLAlchemy re
 .agents/skills/vitest/references/core-config.md:126  export default defineConfig(({ mode }) =&gt; ({
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system provide data subjects the right to receive their personal data in a structured, commonly used, and machine-readable format, and to transmit that data to another controller, as required under Article 20?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a comprehensive data portability system that allows users to request and receive their personal data in structured formats (JSON, CSV, XML). This should include: API endpoints for data export requests, user interface components for initiating data downloads, automated data compilation from all systems storing user data, and secure delivery mechanisms. The system must cover all personal data categories and provide exports in commonly used, machine-readable formats that can be transmitted to other data controllers.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The code snippets found in `.agents/skills/vitest/references/advanced-environments.md` and other referenced files pertain to Vitest testing framework configurations, not the live application&#x27;s data processing or export mechanisms. Therefore, no direct changes are required in these specific documentation files to address GDPR Article 20 data portability, as they do not contribute to the identified compliance risk.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f5" data-framework="GDPR" data-severity="Pattern of Concern">
 <div class="finding-header" onclick="toggleFinding('f5')">
@@ -294,7 +294,7 @@ apps/docs/content/guides/ai/quickstarts/text-deduplication.mdx:48  SQLAlchemy re
 <div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited is from a markdown file (.claude/skills/studio-testing/rules/testing-extract-logic.md) which indicates it is documentation or test-related, not production application source code directly handling personal data. Therefore, it does not confirm a live compliance risk.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.claude/skills/studio-testing/rules/testing-extract-logic.md:28  let sanitized = taxIdValue
 .claude/skills/studio-testing/rules/testing-extract-logic.md:30  sanitized = taxId.vatPrefix + taxIdValue
 .claude/skills/studio-testing/rules/testing-extract-logic.md:32  submitToApi(sanitized)
@@ -305,7 +305,7 @@ apps/docs/content/guides/ai/quickstarts/text-deduplication.mdx:48  SQLAlchemy re
 .claude/skills/studio-testing/rules/testing-extract-logic.md:70  import { sanitizeTaxIdValue } from &#x27;components/.../TaxID.utils&#x27;
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system demonstrate evidence of data protection by design and by default, implementing appropriate technical and organizational measures to ensure only necessary personal data is processed, as required under Article 25?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a comprehensive data protection by design framework including: data minimization controls at API endpoints, automated PII detection and masking, role-based access controls with audit logging, and data retention policies with automatic purging. Add privacy impact assessments for new features, establish data processing inventories, and create systematic validation that only necessary personal data fields are collected and processed throughout the application lifecycle.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Review the actual application source code implementing `sanitizeTaxIdValue` and any related API submission logic to confirm it adheres to GDPR Article 25 requirements for data minimization and purpose limitation for tax ID data, rather than relying solely on examples in documentation or test definitions. Failure to implement these controls in production code could lead to unnecessary processing of personal data.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f6" data-framework="GDPR" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f6')">
@@ -313,7 +313,7 @@ apps/docs/content/guides/ai/quickstarts/text-deduplication.mdx:48  SQLAlchemy re
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited refers to UI notifications and alert components described in documentation and rule files (.mdc, .md), which do not directly demonstrate the presence or absence of backend mechanisms for detecting personal data breaches and notifying authorities/data subjects as required by GDPR Articles 33 and 34.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.cursor/rules/studio-useStaticEffectEvent.mdc:23  showNotification(&#x27;Connected!&#x27;, theme) // `theme` causes unwanted re-runs
 .cursor/rules/studio/RULE.md:32  - `studio/alerts`
 .cursor/rules/studio/alerts/RULE.md:2  description: &quot;Studio: alert/admonition usage and placement&quot;
@@ -324,7 +324,7 @@ LICENSE:158  incidental, or consequential damages of any character arising as a
 SECURITY.md:26  - Do not run automated scanners on other customer projects. Running automated scanners can run up co
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement mechanisms for detecting personal data breaches and notifying the supervisory authority within 72 hours and affected data subjects without undue delay, as required under Articles 33 and 34?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a comprehensive data breach detection and notification system that includes: automated monitoring for unauthorized access to personal data, incident logging and classification mechanisms, automated notification workflows to supervisory authorities within 72 hours of breach detection, and systems for notifying affected data subjects without undue delay when required. The system should include breach assessment capabilities to determine notification thresholds, template management for standardized notifications, and audit trails for compliance documentation.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Review `.cursor/rules/studio-useStaticEffectEvent.mdc`, `.cursor/rules/studio/alerts/RULE.md`, and `.cursor/rules/studio/best-practices/RULE.md` to clarify that references to &#x27;alerts&#x27; and &#x27;notifications&#x27; pertain solely to UI/application-level events and not personal data breach detection or notification systems, to prevent misinterpretation of compliance with GDPR Articles 33 and 34.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f7" data-framework="GDPR" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f7')">
@@ -332,7 +332,7 @@ SECURITY.md:26  - Do not run automated scanners on other customer projects. Runn
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence files cited are documentation (.md) related to the &#x27;vitest&#x27; testing framework and refer to test cleanup, not the implementation of data retention or deletion policies for personal data in a production environment.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/references/advanced-vi.md:98  await vi.dynamicImportSettled()
 .agents/skills/vitest/references/core-hooks.md:30  await cleanupMocks()
 .agents/skills/vitest/references/core-hooks.md:34  ## Cleanup Return Pattern
@@ -343,7 +343,7 @@ SECURITY.md:26  - Do not run automated scanners on other customer projects. Runn
 .agents/skills/vitest/references/features-context.md:25  - `onTestFinished(fn)` - Cleanup after test
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement data retention policies that limit the storage of personal data to what is necessary for the specified processing purpose, with automated deletion or anonymization when the purpose is fulfilled, consistent with the storage limitation principle under Article 5(1)(e)?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement comprehensive data retention policies that automatically delete or anonymize personal data when processing purposes are fulfilled. This should include: (1) configurable retention periods for different data types based on legal basis and processing purpose, (2) automated background jobs that regularly scan for and delete expired personal data, (3) data classification systems to identify what constitutes personal data requiring retention limits, and (4) audit logging of all data deletion activities. Consider implementing database-level policies using tools like PostgreSQL&#x27;s pg_cron extension (mentioned in testing files) for production data lifecycle management, not just test cleanup.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The cited `vitest` documentation and test files, such as `.agents/skills/vitest/references/core-hooks.md`, describe testing framework cleanup and do not provide evidence for implementing or lacking GDPR Article 5(1)(e) data retention policies for personal data. No changes are required in these specific documentation files to comply with storage limitation principles.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f8" data-framework="GDPR" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f8')">
@@ -351,7 +351,7 @@ SECURITY.md:26  - Do not run automated scanners on other customer projects. Runn
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-context">CONTEXT DEPENDENT</div><div class="verdict-text">Independent review could not complete: 504 Deadline Exceeded</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: LOW</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.github/workflows/mirror.yml:28  aws-region: us-east-1
 LICENSE:77  use, offer to sell, sell, import, and otherwise transfer the Work,
 apps/design-system/app/fonts/CustomFont-Bold.woff2:99  Zơs84UaF8 xx?F~(4	?3̵ h@fB 0C%q㥭z:VͲUvꜽbUN@~#tP^eT}03yPmJ/+Zf{DySLU臓ZIhsccޘ
@@ -370,7 +370,7 @@ apps/design-system/registry/default/example/form-patterns-pagelayout.tsx:509  na
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited consists primarily of internal documentation and guidelines for telemetry standards (e.g., PostHog event tracking) and a test reference, not application source code files that directly process personal data or explicitly indicate the absence of a Data Protection Impact Assessment (DPIA). While telemetry can involve personal data, these files alone do not confirm a high risk or the specific lack of a DPIA required by GDPR Article 35.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/references/core-expect.md:213  - Use context&#x27;s `expect` in concurrent tests for correct tracking
 .claude/skills/telemetry-standards/SKILL.md:3  description: PostHog event tracking standards for Supabase Studio. Use when reviewing
 .claude/skills/telemetry-standards/SKILL.md:4  PRs for telemetry compliance or implementing new event tracking. Covers event naming,
@@ -381,7 +381,7 @@ apps/design-system/registry/default/example/form-patterns-pagelayout.tsx:509  na
 .claude/skills/telemetry-standards/SKILL.md:119  When a PR adds user-facing interactions (buttons, forms, toggles, modals) **without** tracking, sugg
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system process personal data in a manner likely to result in high risk to data subjects, and if so, is there evidence that a Data Protection Impact Assessment has been considered, as required under Article 35?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Conduct a formal Data Protection Impact Assessment to evaluate the privacy risks associated with the telemetry and user tracking systems. Document this assessment in the repository with clear findings about data processing activities, risk mitigation measures, and safeguards. Additionally, implement privacy-by-design principles in the tracking systems and ensure proper consent mechanisms are in place before collecting personal data through these telemetry systems.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Review the `telemetry-standards/SKILL.md` to ensure that a corresponding Data Protection Impact Assessment (DPIA) for the PostHog event tracking referenced therein has been completed and documented, as required by GDPR Article 35. This verification will confirm adherence to data protection principles concerning user tracking and avoid non-compliance fines.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f10" data-framework="GDPR" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f10')">
@@ -389,7 +389,7 @@ apps/design-system/registry/default/example/form-patterns-pagelayout.tsx:509  na
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence provided consists solely of internal documentation and rule definitions (.md files), which do not directly demonstrate the presence or absence of user-facing privacy notices and transparency information required by GDPR Articles 13 and 14.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.cursor/rules/docs/docs-graphql/RULE.md:12  The `apps/docs/resources` folder contains the GraphQL endpoint architecture for the docs GraphQL end
 .cursor/rules/docs/docs-graphql/RULE.md:99  &gt; The types in `~/__generated__/graphql` for a new endpoint will not exist
 .cursor/rules/studio/cards/RULE.md:10  - Use cards to group related pieces of information.
@@ -400,7 +400,7 @@ apps/design-system/registry/default/example/form-patterns-pagelayout.tsx:509  na
 .github/workflows/studio-unit-tests.yml:2  # For more information see: https://help.github.com/actions/language-and-framework-guides/using-node
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system provide transparent information to data subjects about the processing of their personal data, including identity of the controller, purposes of processing, and data subject rights, as required under Articles 13 and 14?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement comprehensive privacy notices that inform data subjects about data processing activities. This should include creating user-facing privacy policies, in-application notices at data collection points, and clear disclosures about the identity of the data controller (Supabase), purposes of processing, legal bases, data retention periods, and data subject rights (access, rectification, erasure, portability, etc.). These notices should be integrated into the user interface where personal data is collected and easily accessible to users throughout their interaction with the platform.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Update internal documentation like `.cursor/rules/docs/docs-graphql/RULE.md` and `.cursor/rules/studio/empty-states/RULE.md` to include explicit requirements for user-facing privacy notices and data processing disclosures related to the GraphQL endpoints and Studio components. This ensures internal guidelines support external transparency, aligning with GDPR Articles 13 and 14 requirements for informing data subjects.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 </div>
 <div class="framework-section" id="hipaa" data-framework="HIPAA">
@@ -411,7 +411,7 @@ apps/design-system/registry/default/example/form-patterns-pagelayout.tsx:509  na
 <div class="finding-right"><span class="badge badge-ok">No Issue Found</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited consists solely of markdown documentation files (.md) which discuss generic UI component properties and composition (className, children). This evidence does not contain any code or configuration related to the collection, storage, processing, or transmission of Protected Health Information (PHI), nor does it indicate the presence or absence of technical safeguards, thus posing no direct HIPAA compliance risk.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/references/advanced-environments.md:106  el.className = &#x27;test&#x27;
 .agents/skills/vitest/references/advanced-environments.md:107  expect(el.className).toBe(&#x27;test&#x27;)
 .agents/skills/vitest/references/advanced-environments.md:229  classNameStrategy: &#x27;non-scoped&#x27;,
@@ -422,7 +422,7 @@ apps/design-system/registry/default/example/form-patterns-pagelayout.tsx:509  na
 .claude/skills/vercel-composition-patterns/rules/patterns-children-over-render-props.md:10  Use `children` for composition instead of `renderX` props. Children are more
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does this system collect, store, process, or transmit individually identifiable health information as defined under 45 CFR §160.103, and if so, are adequate technical safeguards in place to protect the confidentiality of such Protected Health Information?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">No remediation required based on current evidence. However, if this system will be extended to handle PHI in the future, ensure proper technical safeguards are implemented including access controls, audit controls, integrity controls, person or entity authentication, and transmission security as required under 45 CFR §164.312(a)(1).</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">No modifications are needed in .agents/skills/vitest/references/advanced-environments.md or .claude/skills/vercel-composition-patterns/AGENTS.md, as these documentation files do not address PHI identification or protection, therefore presenting no HIPAA regulatory consequence for these specific files.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f12" data-framework="HIPAA" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f12')">
@@ -430,7 +430,7 @@ apps/design-system/registry/default/example/form-patterns-pagelayout.tsx:509  na
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The provided evidence from UI component examples (describing transactions as secure and encrypted, or unrelated text) does not demonstrate the presence or absence of encryption at rest for ePHI, rendering the primary finding based on this evidence a false positive.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">apps/design-system/registry/default/example/accordion-demo.tsx:20  Yes. It comes with default styles that matches the other components&amp;apos; aesthetic.
 apps/design-system/registry/default/example/field-demo.tsx:26  &lt;FieldDescription&gt;All transactions are secure and encrypted&lt;/FieldDescription&gt;
 apps/design-system/registry/default/example/field-demo.tsx:26  &lt;FieldDescription&gt;All transactions are secure and encrypted&lt;/FieldDescription&gt;
@@ -441,7 +441,7 @@ apps/design-system/registry/default/example/toc-single-demo.tsx:104  proper auth
 apps/docs/components/AppleSecretGenerator/AppleSecretGenerator.tsx:56  const privateKey = await globalThis.crypto.subtle.importKey(
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Is electronic Protected Health Information encrypted when stored at rest using methods consistent with NIST Special Publication 800-111, as required for addressable implementation under the HIPAA Security Rule?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement server-side encryption at rest for all stored data using NIST SP 800-111 compliant methods such as AES-256 encryption. This should include database encryption, file system encryption, and proper key management systems. Add configuration files and code documentation demonstrating the encryption implementation, key rotation procedures, and compliance with NIST standards. Replace any base64 encoding used for security purposes with proper encryption algorithms, and ensure all PHI storage locations are identified and encrypted according to the addressable implementation requirements.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Review the text `&lt;FieldDescription&gt;All transactions are secure and encrypted&lt;/FieldDescription&gt;` in `apps/design-system/registry/default/example/field-demo.tsx` and ensure it accurately reflects the implementation of encryption at rest for all sensitive data; if not, modify the text or ensure NIST SP 800-111 compliant encryption is in place to avoid misrepresentation and potential HIPAA violations.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f13" data-framework="HIPAA" data-severity="Pattern of Concern">
 <div class="finding-header" onclick="toggleFinding('f13')">
@@ -449,7 +449,7 @@ apps/docs/components/AppleSecretGenerator/AppleSecretGenerator.tsx:56  const pri
 <div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited exclusively refers to documentation/markdown files (`.md`) and explicitly shows the use of `https://` URLs, which contradicts the primary analysis&#x27;s implied unencrypted transmission risk.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/SKILL.md:7  source: Generated from https://github.com/vitest-dev/vitest, scripts located at https://github.com/a
 .agents/skills/vitest/references/advanced-environments.md:263  - https://vitest.dev/guide/environment.html
 .agents/skills/vitest/references/advanced-projects.md:212  apiUrl: &#x27;https://staging.api.com&#x27;,
@@ -460,7 +460,7 @@ apps/docs/components/AppleSecretGenerator/AppleSecretGenerator.tsx:56  const pri
 .agents/skills/vitest/references/advanced-vi.md:248  - https://vitest.dev/api/vi.html
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Are all transmissions of electronic Protected Health Information encrypted using transport-level security consistent with NIST guidelines, preventing unauthorized access during transmission across electronic communications networks?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Replace all HTTP URLs with HTTPS equivalents throughout the codebase, including development and testing configurations. Implement configuration management that enforces HTTPS-only connections across all environments. Add code review processes to prevent HTTP URLs from being committed to the repository. Ensure any PHI transmission uses TLS 1.2 or higher encryption consistent with NIST guidelines, and consider implementing automated security scanning to detect unencrypted connection patterns.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">While `.agents/skills/vitest/references/advanced-projects.md` at lines 212 and 221 correctly use `https://` for `apiUrl` references, review all similar documentation and configuration files to ensure no unencrypted `http://` API endpoints are present, which could result in unauthorized access to ePHI and HIPAA non-compliance for encryption in transit.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f14" data-framework="HIPAA" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f14')">
@@ -468,7 +468,7 @@ apps/docs/components/AppleSecretGenerator/AppleSecretGenerator.tsx:56  const pri
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence provided consists solely of documentation (.md) and configuration (.json) files, which mention &#x27;login&#x27; and &#x27;SessionStart&#x27; in the context of tests or settings, but do not represent actual application source code to confirm the presence or absence of HIPAA-compliant access controls.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/references/core-describe.md:40  test(&#x27;shows login page&#x27;, () =&gt; {})
 .agents/skills/vitest/references/features-filtering.md:30  vitest -t &quot;login&quot;
 .agents/skills/vitest/references/features-filtering.md:183  vitest user -t &quot;login&quot; --changed
@@ -479,7 +479,7 @@ apps/docs/components/AppleSecretGenerator/AppleSecretGenerator.tsx:56  const pri
 .claude/skills/e2e-studio-tests/SKILL.md:104  element.locator(&#x27;..&#x27;).getByRole(&#x27;button&#x27;)
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement technical policies and procedures for electronic information systems that maintain electronic Protected Health Information to allow access only to those persons or software programs that have been granted access rights as specified in 45 CFR §164.312(a)(1)?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement comprehensive technical access controls including user authentication systems, role-based access control (RBAC), session management, and authorization mechanisms that restrict access to electronic PHI. This should include actual code implementing login/logout functionality, user role validation, permission checking before data access, and audit logging of access attempts. The current test references and naming conventions need to be backed by functional security controls that enforce the principle of least privilege access to PHI.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The cited documentation and configuration files indicating &#x27;login&#x27; functionality and &#x27;SessionStart&#x27; do not provide sufficient evidence to confirm a lack of access controls for ePHI. To ascertain compliance with 45 CFR §164.312(a)(1), review the actual application source code for robust authentication, authorization, and session management mechanisms rather than test or configuration references.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f15" data-framework="HIPAA" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f15')">
@@ -487,7 +487,7 @@ apps/docs/components/AppleSecretGenerator/AppleSecretGenerator.tsx:56  const pri
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence files are located within &#x27;.agents/skills/vitest/references/&#x27; and contain &#x27;testTimeout&#x27; or simple &#x27;setTimeout&#x27; calls, clearly indicating they are test configurations or documentation examples, not application source code implementing user session management for PHI-accessing interfaces.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/references/advanced-projects.md:133  testTimeout: 10000,
 .agents/skills/vitest/references/advanced-vi.md:106  setTimeout(() =&gt; console.log(&#x27;done&#x27;), 1000)
 .agents/skills/vitest/references/advanced-vi.md:172  }, { timeout: 5000, interval: 100 })
@@ -498,7 +498,7 @@ apps/docs/components/AppleSecretGenerator/AppleSecretGenerator.tsx:56  const pri
 .agents/skills/vitest/references/core-config.md:76  // Test timeout in ms
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement electronic procedures that terminate an electronic session after a predetermined time of inactivity, as required for PHI-accessing interfaces under the HIPAA Security Rule?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement automatic session timeout functionality for all user-facing interfaces that could potentially access PHI. This should include configurable inactivity timeouts (typically 15-30 minutes), automatic session termination, and user notification before timeout. Add session management middleware that tracks user activity, monitors idle time, and terminates sessions when predetermined inactivity thresholds are exceeded. Document the timeout policies and ensure they apply consistently across all authentication-required interfaces in the platform.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The timeouts observed in `.agents/skills/vitest/references/advanced-projects.md` and `.agents/skills/vitest/references/advanced-vi.md` pertain to test configurations, not application-level session management. Therefore, these specific files do not require modification to achieve compliance with HIPAA-005 for electronic session termination.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f16" data-framework="HIPAA" data-severity="Medium Risk">
 <div class="finding-header" onclick="toggleFinding('f16')">
@@ -506,7 +506,7 @@ apps/docs/components/AppleSecretGenerator/AppleSecretGenerator.tsx:56  const pri
 <div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The evidence directly cites application source code (`.ts` files) utilizing a logging mechanism (`sendToLogflare`), which is a core component of audit controls in a repository context that includes the healthcare domain, making it directly relevant to HIPAA audit logging requirements.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.gitignore:141  # For self-hosted logs: https://github.com/supabase/supabase/blob/86e3ab20abfdb9c3e666334d3d2f8efeef
 apps/docs/app/api/graphql/route.test.ts:3  vi.mock(&#x27;~/lib/logger&#x27;, async () =&gt; {
 apps/docs/app/api/graphql/route.test.ts:4  const actual = await vi.importActual&lt;typeof import(&#x27;~/lib/logger&#x27;)&gt;(&#x27;~/lib/logger&#x27;)
@@ -517,7 +517,7 @@ apps/docs/components/AuthSmsProviderConfig/MessageBirdConfig.mdx:22  Start by lo
 apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:57  Start by logging into your Twilio account and starting a new project: https://www.twilio.com/console
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement hardware, software, and procedural mechanisms that record and examine activity in information systems that contain or use electronic Protected Health Information, as required under the audit controls standard?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement comprehensive audit logging that specifically captures all access, creation, modification, and deletion of electronic PHI. Configure the existing logging infrastructure (sendToLogflare) to record user authentication events, data access patterns, system configuration changes, and security incidents. Ensure audit logs include required data elements like user identification, event type, date/time, success/failure status, and data accessed. Establish procedures for regular log review and analysis, and document how the PGAudit extension and platform audit logs specifically monitor PHI-related activities.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Review `apps/docs/app/api/graphql/route.ts` and the associated `sendToLogflare` function to ensure comprehensive audit logging captures all access, creation, modification, and deletion events for electronic PHI with sufficient detail. Inadequate audit logging for ePHI-handling systems risks non-compliance with HIPAA audit control standards (HIPAA-006).</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f17" data-framework="HIPAA" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f17')">
@@ -525,7 +525,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:57  Start by logging
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited consists exclusively of documentation files (.md) related to the &#x27;vitest&#x27; testing framework. The snippets (&#x27;Smart watch mode&#x27;, &#x27;Test API&#x27;, &#x27;Exclude project&#x27;, &#x27;Only type check&#x27;) describe features or configurations for testing, not application logic handling Protected Health Information (PHI) or enforcing access controls. Thus, the observed patterns do not create a direct HIPAA Minimum Necessary Access risk.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/SKILL.md:15  - Smart watch mode: Only reruns affected tests based on module graph
 .agents/skills/vitest/SKILL.md:29  | Test API | test/it function, modifiers like skip, only, concurrent | [core-test-api](references/co
 .agents/skills/vitest/references/advanced-environments.md:229  classNameStrategy: &#x27;non-scoped&#x27;,
@@ -544,7 +544,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:57  Start by logging
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence provided refers exclusively to documentation and configuration files for `vitest` integration tests, not to actual application code or configurations that establish third-party service integrations handling Protected Health Information (PHI).</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/SKILL.md:27  | Configuration | Vitest and Vite config integration, defineConfig usage | [core-config](references/
 .agents/skills/vitest/references/advanced-projects.md:30  name: &#x27;integration&#x27;,
 .agents/skills/vitest/references/advanced-projects.md:31  include: [&#x27;tests/integration/**/*.test.ts&#x27;],
@@ -555,7 +555,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:57  Start by logging
 .agents/skills/vitest/references/features-coverage.md:171  ## CI Integration
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system integrate with third-party services that may receive, maintain, or transmit Protected Health Information, and if so, is there evidence that Business Associate Agreement requirements are addressed in the code or configuration?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a systematic approach to identify all third-party services that may receive, maintain, or transmit PHI, starting with the documented PostHog integration and any other external services. Create configuration management processes that enforce BAA validation before enabling third-party integrations. Add code comments or configuration flags that document BAA compliance status for each integration, and establish a review process to ensure new third-party integrations cannot process PHI without proper BAA coverage being verified and documented in the system.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The files `.agents/skills/vitest/SKILL.md`, `.agents/skills/vitest/references/advanced-projects.md`, and `.agents/skills/vitest/references/core-config.md` describe `vitest` integration tests, which are distinct from production third-party service integrations. To comply with HIPAA-008, identify application source code files that implement actual third-party service integrations processing PHI and verify explicit BAA agreements or references within their configuration, otherwise risking HIPAA violations related to unauthorized PHI disclosure.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f19" data-framework="HIPAA" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f19')">
@@ -563,7 +563,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:57  Start by logging
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited exclusively refers to documentation and test-related markdown files, not application source code that would directly implement data retention or disposal policies for PHI.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/references/advanced-environments.md:156  delete globalThis.myGlobal
 .agents/skills/vitest/references/advanced-vi.md:98  await vi.dynamicImportSettled()
 .agents/skills/vitest/references/core-hooks.md:30  await cleanupMocks()
@@ -574,7 +574,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:57  Start by logging
 .agents/skills/vitest/references/core-hooks.md:236  - Return cleanup function from `before*` to avoid `after*` duplication
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement policies and procedures to address the final disposition of electronic Protected Health Information and the hardware or electronic media on which it is stored, as well as removal of PHI before media is available for reuse?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement comprehensive data retention and disposal policies that specifically address PHI final disposition. This should include: automated secure deletion procedures for PHI when retention periods expire, documented media sanitization processes before hardware reuse or disposal, audit logging of all PHI disposal activities, and technical controls to ensure complete data removal from storage media. Consider implementing cryptographic erasure techniques and establishing clear procedures for both logical data deletion and physical media destruction when appropriate.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The evidence files (`.agents/skills/vitest/references/advanced-environments.md`, `.agents/skills/vitest/references/advanced-vi.md`, `.agents/skills/vitest/references/core-hooks.md`) are documentation and test-related, not production code. Therefore, no direct code changes are needed in these specific files to address PHI retention and disposal policies, as they do not handle PHI or define system-wide policies, thus avoiding misapplication of HIPAA-009.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f20" data-framework="HIPAA" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f20')">
@@ -582,7 +582,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:57  Start by logging
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited refers exclusively to Vitest testing framework&#x27;s mock restore functions in documentation files, which is irrelevant to HIPAA&#x27;s requirements for detecting, reporting, or responding to security incidents and emergency access to PHI in a production system.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/references/advanced-vi.md:35  fn.mockRestore()  // Restore original (for spies)
 .agents/skills/vitest/references/advanced-vi.md:126  // Restore
 .agents/skills/vitest/references/advanced-vi.md:217  vi.restoreAllMocks() // Restore originals (spies)
@@ -604,7 +604,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:57  Start by logging
 <div class="finding-right"><span class="badge badge-ok">No Issue Found</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited consists exclusively of documentation and test files (.md), which do not represent application source code that would store, process, or transmit cardholder data.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.claude/skills/e2e-studio-tests/SKILL.md:80  page.getByTestId(&#x27;table-editor-side-panel&#x27;)
 .claude/skills/e2e-studio-tests/SKILL.md:135  // Good - scoped to side panel
 .claude/skills/e2e-studio-tests/SKILL.md:136  const sidePanel = page.getByTestId(&#x27;table-editor-side-panel&#x27;)
@@ -615,7 +615,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:57  Start by logging
 .cursor/rules/studio/best-practices/RULE.md:107  ├── UserPanel.tsx
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does this system store, process, or transmit cardholder data including primary account numbers (PAN), and if so, are adequate protections in place to render stored PAN unreadable, as required under PCI DSS Requirement 3.5?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">No remediation required at this time. However, if this system will be extended to handle payment card data in the future, ensure PCI DSS Requirement 3.5 compliance by implementing strong cryptography and security protocols to render stored PAN unreadable, such as encryption with proper key management or tokenization systems.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The files `e2e-studio-tests/SKILL.md` and `studio-testing/SKILL.md` are documentation and test files, not source code that directly handles cardholder data. Therefore, no specific changes are required in these files to comply with PCI DSS Requirement 3.5.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f22" data-framework="PCI-DSS" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f22')">
@@ -623,7 +623,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:57  Start by logging
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited consists solely of markdown documentation files and external links within a testing framework&#x27;s references, not application source code, and the example API URLs already show HTTPS, indicating this is likely not a live compliance risk.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/SKILL.md:7  source: Generated from https://github.com/vitest-dev/vitest, scripts located at https://github.com/a
 .agents/skills/vitest/references/advanced-environments.md:263  - https://vitest.dev/guide/environment.html
 .agents/skills/vitest/references/advanced-projects.md:212  apiUrl: &#x27;https://staging.api.com&#x27;,
@@ -634,7 +634,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:57  Start by logging
 .agents/skills/vitest/references/advanced-vi.md:248  - https://vitest.dev/api/vi.html
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Is cardholder data encrypted using strong cryptography during transmission over open public networks and when stored at rest, consistent with PCI DSS Requirements 3.5 and 4.2?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement strong encryption (AES-256 minimum) for all cardholder data at rest in databases and file systems. Ensure all cardholder data transmission occurs over encrypted channels (TLS 1.2+ with strong cipher suites). Replace all HTTP URLs with HTTPS equivalents in production configurations. Remove base64 encoding of private keys in CI/CD pipelines and implement proper secrets management. Conduct a comprehensive audit to identify all locations where cardholder data is processed, stored, or transmitted to ensure complete cryptographic protection coverage.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The URLs specified in `.agents/skills/vitest/references/advanced-projects.md` are already configured with HTTPS (e.g., `https://api.com`), satisfying PCI DSS Requirement 4.2 for data in transit; therefore, no immediate change to these documented URLs is required.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f23" data-framework="PCI-DSS" data-severity="Medium Risk">
 <div class="finding-header" onclick="toggleFinding('f23')">
@@ -642,7 +642,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:57  Start by logging
 <div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence provided consists solely of Markdown documentation within an end-to-end testing directory, which describes how UI elements are located during tests rather than demonstrating the actual implementation or lack of role-based access controls in the live application itself.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.claude/skills/e2e-studio-tests/SKILL.md:72  1. **`getByRole` with accessible name** - Most robust, tests accessibility
 .claude/skills/e2e-studio-tests/SKILL.md:74  page.getByRole(&#x27;button&#x27;, { name: &#x27;Save&#x27; })
 .claude/skills/e2e-studio-tests/SKILL.md:75  page.getByRole(&#x27;button&#x27;, { name: &#x27;Configure API privileges&#x27; })
@@ -653,7 +653,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:57  Start by logging
 .claude/skills/e2e-studio-tests/SKILL.md:141  const roleSection = popover.getByText(&#x27;Anonymous (anon)&#x27;, { exact: true })
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system restrict access to cardholder data to only those individuals and systems whose job requires such access, implementing role-based access controls consistent with PCI DSS Requirement 7?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement and document role-based access controls specifically for cardholder data access. Create distinct roles with minimum necessary privileges for cardholder data handling, ensure all cardholder data access points use role-based validation (not just generic permissions), and add audit logging for cardholder data access attempts. The existing permission framework appears suitable but needs cardholder-data-specific implementation and documentation to demonstrate compliance with the &quot;need to know&quot; principle.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The application logic underlying actions like &#x27;Configure API privileges&#x27; (as referenced in `.claude/skills/e2e-studio-tests/SKILL.md` on lines 75 and 104) must explicitly verify that only individuals with authorized roles can modify API privileges. Failing to enforce strict role-based access at this point could result in PCI DSS Requirement 7 non-compliance.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f24" data-framework="PCI-DSS" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f24')">
@@ -661,7 +661,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:57  Start by logging
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-context">CONTEXT DEPENDENT</div><div class="verdict-text">The finding pertains to network segmentation (PCI-DSS Requirement 1), an infrastructure-level control that cannot be assessed or confirmed by the provided evidence. The evidence consists solely of documentation files and source code for the documentation website, which are not related to core platform services, network configurations, or cardholder data processing.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.claude/skills/studio-testing/rules/testing-exhaustive-permutations.md:4  impactDescription: catches edge cases and regressions in business logic
 apps/docs/app/guides/functions/[[...slug]]/page.tsx:12  const FunctionsGuidePage = async (props: { params: Promise&lt;Params&gt; }) =&gt; {
 apps/docs/app/guides/functions/[[...slug]]/page.tsx:25  export default FunctionsGuidePage
@@ -672,7 +672,7 @@ apps/docs/components/Navigation/NavigationMenu/NavigationMenu.constants.ts:2637 
 apps/docs/components/Navigation/NavigationMenu/NavigationMenu.constants.ts:2638  url: &#x27;/guides/platform/manage-your-usage/egress&#x27; as `/${string}`,
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement network segmentation to isolate the cardholder data environment (CDE) from other network segments, reducing the scope of PCI DSS compliance as described in Requirement 1?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement proper network segmentation architecture to isolate any cardholder data environment from other network segments. This requires deploying network firewalls, configuring network access control lists (ACLs), and establishing secure network zones with restricted communication paths. Document the network topology, firewall rules, and segmentation controls in your infrastructure-as-code or network configuration files. If this system does not process, store, or transmit cardholder data, clearly document the scope exclusion to reduce PCI DSS compliance requirements.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">To meet PCI-DSS Requirement 1, a comprehensive review of the production network architecture, firewall rules, and cloud security group configurations is required to ensure the Cardholder Data Environment (CDE) is properly isolated. The provided evidence files, such as `.claude/skills/studio-testing/rules/testing-exhaustive-permutations.md` and `apps/docs/app/guides/functions/[[...slug]]/page.tsx`, are not relevant to evaluating or implementing network segmentation controls, risking regulatory non-compliance and cardholder data compromise.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f25" data-framework="PCI-DSS" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f25')">
@@ -680,7 +680,7 @@ apps/docs/components/Navigation/NavigationMenu/NavigationMenu.constants.ts:2638 
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cites only documentation files (.md) related to a JavaScript testing framework (Vitest), which do not directly provide actionable evidence for or against PCI-DSS Requirement 6 vulnerability management practices like patching or scanning.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/SKILL.md:30  | Describe API | describe/suite for grouping tests and nested suites | [core-describe](references/co
 .agents/skills/vitest/references/advanced-vi.md:234  // Partial mock typing
 .agents/skills/vitest/references/core-describe.md:3  description: describe/suite for grouping tests into logical blocks
@@ -691,7 +691,7 @@ apps/docs/components/Navigation/NavigationMenu/NavigationMenu.constants.ts:2638 
 .claude/skills/studio-error-handling/SKILL.md:27  | `error-mappings.tsx`                  | `Record&lt;KnownErrorType, { id, Troubleshooting: ComponentTy
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system demonstrate evidence of vulnerability management practices including regular patching, dependency updates, and vulnerability scanning, consistent with PCI DSS Requirement 6?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement comprehensive vulnerability management practices including: automated dependency vulnerability scanning (tools like Snyk, OWASP Dependency Check), regular security patching procedures with documented schedules, integration of security testing into CI/CD pipelines, and maintenance of a vulnerability remediation workflow. Add configuration files for these tools to the repository and establish documented procedures for addressing identified vulnerabilities within required timeframes per PCI DSS requirements.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">No specific changes are required in the `.md` documentation files (e.g., .agents/skills/vitest/SKILL.md) to address PCI-DSS Requirement 6, as these files pertain to testing framework documentation and not vulnerability management practices, negating this high-risk finding.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f26" data-framework="PCI-DSS" data-severity="Medium Risk">
 <div class="finding-header" onclick="toggleFinding('f26')">
@@ -699,7 +699,7 @@ apps/docs/components/Navigation/NavigationMenu/NavigationMenu.constants.ts:2638 
 <div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence consists solely of documentation (.md files) describing the usage of a general testing framework (Vitest), which does not directly confirm or deny the implementation of specific security testing controls like SAST, code review, or penetration testing as required by PCI DSS.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/references/core-cli.md:39  Run tests that import specific files (useful with lint-staged):
 .agents/skills/vitest/references/core-cli.md:159  - Use `--run` flag to ensure single run (important for lint-staged)
 .agents/skills/vitest/references/core-describe.md:119  ## Parameterized Suites
@@ -710,7 +710,7 @@ apps/docs/components/Navigation/NavigationMenu/NavigationMenu.constants.ts:2638 
 .claude/skills/studio-testing/rules/testing-component-tests-ui-only.md:64  test(&#x27;closes on Escape key&#x27;, async () =&gt; {
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement security testing controls including code review, static analysis, and penetration testing practices, as required under PCI DSS Requirement 6.3 and 11.4?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a comprehensive security testing program that includes: (1) automated static application security testing (SAST) tools integrated into the CI/CD pipeline to catch vulnerabilities like the detected unsafe DOM manipulation patterns, (2) formal code review requirements with security checklists before production deployment, and (3) documented penetration testing procedures with regular execution schedules. Address the identified anti-patterns by replacing `dangerouslySetInnerHTML` with safer alternatives and implementing proper input sanitization for all dynamic content rendering.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Add specific sections to `.agents/skills/vitest/references/core-cli.md` and related `.md` documentation detailing the integration of SAST tools into the CI/CD pipeline and requirements for formal code reviews, ensuring clear evidence of compliance with PCI DSS Requirements 6.3 and 11.4.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f27" data-framework="PCI-DSS" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f27')">
@@ -718,7 +718,7 @@ apps/docs/components/Navigation/NavigationMenu/NavigationMenu.constants.ts:2638 
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence provided, consisting solely of a `.gitignore` entry and documentation files for a chart component, is entirely irrelevant and does not demonstrate the absence or presence of audit logging for cardholder data access as required by PCI DSS Requirement 10.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.gitignore:141  # For self-hosted logs: https://github.com/supabase/supabase/blob/86e3ab20abfdb9c3e666334d3d2f8efeef
 apps/design-system/content/docs/components/chart.mdx:431  Use `labelKey` and `nameKey` to use a custom key for the tooltip label and name.
 apps/design-system/content/docs/components/chart.mdx:449  | `labelKey`      | string                   | The config or data key to use for the label. |
@@ -729,7 +729,7 @@ apps/docs/app/api/graphql/route.test.ts:3  vi.mock(&#x27;~/lib/logger&#x27;, asy
 apps/docs/app/api/graphql/route.test.ts:4  const actual = await vi.importActual&lt;typeof import(&#x27;~/lib/logger&#x27;)&gt;(&#x27;~/lib/logger&#x27;)
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement audit trail mechanisms that record all individual access to cardholder data, all actions taken by any individual with root or administrative privileges, and all access to audit trails, as required under PCI DSS Requirement 10?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement comprehensive audit logging that captures: (1) all individual access attempts and actions involving cardholder data with user identification, timestamps, and data elements accessed; (2) all actions performed by users with root or administrative privileges including authentication attempts, privilege escalations, and system configuration changes; (3) all access to audit logs themselves including who accessed them and when. Ensure logs are tamper-evident, stored securely, and include sufficient detail for forensic analysis. The existing logging infrastructure in the GraphQL route could serve as a foundation, but needs expansion to cover all PCI DSS-required events with appropriate data classification and retention policies.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The evidence cited from `.gitignore` and `apps/design-system/content/docs/components/chart.mdx` does not pertain to audit logging for cardholder data access. Therefore, no specific change in these files is needed to address PCI DSS Requirement 10 based on this evidence.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f28" data-framework="PCI-DSS" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f28')">
@@ -737,7 +737,7 @@ apps/docs/app/api/graphql/route.test.ts:4  const actual = await vi.importActual&
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The &#x27;keys&#x27; identified in the evidence (`DOCS_REVALIDATION_OVERRIDE_KEYS`) appear to be API tokens or identifiers for a revalidation process, not cryptographic keys requiring management under PCI DSS Requirements 3.6 and 3.7 for protecting cardholder data.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">apps/docs/app/api/revalidate/route.utils.ts:27  const overrideKeys = process.env.DOCS_REVALIDATION_OVERRIDE_KEYS?.split(/\s*,\s*/) ?? []
 apps/docs/app/api/revalidate/route.utils.ts:28  if (basicKeys.length === 0 &amp;&amp; overrideKeys.length === 0) {
 apps/docs/app/api/revalidate/route.utils.ts:37  if (overrideKeys.includes(token)) {
@@ -748,7 +748,7 @@ apps/docs/components/AuthSmsProviderConfig/TextLocalConfig.mdx:2  import { CostW
 apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:2  import { CostWarning } from &#x27;./AuthSmsProviderConfig.Warnings&#x27;
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement cryptographic key management procedures including key generation, distribution, storage, rotation, and destruction, consistent with PCI DSS Requirement 3.6 and 3.7?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a comprehensive cryptographic key management system that covers the full lifecycle: key generation using cryptographically secure methods, secure distribution mechanisms, encrypted storage with access controls, automated rotation schedules, and secure destruction procedures. Remove all hardcoded API keys from the codebase and replace with secure vault retrievals. Establish formal policies and procedures documenting key management practices, including role-based access controls for key operations. Integrate all key operations with the existing Vault system and implement audit logging for all key lifecycle events to ensure PCI DSS compliance.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The evidence in `apps/docs/app/api/revalidate/route.utils.ts` and `apps/docs/components/AuthSmsProviderConfig/AuthSmsProviderConfig.tsx` does not indicate the use of cryptographic keys for cardholder data protection. Therefore, PCI DSS Requirements 3.6 and 3.7 concerning cryptographic key management are not applicable to the identified &#x27;keys&#x27; in this context.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f29" data-framework="PCI-DSS" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f29')">
@@ -756,7 +756,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:2  import { CostWarn
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited exclusively refers to documentation files (.md) related to testing framework configurations (Vitest, Playwright), which do not directly indicate the presence or absence of third-party service provider management for live cardholder data, making the finding a potential misinterpretation.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/SKILL.md:40  | Coverage | Code coverage with V8 or Istanbul providers | [features-coverage](references/features-c
 .agents/skills/vitest/SKILL.md:27  | Configuration | Vitest and Vite config integration, defineConfig usage | [core-config](references/
 .agents/skills/vitest/references/advanced-environments.md:210  provider: &#x27;playwright&#x27;,
@@ -767,7 +767,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:2  import { CostWarn
 .agents/skills/vitest/references/advanced-vi.md:148  vi.stubEnv(&#x27;API_KEY&#x27;, &#x27;test&#x27;)
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system manage third-party service providers that have access to cardholder data with appropriate controls, agreements, and monitoring, consistent with PCI DSS Requirement 12.8?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a comprehensive third-party service provider management program that includes: formal written agreements with all service providers that handle cardholder data, documented due diligence processes for vetting providers&#x27; PCI DSS compliance status, regular monitoring and assessment procedures for ongoing compliance verification, and maintenance of an inventory of all third-party services with access to cardholder data environments. Create policies and procedures documents that define roles, responsibilities, and processes for managing these relationships throughout their lifecycle.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">No changes are required in the `.agents/skills/vitest/SKILL.md`, `.agents/skills/vitest/references/advanced-environments.md`, or `.agents/skills/vitest/references/advanced-projects.md` files as the content refers to test environment configurations, not actual third-party services handling live cardholder data. Therefore, this evidence does not indicate a violation of PCI DSS Requirement 12.8.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f30" data-framework="PCI-DSS" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f30')">
@@ -775,7 +775,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:2  import { CostWarn
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence provided consists solely of documentation and markdown files describing UI alerts and general error handling, which are not relevant to demonstrating the implementation of a PCI-DSS incident response plan for cardholder data breaches as required by Requirement 12.10.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.cursor/rules/studio-useStaticEffectEvent.mdc:23  showNotification(&#x27;Connected!&#x27;, theme) // `theme` causes unwanted re-runs
 .cursor/rules/studio/RULE.md:32  - `studio/alerts`
 .cursor/rules/studio/alerts/RULE.md:2  description: &quot;Studio: alert/admonition usage and placement&quot;
@@ -786,7 +786,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:2  import { CostWarn
 .github/workflows/dashboard-pr-reminder.yml:44  run: pnpm tsx scripts/actions/find-stale-dashboard-prs.ts | pnpm tsx scripts/actions/send-slack-pr-n
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement an incident response plan that addresses suspected or confirmed cardholder data breaches, including detection, containment, and notification procedures, as required under PCI DSS Requirement 12.10?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a comprehensive incident response plan that specifically addresses cardholder data breaches. This should include documented procedures for detection (monitoring and alerting systems), containment (isolation protocols and access restrictions), assessment (breach scope determination), notification (internal escalation and external reporting to card brands/acquirers), and recovery processes. The plan should be stored in the repository as formal documentation with clear roles, responsibilities, and timelines that go beyond the general 5-day security response window currently documented.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">No specific changes are required for `.cursor/rules/studio/alerts/RULE.md` or other cited documentation files, as they pertain to UI alert design and general notifications, not the implementation of a PCI-DSS 12.10 incident response plan for cardholder data breaches, which remains a regulatory requirement to avoid non-compliance penalties.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 </div>
 <div class="framework-section" id="soc2" data-framework="SOC2">
@@ -797,7 +797,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:2  import { CostWarn
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence provided consists solely of .md files referencing login page tests and API design patterns, not actual source code implementing authentication controls, therefore the finding cannot be substantiated by the given evidence type.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/references/core-describe.md:40  test(&#x27;shows login page&#x27;, () =&gt; {})
 .agents/skills/vitest/references/features-filtering.md:30  vitest -t &quot;login&quot;
 .agents/skills/vitest/references/features-filtering.md:183  vitest user -t &quot;login&quot; --changed
@@ -808,7 +808,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:2  import { CostWarn
 .cursor/rules/studio/styling/RULE.md:2  description: &quot;Studio: styling rules (Tailwind + semantic tokens + typography/focus utilities)&quot;
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement logical access security controls over user authentication that are suitably designed and operating effectively to restrict access to authorized users, consistent with the Common Criteria CC6.1 requirement for logical and physical access controls?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement comprehensive user authentication controls including secure login/logout functions, session management, password policies, multi-factor authentication capabilities, and role-based access controls. The codebase should include authentication middleware, input validation, secure credential storage mechanisms, and access authorization checks. Additionally, ensure that authentication-related security controls are properly tested beyond the basic login page tests currently present, and document the authentication architecture to demonstrate compliance with logical access control requirements.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Review the application&#x27;s actual authentication source code, beyond the references in `core-describe.md`, `features-filtering.md`, and `SKILL.md`, to confirm that secure login/logout functions, session management, and robust access controls are effectively implemented, preventing non-compliance with SOC2-001 requirements for user authentication.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f32" data-framework="SOC2" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f32')">
@@ -816,7 +816,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:2  import { CostWarn
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited consists solely of Vitest testing framework documentation files, where terms like &#x27;scoped&#x27; and &#x27;non-scoped&#x27; refer to technical code or test suite organization rather than security-related role-based access control (RBAC) implementation or enforcement.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/references/advanced-environments.md:229  classNameStrategy: &#x27;non-scoped&#x27;,
 .agents/skills/vitest/references/core-describe.md:186  - Hooks are scoped to their suite and nested suites
 .agents/skills/vitest/references/core-hooks.md:56  ## Scoped Hooks
@@ -827,7 +827,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:2  import { CostWarn
 .agents/skills/vitest/references/features-context.md:130  { scope: &#x27;worker&#x27; }
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement role-based or attribute-based access controls that restrict system functions and data access based on authorized user roles, consistent with the principle of least privilege as required under CC6.3?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a comprehensive role-based access control (RBAC) system that includes: user role definitions and assignments, permission matrices mapping roles to specific system functions and data access levels, middleware or interceptors that enforce access controls at the application layer, and audit logging of access decisions. The system should default to denying access and require explicit permission grants based on assigned user roles, following the principle of least privilege. Consider leveraging Supabase&#x27;s existing auth features mentioned in the README to build proper RBAC controls.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Confirm that the &#x27;classNameStrategy: &#x27;non-scoped&#x27;&#x27; mentioned in .agents/skills/vitest/references/advanced-environments.md:229, and other &#x27;scoped&#x27; references in the provided Vitest documentation, are correctly interpreted as technical aspects of the testing framework and not indicators of lacking access control, ensuring no misinterpretation affects compliance with SOC2 CC6.3.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f33" data-framework="SOC2" data-severity="Pattern of Concern">
 <div class="finding-header" onclick="toggleFinding('f33')">
@@ -835,7 +835,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:2  import { CostWarn
 <div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence consists solely of Markdown documentation files within a test framework&#x27;s directory, and critically, all cited URLs in these documents explicitly use &#x27;https://&#x27;, indicating encryption in transit rather than a lack thereof.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/SKILL.md:7  source: Generated from https://github.com/vitest-dev/vitest, scripts located at https://github.com/a
 .agents/skills/vitest/references/advanced-environments.md:263  - https://vitest.dev/guide/environment.html
 .agents/skills/vitest/references/advanced-projects.md:212  apiUrl: &#x27;https://staging.api.com&#x27;,
@@ -846,7 +846,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:2  import { CostWarn
 .agents/skills/vitest/references/advanced-vi.md:248  - https://vitest.dev/api/vi.html
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system protect data during transmission over networks using encryption or other equivalent security measures, consistent with the CC6.7 requirement for protection of information during transmission?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a consistent encryption-in-transit policy that mandates HTTPS for all environments, including development and testing. Update all HTTP references in configuration files to use HTTPS or implement local TLS certificates for development environments. Add explicit documentation of encryption requirements and configure automated checks to prevent HTTP usage in any environment that handles sensitive data. Consider implementing HSTS headers and certificate pinning for additional transmission security.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Review `.agents/skills/vitest/references/advanced-projects.md` to confirm that the documented &#x27;https://staging.api.com&#x27; and &#x27;https://api.com&#x27; URLs accurately reflect current API endpoint configurations and that these production environments enforce HTTPS for all data transmission, ensuring compliance with SOC2 CC6.7 regarding protection of information during transmission.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f34" data-framework="SOC2" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f34')">
@@ -854,7 +854,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:2  import { CostWarn
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence consists solely of documentation files related to testing frameworks (Vitest, Playwright trace features), which are irrelevant to the assessment of production security logging and monitoring systems required by SOC2 CC7.2.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/SKILL.md:31  | Expect API | Assertions with toBe, toEqual, matchers and asymmetric matchers | [core-expect](refer
 .agents/skills/vitest/references/core-expect.md:3  description: Assertions with matchers, asymmetric matchers, and custom matchers
 .agents/skills/vitest/references/core-expect.md:103  ## Asymmetric Matchers
@@ -865,7 +865,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:2  import { CostWarn
 .cursor/rules/studio/alerts/RULE.md:2  description: &quot;Studio: alert/admonition usage and placement&quot;
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement logging, monitoring, and alerting mechanisms that detect and record security events, anomalies, and unauthorized activities, as required under CC7.2 for monitoring system components for anomalies?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement comprehensive security logging and monitoring infrastructure including: security event logging for authentication failures, unauthorized access attempts, and privilege escalations; automated anomaly detection systems that monitor system components for unusual patterns; real-time alerting mechanisms that notify security teams of potential threats; and centralized log management with appropriate retention policies. Configure monitoring dashboards and establish incident response procedures triggered by security alerts.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The identified files, such as `.agents/skills/vitest/SKILL.md` and `.claude/skills/e2e-studio-tests/SKILL.md`, describe testing functionalities and are not the appropriate location for implementing or verifying SOC2 CC7.2-compliant security logging and monitoring mechanisms. Production security logging and monitoring must be established within relevant application code or infrastructure configuration to meet regulatory requirements.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f35" data-framework="SOC2" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f35')">
@@ -873,7 +873,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:2  import { CostWarn
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence provided consists solely of documentation files (.md) which do not directly demonstrate the presence or absence of formal change management controls for application source code or infrastructure, aligning with the criteria for a possible false positive.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/SKILL.md:6  version: &quot;2026.1.28&quot;
 .agents/skills/vitest/SKILL.md:13  - Vite-native: Uses Vite&#x27;s transformation pipeline for fast HMR-like test updates
 .agents/skills/vitest/references/advanced-environments.md:23  // Environment-specific options
@@ -884,7 +884,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:2  import { CostWarn
 .agents/skills/vitest/references/advanced-projects.md:188  # Run specific project
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system demonstrate evidence of change management controls including version control, code review processes, and controlled deployment procedures, as required under CC8.1 for managing changes to infrastructure, data, software, and procedures?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement comprehensive change management controls including: establishing a formal version control system (Git) with branch protection rules requiring code reviews before merges, implementing automated CI/CD pipelines with approval gates for deployments to staging and production environments, creating documented procedures for change approval and rollback processes, and maintaining audit trails of all changes to infrastructure, software, and procedures. Document these processes and ensure they cover all system components referenced in the codebase.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">To address potential change management gaps, verify that the &#x27;version&#x27; field in `.agents/skills/vitest/SKILL.md` and similar documentation reflects an artifact under formal version control, with updates subject to documented review and approval processes. This ensures consistency and prevents unauthorized changes, upholding SOC2 CC8.1 requirements.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f36" data-framework="SOC2" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f36')">
@@ -892,7 +892,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:2  import { CostWarn
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence provided consists solely of markdown documentation files related to testing criticality, not application source code or direct indicators of absent incident detection, response, or recovery procedures required by SOC2 CC7.3 and CC7.4.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.claude/skills/studio-testing/SKILL.md:30  | 1        | Logic Extraction | CRITICAL | `testing-` |
 .claude/skills/studio-testing/SKILL.md:31  | 2        | Test Coverage    | CRITICAL | `testing-` |
 .claude/skills/studio-testing/SKILL.md:37  ### 1. Logic Extraction (CRITICAL)
@@ -903,7 +903,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:2  import { CostWarn
 .claude/skills/vercel-composition-patterns/AGENTS.md:47  **Impact: CRITICAL (prevents unmaintainable component variants)**
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement incident detection, response, and recovery procedures that enable timely identification and remediation of security incidents, consistent with CC7.3 requirements for evaluating security events and CC7.4 for responding to identified incidents?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement comprehensive incident response procedures including: automated security event detection and logging systems, defined incident classification and escalation procedures, documented response workflows for different incident types, and recovery/remediation tracking mechanisms. Add security monitoring capabilities that can evaluate events in real-time and trigger appropriate response actions. Establish incident response team roles, communication procedures, and post-incident review processes to ensure timely identification and remediation of security incidents beyond just vulnerability disclosures.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Document incident response procedures that explicitly cover potential security incidents arising from failures of the &#x27;critical shared features&#x27; identified in `.claude/skills/studio-testing/SKILL.md` and `.claude/skills/studio-testing/rules/testing-e2e-shared-features.md`. This action will facilitate timely identification and remediation of security incidents, meeting SOC2 CC7.3 and CC7.4 requirements.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f37" data-framework="SOC2" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f37')">
@@ -911,7 +911,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:2  import { CostWarn
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited exclusively points to documentation files (.md) describing the &#x27;vitest&#x27; testing framework, which, while a third-party dependency, does not directly provide evidence of a systemic failure in the overall process for assessing and managing third-party vendor, library, or service provider risks as required by SOC2 CC9.2.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/SKILL.md:30  | Describe API | describe/suite for grouping tests and nested suites | [core-describe](references/co
 .agents/skills/vitest/references/advanced-vi.md:234  // Partial mock typing
 .agents/skills/vitest/references/core-cli.md:115  ## Package.json Scripts
@@ -922,7 +922,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:2  import { CostWarn
 .agents/skills/vitest/references/features-filtering.md:203  - Tags provide semantic test grouping
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system assess and manage risks associated with third-party vendors, libraries, and service providers, including dependency vulnerability management, consistent with CC9.2 requirements for risk assessment of third-party service providers?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a comprehensive third-party risk management program including: dependency vulnerability scanning tools (like npm audit, Snyk, or OWASP Dependency-Check) integrated into the CI/CD pipeline; vendor security assessment procedures with documented evaluation criteria; regular dependency updates and patch management processes; and maintain an inventory of all third-party libraries, services, and vendors with associated risk ratings. Document these processes and ensure they are consistently applied across all system components.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Considering the use of `vitest` as documented in `.agents/skills/vitest/SKILL.md`, implement a documented process to include all third-party testing frameworks and libraries in Supabase&#x27;s dependency vulnerability management and risk assessment program, ensuring compliance with SOC2 CC9.2 requirements for third-party service provider risk management.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f38" data-framework="SOC2" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f38')">
@@ -930,7 +930,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:2  import { CostWarn
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence provided, consisting of documentation files related to software testing snapshots (Vitest), is entirely irrelevant to the compliance question regarding data backup and recovery controls for operational data.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/GENERATION.md:4  - **Git SHA:** `4a7321e10672f00f0bb698823a381c2cc245b8f7`
 .agents/skills/vitest/SKILL.md:19  - Snapshot testing, mocking, and spy utilities
 .agents/skills/vitest/SKILL.md:39  | Snapshots | Snapshot testing with toMatchSnapshot and inline snapshots | [features-snapshots](refe
@@ -941,7 +941,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:2  import { CostWarn
 .agents/skills/vitest/references/advanced-environments.md:178  export default &lt;Environment&gt;{
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement data backup, replication, and recovery controls that ensure availability and recoverability of data, consistent with the A1.2 criterion for recovery of infrastructure and data to meet objectives?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement comprehensive data backup and recovery controls including automated backup schedules, data replication mechanisms, disaster recovery procedures, and recovery time/point objectives. Document backup retention policies, test recovery procedures regularly, and maintain backup integrity verification processes. Consider implementing database-level backups, file system snapshots, and cross-region replication given this appears to be a Supabase-related project handling production data.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The evidence files .agents/skills/vitest/GENERATION.md and .agents/skills/vitest/SKILL.md discuss software snapshot testing, which is a development practice, not an indicator of data backup and recovery controls for production data. Therefore, no changes are required within these specific files to address the SOC2-008 criterion for data availability and recoverability.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f39" data-framework="SOC2" data-severity="Medium Risk">
 <div class="finding-header" onclick="toggleFinding('f39')">
@@ -949,7 +949,7 @@ apps/docs/components/AuthSmsProviderConfig/TwilioConfig.mdx:2  import { CostWarn
 <div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The presence of &#x27;input-otp&#x27; components within the application&#x27;s design system (`.tsx` files) indicates UI-level support or intent for multi-factor authentication, making the finding relevant to SOC2 CC6.1 despite the inclusion of test/documentation files.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/references/features-snapshots.md:187  resolveSnapshotPath: (testPath, snapExtension) =&gt; {
 .agents/skills/vitest/references/features-snapshots.md:187  resolveSnapshotPath: (testPath, snapExtension) =&gt; {
 apps/design-system/__registry__/index.tsx:965  &quot;input-otp-demo&quot;: {
@@ -960,7 +960,7 @@ apps/design-system/__registry__/index.tsx:971  files: [&quot;registry/default/ex
 apps/design-system/__registry__/index.tsx:976  &quot;input-otp-pattern&quot;: {
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement or support multi-factor authentication for user access, particularly for privileged accounts and administrative interfaces, consistent with CC6.1 requirements for logical access security?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement complete MFA functionality beyond just UI components. This should include backend authentication services that enforce MFA for all user accounts (especially privileged/administrative accounts), integration with MFA providers (TOTP, SMS, hardware tokens), session management that validates second factors, and administrative policies that mandate MFA usage. Document the MFA implementation and provide evidence of enforcement mechanisms, particularly for administrative interfaces and privileged account access.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Utilize the &#x27;input-otp&#x27; components, as defined in `apps/design-system/__registry__/index.tsx`, to integrate and enforce robust backend multi-factor authentication for all privileged and administrative accounts, which is critical for meeting SOC2 CC6.1 logical access security requirements.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f40" data-framework="SOC2" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f40')">
@@ -968,7 +968,7 @@ apps/design-system/__registry__/index.tsx:976  &quot;input-otp-pattern&quot;: {
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited, primarily `CONTRIBUTING.md` and related config files, consists of general project documentation and does not directly support the presence or absence of formal security policies (acceptable use, data classification, access management) as required by SOC2 CC1.1. The tool misinterpreted general documentation for security policy documentation.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: MEDIUM</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.github/pull_request_template.md:1  ## I have read the [CONTRIBUTING.md](https://github.com/supabase/supabase/blob/master/CONTRIBUTING.m
 .github/workflows/external-pr-comment.yml:20  Thanks for contributing to Supabase! ❤️ Our team will review your PR.
 .prettierignore:18  apps/docs/CONTRIBUTING.md
@@ -979,7 +979,7 @@ CONTRIBUTING.md:11  To ensure a positive and inclusive environment, please read 
 DEVELOPERS.md:31  To ensure a positive and inclusive environment, please read our [code of conduct](https://github.com
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system demonstrate evidence of documented security policies, including acceptable use, data classification, and access management policies, as required under CC1.1 for the entity&#x27;s commitment to integrity and ethical values?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The organization needs to create and maintain formal, documented security policies that specifically address acceptable use of systems and data, data classification standards, and access management procedures. These policies should be stored in accessible locations within the repository (such as a /policies or /security-policies directory) and referenced in the main README or contributing documentation. The policies must go beyond basic contributing guidelines to establish clear security expectations, data handling requirements, and access control standards that demonstrate organizational commitment to integrity and ethical values.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">To comply with SOC2 CC1.1, the organization must create formal, documented security policies addressing acceptable use, data classification, and access management. Store these policies in a clearly defined location such as `docs/security/policies.md` or similar, as existing documentation like `CONTRIBUTING.md` does not fulfill this requirement.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 </div>
 <div class="framework-section" id="sox" data-framework="SOX">
@@ -990,7 +990,7 @@ DEVELOPERS.md:31  To ensure a positive and inclusive environment, please read ou
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">All evidence cited consists of documentation files (.md) referring to testing setup, telemetry standards, or general content processing, rather than active application source code directly handling financial data or transactions, thus not supporting a SOX financial data integrity control finding.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/references/core-hooks.md:89  // Wrap each test in database transaction
 .agents/skills/vitest/references/core-hooks.md:91  await db.beginTransaction()
 .claude/skills/studio-testing/rules/testing-component-tests-ui-only.md:21  validation that happens to live inside a component. Extract that logic into a
@@ -1001,7 +1001,7 @@ DEVELOPERS.md:31  To ensure a positive and inclusive environment, please read ou
 .cursor/rules/docs/docs-embeddings-generation/RULE.md:67  - **`page`** table: Stores page metadata, content, checksum, version
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement controls to ensure the integrity, accuracy, and completeness of financial data and transactions, consistent with SOX Section 302 requirements for management certification of financial statements?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement comprehensive financial data integrity controls including: data validation schemas specifically for financial transactions using tools like Zod (referenced but not implemented for financial data), audit logging for all financial data modifications with immutable timestamps and user attribution, role-based access controls for financial data access, automated data completeness checks and reconciliation processes, and transaction rollback capabilities with proper error handling. Additionally, establish formal procedures for management certification of financial data accuracy and implement automated controls testing to ensure ongoing compliance with SOX Section 302 requirements.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The cited evidence files, such as `.agents/skills/vitest/references/core-hooks.md` and `.claude/skills/telemetry-standards/SKILL.md`, are documentation and test-related, not production application code. Therefore, no specific code changes are required in these files to address SOX Section 302 financial data integrity controls.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f42" data-framework="SOX" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f42')">
@@ -1009,7 +1009,7 @@ DEVELOPERS.md:31  To ensure a positive and inclusive environment, please read ou
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence is found within a markdown file, specifically in a section describing or referencing test setup for an &#x27;admin&#x27; user within the vitest framework, indicating it is not production application code directly affecting SOX access controls.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/references/features-context.md:215  // admin-test.ts
 .agents/skills/vitest/references/features-context.md:218  export const test = dbTest.extend&lt;{ admin: User }&gt;({
 .agents/skills/vitest/references/features-context.md:219  admin: async ({ db }, use) =&gt; {
@@ -1028,7 +1028,7 @@ DEVELOPERS.md:31  To ensure a positive and inclusive environment, please read ou
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited exclusively refers to documentation for testing utilities (Vitest) used to clear *mock* call histories, not production application logs or financial transaction records, making it a likely false positive for SOX audit trail requirements.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/references/advanced-vi.md:33  fn.mockClear()    // Clear call history
 .agents/skills/vitest/references/advanced-vi.md:34  fn.mockReset()    // Clear history + implementation
 .agents/skills/vitest/references/advanced-vi.md:215  vi.clearAllMocks()   // Clear all mock call history
@@ -1039,7 +1039,7 @@ DEVELOPERS.md:31  To ensure a positive and inclusive environment, please read ou
 .claude/skills/studio-testing/rules/testing-exhaustive-permutations.md:79  test(&#x27;detects timestamp&#x27;, () =&gt; { ... })      // multiple formats -&gt; timestamptz
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system maintain a complete and tamper-evident audit trail of all financial transactions, modifications, and access events, sufficient to support the audit requirements under SOX Section 802?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a comprehensive audit logging system that captures all financial transactions, data modifications, and user access events with immutable timestamps and tamper-evident mechanisms. Remove or restrict any functionality that allows clearing of operational logs or audit trails in production environments. Ensure audit logs are stored separately from application data with appropriate access controls, retention policies, and integrity verification mechanisms to meet SOX compliance requirements.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">No changes are necessary in `.agents/skills/vitest/references/advanced-vi.md` or `.agents/skills/vitest/references/features-mocking.md`, as these files document testing utilities for clearing *mock* data and do not present a risk to SOX audit trail immutability in production systems, avoiding unnecessary development effort.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f44" data-framework="SOX" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f44')">
@@ -1047,7 +1047,7 @@ DEVELOPERS.md:31  To ensure a positive and inclusive environment, please read ou
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence exclusively consists of documentation files (.md) related to a testing framework, which does not directly demonstrate a failure in SOX change management controls for financial software.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/SKILL.md:6  version: &quot;2026.1.28&quot;
 .agents/skills/vitest/SKILL.md:13  - Vite-native: Uses Vite&#x27;s transformation pipeline for fast HMR-like test updates
 .agents/skills/vitest/references/advanced-environments.md:23  // Environment-specific options
@@ -1058,7 +1058,7 @@ DEVELOPERS.md:31  To ensure a positive and inclusive environment, please read ou
 .agents/skills/vitest/references/advanced-projects.md:188  # Run specific project
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement change management controls for software that processes financial data, including version control, code review, testing, and controlled deployment, consistent with SOX IT general controls?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement comprehensive change management controls including: (1) formal version control system with branch protection and merge approval requirements, (2) mandatory code review process with documented approval workflows, (3) automated testing pipelines that must pass before deployment, and (4) controlled deployment procedures with segregation of duties between development, testing, and production environments. Document all procedures and maintain audit trails of changes to financial data processing systems.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Update `.agents/skills/vitest/SKILL.md` and associated Vitest documentation to explicitly reference the formal change management framework governing financial software, detailing how Vitest testing procedures integrate into SOX-compliant version control, code review, and deployment processes. This clarification is necessary to avoid regulatory misinterpretation of these documents regarding SOX compliance.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f45" data-framework="SOX" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f45')">
@@ -1066,7 +1066,7 @@ DEVELOPERS.md:31  To ensure a positive and inclusive environment, please read ou
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited consists exclusively of documentation files (.md) referencing Vitest test coverage thresholds and concurrency limits, which are not directly relevant to demonstrating the absence or presence of segregation of duties controls for financial transactions or system development/deployment.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/references/features-concurrency.md:73  Limit concurrent tests:
 .agents/skills/vitest/references/features-coverage.md:45  // Thresholds
 .agents/skills/vitest/references/features-coverage.md:46  thresholds: {
@@ -1077,7 +1077,7 @@ DEVELOPERS.md:31  To ensure a positive and inclusive environment, please read ou
 .agents/skills/vitest/references/features-coverage.md:108  // Per-file thresholds
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement segregation of duties controls that prevent any single individual from having the ability to both authorize and execute financial transactions, or to both develop and deploy changes to financial systems?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement role-based access controls and multi-person approval workflows for all financial operations and system changes. Create separate roles for transaction authorization vs. execution, and for development vs. deployment activities. Add approval gates in CI/CD pipelines requiring different individuals to approve code changes before deployment to production financial systems. Document these controls with clear role definitions and establish audit trails for all financial system access and modifications.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The documentation in `.agents/skills/vitest/references/features-concurrency.md` and `.agents/skills/vitest/references/features-coverage.md` details testing practices, which are unrelated to segregation of duties. No changes to these specific files are required to address SOX-005, as they do not constitute evidence of missing SoD controls.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f46" data-framework="SOX" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f46')">
@@ -1085,7 +1085,7 @@ DEVELOPERS.md:31  To ensure a positive and inclusive environment, please read ou
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited consists solely of code coverage ignore directives found within a documentation file (.md), which is entirely irrelevant to the system&#x27;s data retention policies for financial records under SOX Section 802.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/references/features-coverage.md:122  /* v8 ignore next -- @preserve */
 .agents/skills/vitest/references/features-coverage.md:127  /* v8 ignore start -- @preserve */
 .agents/skills/vitest/references/features-coverage.md:129  /* v8 ignore stop -- @preserve */
@@ -1096,7 +1096,7 @@ DEVELOPERS.md:31  To ensure a positive and inclusive environment, please read ou
 .claude/skills/studio-error-handling/SKILL.md:46  - Do not pass `error.message` to `ErrorMatcher` — pass the full `error` object so the class is prese
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement data retention policies that preserve financial records, audit work papers, and supporting documentation for the minimum retention period required under SOX Section 802 (not less than 7 years)?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a comprehensive data retention policy system that automatically preserves financial records, audit trails, and supporting documentation for at least 7 years. This should include database-level retention policies, automated archival processes, and configuration management to ensure compliance with SOX Section 802. The system should also include audit logging to demonstrate retention policy enforcement and prevent premature deletion of regulated financial data.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The directives like `/* v8 ignore next -- @preserve */` and `/* istanbul ignore next -- @preserve */` in `.agents/skills/vitest/references/features-coverage.md` are test coverage annotations, not indicators of non-compliance with data retention policies. Therefore, no changes are required in this specific file to address SOX Section 802 requirements for financial record preservation.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f47" data-framework="SOX" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f47')">
@@ -1104,7 +1104,7 @@ DEVELOPERS.md:31  To ensure a positive and inclusive environment, please read ou
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence consists solely of documentation files (.md) describing testing frameworks, which do not directly demonstrate the presence or absence of formal internal control documentation over financial reporting as required by SOX Section 404(a). The cited files are irrelevant to the specific SOX compliance requirement for internal control documentation.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/SKILL.md:3  description: Vitest fast unit testing framework powered by Vite with Jest-compatible API. Use when w
 .agents/skills/vitest/SKILL.md:10  Vitest is a next-generation testing framework powered by Vite. It provides a Jest-compatible API wit
 .agents/skills/vitest/references/features-concurrency.md:141  Control test order:
@@ -1123,7 +1123,7 @@ DEVELOPERS.md:31  To ensure a positive and inclusive environment, please read ou
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited consists solely of documentation (.md) and workflow configuration (.yml) files, which do not demonstrate anti-tampering controls for financial records within application source code, and the checksums mentioned are for document embedding generation and caching, not SOX-relevant data integrity.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.cursor/rules/docs/docs-embeddings-generation/RULE.md:15  2. **Processing content** into structured sections with checksums
 .cursor/rules/docs/docs-embeddings-generation/RULE.md:57  - Checksum for change detection
 .cursor/rules/docs/docs-embeddings-generation/RULE.md:60  3. **Change Detection**: Compares checksums against existing database records
@@ -1134,7 +1134,7 @@ DEVELOPERS.md:31  To ensure a positive and inclusive environment, please read ou
 .gitignore:82  .yarn-integrity
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement controls to prevent unauthorized alteration or destruction of financial records, including integrity verification, immutable storage, and tamper detection mechanisms, consistent with SOX Section 802 anti-destruction requirements?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a comprehensive anti-tampering framework that includes: (1) cryptographic integrity verification using digital signatures or hash chains for all financial records, (2) immutable storage mechanisms such as append-only logs or blockchain-based storage, (3) tamper detection systems that log all access attempts and modifications with timestamps and user identification, (4) access controls that prevent unauthorized deletion or modification of financial records, and (5) automated monitoring and alerting for any attempts to alter or destroy financial data. All deletion operations should be replaced with logical deletion (marking records as inactive) while preserving the original data for audit purposes.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The checksum logic described in `.cursor/rules/docs/docs-embeddings-generation/RULE.md` and the caching hashes in `.github/workflows/studio-e2e-test.yml` are not designed for financial record integrity. For SOX Section 802 compliance, financial data systems require dedicated cryptographic integrity verification and immutable storage to prevent unauthorized alteration or destruction of financial records, avoiding severe regulatory penalties.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 </div>
 <div class="framework-section" id="tcpa" data-framework="TCPA">
@@ -1145,7 +1145,7 @@ DEVELOPERS.md:31  To ensure a positive and inclusive environment, please read ou
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence is solely from the LICENSE file, containing generic legal terms about agreements in writing, which are not relevant to obtaining specific prior express written consent for SMS marketing under TCPA.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">LICENSE:135  the terms of any separate license agreement you may have executed
 LICENSE:144  agreed to in writing, Licensor provides the Work (and each
 LICENSE:156  negligent acts) or agreed to in writing, shall any Contributor be
@@ -1156,7 +1156,7 @@ apps/docs/content/guides/auth/auth-web3.mdx:37  It defines the wallet address, t
 apps/docs/content/guides/auth/auth-web3.mdx:185  Providing a `statement` is required for most Solana wallets and this message will be shown to the us
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system obtain prior express written consent before sending marketing or promotional text messages, including a clear and conspicuous disclosure that consent is being sought, as required under 47 U.S.C. §227(b)(1) and 47 CFR §64.1200(a)(2)?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a compliant SMS consent collection system that includes: (1) clear and conspicuous disclosure that consent is being sought for marketing text messages, (2) explicit opt-in mechanism (not pre-checked boxes), (3) disclosure of message frequency and data rates, (4) clear instructions for opting out, and (5) persistent storage of consent records with timestamps. Add SMS consent workflow components to the design system and document the implementation in the authentication guides alongside existing OAuth consent patterns.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The content within `LICENSE` file lines 135, 144, 156, 171, and 197 discusses general written agreements and indemnification, unrelated to obtaining prior express written consent for SMS marketing. Therefore, no changes are required in these specific license terms for TCPA compliance, as the relevant consent mechanism would reside in user-facing application code if the application sends marketing SMS.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f50" data-framework="TCPA" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f50')">
@@ -1164,7 +1164,7 @@ apps/docs/content/guides/auth/auth-web3.mdx:185  Providing a `statement` is requ
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence provided refers to &#x27;stop after failure&#x27; configurations within a testing framework&#x27;s documentation (vitest), which is entirely unrelated to opt-out mechanisms for recipient communications under TCPA regulations.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/references/core-cli.md:94  --bail &lt;n&gt;                # Stop after n failures
 .agents/skills/vitest/references/core-config.md:115  // Stop after first failure
 .agents/skills/vitest/references/features-concurrency.md:230  Stop after first failure:
@@ -1175,7 +1175,7 @@ apps/docs/content/guides/auth/auth-web3.mdx:185  Providing a `statement` is requ
 .claude/skills/vercel-composition-patterns/AGENTS.md:532  &lt;CancelButton /&gt;
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system provide a clear and easy mechanism for recipients to opt out of receiving further messages, and does it honor opt-out requests promptly, as required under TCPA and CTIA guidelines?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a comprehensive opt-out system that includes: (1) clear opt-out instructions in all messages (e.g., &quot;Reply STOP to opt out&quot;), (2) automated processing of opt-out keywords like &quot;STOP&quot;, &quot;UNSUBSCRIBE&quot;, etc., (3) immediate removal of opted-out recipients from messaging lists, (4) confirmation messages acknowledging opt-out requests, and (5) database tables to track opt-out status with proper indexing for quick lookups before sending messages. Ensure the opt-out mechanism is prominent, easy to use, and processes requests within the timeframes required by TCPA regulations.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The identified lines in `.agents/skills/vitest/references/core-cli.md`, `.agents/skills/vitest/references/core-config.md`, and `.agents/skills/vitest/references/features-concurrency.md` discuss test execution behavior and do not indicate a missing opt-out mechanism for user communications; thus, no TCPA compliance remediation is required based on this evidence.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f51" data-framework="TCPA" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f51')">
@@ -1183,7 +1183,7 @@ apps/docs/content/guides/auth/auth-web3.mdx:185  Providing a `statement` is requ
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence provided, a Markdown documentation file listing UI chart components in a design system, is entirely unrelated to the functionality of initiating outbound calls or checking against a Do Not Call Registry, making the finding a false positive based on the cited evidence.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.cursor/rules/studio/charts/RULE.md:14  - `apps/design-system/__registry__/default/block/chart-composed-demo.tsx`
 .cursor/rules/studio/charts/RULE.md:15  - `apps/design-system/__registry__/default/block/chart-composed-basic.tsx`
 .cursor/rules/studio/charts/RULE.md:16  - `apps/design-system/__registry__/default/block/chart-composed-states.tsx`
@@ -1194,7 +1194,7 @@ apps/docs/content/guides/auth/auth-web3.mdx:185  Providing a `statement` is requ
 .cursor/rules/studio/empty-states/RULE.md:15  - `apps/design-system/registry/default/example/empty-state-initial-state-informational.tsx`
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system check phone numbers against the National Do Not Call Registry and maintain an internal do-not-call list before initiating outbound calls or messages, as required under 47 CFR §64.1200(c)?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">If this system performs outbound calls or SMS messaging, implement mandatory Do Not Call Registry checking before any outbound communication attempts. This should include: (1) integration with the National Do Not Call Registry API to validate phone numbers, (2) maintenance of an internal suppression list with add/remove functionality, (3) automatic blocking of communications to numbers on either list, and (4) logging of all DNC checks for audit purposes. If this system does not perform outbound communications, document this clearly to establish the system&#x27;s scope and exempt status.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">No changes are required in `.cursor/rules/studio/charts/RULE.md` or the referenced `apps/design-system/__registry__/default/block/*.tsx` files as they are UI chart components and contain no logic relevant to outbound calling or DNC list checks, thus they do not impact compliance with 47 CFR §64.1200(c).</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f52" data-framework="TCPA" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f52')">
@@ -1202,7 +1202,7 @@ apps/docs/content/guides/auth/auth-web3.mdx:185  Providing a `statement` is requ
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence provided consists solely of markdown files related to testing and UI interaction (e.g., handling the Escape key, snapshot tests) and does not contain any application source code or information relevant to TCPA message frequency disclosure or enforcement mechanisms. The snippets are entirely unrelated to the legal question.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/references/features-snapshots.md:8  Snapshot tests capture output and compare against stored references.
 .agents/skills/vitest/references/features-snapshots.md:158  escapeString: false,
 .claude/skills/studio-testing/rules/testing-component-tests-ui-only.md:11  logic that cannot be captured by testing utility functions alone.
@@ -1213,7 +1213,7 @@ apps/docs/content/guides/auth/auth-web3.mdx:185  Providing a `statement` is requ
 .claude/skills/studio-testing/rules/testing-e2e-shared-features.md:54  await getFilterBarInput(page).press(&#x27;Escape&#x27;)
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system disclose to consumers the expected frequency of messages before obtaining consent, and does it enforce frequency limits consistent with the disclosed rate, as recommended by CTIA guidelines?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a comprehensive messaging consent system that includes: (1) clear frequency disclosure forms that specify expected message volume (e.g., &quot;up to 5 messages per week&quot;), (2) explicit opt-in consent capture before any messaging begins, (3) rate limiting mechanisms to enforce disclosed frequency limits, and (4) audit logging of all consent events and message send rates. Consider adding these components to your authentication flow or user preferences system, ensuring compliance documentation is maintained alongside the technical implementation.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">To align the testing with TCPA compliance, update `.claude/skills/studio-testing/rules/testing-component-tests-ui-only.md` to include tests that verify message frequency disclosures are presented to users before consent is obtained, preventing potential TCPA violations.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f53" data-framework="TCPA" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f53')">
@@ -1221,7 +1221,7 @@ apps/docs/content/guides/auth/auth-web3.mdx:185  Providing a `statement` is requ
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited (references to &#x27;branded types&#x27; in documentation and UI styling with &#x27;--brand-default&#x27; or &#x27;text-brand&#x27;) relates to internal type definitions or design system elements, not to the content or mechanisms for sender identification in outbound messages subject to TCPA and CTIA requirements.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/references/advanced-type-testing.md:125  ## Branded Types
 .agents/skills/vitest/references/advanced-type-testing.md:128  type UserId = number &amp; { __brand: &#x27;UserId&#x27; }
 .agents/skills/vitest/references/advanced-type-testing.md:129  type PostId = number &amp; { __brand: &#x27;PostId&#x27; }
@@ -1232,7 +1232,7 @@ apps/design-system/components/copy-button.tsx:74  {hasCopied ? &lt;Check classNa
 apps/design-system/components/mdx-components.tsx:88  &#x27;text-foreground underline decoration-1 decoration-foreground-muted underline-offset-4 transition-co
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system include proper sender identification in all outbound messages, including the identity of the entity sending the message and how to contact them, consistent with TCPA and CTIA requirements?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement sender identification in all outbound message templates and messaging systems. This should include: (1) Clear identification of the sending entity/business name in message content, (2) Contact information such as phone number, email, or physical address, (3) Standardized message headers or footers containing this information, and (4) Configuration systems to ensure sender identification is automatically included in all outbound communications. Review existing messaging workflows to ensure compliance before any messages are sent to users.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The cited files (`.agents/skills/vitest/references/advanced-type-testing.md`, `apps/design-system/__registry__/default/block/chart-composed-basic.tsx`, `apps/design-system/app/(app)/page.tsx`) do not contain elements related to outbound message sender identification for TCPA compliance. No modifications are necessary based on this finding to ensure proper sender identification as required by TCPA and CTIA.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f54" data-framework="TCPA" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f54')">
@@ -1240,11 +1240,11 @@ apps/design-system/components/mdx-components.tsx:88  &#x27;text-foreground under
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The absence of code evidence for a critical TCPA consent record-keeping requirement in a repository serving relevant domains (saas, ecommerce, fintech, communication, healthcare) indicates a high likelihood of non-compliance with a core regulatory obligation, confirming the risk.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system maintain records of consent that would be sufficient to demonstrate compliance in the event of a dispute, including the date, time, method of consent, and the specific consent language presented to the consumer?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a comprehensive consent management system that captures and stores all required TCPA consent elements in a structured database. This should include creating database schemas to store consent timestamps, the exact method of consent collection (web form, SMS, voice, etc.), the complete consent language presented to consumers, and unique identifiers linking consent to specific phone numbers. Additionally, implement audit trails and data retention policies to ensure these records remain accessible for potential disputes or regulatory inquiries.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Given the absence of code evidence, establish a new consent management system within the application architecture. This system must capture and store comprehensive TCPA consent records—including date, time, method, and specific language—in the Supabase database to avoid severe penalties for non-compliance with TCPA record-keeping standards.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f55" data-framework="TCPA" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f55')">
@@ -1252,7 +1252,7 @@ apps/design-system/components/mdx-components.tsx:88  &#x27;text-foreground under
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited exclusively refers to test execution parameters (e.g., `vitest --bail`) within documentation files for a testing framework, which is entirely unrelated to handling user consent revocation for TCPA purposes.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.agents/skills/vitest/references/core-cli.md:94  --bail &lt;n&gt;                # Stop after n failures
 .agents/skills/vitest/references/core-config.md:115  // Stop after first failure
 .agents/skills/vitest/references/features-concurrency.md:230  Stop after first failure:
@@ -1263,7 +1263,7 @@ apps/design-system/components/mdx-components.tsx:88  &#x27;text-foreground under
 .claude/skills/studio-testing/rules/testing-extract-logic.md:10  Remove as much logic from components as possible. Put it in co-located
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system honor revocation of consent through any reasonable means indicated by the consumer, not limited to specific keywords, and process revocation within a reasonable timeframe, consistent with FCC guidance?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement a comprehensive consent revocation system that: 1) Accepts revocation requests through multiple channels (SMS replies, web interface, phone calls) without requiring specific keywords, 2) Processes revocation requests immediately or within industry-standard timeframes (typically within 24-48 hours), 3) Maintains audit logs of all revocation requests and processing timestamps, 4) Automatically updates contact preferences across all communication systems, and 5) Provides confirmation to consumers when revocation is processed. The system should recognize common opt-out language like &quot;STOP&quot;, &quot;UNSUBSCRIBE&quot;, &quot;REMOVE&quot;, and natural language requests.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">No code modifications are required in .agents/skills/vitest/references/core-cli.md, .agents/skills/vitest/references/core-config.md, or .agents/skills/vitest/references/features-concurrency.md, as the cited text refers exclusively to test runner control flow and not to consumer consent revocation mechanisms. Applying remediation to these files would not address actual TCPA compliance obligations.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f56" data-framework="TCPA" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f56')">
@@ -1271,7 +1271,7 @@ apps/design-system/components/mdx-components.tsx:88  &#x27;text-foreground under
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cited, consisting solely of `.github/` workflow and configuration files, specifies schedules for internal repository operations (e.g., dependency updates, tests, documentation linting) and does not indicate any mechanism for sending outbound calls or messages to external recipients that would fall under TCPA regulations.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">.github/dependabot.yml:5  schedule:
 .github/workflows/ai-tests.yml:12  schedule:
 .github/workflows/dashboard-pr-reminder.yml:4  schedule:
@@ -1282,7 +1282,7 @@ apps/design-system/components/mdx-components.tsx:88  &#x27;text-foreground under
 .github/workflows/docs-tests-smoke.yml:7  schedule:
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system enforce time-of-day restrictions for outbound calls and messages, ensuring they are not sent before 8:00 AM or after 9:00 PM in the recipient&#x27;s local time zone, as required under 47 CFR §64.1200(c)(1)?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Implement time-of-day validation logic that checks recipient local time zones before sending any outbound calls or messages. This should include: (1) timezone detection or storage for each recipient, (2) validation functions that prevent communications before 8:00 AM or after 9:00 PM in the recipient&#x27;s local time, (3) queue management to defer messages that fall outside permitted hours, and (4) comprehensive logging of time-based restrictions. Consider integrating this validation into your existing scheduling infrastructure referenced throughout the workflow files.</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">No modifications are necessary for the `schedule` configurations within `.github/dependabot.yml`, `.github/workflows/ai-tests.yml`, `.github/workflows/dashboard-pr-reminder.yml`, `.github/workflows/docs-last-changed.yml`, or `.github/workflows/docs-lint-v2-scheduled.yml` regarding TCPA-008. These files define internal CI/CD processes and do not involve sending outbound calls or messages to external recipients, which are the target of 47 CFR §64.1200(c)(1) time-of-day restrictions.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 </div>
 
@@ -1319,7 +1319,7 @@ apps/design-system/components/mdx-components.tsx:88  &#x27;text-foreground under
 <div class="section-heading">How Findings Are Generated</div>
 <ul style="padding-left:20px;margin-bottom:16px;font-size:14px;line-height:2;color:#57606a">
 <li>Primary analysis by Claude Sonnet (Anthropic)</li>
-<li>Independent review by Gemini 1.5 Flash (Google)</li>
+<li>Independent review by Gemini 2.5 Flash (Google)</li>
 <li>Question libraries are open source and community-maintained</li>
 <li>All questions cite regulatory source text</li>
 <li>Questions have not been validated by a licensed attorney</li>
