@@ -12,12 +12,76 @@ from dataclasses import dataclass, field
 from anthropic import Anthropic
 
 
+# Evidence tier classification
+TIER_1_EXTENSIONS = {
+    '.ts', '.tsx', '.js', '.jsx', '.py',
+    '.go', '.rs', '.java', '.php', '.rb',
+    '.cs', '.cpp', '.c', '.swift', '.kt',
+    '.scala', '.clj', '.ex', '.exs', '.h', '.hpp',
+}
+
+TIER_2_EXTENSIONS = {
+    '.yml', '.yaml', '.json', '.toml',
+    '.env', '.config', '.tf', '.hcl',
+    '.xml', '.properties',
+}
+TIER_2_FILENAMES = {
+    'Dockerfile', 'docker-compose.yml',
+    'docker-compose.yaml', 'docker-compose.full-stack.yml',
+}
+
+TIER_3_EXTENSIONS = {
+    '.md', '.mdc', '.txt', '.rst', '.mdx',
+    '.html', '.css', '.scss',
+}
+
+
+def classify_evidence_tier(file_path: str) -> int:
+    """Classify a file into evidence tiers: 1=source, 2=config, 3=docs."""
+    basename = os.path.basename(file_path)
+    if basename in TIER_2_FILENAMES:
+        return 2
+    ext = os.path.splitext(file_path)[1].lower()
+    if ext in TIER_1_EXTENSIONS:
+        return 1
+    if ext in TIER_2_EXTENSIONS:
+        return 2
+    if ext in TIER_3_EXTENSIONS:
+        return 3
+    # Default: treat unknown as tier 2 (config-like)
+    return 2
+
+
+def calculate_tier_severity(evidence_items: list) -> str:
+    """Calculate severity based on evidence tiers. Only Tier 1 supports High Risk."""
+    tier1 = [e for e in evidence_items if e.tier == 1]
+    tier2 = [e for e in evidence_items if e.tier == 2]
+    tier3 = [e for e in evidence_items if e.tier == 3]
+
+    if len(tier1) >= 2:
+        return "High Risk"
+    elif len(tier1) == 1:
+        return "Medium Risk"
+    elif len(tier2) >= 2:
+        return "Medium Risk"
+    elif len(tier2) == 1:
+        return "Pattern of Concern"
+    elif tier3:
+        return "Pattern of Concern"
+    else:
+        return "No Issue Found"
+
+
+TIER_LABELS = {1: "SOURCE", 2: "CONFIG", 3: "DOCS"}
+
+
 @dataclass
 class Evidence:
     file_path: str
     line_number: int
     content: str
     match_type: str  # "search_pattern" or "absence_pattern"
+    tier: int = 0  # 1=source code, 2=config, 3=docs
 
 
 @dataclass
@@ -84,6 +148,7 @@ class BaseComplianceAgent:
             except (OSError, IOError):
                 continue
 
+            tier = classify_evidence_tier(rel_path)
             for pattern in patterns:
                 regex = re.compile(re.escape(pattern), re.IGNORECASE)
                 for i, line in enumerate(lines, 1):
@@ -93,6 +158,7 @@ class BaseComplianceAgent:
                             line_number=i,
                             content=line.strip()[:200],
                             match_type="search_pattern",
+                            tier=tier,
                         ))
                         if len(evidence) >= max_results:
                             return evidence
@@ -120,14 +186,16 @@ class BaseComplianceAgent:
         if evidence:
             evidence_text = "EVIDENCE FOUND:\n"
             for e in evidence[:20]:
-                evidence_text += f"  - {e.file_path}:{e.line_number} | {e.content}\n"
+                label = TIER_LABELS.get(e.tier, "UNKNOWN")
+                evidence_text += f"  - [{label}] {e.file_path}:{e.line_number} | {e.content}\n"
         else:
             evidence_text = "NO MATCHING EVIDENCE FOUND for search patterns.\n"
 
         if absence_evidence:
             evidence_text += "\nANTI-PATTERNS DETECTED:\n"
             for e in absence_evidence[:10]:
-                evidence_text += f"  - {e.file_path}:{e.line_number} | {e.content}\n"
+                label = TIER_LABELS.get(e.tier, "UNKNOWN")
+                evidence_text += f"  - [{label}] {e.file_path}:{e.line_number} | {e.content}\n"
 
         prompt = f"""You are a compliance analyst producing a legal brief finding. Analyze the following evidence from a code repository.
 
@@ -200,6 +268,12 @@ Rules:
         # If parsing failed, use the full response
         if not finding_text:
             finding_text = response_text[:500]
+
+        # Cap severity based on evidence tiers — docs alone cannot produce High Risk
+        tier_max = calculate_tier_severity(evidence)
+        sev_order = ["No Issue Found", "Pattern of Concern", "Medium Risk", "High Risk"]
+        if sev_order.index(finding_level) > sev_order.index(tier_max):
+            finding_level = tier_max
 
         return Finding(
             question_id=question["id"],
@@ -292,7 +366,8 @@ class JudgeAgent:
         evidence_summary = ""
         if finding.evidence:
             for e in finding.evidence[:5]:
-                evidence_summary += f"  - {e.file_path}:{e.line_number} | {e.content[:100]}\n"
+                label = TIER_LABELS.get(e.tier, "UNKNOWN")
+                evidence_summary += f"  - [{label}] {e.file_path}:{e.line_number} | {e.content[:100]}\n"
         else:
             evidence_summary = "  No code evidence was found.\n"
 

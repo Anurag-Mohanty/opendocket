@@ -110,7 +110,7 @@ a { color: #0052CC; text-decoration: none; } a:hover { text-decoration: underlin
 <body>
 <div class="top-bar"></div>
 <nav class="nav"><a href="../index.html" class="nav-brand"><span class="nav-brand-shield"></span> OpenDocket</a><div class="nav-links"><a href="../index.html">Directory</a><a href="../dashboard.html">Dashboard</a><a href="../methodology.html">Methodology</a><a href="../questions.html">Questions</a></div></nav>
-<div class="action-bar"><div class="action-bar-left"><span style="font-size:13px;color:#57606a;font-weight:600">openemr</span><span style="font-size:13px;color:#8c959f">&middot; 30 findings &middot; MODERATE RISK</span></div><div class="action-bar-right"><button class="btn" onclick="expandAll()">Expand all</button><button class="btn" onclick="collapseAll()">Collapse all</button><button class="btn btn-primary" onclick="window.print()">Print / PDF</button></div></div>
+<div class="action-bar"><div class="action-bar-left"><span style="font-size:13px;color:#57606a;font-weight:600">openemr</span><span style="font-size:13px;color:#8c959f">&middot; 30 findings · 4 confirmed high &middot; ELEVATED RISK</span></div><div class="action-bar-right"><button class="btn" onclick="expandAll()">Expand all</button><button class="btn" onclick="collapseAll()">Collapse all</button><button class="btn btn-primary" onclick="window.print()">Print / PDF</button></div></div>
 <div class="tab-bar"><button class="tab-btn active" onclick="showTab('overview',this)">Overview</button><button class="tab-btn" onclick="showTab('findings',this)">Findings</button><button class="tab-btn" onclick="showTab('methodology',this)">Methodology &amp; Limitations</button></div>
 <div class="page">
 <div class="report-header"><div class="report-eyebrow">Compliance Risk Analysis</div><div class="report-title">openemr</div><div class="report-meta"><a href="https://github.com/openemr/openemr">https://github.com/openemr/openemr</a><br>Scanned 2026-03-23 &middot; OpenDocket V1 &middot; Primary: Claude Sonnet &middot; Review: Gemini 2.5 Flash</div></div>
@@ -118,8 +118,8 @@ a { color: #0052CC; text-decoration: none; } a:hover { text-decoration: underlin
 <!-- TAB 1: OVERVIEW -->
 <div class="tab-panel active" id="tab-overview">
 <div class="callout callout-amber" style="margin-bottom:24px;padding:20px 24px"><div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#9A6700;margin-bottom:12px">Important Limitations of This Report</div><div style="font-size:13px;line-height:1.8"><strong>This report is not legal advice and is not defensible in court.</strong> It provides directional guidance only. To obtain a defensible compliance assessment, engage a licensed attorney and certified auditor.<br><br><strong>Scope limitations:</strong> Only public repository content was analyzed. Infrastructure configuration, deployment settings, operational policies, vendor contracts, and staff training are outside scope.<br><br><strong>A true compliance audit</strong> would also review: vendor contracts and BAAs, staff training records, incident response procedures, physical security controls, and system audit logs — none of which are visible in source code.</div></div>
-<div class="section" id="summary"><div class="section-heading">Risk Assessment</div><p style="font-size:15px;line-height:1.8;margin-bottom:24px">This analysis identified 30 compliance risk patterns across HIPAA, SOC2, GDPR. Of these, 5 are classified as high-severity — patterns consistent with potential non-compliance that regulators actively investigate. The most serious gaps were found in GDPR, HIPAA. Without remediation, these patterns could expose the organization to regulatory enforcement, financial penalties, and reputational damage.</p>
-<div class="risk-index"><div class="risk-label" style="color:#9A6700">MODERATE RISK</div><div class="risk-desc">5 high-severity patterns require attention</div></div>
+<div class="section" id="summary"><div class="section-heading">Risk Assessment</div><p style="font-size:15px;line-height:1.8;margin-bottom:24px">This analysis identified 30 compliance patterns across HIPAA, SOC2, GDPR. After independent verification by Gemini 2.5 Flash, 4 high-severity findings were confirmed and 3 were identified as possible false positives — likely pattern matches in documentation or configuration files rather than application source code. The 4 confirmed findings represent the primary areas requiring attention.</p>
+<div class="risk-index"><div class="risk-label" style="color:#CF222E">ELEVATED RISK</div><div class="risk-desc"><strong>4 confirmed high-severity findings</strong><br><span style="font-size:12px;color:#8c959f">5 total patterns identified · 3 flagged as possible false positives by independent review</span></div></div>
 <div class="section-heading">What This Means If Unaddressed</div><table class="table"><thead><tr><th>Framework</th><th>Regulatory Body</th><th>Max Penalty</th><th>Enforcement Trend</th></tr></thead><tbody><tr><td style="font-weight:600">GDPR <span style="color:#CF222E;font-size:12px">(3 high)</span></td><td>EU DPAs</td><td style="color:#CF222E;font-weight:600">Up to EUR 20M or 4% turnover</td><td>Cross-border enforcement rising</td></tr>
 <tr><td style="font-weight:600">HIPAA <span style="color:#CF222E;font-size:12px">(2 high)</span></td><td>HHS / OCR</td><td style="color:#CF222E;font-weight:600">Fines up to $1.5M/year per category</td><td>Increasing enforcement, record penalties in 2024</td></tr>
 </tbody></table>
@@ -127,7 +127,7 @@ a { color: #0052CC; text-decoration: none; } a:hover { text-decoration: underlin
 <div class="top-finding"><div class="top-finding-q"></div><div class="top-finding-meta"><span class="badge badge-high">High Risk</span><span>GDPR</span><span>GDPR-003</span><span>No specific file cited</span> &middot; Review: CONFIRMED</div><div style="font-size:13px;color:#57606a;margin-top:8px">Implement a patient data erasure workflow that identifies all personal data across related tables and either deletes or anonymizes it based on configurable rules. Support partial anonymization where c</div></div>
 <div class="top-finding"><div class="top-finding-q"></div><div class="top-finding-meta"><span class="badge badge-med">Medium Risk</span><span>SOC2</span><span>SOC2-003</span><span>interface/globals.php:122</span> &middot; Review: CONFIRMED</div><div style="font-size:13px;color:#57606a;margin-top:8px">Enforce HTTPS at the application level with automatic redirects and HSTS headers. Ensure all outbound HTTP client calls enforce certificate verification and minimum TLS 1.2. Add TLS requirement checks</div></div>
 
-<div class="judge-block"><div class="judge-title">Independent Review — Gemini 2.5 Flash</div><div class="judge-stats"><div class="judge-stat"><span class="judge-stat-n j-confirmed">22</span><span class="judge-stat-l">Confirmed</span></div><div class="judge-stat"><span class="judge-stat-n j-context">2</span><span class="judge-stat-l">Context dependent</span></div><div class="judge-stat"><span class="judge-stat-n j-fp">2</span><span class="judge-stat-l">Possible false positives</span></div><div class="judge-stat"><span class="judge-stat-n j-additional">4</span><span class="judge-stat-l">Additional risk</span></div></div><div class="judge-note">Primary: Claude Sonnet (Anthropic). Review: Gemini 2.5 Flash (Google). Neither constitutes legal advice.</div></div>
+<div class="judge-block"><div class="judge-title">Gemini Verification Layer</div><div style="font-size:13px;color:#57606a;line-height:1.7;margin-bottom:14px;padding:10px 12px;background:rgba(110,64,201,0.05);border-radius:4px"><strong>How to read this:</strong> The confirmed count is your action list. The false positive count shows where the scanner found keyword patterns in documentation rather than application source code. Click any finding to see exactly what evidence was found and why Gemini made its determination.</div><div class="judge-stats"><div class="judge-stat"><span class="judge-stat-n j-confirmed">23</span><span class="judge-stat-l">Confirmed</span></div><div class="judge-stat"><span class="judge-stat-n j-context">0</span><span class="judge-stat-l">Context dependent</span></div><div class="judge-stat"><span class="judge-stat-n j-fp">3</span><span class="judge-stat-l">Possible false positives</span></div><div class="judge-stat"><span class="judge-stat-n j-additional">4</span><span class="judge-stat-l">Additional risk</span></div></div><div class="judge-note">Primary: Claude Sonnet (Anthropic). Verification: Gemini 2.5 Flash (Google). Neither constitutes legal advice.</div></div>
 <div class="section-heading">Recommended Actions</div><div class="rec-item"><div class="rec-priority rec-p-high">High</div><div><div class="rec-text">Implement field-level encryption for all high-sensitivity database columns (SSN, drivers license, insurance policy numbers, diagnosis codes) using the existing `CryptoGen` class or a dedicated transparent encryption layer. Enable the `encryption_at_rest` global setting by default for new installations. Consider MySQL/MariaDB Transparent Data Encryption (TDE) as a compensating control for the full database, and document the encryption strategy in a formal security architecture document.</div><div class="rec-fw">HIPAA &middot; HIPAA-002</div></div></div>
 <div class="rec-item"><div class="rec-priority rec-p-high">High</div><div><div class="rec-text">Refactor `getPatientData()` and similar functions to require explicit column lists rather than defaulting to `SELECT *`. Introduce purpose-specific data transfer objects (DTOs) for common use cases (e.g., `PatientNameDTO`, `PatientBillingDTO`, `PatientDemographicsSummaryDTO`) that return only the fields required for each workflow. Audit all SQL queries across the codebase for `SELECT *` usage and replace with explicit column selections. For the FHIR API, implement scope-based field filtering that limits returned attributes to those authorized by the client&#x27;s OAuth scopes.</div><div class="rec-fw">HIPAA &middot; HIPAA-007</div></div></div>
 <div class="rec-item"><div class="rec-priority rec-p-high">High</div><div><div class="rec-text">Implement a patient data erasure workflow that identifies all personal data across related tables and either deletes or anonymizes it based on configurable rules. Support partial anonymization where clinical data can be retained for public health or research purposes with personal identifiers removed. Handle the tension between GDPR erasure rights and medical record retention requirements by documenting the applicable exceptions under Article 17(3)(c) for public health. Add erasure request tracking and completion audit logging.</div><div class="rec-fw">GDPR &middot; GDPR-003</div></div></div>
@@ -144,9 +144,9 @@ a { color: #0052CC; text-decoration: none; } a:hover { text-decoration: underlin
 <div class="rec-item"><div class="rec-priority rec-p-med">Medium</div><div><div class="rec-text">Add a patient-facing data export feature in the patient portal that generates a comprehensive download package in a machine-readable format (JSON or XML) containing all personal data categories. Extend CCD/CCDA exports to include non-clinical personal data. Implement a &quot;transmit to another controller&quot; workflow that allows patients to request direct transfer of their data to a specified recipient. Log all portability requests and fulfillment actions.</div><div class="rec-fw">GDPR &middot; GDPR-004</div></div></div>
 <div class="rec-item"><div class="rec-priority rec-p-med">Medium</div><div><div class="rec-text">Add deployment configuration options for data residency region and cross-border transfer policy. Implement geographic validation for external integration endpoints that flags connections to servers in non-adequate jurisdictions. Add API access controls that can restrict data serving based on client geographic origin. Document cross-border transfer considerations in the deployment guide with templates for Standard Contractual Clauses and Transfer Impact Assessments.</div><div class="rec-fw">GDPR &middot; GDPR-008</div></div></div>
 
-<div class="section-heading" style="margin-top:32px">Risk Scorecard</div><table class="table"><thead><tr><th>Framework</th><th>High Risk</th><th>Medium</th><th>Concern</th><th>No Issue</th></tr></thead><tbody><tr><td style="font-weight:600">HIPAA</td><td class="n-high">2</td><td class="n-med">4</td><td class="n-concern">2</td><td class="n-ok">2</td></tr>
-<tr><td style="font-weight:600">SOC2</td><td class="n-high">0</td><td class="n-med">3</td><td class="n-concern">4</td><td class="n-ok">3</td></tr>
-<tr><td style="font-weight:600">GDPR</td><td class="n-high">3</td><td class="n-med">3</td><td class="n-concern">4</td><td class="n-ok">0</td></tr>
+<div class="section-heading" style="margin-top:32px">Risk Scorecard</div><table class="table"><thead><tr><th>Framework</th><th>High Risk</th><th>Confirmed</th><th>False Pos.</th><th>Medium</th><th>Concern</th><th>No Issue</th></tr></thead><tbody><tr><td style="font-weight:600">HIPAA</td><td class="n-high">2</td><td style="color:#1A7F37;font-weight:700">9</td><td style="color:#8c959f">0</td><td class="n-med">4</td><td class="n-concern">2</td><td class="n-ok">2</td></tr>
+<tr><td style="font-weight:600">SOC2</td><td class="n-high">0</td><td style="color:#1A7F37;font-weight:700">7</td><td style="color:#8c959f">0</td><td class="n-med">3</td><td class="n-concern">4</td><td class="n-ok">3</td></tr>
+<tr><td style="font-weight:600">GDPR</td><td class="n-high">3</td><td style="color:#1A7F37;font-weight:700">7</td><td style="color:#8c959f">3</td><td class="n-med">3</td><td class="n-concern">4</td><td class="n-ok">0</td></tr>
 </tbody></table>
 <div class="section-heading" style="margin-top:24px">Domains Detected</div><div class="domain-row"><span class="domain-name">Healthcare</span><div class="domain-bar-wrap"><div class="domain-bar" style="width:97.1%"></div></div><span class="domain-pct">97.1%</span></div>
 
@@ -160,61 +160,61 @@ a { color: #0052CC; text-decoration: none; } a:hover { text-decoration: underlin
 <div class="filter-sep"></div><span class="filter-label">Severity:</span><button class="filter-btn active" data-type="sev" onclick="filterSeverity('all',this)">All</button><button class="filter-btn" data-type="sev" onclick="filterSeverity('High Risk',this)">High (5)</button><button class="filter-btn" data-type="sev" onclick="filterSeverity('Medium Risk',this)">Medium (10)</button><button class="filter-btn" data-type="sev" onclick="filterSeverity('Pattern of Concern',this)">Concern (10)</button></div>
 <div class="framework-section" id="hipaa" data-framework="HIPAA">
 <div class="framework-header"><div><div class="framework-name">HIPAA</div><div class="framework-meta">HHS / OCR &middot; Fines up to $1.5M/year per category</div></div><div class="framework-count">10 findings</div></div>
-<div class="finding" id="f-f1" data-framework="HIPAA" data-severity="Medium Risk">
+<div class="finding" id="f-f1" data-framework="HIPAA" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f1')">
-<div class="finding-left"><div class="finding-num">HIPAA-001</div><div class="finding-question"></div></div>
-<div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
-</div>
-<div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The evidence directly cites application source code files that retrieve and insert explicit Protected Health Information (PHI) such as patient demographics, SSN, DOB, and medical results, clearly demonstrating the system&#x27;s direct handling of sensitive data within a healthcare context under HIPAA.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">interface/patient_file/summary/demographics.php:142  $result = sqlQuery(&quot;SELECT pid, fname, lname, mname, ss, DOB, street, city, state, postal_code, phon
-src/Services/PatientService.php:91  $sql = &quot;SELECT * FROM patient_data WHERE puuid = ?&quot;;
-interface/orders/receive_hl7_results.inc.php:231  sqlInsert(&quot;INSERT INTO procedure_result SET procedure_report_id = ?, result_code = ?, result_text = 
-library/patient.inc.php:328  getInsuranceData()
-</div>
-<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system properly identify, classify, and safeguard all 18 categories of Protected Health Information across every data handling pathway, including storage, processing, display, and transmission?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Refactor data retrieval and insertion operations within files such as `interface/patient_file/summary/demographics.php` and `src/Services/PatientService.php` to integrate with a service that explicitly identifies, classifies, and applies field-level access controls to all PHI (e.g., `fname`, `ss`, `DOB`). This ensures that all 18 categories of PHI are consistently safeguarded across every data handling pathway, preventing unauthorized access and maintaining HIPAA compliance.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
-</div></div>
-<div class="finding" id="f-f2" data-framework="HIPAA" data-severity="High Risk">
-<div class="finding-header" onclick="toggleFinding('f2')">
 <div class="finding-left"><div class="finding-num">HIPAA-002</div><div class="finding-question"></div></div>
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The evidence shows PHI stored in the database and an encryption capability with `openssl_encrypt` that is conditionally applied, raising concerns about comprehensive encryption at rest and secure key management, aligning with the high-risk finding.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">sql/database.sql:1872  CREATE TABLE patient_data ( id bigint(20) NOT NULL AUTO_INCREMENT, pid bigint(20) NOT NULL DEFAULT 0
-sql/database.sql:2148  form_encounter` and related form tables store clinical notes, reason for visit, and diagnostic impre
-library/encryption.php:18  class CryptoGen { public function encryptStandard($plaintext, $customKey = null) { return openssl_en
-src/Services/DocumentService.php:128  if ($GLOBALS[&#x27;encryption_at_rest&#x27;]) { $content = $cryptoGen-&gt;encryptStandard($content); }
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">Evidence from database schema clearly shows PHI storage in `patient_data` and `form_encounter` tables, and application source code indicates encryption at rest is conditionally applied via `$GLOBALS[&#x27;encryption_at_rest&#x27;]` in `src/Services/DocumentService.php`, suggesting PHI may not be universally encrypted by default.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[CONFIG] sql/database.sql:1872  CREATE TABLE patient_data ( id bigint(20) NOT NULL AUTO_INCREMENT, pid bigint(20) NOT NULL DEFAULT 0
+[CONFIG] sql/database.sql:2148  form_encounter` and related form tables store clinical notes, reason for visit, and diagnostic impre
+[SOURCE] library/encryption.php:18  class CryptoGen { public function encryptStandard($plaintext, $customKey = null) { return openssl_en
+[SOURCE] src/Services/DocumentService.php:128  if ($GLOBALS[&#x27;encryption_at_rest&#x27;]) { $content = $cryptoGen-&gt;encryptStandard($content); }
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Is all electronically stored PHI encrypted at rest using industry-standard algorithms, and are encryption keys managed securely with proper rotation and access controls?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Review `sql/database.sql` to identify all PHI columns in tables like `patient_data` and `form_encounter`, then modify application logic or the database schema to ensure these fields are encrypted using `CryptoGen::encryptStandard`. Ensure the global setting controlling `encryption_at_rest` referenced in `src/Services/DocumentService.php` is enabled by default for all PHI and robust key management practices are implemented to comply with HIPAA&#x27;s encryption requirements for PHI at rest.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Update `sql/database.sql` to apply field-level encryption for all PHI in tables like `patient_data` and `form_encounter` utilizing the `CryptoGen` class, and modify application logic to ensure the `$GLOBALS[&#x27;encryption_at_rest&#x27;]` setting in `src/Services/DocumentService.php` is enforced by default, preventing unauthorized access to unencrypted PHI and ensuring HIPAA compliance.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+</div></div>
+<div class="finding" id="f-f2" data-framework="HIPAA" data-severity="High Risk">
+<div class="finding-header" onclick="toggleFinding('f2')">
+<div class="finding-left"><div class="finding-num">HIPAA-007</div><div class="finding-question"></div></div>
+<div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
+</div>
+<div class="finding-body">
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The application source code explicitly uses or allows for `SELECT *` when querying `patient_data` in critical functions and reports, directly violating the HIPAA Minimum Necessary principle by retrieving more PHI than required for the intended purpose.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[SOURCE] library/patient.inc.php:52  function getPatientData($pid, $given = &quot;*&quot;) { $sql = &quot;SELECT $given FROM patient_data WHERE pid = ? 
+[SOURCE] interface/reports/clinical_reports.php:92  $query = &quot;SELECT pd.*, fe.date AS encounter_date, fe.reason, b.code, b.code_text FROM patient_data p
+</div>
+<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system limit access to and disclosure of PHI to the minimum amount necessary to accomplish the intended purpose of each use, disclosure, or request?</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Modify `function getPatientData($pid, $given = &quot;*&quot;)` in `library/patient.inc.php` to strictly require and enforce an explicit column list, preventing default `SELECT *` behavior. Concurrently, refactor the query at `interface/reports/clinical_reports.php:92` to select only the data necessary for the report, which is crucial for complying with HIPAA&#x27;s Minimum Necessary standard for PHI access and disclosure.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f3" data-framework="HIPAA" data-severity="Medium Risk">
 <div class="finding-header" onclick="toggleFinding('f3')">
+<div class="finding-left"><div class="finding-num">HIPAA-001</div><div class="finding-question"></div></div>
+<div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
+</div>
+<div class="finding-body">
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The evidence directly cites application source code files (`.php`) demonstrating selection and handling of multiple categories of Protected Health Information (PHI) such as SSN, DOB, addresses, and insurance data, which is a core and known compliance risk under HIPAA.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[SOURCE] interface/patient_file/summary/demographics.php:142  $result = sqlQuery(&quot;SELECT pid, fname, lname, mname, ss, DOB, street, city, state, postal_code, phon
+[SOURCE] src/Services/PatientService.php:91  $sql = &quot;SELECT * FROM patient_data WHERE puuid = ?&quot;;
+[SOURCE] interface/orders/receive_hl7_results.inc.php:231  sqlInsert(&quot;INSERT INTO procedure_result SET procedure_report_id = ?, result_code = ?, result_text = 
+[SOURCE] library/patient.inc.php:328  getInsuranceData()
+</div>
+<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system properly identify, classify, and safeguard all 18 categories of Protected Health Information across every data handling pathway, including storage, processing, display, and transmission?</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">To safeguard PHI, update the data retrieval logic within `interface/patient_file/summary/demographics.php` and `src/Services/PatientService.php` to include explicit field-level access controls. This ensures that only authorized users or services can access specific PHI elements like SSN or DOB, preventing unauthorized disclosure and maintaining HIPAA compliance.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+</div></div>
+<div class="finding" id="f-f4" data-framework="HIPAA" data-severity="Medium Risk">
+<div class="finding-header" onclick="toggleFinding('f4')">
 <div class="finding-left"><div class="finding-num">HIPAA-003</div><div class="finding-question"></div></div>
 <div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The &#x27;fsockopen&#x27; call in `PhimailController.php` initiates a raw socket connection that does not inherently provide encryption, posing a direct risk for PHI transmitted via email, while the `globals.php` snippet only conditionally sets secure cookie parameters rather than enforcing HTTPS universally.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">interface/modules/zend_modules/module/Phimail/src/Phimail/Controller/PhimailController.php:95  $fp = fsockopen($phimail_server, $phimail_port, $errno, $errstr, 20);
-interface/globals.php:122  $isSecure = ($_SERVER[&#x27;HTTPS&#x27;] ?? &#x27;&#x27;) === &#x27;on&#x27;; session_set_cookie_params(0, $webroot, &#x27;&#x27;, $isSecure
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The evidence shows usage of `fsockopen` which defaults to unencrypted connections, potentially transmitting PHI without TLS, and application code that conditionally uses HTTPS for cookies without enforcing HTTPS for all traffic, directly violating HIPAA&#x27;s encryption in transit requirements.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[SOURCE] interface/modules/zend_modules/module/Phimail/src/Phimail/Controller/PhimailController.php:95  $fp = fsockopen($phimail_server, $phimail_port, $errno, $errstr, 20);
+[SOURCE] interface/globals.php:122  $isSecure = ($_SERVER[&#x27;HTTPS&#x27;] ?? &#x27;&#x27;) === &#x27;on&#x27;; session_set_cookie_params(0, $webroot, &#x27;&#x27;, $isSecure
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Is all PHI encrypted during electronic transmission using TLS 1.2 or higher, and are insecure transport protocols explicitly disabled or redirected?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">In `interface/modules/zend_modules/module/Phimail/src/Phimail/Controller/PhimailController.php`, update line 95 to utilize TLS-encrypted stream functions (e.g., `stream_socket_client` with `stream_socket_enable_crypto`) for all external connections handling PHI. Additionally, modify `interface/globals.php` to enforce HTTP-to-HTTPS redirects and HSTS headers to encrypt all web traffic, thereby preventing unauthorized access to PHI as required by HIPAA.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
-</div></div>
-<div class="finding" id="f-f4" data-framework="HIPAA" data-severity="No Issue Found">
-<div class="finding-header" onclick="toggleFinding('f4')">
-<div class="finding-left"><div class="finding-num">HIPAA-004</div><div class="finding-question"></div></div>
-<div class="finding-right"><span class="badge badge-ok">No Issue Found</span><span class="chevron">&#8250;</span></div>
-</div>
-<div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-additional">ADDITIONAL RISK</div><div class="verdict-text">While the evidence confirms the use of an access control function (`acl_check`) to protect PHI access, these snippets alone are insufficient to confirm the system fully implements role-based access controls based on job functions with minimum necessary granularity as strictly required by HIPAA-004, thus the primary analysis&#x27;s &#x27;No Issue Found&#x27; understates the potential for incomplete compliance.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">library/acl.inc.php:12  function acl_check($section, $value, $user = &#x27;&#x27;, $return_value = &#x27;&#x27;) { if (empty($user)) { $user = $
-interface/patient_file/summary/demographics.php:32  if (!acl_check(&#x27;patients&#x27;, &#x27;demo&#x27;)) { die(xlt(&#x27;Access denied&#x27;)); }
-</div>
-<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system enforce role-based access controls that limit PHI access to authorized individuals based on their job function, and are these controls granular enough to satisfy the minimum necessary standard?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The existing `acl_check` function in `library/acl.inc.php` and its invocation in `interface/patient_file/summary/demographics.php` must be reviewed to confirm that the defined sections and values map to explicit role-based permissions, job functions, and meet the minimum necessary standard. Failure to adequately map access to specific job functions could lead to inappropriate access to PHI, violating HIPAA-004.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Modify `interface/globals.php` to enforce HTTPS for all requests, including automatic HTTP-to-HTTPS redirects and setting HSTS headers. Update `interface/modules/zend_modules/module/Phimail/src/Phimail/Controller/PhimailController.php` to explicitly establish TLS 1.2+ encrypted connections when using `fsockopen` or similar functions for external communication, such as by using `ssl://` or `tls://` stream wrappers. This ensures PHI is encrypted in transit, preventing HIPAA violations for unencrypted electronic transmissions.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f5" data-framework="HIPAA" data-severity="Medium Risk">
 <div class="finding-header" onclick="toggleFinding('f5')">
@@ -222,236 +222,236 @@ interface/patient_file/summary/demographics.php:32  if (!acl_check(&#x27;patient
 <div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The evidence explicitly points to PHP source code configuring session lifetime and cookie parameters, which are directly relevant to HIPAA requirements for automatic session termination and protection against token hijacking/fixation.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">interface/globals.php:118  ini_set(&#x27;session.gc_maxlifetime&#x27;, $GLOBALS[&#x27;timeout&#x27;]); session_set_cookie_params(0, $webroot, &#x27;&#x27;, t
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The evidence directly manipulates PHP session parameters (`session.gc_maxlifetime` and `session_set_cookie_params`) within application source code, which is a known compliance risk for HIPAA if not configured securely or if other protections are missing.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[SOURCE] interface/globals.php:118  ini_set(&#x27;session.gc_maxlifetime&#x27;, $GLOBALS[&#x27;timeout&#x27;]); session_set_cookie_params(0, $webroot, &#x27;&#x27;, t
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement automatic session termination after a period of inactivity, and are session tokens protected against hijacking, fixation, and replay attacks?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">In `interface/globals.php`, modify the `$GLOBALS[&#x27;timeout&#x27;]` variable to 900 seconds or less for `session.gc_maxlifetime` to enforce automatic inactivity termination. Set the `secure` and `httponly` flags to `true` within the `session_set_cookie_params` call at line 118, and add `session_regenerate_id(true)` after user authentication, to protect session tokens against hijacking, fixation, and replay attacks as required by HIPAA.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">To address session inactivity in `interface/globals.php:118`, configure `$GLOBALS[&#x27;timeout&#x27;]` to a maximum of 900 seconds (15 minutes) for `session.gc_maxlifetime`. Integrate `session_regenerate_id(true)` after successful authentication and any privilege changes to protect against session fixation and hijacking, fulfilling HIPAA requirements for robust session management.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
-<div class="finding" id="f-f6" data-framework="HIPAA" data-severity="No Issue Found">
+<div class="finding" id="f-f6" data-framework="HIPAA" data-severity="Medium Risk">
 <div class="finding-header" onclick="toggleFinding('f6')">
-<div class="finding-left"><div class="finding-num">HIPAA-006</div><div class="finding-question"></div></div>
-<div class="finding-right"><span class="badge badge-ok">No Issue Found</span><span class="chevron">&#8250;</span></div>
-</div>
-<div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-additional">ADDITIONAL RISK</div><div class="verdict-text">The primary analysis correctly identified the presence of audit logging capabilities within the source code, but its &#x27;No Issue Found&#x27; severity understates the actual risk, as indicated by the need for extended logging coverage and tamper-proofing measures mentioned in its own remediation, which are crucial for &#x27;comprehensive&#x27; HIPAA compliance.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">library/log.inc.php:14  function newEvent($event, $user, $groupname, $success, $comments = &quot;&quot;, $patient_id = null, $log_from
-interface/patient_file/summary/demographics.php:55  newEvent(&quot;patient-record&quot;, $_SESSION[&#x27;authUser&#x27;], $_SESSION[&#x27;authProvider&#x27;], 1, &quot;view&quot;, $pid);
-sql/database.sql:3862  CREATE TABLE log ( id bigint(20) NOT NULL AUTO_INCREMENT, date datetime DEFAULT NULL, event varchar(
-</div>
-<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system maintain comprehensive audit logs that record all access to and modifications of PHI, including who accessed what data, when, and the outcome of the access attempt?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">To meet HIPAA&#x27;s comprehensive audit logging requirements, all access to PHI via new FHIR API endpoints and report generation pathways must initiate a call to `newEvent` (defined in `library/log.inc.php`), similar to the current logging for patient record views in `interface/patient_file/summary/demographics.php`. Additionally, mechanisms for forwarding logs from the `log` table (created in `sql/database.sql`) to an immutable external system should be implemented to prevent unauthorized modification and ensure audit trail integrity.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
-</div></div>
-<div class="finding" id="f-f7" data-framework="HIPAA" data-severity="High Risk">
-<div class="finding-header" onclick="toggleFinding('f7')">
-<div class="finding-left"><div class="finding-num">HIPAA-007</div><div class="finding-question"></div></div>
-<div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
-</div>
-<div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The application source code explicitly allows or performs &#x27;SELECT *&#x27; on patient data in multiple locations, directly violating the HIPAA Minimum Necessary principle by enabling access to more PHI than required for specific purposes.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">library/patient.inc.php:52  function getPatientData($pid, $given = &quot;*&quot;) { $sql = &quot;SELECT $given FROM patient_data WHERE pid = ? 
-interface/reports/clinical_reports.php:92  $query = &quot;SELECT pd.*, fe.date AS encounter_date, fe.reason, b.code, b.code_text FROM patient_data p
-</div>
-<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system limit access to and disclosure of PHI to the minimum amount necessary to accomplish the intended purpose of each use, disclosure, or request?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Modify `library/patient.inc.php:52`&#x27;s `getPatientData` function to explicitly require a list of columns, removing the `given = &quot;*&quot;` default. Additionally, rewrite the query at `interface/reports/clinical_reports.php:92` to specify only essential columns from `patient_data` instead of `pd.*` to limit PHI access to the minimum necessary for its intended purpose, complying with HIPAA&#x27;s Minimum Necessary rule.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
-</div></div>
-<div class="finding" id="f-f8" data-framework="HIPAA" data-severity="Pattern of Concern">
-<div class="finding-header" onclick="toggleFinding('f8')">
-<div class="finding-left"><div class="finding-num">HIPAA-008</div><div class="finding-question"></div></div>
-<div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
-</div>
-<div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The absence of code evidence for an application-level control to track and enforce Business Associate Agreement requirements in a healthcare system operating under HIPAA indicates a critical missing feature within the application itself.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
-</div>
-<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system track and enforce Business Associate Agreement requirements for all third-party services and integrations that process, store, or transmit PHI on behalf of the covered entity?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Develop new files within the `interface/forms/admin/` and `library/` directories (e.g., `vendor_baa_registry.php`, `integration_status_api.php`) to establish a vendor registry for tracking BAA statuses and enforce a configuration gate that prevents activating PHI-handling integrations without a recorded BAA. This will prevent unauthorized PHI disclosures and maintain compliance with HIPAA regulations.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
-</div></div>
-<div class="finding" id="f-f9" data-framework="HIPAA" data-severity="Pattern of Concern">
-<div class="finding-header" onclick="toggleFinding('f9')">
-<div class="finding-left"><div class="finding-num">HIPAA-009</div><div class="finding-question"></div></div>
-<div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
-</div>
-<div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The primary analysis identified no code evidence for data retention, archival, or secure disposal mechanisms within the application, which represents a severe and direct compliance risk for a HIPAA-regulated healthcare system handling PHI.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
-</div>
-<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system enforce data retention policies that specify how long PHI is retained, provide automated archival and secure disposal mechanisms, and ensure compliance with both minimum retention requirements and maximum retention limits?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Add new data retention and archival logic within core patient record management files, such as `interface/patient_file/summary/demographics.php` and associated database schemas. This modification is critical to define, enforce, and automate secure disposal of PHI, ensuring compliance with HIPAA&#x27;s data retention and disposal mandates.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
-</div></div>
-<div class="finding" id="f-f10" data-framework="HIPAA" data-severity="Medium Risk">
-<div class="finding-header" onclick="toggleFinding('f10')">
 <div class="finding-left"><div class="finding-num">HIPAA-010</div><div class="finding-question"></div></div>
 <div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The explicit statement &#x27;No code evidence was found&#x27; for automated breach detection mechanisms in a healthcare system like OpenEMR indicates a direct absence of critical application-level controls, which is a non-compliance with HIPAA requirements for timely incident detection.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The primary analysis identified no code evidence for automated breach detection and notification mechanisms, which are critical for HIPAA compliance in a healthcare application like OpenEMR, indicating a confirmed lack of implementation within the analyzed codebase.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement automated mechanisms to detect potential security incidents, unauthorized access patterns, and data breaches, and does it support timely notification as required by the Breach Notification Rule?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">As no code evidence was found, new functionality must be developed within OpenEMR&#x27;s core application, specifically integrating with user authentication and patient record access points, to implement login anomaly detection (e.g., repeated failures, unusual IP sources) and bulk data access monitoring. This implementation is crucial to meet HIPAA Breach Notification Rule requirements for detecting security incidents and unauthorized access promptly.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Modify OpenEMR&#x27;s user authentication module to log and alert on repeated login failures, unusual IP addresses, or off-hours access. Enhance the data access components to detect and flag unusual patterns of bulk patient record access, ensuring the system can provide timely notification as required by the HIPAA Breach Notification Rule.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+</div></div>
+<div class="finding" id="f-f7" data-framework="HIPAA" data-severity="Pattern of Concern">
+<div class="finding-header" onclick="toggleFinding('f7')">
+<div class="finding-left"><div class="finding-num">HIPAA-008</div><div class="finding-question"></div></div>
+<div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
+</div>
+<div class="finding-body">
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The absence of code evidence for critical application-level tracking and enforcement of Business Associate Agreements in a healthcare system indicates a confirmed deficiency in HIPAA compliance capabilities, as the system does not programmatically demonstrate this control.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
+</div>
+<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system track and enforce Business Associate Agreement requirements for all third-party services and integrations that process, store, or transmit PHI on behalf of the covered entity?</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Develop an administrative interface and underlying data model within OpenEMR (e.g., in a new &#x27;admin/baas_management.php&#x27; module and corresponding database schema update) to allow tracking of third-party service Business Associate Agreement (BAA) statuses. Incorporate a pre-activation check within relevant integration points (e.g., &#x27;interface/forms/external_services.php&#x27; submission logic) that programmatically prevents the enabling of any service processing PHI if a BAA is not recorded, thus ensuring compliance with HIPAA&#x27;s Business Associate Agreement requirements.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+</div></div>
+<div class="finding" id="f-f8" data-framework="HIPAA" data-severity="Pattern of Concern">
+<div class="finding-header" onclick="toggleFinding('f8')">
+<div class="finding-left"><div class="finding-num">HIPAA-009</div><div class="finding-question"></div></div>
+<div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
+</div>
+<div class="finding-body">
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The absence of any code evidence for critical HIPAA data retention, archival, and secure disposal mechanisms in a healthcare application like OpenEMR indicates a significant and confirmed potential compliance gap, as these controls are mandatory.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
+</div>
+<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system enforce data retention policies that specify how long PHI is retained, provide automated archival and secure disposal mechanisms, and ensure compliance with both minimum retention requirements and maximum retention limits?</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Develop a new data retention module within the OpenEMR application, integrating it with patient record management and audit logging features to define and enforce PHI retention periods. This module must include automated archival and secure disposal functions to ensure compliance with HIPAA minimum retention requirements and maximum retention limits for patient data.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+</div></div>
+<div class="finding" id="f-f9" data-framework="HIPAA" data-severity="No Issue Found">
+<div class="finding-header" onclick="toggleFinding('f9')">
+<div class="finding-left"><div class="finding-num">HIPAA-004</div><div class="finding-question"></div></div>
+<div class="finding-right"><span class="badge badge-ok">No Issue Found</span><span class="chevron">&#8250;</span></div>
+</div>
+<div class="finding-body">
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The evidence provided, specifically the use of `acl_check` in `interface/patient_file/summary/demographics.php` to guard access to patient data, directly supports the primary analysis&#x27;s finding that access controls are enforced, thus confirming &#x27;No Issue Found&#x27; for HIPAA-004.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[SOURCE] library/acl.inc.php:12  function acl_check($section, $value, $user = &#x27;&#x27;, $return_value = &#x27;&#x27;) { if (empty($user)) { $user = $
+[SOURCE] interface/patient_file/summary/demographics.php:32  if (!acl_check(&#x27;patients&#x27;, &#x27;demo&#x27;)) { die(xlt(&#x27;Access denied&#x27;)); }
+</div>
+<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system enforce role-based access controls that limit PHI access to authorized individuals based on their job function, and are these controls granular enough to satisfy the minimum necessary standard?</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The current `acl_check` implementation in `library/acl.inc.php` and its application in `interface/patient_file/summary/demographics.php` adequately address the requirement for role-based access controls for PHI. Proactively, plan to transition the legacy ACL framework, as defined in `library/acl.inc.php`, to a more actively maintained RBAC system to ensure sustained security and compliance with HIPAA access control standards.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+</div></div>
+<div class="finding" id="f-f10" data-framework="HIPAA" data-severity="No Issue Found">
+<div class="finding-header" onclick="toggleFinding('f10')">
+<div class="finding-left"><div class="finding-num">HIPAA-006</div><div class="finding-question"></div></div>
+<div class="finding-right"><span class="badge badge-ok">No Issue Found</span><span class="chevron">&#8250;</span></div>
+</div>
+<div class="finding-body">
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-additional">ADDITIONAL RISK</div><div class="verdict-text">The primary analysis concluded &#x27;No Issue Found&#x27; regarding comprehensive audit logs, but the provided evidence only demonstrates logging for a single patient record view, not for all PHI access or modifications as required by &#x27;comprehensive&#x27; logging under HIPAA.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[SOURCE] library/log.inc.php:14  function newEvent($event, $user, $groupname, $success, $comments = &quot;&quot;, $patient_id = null, $log_from
+[SOURCE] interface/patient_file/summary/demographics.php:55  newEvent(&quot;patient-record&quot;, $_SESSION[&#x27;authUser&#x27;], $_SESSION[&#x27;authProvider&#x27;], 1, &quot;view&quot;, $pid);
+[CONFIG] sql/database.sql:3862  CREATE TABLE log ( id bigint(20) NOT NULL AUTO_INCREMENT, date datetime DEFAULT NULL, event varchar(
+</div>
+<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system maintain comprehensive audit logs that record all access to and modifications of PHI, including who accessed what data, when, and the outcome of the access attempt?</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The `newEvent` function in `library/log.inc.php` is correctly utilized for patient demographics viewing as seen in `interface/patient_file/summary/demographics.php`. To ensure comprehensive audit logs for all PHI access and modifications, extend calls to `newEvent` (or similar audit logging mechanisms) to all other data access points, modification functions, FHIR API endpoints, and report generation pathways within the application, to comply with HIPAA&#x27;s requirement for tracking who accessed what PHI, when, and the nature of the action.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 </div>
 <div class="framework-section" id="soc2" data-framework="SOC2">
 <div class="framework-header"><div><div class="framework-name">SOC2</div><div class="framework-meta">AICPA &middot; Loss of enterprise contracts</div></div><div class="framework-count">10 findings</div></div>
-<div class="finding" id="f-f11" data-framework="SOC2" data-severity="No Issue Found">
+<div class="finding" id="f-f11" data-framework="SOC2" data-severity="Medium Risk">
 <div class="finding-header" onclick="toggleFinding('f11')">
-<div class="finding-left"><div class="finding-num">SOC2-001</div><div class="finding-question"></div></div>
-<div class="finding-right"><span class="badge badge-ok">No Issue Found</span><span class="chevron">&#8250;</span></div>
-</div>
-<div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-additional">ADDITIONAL RISK</div><div class="verdict-text">The primary analysis identified strong password hashing but failed to provide evidence for or against other critical authentication controls mentioned in the reasoning, such as configurable complexity requirements, account lockout policies, or protection against credential-based attacks, thus understating the overall compliance posture for SOC2-001.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">library/auth.inc.php:148  $hash = password_hash($password, PASSWORD_BCRYPT, [&#x27;cost&#x27; =&gt; 12]);` followed by `if (password_verify
-</div>
-<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement strong authentication mechanisms including secure password storage, configurable complexity requirements, account lockout policies, and protection against credential-based attacks?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Add logic to `library/auth.inc.php` to enforce configurable password complexity requirements and implement account lockout policies following multiple failed login attempts. Introduce application-level rate limiting for authentication attempts to protect against credential-based attacks. Without these controls, the system risks non-compliance with SOC2 requirements for comprehensive strong authentication mechanisms.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
-</div></div>
-<div class="finding" id="f-f12" data-framework="SOC2" data-severity="No Issue Found">
-<div class="finding-header" onclick="toggleFinding('f12')">
-<div class="finding-left"><div class="finding-num">SOC2-002</div><div class="finding-question"></div></div>
-<div class="finding-right"><span class="badge badge-ok">No Issue Found</span><span class="chevron">&#8250;</span></div>
-</div>
-<div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-additional">ADDITIONAL RISK</div><div class="verdict-text">The primary analysis concluded &#x27;No Issue Found&#x27; for a critical control (role-based access control) in a healthcare system, despite explicitly stating &#x27;No code evidence was found,&#x27; thereby severely understating the risk of an unverified or potentially missing fundamental security control required for SOC2 compliance.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
-</div>
-<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement role-based access control with the principle of least privilege, ensuring users can only access resources and perform actions necessary for their job function?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The `openemr` repository must explicitly demonstrate implementation of role-based access control (RBAC) with least privilege principles. Provide specific source code files demonstrating user authentication, role assignment, and permission enforcement mechanisms (e.g., within `user_management/` or `access_control/` directories). Failure to provide verifiable evidence of RBAC implementation in the source code will result in an SOC2 audit finding for non-compliance with access control requirements.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
-</div></div>
-<div class="finding" id="f-f13" data-framework="SOC2" data-severity="Medium Risk">
-<div class="finding-header" onclick="toggleFinding('f13')">
 <div class="finding-left"><div class="finding-num">SOC2-003</div><div class="finding-question"></div></div>
 <div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The code conditionally sets the secure flag for session cookies based on whether the current connection is HTTPS, which indicates the application does not inherently enforce HTTPS for all client-server connections, thereby failing to ensure all data is in transit over TLS 1.2 or higher.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">interface/globals.php:122  $isSecure = ($_SERVER[&#x27;HTTPS&#x27;] ?? &#x27;&#x27;) === &#x27;on&#x27;; session_set_cookie_params(0, $webroot, &#x27;&#x27;, $isSecure
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The evidence from `interface/globals.php` shows the application conditionally secures session cookies based on HTTPS presence, indicating a direct application-level involvement in transit encryption that would be a risk if not universally enforced.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[SOURCE] interface/globals.php:122  $isSecure = ($_SERVER[&#x27;HTTPS&#x27;] ?? &#x27;&#x27;) === &#x27;on&#x27;; session_set_cookie_params(0, $webroot, &#x27;&#x27;, $isSecure
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system enforce encryption for all data in transit, including internal service communication, external API calls, and client-server connections, using TLS 1.2 or higher?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">To satisfy SOC2-003, modify `interface/globals.php` or a related application bootstrap to unconditionally redirect all HTTP requests to HTTPS, ensuring all client-server communication uses TLS 1.2+ and removing reliance on conditional checks based on `$_SERVER[&#x27;HTTPS&#x27;]`, which is critical for preventing unencrypted transmission of sensitive healthcare data.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Modify application configurations to ensure all HTTP requests are automatically redirected to HTTPS. This guarantees `$_SERVER[&#x27;HTTPS&#x27;]` is always &#x27;on&#x27;, making the `session_set_cookie_params` call in `interface/globals.php:122` consistently set the &#x27;Secure&#x27; flag for session cookies, preventing unencrypted session data transmission and meeting SOC2 encryption in transit requirements.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
-<div class="finding" id="f-f14" data-framework="SOC2" data-severity="No Issue Found">
-<div class="finding-header" onclick="toggleFinding('f14')">
-<div class="finding-left"><div class="finding-num">SOC2-004</div><div class="finding-question"></div></div>
-<div class="finding-right"><span class="badge badge-ok">No Issue Found</span><span class="chevron">&#8250;</span></div>
-</div>
-<div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The primary analysis states &#x27;No Issue Found&#x27; but reports &#x27;No code evidence was found&#x27; for critical logging requirements in a healthcare application, which directly confirms a lack of application-level logging for security-relevant events and thus a compliance risk.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
-</div>
-<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement comprehensive logging of security-relevant events with sufficient detail for forensic analysis, and are logs protected against tampering, monitored for anomalies, and retained for an appropriate period?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The application currently lacks discernible code for comprehensive security-relevant event logging. Developers must add explicit logging statements within key application modules, such as `controllers/UserAuthentication.php` and `models/PatientData.php`, to capture events like user logins, access to sensitive patient information, and system configuration changes. Failure to implement this logging risks non-compliance with SOC2-004 requirements for forensic analysis and monitoring.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
-</div></div>
-<div class="finding" id="f-f15" data-framework="SOC2" data-severity="Pattern of Concern">
-<div class="finding-header" onclick="toggleFinding('f15')">
-<div class="finding-left"><div class="finding-num">SOC2-005</div><div class="finding-question"></div></div>
-<div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
-</div>
-<div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The primary analysis identified a &#x27;Pattern of Concern&#x27; for change management but explicitly stated &#x27;No code evidence was found&#x27;, meaning the finding is unsupported by internal repository evidence.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
-</div>
-<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system maintain formal change management processes including version-controlled migrations, automated testing, code review gates, and reproducible deployment procedures?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Create `db/migrations/*.php` for version-controlled database schema changes, and establish CI/CD pipeline definitions in `.github/workflows/deploy.yml` or similar for automated testing and reproducible deployments. This evidence is necessary to demonstrate formal change management processes, avoiding SOC2-005 findings related to uncontrolled system changes.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
-</div></div>
-<div class="finding" id="f-f16" data-framework="SOC2" data-severity="Pattern of Concern">
-<div class="finding-header" onclick="toggleFinding('f16')">
-<div class="finding-left"><div class="finding-num">SOC2-006</div><div class="finding-question"></div></div>
-<div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
-</div>
-<div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-context">CONTEXT DEPENDENT</div><div class="verdict-text">The finding concerns organizational incident response procedures, security event playbooks, and detection-to-response workflows, which are controls typically verified through documentation, policies, and operational practices external to the application source code. The primary analysis finding &#x27;No code evidence was found&#x27; accurately reflects that this type of control cannot be determined from the repository&#x27;s source code alone.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
-</div>
-<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the organization maintain documented incident response procedures, security event playbooks, and automated detection-to-response workflows for security incidents?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">To address the absence of visible incident response documentation within the openemr repository, create and maintain a `SECURITY.md` file outlining vulnerability reporting and general incident communication protocols. Additionally, establish comprehensive, externally managed incident response procedures and security event playbooks detailing detection, containment, eradication, recovery, and post-incident analysis, crucial for demonstrating adherence to SOC2 incident response requirements.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
-</div></div>
-<div class="finding" id="f-f17" data-framework="SOC2" data-severity="Medium Risk">
-<div class="finding-header" onclick="toggleFinding('f17')">
+<div class="finding" id="f-f12" data-framework="SOC2" data-severity="Medium Risk">
+<div class="finding-header" onclick="toggleFinding('f12')">
 <div class="finding-left"><div class="finding-num">SOC2-007</div><div class="finding-question"></div></div>
 <div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">Despite stating &#x27;No code evidence was found,&#x27; the primary analysis identified a critical gap in controls for managing third-party dependencies, which is substantiated by the recommended code-level remediations specific to OpenEMR&#x27;s PHP/JS ecosystem, signifying a legitimate compliance risk.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The primary analysis correctly identified a critical missing control for third-party risk management in a healthcare system, and the reported &#x27;no code evidence found&#x27; implies these essential controls are not implemented within the codebase or configuration, directly indicating a medium risk.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement controls to identify, assess, and manage risks arising from third-party dependencies, libraries, and external service integrations?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Configure `composer.json` and `package.json` files, along with CI/CD pipelines (e.g., `.github/workflows/*.yaml` for GitHub Actions), to enable GitHub Dependabot and include `composer audit` and `npm audit` steps with build-breaking thresholds for high-severity CVEs, directly addressing the absence of robust third-party dependency management. Furthermore, migrate all manually managed libraries from the `library/` directory into Composer management to ensure ongoing identification and mitigation of third-party risks, thereby meeting SOC2-007 requirements for vendor risk management.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Configure GitHub Dependabot security alerts and automate pull requests for vulnerable dependencies. Integrate `composer audit` and `npm audit` into the CI/CD pipeline with build-breaking thresholds for high-severity CVEs, and migrate vendored libraries from the `library/` directory into Composer management, to establish essential third-party risk controls and comply with SOC2-007.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
-<div class="finding" id="f-f18" data-framework="SOC2" data-severity="Pattern of Concern">
-<div class="finding-header" onclick="toggleFinding('f18')">
-<div class="finding-left"><div class="finding-num">SOC2-008</div><div class="finding-question"></div></div>
-<div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
-</div>
-<div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The `backup.php` script demonstrates the application&#x27;s method for creating database backups, but the provided code evidence does not show implementation of encryption, integrity verification, or explicit integration with automated scheduling, which are all critical components of SOC2-008 backup and recovery controls.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">interface/main/backup.php:45  $cmd = escapeshellcmd($mysql_dump_cmd) . &quot; --opt --quote-names &quot; . escapeshellarg($sqlconf[&quot;dbase&quot;])
-</div>
-<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement automated backup procedures with encryption, integrity verification, offsite storage, and tested recovery processes to ensure system availability and data durability?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Modify `interface/main/backup.php` to encrypt the generated database dump using GPG or AES and to perform integrity verification (e.g., via checksum) on the output file. These additions are crucial to meet SOC2-008 requirements for data confidentiality, integrity, and durability in backup processes.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
-</div></div>
-<div class="finding" id="f-f19" data-framework="SOC2" data-severity="Medium Risk">
-<div class="finding-header" onclick="toggleFinding('f19')">
+<div class="finding" id="f-f13" data-framework="SOC2" data-severity="Medium Risk">
+<div class="finding-header" onclick="toggleFinding('f13')">
 <div class="finding-left"><div class="finding-num">SOC2-009</div><div class="finding-question"></div></div>
 <div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The absence of code evidence for Multi-Factor Authentication (MFA) in a healthcare repository like OpenEMR, especially for privileged accounts, represents a significant and confirmed compliance risk under SOC2-009, as MFA is a critical control for protecting sensitive data.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The absence of code evidence for multi-factor authentication in the application&#x27;s repository indicates a lack of native MFA support within the application itself, representing a direct compliance gap for SOC2-009.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system support and enforce multi-factor authentication for all users, with mandatory MFA requirements for privileged accounts that can access sensitive data or administrative functions?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Add a `mfa_required_roles` configuration array to `library/options.php` and modify `interface/login/login_user.php` to enforce MFA for specified roles (e.g., `admin:super`, `admin:users`), redirecting users without MFA to a new `interface/user/mfa_setup.php` page after a configurable grace period, to meet SOC2-009 requirements for privileged account security.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Add new code to OpenEMR&#x27;s authentication module, potentially within `library/authentication.php` or `interface/login/login.php`, to introduce mandatory multi-factor authentication for `admin:super` and `admin:users` roles, including support for WebAuthn/FIDO2. This will mitigate unauthorized access risks to patient data, as required by SOC2-009.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
-<div class="finding" id="f-f20" data-framework="SOC2" data-severity="Pattern of Concern">
-<div class="finding-header" onclick="toggleFinding('f20')">
+<div class="finding" id="f-f14" data-framework="SOC2" data-severity="Pattern of Concern">
+<div class="finding-header" onclick="toggleFinding('f14')">
+<div class="finding-left"><div class="finding-num">SOC2-005</div><div class="finding-question"></div></div>
+<div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
+</div>
+<div class="finding-body">
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The explicit &#x27;No code evidence was found&#x27; for critical change management components like version-controlled migrations, automated testing, and reproducible deployment procedures in a healthcare system repository directly indicates a significant gap in controls, aligning with the pattern of concern.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
+</div>
+<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system maintain formal change management processes including version-controlled migrations, automated testing, code review gates, and reproducible deployment procedures?</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Integrate version-controlled database migration scripts and define CI/CD pipeline configurations to mandate automated testing, code review gates, and reproducible deployment. These crucial technical artifacts, when present in the repository, will provide the demonstrable evidence necessary for SOC2-005 change management compliance.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+</div></div>
+<div class="finding" id="f-f15" data-framework="SOC2" data-severity="Pattern of Concern">
+<div class="finding-header" onclick="toggleFinding('f15')">
+<div class="finding-left"><div class="finding-num">SOC2-006</div><div class="finding-question"></div></div>
+<div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
+</div>
+<div class="finding-body">
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The primary analysis correctly identified a pattern of concern, as the absence of any code evidence within the repository related to incident response procedures, playbooks, or automated workflows directly indicates a lack of demonstrated compliance for SOC2-006.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
+</div>
+<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the organization maintain documented incident response procedures, security event playbooks, and automated detection-to-response workflows for security incidents?</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">To establish documented incident response procedures, create a `SECURITY.md` file detailing vulnerability reporting and response workflows. Additionally, add a new `docs/incident_response/` directory to the repository, containing documented playbooks for common scenarios, ensuring compliance with SOC2 requirements for incident preparedness.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+</div></div>
+<div class="finding" id="f-f16" data-framework="SOC2" data-severity="Pattern of Concern">
+<div class="finding-header" onclick="toggleFinding('f16')">
+<div class="finding-left"><div class="finding-num">SOC2-008</div><div class="finding-question"></div></div>
+<div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
+</div>
+<div class="finding-body">
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The evidence in interface/main/backup.php demonstrates a database dump mechanism but lacks any indication of automated scheduling, encryption, integrity verification, offsite storage, or tested recovery processes, which are critical components of SOC2-008 requirements.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[SOURCE] interface/main/backup.php:45  $cmd = escapeshellcmd($mysql_dump_cmd) . &quot; --opt --quote-names &quot; . escapeshellarg($sqlconf[&quot;dbase&quot;])
+</div>
+<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement automated backup procedures with encryption, integrity verification, offsite storage, and tested recovery processes to ensure system availability and data durability?</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The `interface/main/backup.php` file, which initiates database dumps, must be modified to ensure immediate encryption of backup files and integration with an automated, verified, offsite storage system. Failure to secure and automate backups adequately increases the risk of non-compliance with SOC2-008 requirements for data durability and availability.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+</div></div>
+<div class="finding" id="f-f17" data-framework="SOC2" data-severity="Pattern of Concern">
+<div class="finding-header" onclick="toggleFinding('f17')">
 <div class="finding-left"><div class="finding-num">SOC2-010</div><div class="finding-question"></div></div>
 <div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The finding correctly identifies a &#x27;Pattern of Concern&#x27; for SOC2-010, as the primary analysis found no evidence of documented security policies, vulnerability disclosure procedures, or operational guidance within the codebase or project documentation, which is a direct violation of the standard.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The finding correctly identifies the absence of documented security policies and vulnerability disclosure procedures within the repository, which is a direct non-compliance with SOC2-010 requirements concerning security documentation.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the organization maintain and communicate documented security policies, vulnerability disclosure procedures, and security-related operational guidance within the codebase and project documentation?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Add a `SECURITY.md` file to the repository&#x27;s root, including documented vulnerability reporting procedures, security contacts, responsible disclosure timelines, and supported versions. Supplement this with a `DEPLOYMENT_SECURITY_GUIDE.md` (or similar) outlining TLS configuration, encryption at rest, MFA enforcement, session timeouts, and backup encryption, which are essential for demonstrating SOC2-010 compliance.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">To comply with SOC2-010, create a `SECURITY.md` file in the repository&#x27;s root documenting vulnerability reporting procedures, security contacts, responsible disclosure timelines, and supported versions. Additionally, develop a deployment security guide to cover TLS configuration, encryption at rest, MFA enforcement, session timeouts, and backup encryption, thus ensuring all required security policies are maintained and communicated within the project documentation.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+</div></div>
+<div class="finding" id="f-f18" data-framework="SOC2" data-severity="No Issue Found">
+<div class="finding-header" onclick="toggleFinding('f18')">
+<div class="finding-left"><div class="finding-num">SOC2-001</div><div class="finding-question"></div></div>
+<div class="finding-right"><span class="badge badge-ok">No Issue Found</span><span class="chevron">&#8250;</span></div>
+</div>
+<div class="finding-body">
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-additional">ADDITIONAL RISK</div><div class="verdict-text">The primary analysis identified strong password hashing but understated the full scope of SOC2-001 by not providing evidence for other critical authentication requirements like password complexity, account lockout policies, or protection against credential-based attacks.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[SOURCE] library/auth.inc.php:148  $hash = password_hash($password, PASSWORD_BCRYPT, [&#x27;cost&#x27; =&gt; 12]);` followed by `if (password_verify
+</div>
+<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement strong authentication mechanisms including secure password storage, configurable complexity requirements, account lockout policies, and protection against credential-based attacks?</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Within `library/auth.inc.php` or its related authentication logic, add code to enforce configurable password complexity requirements, implement account lockout policies, and provide protection against credential-based attacks (e.g., rate limiting) to fully meet SOC2-001 strong authentication requirements.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+</div></div>
+<div class="finding" id="f-f19" data-framework="SOC2" data-severity="No Issue Found">
+<div class="finding-header" onclick="toggleFinding('f19')">
+<div class="finding-left"><div class="finding-num">SOC2-002</div><div class="finding-question"></div></div>
+<div class="finding-right"><span class="badge badge-ok">No Issue Found</span><span class="chevron">&#8250;</span></div>
+</div>
+<div class="finding-body">
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-additional">ADDITIONAL RISK</div><div class="verdict-text">The primary analysis found &#x27;No code evidence&#x27; for Role-Based Access Control and Least Privilege in a critical healthcare system, yet concluded &#x27;No Issue Found.&#x27; This significantly understates the compliance risk of an unverified or absent application-level control under SOC2-002.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: MEDIUM</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
+</div>
+<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement role-based access control with the principle of least privilege, ensuring users can only access resources and perform actions necessary for their job function?</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Identify and document the specific code files and functions within the application that implement user role assignments, permission checks, and least privilege enforcement. Ensure these components are clearly auditable to demonstrate compliance with SOC2-002, preventing audit findings related to insufficient controls.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+</div></div>
+<div class="finding" id="f-f20" data-framework="SOC2" data-severity="No Issue Found">
+<div class="finding-header" onclick="toggleFinding('f20')">
+<div class="finding-left"><div class="finding-num">SOC2-004</div><div class="finding-question"></div></div>
+<div class="finding-right"><span class="badge badge-ok">No Issue Found</span><span class="chevron">&#8250;</span></div>
+</div>
+<div class="finding-body">
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-additional">ADDITIONAL RISK</div><div class="verdict-text">The primary analysis incorrectly concluded &#x27;No Issue Found&#x27; despite explicitly stating &#x27;No code evidence was found&#x27; for a critical control requiring application-level logging, thus understating the potential risk of missing or insufficient comprehensive security event logging.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
+</div>
+<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement comprehensive logging of security-relevant events with sufficient detail for forensic analysis, and are logs protected against tampering, monitored for anomalies, and retained for an appropriate period?</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Based on the finding that &#x27;No code evidence was found&#x27; for comprehensive logging within the openemr repository, analyze existing application code (e.g., PHP files in interface/) to identify if and where security-relevant events are logged. If logging is absent or insufficient, add explicit logging statements for critical security events to ensure compliance with SOC2-004 requirements regarding comprehensive event logging. Failure to provide auditable logs of security-relevant events could lead to SOC2 compliance failures.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 </div>
 <div class="framework-section" id="gdpr" data-framework="GDPR">
-<div class="framework-header"><div><div class="framework-name">GDPR</div><div class="framework-meta">EU DPAs &middot; Up to EUR 20M or 4% turnover</div></div><div class="framework-count">10 findings</div></div>
-<div class="finding" id="f-f21" data-framework="GDPR" data-severity="Medium Risk">
+<div class="framework-header"><div><div class="framework-name">GDPR</div><div class="framework-meta">EU DPAs &middot; Up to EUR 20M or 4% turnover</div></div><div class="framework-count">10 findings · 3 possible FP</div></div>
+<div class="finding" id="f-f21" data-framework="GDPR" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f21')">
-<div class="finding-left"><div class="finding-num">GDPR-001</div><div class="finding-question"></div></div>
-<div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
-</div>
-<div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The primary analysis correctly identifies a critical compliance gap: the absence of detectable code mechanisms to document and enforce lawful basis for processing special categories of health data in a healthcare system, which is a known and non-negotiable GDPR requirement.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
-</div>
-<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system document and enforce a lawful basis for processing personal data under Article 6 of the GDPR, including specific provisions for processing special categories of health data under Article 9?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Introduce a `lawful_basis` field to the `patient_data` table schema (e.g., in `sql/create_database.sql` or a migration script) to explicitly record the legal basis under Article 6 and 9 for each patient. Update corresponding PHP data access objects and UI forms to ensure this field is populated and enforced, preventing data processing without a documented lawful basis as mandated by GDPR.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
-</div></div>
-<div class="finding" id="f-f22" data-framework="GDPR" data-severity="Pattern of Concern">
-<div class="finding-header" onclick="toggleFinding('f22')">
-<div class="finding-left"><div class="finding-num">GDPR-002</div><div class="finding-question"></div></div>
-<div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
-</div>
-<div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The absence of identifiable code for GDPR-compliant consent management in a healthcare system handling sensitive personal data constitutes a confirmed compliance risk, as such mechanisms are mandatory for data processing.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
-</div>
-<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement GDPR-compliant consent management with granular consent collection, purpose-specific tracking, easy withdrawal mechanisms, and auditable consent records?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Develop and integrate a comprehensive GDPR consent management module into the OpenEMR application, ensuring it supports granular, purpose-specific consent collection with auditable records, timestamping, and version control for consent text, to mitigate the risk of non-compliance with GDPR Article 7 requirements for consent.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
-</div></div>
-<div class="finding" id="f-f23" data-framework="GDPR" data-severity="High Risk">
-<div class="finding-header" onclick="toggleFinding('f23')">
 <div class="finding-left"><div class="finding-num">GDPR-003</div><div class="finding-question"></div></div>
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The GDPR Right to Erasure is a fundamental requirement for systems like OpenEMR handling personal health data; the absence of any code evidence for a mechanism to fulfill this right indicates a clear and significant compliance gap within the application.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">For an EHR system like OpenEMR handling sensitive personal data, the absence of an identified mechanism for GDPR&#x27;s Right to Erasure (GDPR-003) represents a confirmed high-risk functional gap and non-compliance, even without specific code evidence found. The &#x27;no code evidence&#x27; implies the feature is missing.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system provide a mechanism for data subjects to request and obtain erasure of their personal data (&quot;right to be forgotten&quot;), and can the system completely remove personal data from all storage locations including backups and derived datasets?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Introduce a dedicated module within OpenEMR to handle GDPR Article 17 Right to Erasure requests. This module must provide UI for data subjects or administrators to initiate erasure, coupled with backend logic to identify and permanently remove or anonymize personal data across all relevant database tables, preventing non-compliance with data subject rights.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Develop and integrate a comprehensive patient data erasure workflow within the OpenEMR application to enable data subjects to exercise their Right to Erasure. This workflow must ensure complete deletion or robust anonymization of personal data across all system records, including any derived datasets, to comply with GDPR-003 requirements.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+</div></div>
+<div class="finding" id="f-f22" data-framework="GDPR" data-severity="High Risk">
+<div class="finding-header" onclick="toggleFinding('f22')">
+<div class="finding-left"><div class="finding-num">GDPR-007</div><div class="finding-question"></div></div>
+<div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
+</div>
+<div class="finding-body">
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The absence of code evidence for automated data retention and deletion mechanisms in a healthcare system dealing with personal data indicates a critical missing control for GDPR compliance (GDPR Article 5(1)(e) and Article 17).</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
+</div>
+<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system enforce data retention policies that limit personal data storage to the minimum period necessary for the stated purpose, and does it provide automated mechanisms for data deletion or anonymization when retention periods expire?</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The OpenEMR codebase currently lacks explicit mechanisms to enforce GDPR-mandated data retention policies, including automated deletion or anonymization upon expiry. Introduce new application code (e.g., within `library/`, `interface/` directories, and associated database scripts) to define configurable retention periods for various data categories and implement automated workflows for anonymizing or deleting personal data to ensure compliance with GDPR Article 5(1)(e) and Article 17.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+</div></div>
+<div class="finding" id="f-f23" data-framework="GDPR" data-severity="Medium Risk">
+<div class="finding-header" onclick="toggleFinding('f23')">
+<div class="finding-left"><div class="finding-num">GDPR-001</div><div class="finding-question"></div></div>
+<div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
+</div>
+<div class="finding-body">
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The primary analysis identified a critical lack of code evidence for documenting and enforcing a lawful basis for processing special categories of health data under GDPR Articles 6 and 9 in a healthcare system, indicating a confirmed compliance gap.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
+</div>
+<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system document and enforce a lawful basis for processing personal data under Article 6 of the GDPR, including specific provisions for processing special categories of health data under Article 9?</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Add `lawful_basis` and `purpose_limitation` fields to relevant patient data models (e.g., database schema definitions in `sql/` and corresponding PHP ORM classes) to track the legal basis and declared purpose for data processing. This will prevent non-compliant data usage under GDPR Article 6 and 9, ensuring explicit consent or other lawful bases are recorded.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f24" data-framework="GDPR" data-severity="Medium Risk">
 <div class="finding-header" onclick="toggleFinding('f24')">
@@ -459,11 +459,11 @@ interface/reports/clinical_reports.php:92  $query = &quot;SELECT pd.*, fe.date A
 <div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The absence of code evidence for GDPR-mandated data portability features in a healthcare system like OpenEMR strongly indicates a likely compliance gap, given the criticality of this right under Article 20.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The primary analysis correctly identifies a critical missing feature for GDPR Article 20 (Data Portability) in a healthcare system, which represents a confirmed compliance gap even if the &#x27;evidence&#x27; is the absence of implementation code.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system allow data subjects to receive their personal data in a structured, commonly used, and machine-readable format, and can this data be transmitted directly to another controller upon request?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Create new PHP functions within the patient portal (e.g., a new dedicated data export module or `interface/patient_file/summary/demographics.php`) to aggregate all personal data into a structured (JSON/XML), machine-readable format for download. Additionally, implement a direct transmission feature to send this data to another controller upon request. Without these capabilities, OpenEMR remains non-compliant with GDPR Article 20, risking penalties for failing to uphold data subjects&#x27; right to data portability.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">A new patient data export and transmission feature must be integrated into the OpenEMR patient portal, generating structured (e.g., JSON/XML) machine-readable files of all personal data and enabling direct transmission to other controllers. This action is necessary to comply with GDPR Article 20 regarding data portability requirements for data subjects.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f25" data-framework="GDPR" data-severity="Pattern of Concern">
 <div class="finding-header" onclick="toggleFinding('f25')">
@@ -471,72 +471,75 @@ interface/reports/clinical_reports.php:92  $query = &quot;SELECT pd.*, fe.date A
 <div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The &#x27;SELECT *&#x27; default in `getPatientData` directly contradicts the principle of data minimization, retrieving all patient data regardless of specific purpose.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">library/patient.inc.php:52  function getPatientData($pid, $given = &quot;*&quot;)` defaults to `SELECT *
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The &#x27;SELECT *&#x27; default in `getPatientData` directly contradicts GDPR&#x27;s data minimization and purpose limitation principles by failing to retrieve only necessary data by default.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[SOURCE] library/patient.inc.php:52  function getPatientData($pid, $given = &quot;*&quot;)` defaults to `SELECT *
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement data protection by design and by default, incorporating privacy-protective measures such as data minimization, pseudonymization, and purpose limitation into its core architecture?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Refactor `function getPatientData($pid, $given = &quot;*&quot;)` in `library/patient.inc.php` to require explicit field selection, removing the default &#x27;SELECT *&#x27;. This ensures that only necessary patient data is retrieved for a given purpose, thereby upholding GDPR Article 5(1)(c) data minimization principles.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Revise the `getPatientData` function in `library/patient.inc.php` to explicitly select only the required data fields, rather than using `SELECT *`, based on the caller&#x27;s declared purpose. This change ensures data minimization and purpose limitation are applied by default, aligning with GDPR Article 25 requirements.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
-<div class="finding" id="f-f26" data-framework="GDPR" data-severity="High Risk">
+<div class="finding" id="f-f26" data-framework="GDPR" data-severity="Pattern of Concern">
 <div class="finding-header" onclick="toggleFinding('f26')">
-<div class="finding-left"><div class="finding-num">GDPR-006</div><div class="finding-question"></div></div>
-<div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
-</div>
-<div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The primary analysis explicitly states &#x27;No code evidence was found&#x27;, indicating that the tool could not identify specific application source code supporting or refuting the breach notification requirements. According to the defined rules, findings without specific application source code evidence are classified as a possible false positive.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
-</div>
-<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system support the 72-hour breach notification requirement under GDPR, including automated detection of personal data breaches, assessment of risk to data subjects, and notification workflows for supervisory authorities and affected individuals?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The OpenEMR application currently lacks explicit code supporting automated GDPR personal data breach detection, risk assessment, and notification workflows. Developers must integrate or build a dedicated breach management module within the application to log and analyze data access patterns, enabling a streamlined process for fulfilling GDPR Article 33 and 34 obligations for timely breach notifications to supervisory authorities and affected individuals. Without such a mechanism, the application may fail to support crucial GDPR breach notification requirements.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
-</div></div>
-<div class="finding" id="f-f27" data-framework="GDPR" data-severity="High Risk">
-<div class="finding-header" onclick="toggleFinding('f27')">
-<div class="finding-left"><div class="finding-num">GDPR-007</div><div class="finding-question"></div></div>
-<div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
-</div>
-<div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The absence of identified code for a critical GDPR data retention mechanism in a healthcare system indicates a probable high risk, as such controls are mandatory for compliance with storage limitation principles.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
-</div>
-<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system enforce data retention policies that limit personal data storage to the minimum period necessary for the stated purpose, and does it provide automated mechanisms for data deletion or anonymization when retention periods expire?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Develop and integrate application-level data retention functionality, including user-configurable retention policies for personal data categories and automated workflows for anonymization or deletion of records past their retention period. Lacking these mechanisms means OpenEMR cannot demonstrate compliance with GDPR principles of storage limitation (Article 5(1)(e)) and the right to erasure (Article 17).</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
-</div></div>
-<div class="finding" id="f-f28" data-framework="GDPR" data-severity="Medium Risk">
-<div class="finding-header" onclick="toggleFinding('f28')">
-<div class="finding-left"><div class="finding-num">GDPR-008</div><div class="finding-question"></div></div>
-<div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
-</div>
-<div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-context">CONTEXT DEPENDENT</div><div class="verdict-text">The finding concerns GDPR Chapter V safeguards for cross-border data transfers, which primarily involve legal agreements and deployment choices (e.g., data residency, adequacy decisions). These aspects are typically managed at the organizational or infrastructure level rather than being explicitly coded within the application&#x27;s source code, and the primary analysis confirmed no code evidence was found, indicating the system&#x27;s compliance relies on external factors.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
-</div>
-<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement safeguards for transferring personal data to countries outside the EEA, including adequacy assessments, Standard Contractual Clauses, or other approved transfer mechanisms under Chapter V of the GDPR?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">To mitigate cross-border data transfer risks, update an application configuration file, such as `openemr/library/config.inc.php` or equivalent database settings, to include mandatory parameters like `data_residency_region` and `cross_border_transfer_policy_id`. This configuration enables OpenEMR deployments to enforce Chapter V GDPR requirements for data transfers by defining authorized mechanisms and regions.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
-</div></div>
-<div class="finding" id="f-f29" data-framework="GDPR" data-severity="Pattern of Concern">
-<div class="finding-header" onclick="toggleFinding('f29')">
 <div class="finding-left"><div class="finding-num">GDPR-009</div><div class="finding-question"></div></div>
 <div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">For a healthcare system like OpenEMR, the absence of tooling or documentation within the repository to support Data Protection Impact Assessments (DPIAs) for high-risk data processing is a direct and significant GDPR compliance risk.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">OpenEMR, as an EHR system, inherently processes special categories of personal data, necessitating Data Protection Impact Assessments (DPIAs) under GDPR Article 35. The finding correctly highlights the absence of tooling or documentation within the repository to support these crucial DPIA requirements for its implementers and users, representing a confirmed gap in compliance support.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Has a Data Protection Impact Assessment been conducted for the high-risk processing activities performed by the system, and does the application provide tooling or documentation to support ongoing DPIA requirements?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Add a new markdown file, such as `docs/DPIA_Guidance.md`, to the OpenEMR repository. This documentation should include a DPIA template covering standard processing activities (e.g., patient registration, prescriptions) with outlined data flows, processing purposes, lawful bases, and risk mitigations, directly addressing GDPR-009 requirements.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Create a `GDPR_DPIA_Template.md` file within the `docs/` directory of the repository. This template should outline key considerations for OpenEMR implementers to conduct a DPIA, covering standard data processing activities, data flows, lawful bases, and risk mitigations, as mandated by GDPR Article 35. Lack of such guidance can expose OpenEMR users to non-compliance and significant regulatory fines.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
-<div class="finding" id="f-f30" data-framework="GDPR" data-severity="Pattern of Concern">
-<div class="finding-header" onclick="toggleFinding('f30')">
+<div class="finding" id="f-f27" data-framework="GDPR" data-severity="Pattern of Concern">
+<div class="finding-header" onclick="toggleFinding('f27')">
 <div class="finding-left"><div class="finding-num">GDPR-010</div><div class="finding-question"></div></div>
 <div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The absence of code evidence for transparent privacy notices in OpenEMR, a healthcare system processing sensitive personal data, indicates a confirmed GDPR Article 13 and 14 compliance gap.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The absence of code evidence for required privacy notices (Articles 13 and 14) in a healthcare application that processes sensitive personal data strongly indicates a confirmed compliance gap, as these are fundamental GDPR requirements.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system provide transparent privacy notices to data subjects at the point of data collection, informing them of processing purposes, lawful basis, data retention periods, their rights, and controller contact information as required by Articles 13 and 14?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Modify the system&#x27;s user interface code, specifically around patient registration and portal signup forms, to display transparent privacy notices detailing processing purposes, lawful basis, data retention, and data subject rights, which is necessary for compliance with GDPR Articles 13 and 14.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Develop functionality to manage privacy notice content or a privacy policy URL via OpenEMR&#x27;s administrative global settings. Present these detailed notices, incorporating all GDPR Article 13 requirements, directly to data subjects during patient registration, portal signup, and consent processes to prevent non-compliance with GDPR Articles 13 and 14.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
+<div class="fp-section-header" style="background:#f6f8fa;border:1px solid #d0d7de;padding:12px 16px;margin:16px 0 8px;display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="toggleFpSection('gdpr')"><div><span style="font-size:14px;font-weight:600;color:#57606a">Possible False Positives (3)</span><span style="font-size:12px;color:#8c959f;margin-left:12px">Gemini flagged these as likely pattern matches in non-source-code files. Review before acting.</span></div><span class="chevron fp-chevron" id="fp-chev-gdpr" style="font-size:12px;color:#57606a">&#8250;</span></div>
+<div class="fp-findings-group" id="fp-group-gdpr" style="display:none">
+<div class="finding" id="f-f28" data-framework="GDPR" data-severity="Pattern of Concern" data-fp="true" style="border-left:4px solid #d0d7de;opacity:0.85">
+<div class="finding-header" onclick="toggleFinding('f28')" style="background:#f6f8fa">
+<div class="finding-left"><div class="finding-num">GDPR-002 <span style="font-size:10px;color:#8c959f;text-transform:uppercase;letter-spacing:0.5px">· Possible False Positive</span></div><div class="finding-question" style="color:#57606a"></div></div>
+<div class="finding-right"><span class="badge" style="color:#8c959f;background:#f6f8fa;border:1px solid #d0d7de">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
+</div>
+<div class="finding-body">
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The primary analysis identified a &#x27;Pattern of Concern&#x27; for GDPR consent management but explicitly stated that no code evidence was found to support this claim, making it a potential false positive from a code analysis perspective.</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
+</div>
+<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement GDPR-compliant consent management with granular consent collection, purpose-specific tracking, easy withdrawal mechanisms, and auditable consent records?</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Conduct a comprehensive audit of OpenEMR&#x27;s existing patient data collection forms and backend processing logic to confirm explicit, granular, and purpose-specific consent mechanisms, including verifiable withdrawal processes, are fully present and auditable. This action is necessary to ensure compliance with GDPR Articles 6, 7, and 9 for personal data processing.</div>
+</div></div>
+<div class="finding" id="f-f29" data-framework="GDPR" data-severity="High Risk" data-fp="true" style="border-left:4px solid #d0d7de;opacity:0.85">
+<div class="finding-header" onclick="toggleFinding('f29')" style="background:#f6f8fa">
+<div class="finding-left"><div class="finding-num">GDPR-006 <span style="font-size:10px;color:#8c959f;text-transform:uppercase;letter-spacing:0.5px">· Possible False Positive</span></div><div class="finding-question" style="color:#57606a"></div></div>
+<div class="finding-right"><span class="badge" style="color:#8c959f;background:#f6f8fa;border:1px solid #d0d7de">High Risk</span><span class="chevron">&#8250;</span></div>
+</div>
+<div class="finding-body">
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The primary analysis flags a high-risk compliance gap for breach notification but explicitly states &#x27;No code evidence was found.&#x27; While crucial for GDPR, the absence of specific automated features in code does not definitively prove non-compliance, as processes could involve existing audit logging, manual procedures, or external systems not visible to the code analysis.</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
+</div>
+<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system support the 72-hour breach notification requirement under GDPR, including automated detection of personal data breaches, assessment of risk to data subjects, and notification workflows for supervisory authorities and affected individuals?</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Since the analysis found no specific code for automated breach detection or notification workflows, review existing OpenEMR audit logs (e.g., within `library/audit_log.inc.php` or `interface/super/manage_audit.php`) and associated organizational procedures. Confirm these mechanisms adequately support the 72-hour breach notification requirement under GDPR-006 for supervisory authorities and affected individuals.</div>
+</div></div>
+<div class="finding" id="f-f30" data-framework="GDPR" data-severity="Medium Risk" data-fp="true" style="border-left:4px solid #d0d7de;opacity:0.85">
+<div class="finding-header" onclick="toggleFinding('f30')" style="background:#f6f8fa">
+<div class="finding-left"><div class="finding-num">GDPR-008 <span style="font-size:10px;color:#8c959f;text-transform:uppercase;letter-spacing:0.5px">· Possible False Positive</span></div><div class="finding-question" style="color:#57606a"></div></div>
+<div class="finding-right"><span class="badge" style="color:#8c959f;background:#f6f8fa;border:1px solid #d0d7de">Medium Risk</span><span class="chevron">&#8250;</span></div>
+</div>
+<div class="finding-body">
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The primary analysis searches for safeguards like adequacy assessments and Standard Contractual Clauses, which are legal and organizational responsibilities of the data controller, not features typically implemented directly within application source code; thus, the absence of code evidence correctly indicates these are not application-level implementations, making the finding a false positive in the context of source code analysis.</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">No matching code patterns found.
+</div>
+<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement safeguards for transferring personal data to countries outside the EEA, including adequacy assessments, Standard Contractual Clauses, or other approved transfer mechanisms under Chapter V of the GDPR?</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">To better support compliant deployments, introduce new configuration parameters within a designated file like `application_settings.php` to allow administrators to specify data residency regions and define cross-border transfer policies, thereby helping manage GDPR Chapter V risks. Furthermore, add new validation logic in relevant external integration modules (e.g., `modules/external_apis/lab_interface.php`) to actively check and flag connection attempts to servers in non-adequate jurisdictions, preventing unauthorized data transfers and potential GDPR fines. Finally, implement granular API access controls (e.g., in `controllers/api_controller.php`) that enable restricting data serving based on client location or contractual agreement, bolstering compliance with GDPR Article 44.</div>
+</div></div>
+</div>
 </div>
 
 </div>
@@ -572,11 +575,33 @@ interface/reports/clinical_reports.php:92  $query = &quot;SELECT pd.*, fe.date A
 <div class="section-heading">How Findings Are Generated</div>
 <ul style="padding-left:20px;margin-bottom:16px;font-size:14px;line-height:2;color:#57606a">
 <li>Primary analysis by Claude Sonnet (Anthropic)</li>
-<li>Independent review by Gemini 2.5 Flash (Google)</li>
+<li>Verification by Gemini 2.5 Flash (Google)</li>
 <li>Question libraries are open source and community-maintained</li>
 <li>All questions cite regulatory source text</li>
 <li>Questions have not been validated by a licensed attorney</li>
 </ul>
+</div>
+<div class="section">
+<div class="section-heading">Why Two Models?</div>
+<p style="margin-bottom:12px"><strong>Claude Sonnet</strong> scans broadly — it finds every pattern that could indicate a compliance risk. This produces a comprehensive set of findings but includes noise from documentation files, config references, and test data.</p>
+<p style="margin-bottom:12px"><strong>Gemini 2.5 Flash</strong> then challenges each finding independently. It asks: is this evidence from actual application code? Would a regulator actually find this concerning? Is the severity appropriate?</p>
+<p style="margin-bottom:12px">The result is a tiered output:</p>
+<ul style="padding-left:20px;margin-bottom:16px;font-size:14px;line-height:2;color:#1a1a1a">
+<li><strong style="color:#1A7F37">CONFIRMED</strong> — Gemini agrees this is a real risk</li>
+<li><strong style="color:#9A6700">CONTEXT DEPENDENT</strong> — Risk depends on deployment/infrastructure</li>
+<li><strong style="color:#cf222e">POSSIBLE FALSE POSITIVE</strong> — Likely noise, review before acting</li>
+</ul>
+<p style="margin-bottom:12px"><strong>The confirmed count is the number you should act on.</strong> The total count shows the full scope of what was examined.</p>
+</div>
+<div class="section">
+<div class="section-heading">Evidence Tiers</div>
+<p style="margin-bottom:12px">Evidence is classified into three tiers based on file type:</p>
+<ul style="padding-left:20px;margin-bottom:16px;font-size:14px;line-height:2;color:#1a1a1a">
+<li><strong>[SOURCE]</strong> — Application source code (.ts, .py, .go, .rs, etc.) — strongest evidence</li>
+<li><strong>[CONFIG]</strong> — Configuration files (.yml, .json, .toml, Dockerfile) — moderate evidence</li>
+<li><strong>[DOCS]</strong> — Documentation (.md, .txt, .html) — context only, cannot produce High Risk findings</li>
+</ul>
+<p style="font-size:14px;color:#57606a">A finding is only classified as High Risk if supported by at least two source code files with matching evidence. Documentation references alone produce Pattern of Concern at most.</p>
 </div>
 <div class="section">
 <div class="section-heading">How to Use This Report</div>
@@ -594,6 +619,7 @@ interface/reports/clinical_reports.php:92  $query = &quot;SELECT pd.*, fe.date A
 <script>
 function showTab(name,btn){document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));document.getElementById('tab-'+name).classList.add('active');document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active')}
 function toggleFinding(id){document.getElementById('f-'+id).classList.toggle('open')}
+function toggleFpSection(fwid){var g=document.getElementById('fp-group-'+fwid);var c=document.getElementById('fp-chev-'+fwid);if(g.style.display==='none'){g.style.display='block';c.style.transform='rotate(90deg)'}else{g.style.display='none';c.style.transform=''}}
 function expandAll(){document.querySelectorAll('.finding').forEach(f=>f.classList.add('open'))}
 function collapseAll(){document.querySelectorAll('.finding').forEach(f=>f.classList.remove('open'))}
 let aFw='all',aSev='all';

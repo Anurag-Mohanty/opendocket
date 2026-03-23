@@ -173,7 +173,7 @@ REPO_URLS = {
 def regenerate_all_html():
     """Regenerate all HTML reports from markdown using current template."""
     import re as _re
-    from scanner.agents.base_agent import Finding, Evidence, AgentResult
+    from scanner.agents.base_agent import Finding, Evidence, AgentResult, classify_evidence_tier
     from scanner.domain_detector import DomainResult
 
     reports_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "reports")
@@ -254,9 +254,11 @@ def regenerate_all_html():
                 # Evidence
                 ev_m = _re.match(r"- `([^:]+):(\d+)`.*— `(.+)`", line)
                 if ev_m:
+                    ev_path = ev_m.group(1)
                     cur_finding.evidence.append(Evidence(
-                        file_path=ev_m.group(1), line_number=int(ev_m.group(2)),
-                        content=ev_m.group(3), match_type="search_pattern"))
+                        file_path=ev_path, line_number=int(ev_m.group(2)),
+                        content=ev_m.group(3), match_type="search_pattern",
+                        tier=classify_evidence_tier(ev_path)))
                     continue
                 # Severity (handle both emoji and text formats)
                 if "FINDING" in line or ":red_circle:" in line or ":orange_circle:" in line or ":green_circle:" in line or ":yellow_circle:" in line or ":blue_circle:" in line:

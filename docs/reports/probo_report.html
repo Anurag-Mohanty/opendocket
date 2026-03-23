@@ -110,7 +110,7 @@ a { color: #0052CC; text-decoration: none; } a:hover { text-decoration: underlin
 <body>
 <div class="top-bar"></div>
 <nav class="nav"><a href="../index.html" class="nav-brand"><span class="nav-brand-shield"></span> OpenDocket</a><div class="nav-links"><a href="../index.html">Directory</a><a href="../dashboard.html">Dashboard</a><a href="../methodology.html">Methodology</a><a href="../questions.html">Questions</a></div></nav>
-<div class="action-bar"><div class="action-bar-left"><span style="font-size:13px;color:#57606a;font-weight:600">probo</span><span style="font-size:13px;color:#8c959f">&middot; 20 findings &middot; MODERATE RISK</span></div><div class="action-bar-right"><button class="btn" onclick="expandAll()">Expand all</button><button class="btn" onclick="collapseAll()">Collapse all</button><button class="btn btn-primary" onclick="window.print()">Print / PDF</button></div></div>
+<div class="action-bar"><div class="action-bar-left"><span style="font-size:13px;color:#57606a;font-weight:600">probo</span><span style="font-size:13px;color:#8c959f">&middot; 20 findings · 2 confirmed high &middot; MODERATE RISK</span></div><div class="action-bar-right"><button class="btn" onclick="expandAll()">Expand all</button><button class="btn" onclick="collapseAll()">Collapse all</button><button class="btn btn-primary" onclick="window.print()">Print / PDF</button></div></div>
 <div class="tab-bar"><button class="tab-btn active" onclick="showTab('overview',this)">Overview</button><button class="tab-btn" onclick="showTab('findings',this)">Findings</button><button class="tab-btn" onclick="showTab('methodology',this)">Methodology &amp; Limitations</button></div>
 <div class="page">
 <div class="report-header"><div class="report-eyebrow">Compliance Risk Analysis</div><div class="report-title">probo</div><div class="report-meta"><a href="https://github.com/getprobo/probo">https://github.com/getprobo/probo</a><br>Scanned 2026-03-23 &middot; OpenDocket V1 &middot; Primary: Claude Sonnet &middot; Review: Gemini 2.5 Flash</div></div>
@@ -118,16 +118,16 @@ a { color: #0052CC; text-decoration: none; } a:hover { text-decoration: underlin
 <!-- TAB 1: OVERVIEW -->
 <div class="tab-panel active" id="tab-overview">
 <div class="callout callout-amber" style="margin-bottom:24px;padding:20px 24px"><div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#9A6700;margin-bottom:12px">Important Limitations of This Report</div><div style="font-size:13px;line-height:1.8"><strong>This report is not legal advice and is not defensible in court.</strong> It provides directional guidance only. To obtain a defensible compliance assessment, engage a licensed attorney and certified auditor.<br><br><strong>Scope limitations:</strong> Only public repository content was analyzed. Infrastructure configuration, deployment settings, operational policies, vendor contracts, and staff training are outside scope.<br><br><strong>A true compliance audit</strong> would also review: vendor contracts and BAAs, staff training records, incident response procedures, physical security controls, and system audit logs — none of which are visible in source code.</div></div>
-<div class="section" id="summary"><div class="section-heading">Risk Assessment</div><p style="font-size:15px;line-height:1.8;margin-bottom:24px">This analysis identified 20 compliance risk patterns across SOC2, GDPR. Of these, 3 are classified as high-severity — patterns consistent with potential non-compliance that regulators actively investigate. The most serious gaps were found in SOC2, GDPR. Without remediation, these patterns could expose the organization to regulatory enforcement, financial penalties, and reputational damage.</p>
-<div class="risk-index"><div class="risk-label" style="color:#9A6700">MODERATE RISK</div><div class="risk-desc">3 high-severity patterns require attention</div></div>
+<div class="section" id="summary"><div class="section-heading">Risk Assessment</div><p style="font-size:15px;line-height:1.8;margin-bottom:24px">This analysis identified 20 compliance patterns across SOC2, GDPR. After independent verification by Gemini 2.5 Flash, 2 high-severity findings were confirmed and 3 were identified as possible false positives — likely pattern matches in documentation or configuration files rather than application source code. The 2 confirmed findings represent the primary areas requiring attention.</p>
+<div class="risk-index"><div class="risk-label" style="color:#9A6700">MODERATE RISK</div><div class="risk-desc"><strong>2 confirmed high-severity findings</strong><br><span style="font-size:12px;color:#8c959f">3 total patterns identified · 3 flagged as possible false positives by independent review</span></div></div>
 <div class="section-heading">What This Means If Unaddressed</div><table class="table"><thead><tr><th>Framework</th><th>Regulatory Body</th><th>Max Penalty</th><th>Enforcement Trend</th></tr></thead><tbody><tr><td style="font-weight:600">SOC2 <span style="color:#CF222E;font-size:12px">(2 high)</span></td><td>AICPA</td><td style="color:#CF222E;font-weight:600">Loss of enterprise contracts</td><td>Mandatory for enterprise SaaS sales</td></tr>
 <tr><td style="font-weight:600">GDPR <span style="color:#CF222E;font-size:12px">(1 high)</span></td><td>EU DPAs</td><td style="color:#CF222E;font-weight:600">Up to EUR 20M or 4% turnover</td><td>Cross-border enforcement rising</td></tr>
 </tbody></table>
-<div class="section-heading">Top Findings</div><div class="top-finding"><div class="top-finding-q"></div><div class="top-finding-meta"><span class="badge badge-high">High Risk</span><span>SOC2</span><span>SOC2-006</span><span>cmd/probo/main.go:45</span> &middot; Review: CONFIRMED</div><div style="font-size:13px;color:#57606a;margin-top:8px">Build an incident response infrastructure and operational framework:</div></div>
+<div class="section-heading">Top Findings</div><div class="top-finding"><div class="top-finding-q"></div><div class="top-finding-meta"><span class="badge badge-high">High Risk</span><span>SOC2</span><span>SOC2-008</span><span>internal/config/config.go:18</span> &middot; Review: CONFIRMED</div><div style="font-size:13px;color:#57606a;margin-top:8px">Implement a comprehensive backup and disaster recovery strategy:</div></div>
 <div class="top-finding"><div class="top-finding-q"></div><div class="top-finding-meta"><span class="badge badge-high">High Risk</span><span>GDPR</span><span>GDPR-006</span><span>cmd/probo/main.go:45</span> &middot; Review: CONFIRMED</div><div style="font-size:13px;color:#57606a;margin-top:8px">Implement a comprehensive breach detection and notification capability:</div></div>
-<div class="top-finding"><div class="top-finding-q"></div><div class="top-finding-meta"><span class="badge badge-high">High Risk</span><span>SOC2</span><span>SOC2-008</span><span>internal/config/config.go:18</span> &middot; Review: CONFIRMED</div><div style="font-size:13px;color:#57606a;margin-top:8px">Implement a comprehensive backup and disaster recovery strategy:</div></div>
+<div class="top-finding"><div class="top-finding-q"></div><div class="top-finding-meta"><span class="badge badge-high">High Risk</span><span>SOC2</span><span>SOC2-006</span><span>cmd/probo/main.go:45</span> &middot; Review: POSSIBLE FALSE POSITIVE</div><div style="font-size:13px;color:#57606a;margin-top:8px">Build an incident response infrastructure and operational framework:</div></div>
 
-<div class="judge-block"><div class="judge-title">Independent Review — Gemini 2.5 Flash</div><div class="judge-stats"><div class="judge-stat"><span class="judge-stat-n j-confirmed">19</span><span class="judge-stat-l">Confirmed</span></div><div class="judge-stat"><span class="judge-stat-n j-context">0</span><span class="judge-stat-l">Context dependent</span></div><div class="judge-stat"><span class="judge-stat-n j-fp">0</span><span class="judge-stat-l">Possible false positives</span></div><div class="judge-stat"><span class="judge-stat-n j-additional">1</span><span class="judge-stat-l">Additional risk</span></div></div><div class="judge-note">Primary: Claude Sonnet (Anthropic). Review: Gemini 2.5 Flash (Google). Neither constitutes legal advice.</div></div>
+<div class="judge-block"><div class="judge-title">Gemini Verification Layer</div><div style="font-size:13px;color:#57606a;line-height:1.7;margin-bottom:14px;padding:10px 12px;background:rgba(110,64,201,0.05);border-radius:4px"><strong>How to read this:</strong> The confirmed count is your action list. The false positive count shows where the scanner found keyword patterns in documentation rather than application source code. Click any finding to see exactly what evidence was found and why Gemini made its determination.</div><div class="judge-stats"><div class="judge-stat"><span class="judge-stat-n j-confirmed">16</span><span class="judge-stat-l">Confirmed</span></div><div class="judge-stat"><span class="judge-stat-n j-context">0</span><span class="judge-stat-l">Context dependent</span></div><div class="judge-stat"><span class="judge-stat-n j-fp">3</span><span class="judge-stat-l">Possible false positives</span></div><div class="judge-stat"><span class="judge-stat-n j-additional">1</span><span class="judge-stat-l">Additional risk</span></div></div><div class="judge-note">Primary: Claude Sonnet (Anthropic). Verification: Gemini 2.5 Flash (Google). Neither constitutes legal advice.</div></div>
 <div class="section-heading">Recommended Actions</div><div class="rec-item"><div class="rec-priority rec-p-high">High</div><div><div class="rec-text">Build an incident response infrastructure and operational framework:</div><div class="rec-fw">SOC2 &middot; SOC2-006</div></div></div>
 <div class="rec-item"><div class="rec-priority rec-p-high">High</div><div><div class="rec-text">Implement a comprehensive backup and disaster recovery strategy:</div><div class="rec-fw">SOC2 &middot; SOC2-008</div></div></div>
 <div class="rec-item"><div class="rec-priority rec-p-high">High</div><div><div class="rec-text">Implement a comprehensive breach detection and notification capability:</div><div class="rec-fw">GDPR &middot; GDPR-006</div></div></div>
@@ -138,8 +138,8 @@ a { color: #0052CC; text-decoration: none; } a:hover { text-decoration: underlin
 <div class="rec-item"><div class="rec-priority rec-p-med">Medium</div><div><div class="rec-text">Implement a comprehensive data erasure capability:</div><div class="rec-fw">GDPR &middot; GDPR-003</div></div></div>
 <div class="rec-item"><div class="rec-priority rec-p-med">Medium</div><div><div class="rec-text">Implement a data retention management system:</div><div class="rec-fw">GDPR &middot; GDPR-007</div></div></div>
 
-<div class="section-heading" style="margin-top:32px">Risk Scorecard</div><table class="table"><thead><tr><th>Framework</th><th>High Risk</th><th>Medium</th><th>Concern</th><th>No Issue</th></tr></thead><tbody><tr><td style="font-weight:600">SOC2</td><td class="n-high">2</td><td class="n-med">3</td><td class="n-concern">3</td><td class="n-ok">2</td></tr>
-<tr><td style="font-weight:600">GDPR</td><td class="n-high">1</td><td class="n-med">3</td><td class="n-concern">5</td><td class="n-ok">1</td></tr>
+<div class="section-heading" style="margin-top:32px">Risk Scorecard</div><table class="table"><thead><tr><th>Framework</th><th>High Risk</th><th>Confirmed</th><th>False Pos.</th><th>Medium</th><th>Concern</th><th>No Issue</th></tr></thead><tbody><tr><td style="font-weight:600">SOC2</td><td class="n-high">2</td><td style="color:#1A7F37;font-weight:700">7</td><td style="color:#8c959f">3</td><td class="n-med">3</td><td class="n-concern">3</td><td class="n-ok">2</td></tr>
+<tr><td style="font-weight:600">GDPR</td><td class="n-high">1</td><td style="color:#1A7F37;font-weight:700">9</td><td style="color:#8c959f">0</td><td class="n-med">3</td><td class="n-concern">5</td><td class="n-ok">1</td></tr>
 </tbody></table>
 <div class="section-heading" style="margin-top:24px">Domains Detected</div><div class="domain-row"><span class="domain-name">Saas</span><div class="domain-bar-wrap"><div class="domain-bar" style="width:67.8%"></div></div><span class="domain-pct">67.8%</span></div>
 
@@ -151,186 +151,189 @@ a { color: #0052CC; text-decoration: none; } a:hover { text-decoration: underlin
 <button class="filter-btn" data-type="fw" onclick="filterFramework('GDPR', this)">GDPR (10)</button>
 <div class="filter-sep"></div><span class="filter-label">Severity:</span><button class="filter-btn active" data-type="sev" onclick="filterSeverity('all',this)">All</button><button class="filter-btn" data-type="sev" onclick="filterSeverity('High Risk',this)">High (3)</button><button class="filter-btn" data-type="sev" onclick="filterSeverity('Medium Risk',this)">Medium (6)</button><button class="filter-btn" data-type="sev" onclick="filterSeverity('Pattern of Concern',this)">Concern (8)</button></div>
 <div class="framework-section" id="soc2" data-framework="SOC2">
-<div class="framework-header"><div><div class="framework-name">SOC2</div><div class="framework-meta">AICPA &middot; Loss of enterprise contracts</div></div><div class="framework-count">10 findings</div></div>
-<div class="finding" id="f-f1" data-framework="SOC2" data-severity="No Issue Found">
+<div class="framework-header"><div><div class="framework-name">SOC2</div><div class="framework-meta">AICPA &middot; Loss of enterprise contracts</div></div><div class="framework-count">10 findings · 3 possible FP</div></div>
+<div class="finding" id="f-f1" data-framework="SOC2" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f1')">
-<div class="finding-left"><div class="finding-num">SOC2-001</div><div class="finding-question"></div></div>
-<div class="finding-right"><span class="badge badge-ok">No Issue Found</span><span class="chevron">&#8250;</span></div>
-</div>
-<div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The primary analysis correctly determined that the repository implements secure authentication mechanisms, as evidenced by the use of bcrypt for password hashing and JWT for session management, supporting the &#x27;No Issue Found&#x27; conclusion for SOC2-001.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">internal/server/auth.go:34  func (s *Server) handleLogin(w http.ResponseWriter, r *http.Request) { ... hashedPassword, err := bc
-internal/server/middleware.go:18  func AuthMiddleware(next http.Handler) http.Handler { token := r.Header.Get(&quot;Authorization&quot;); claims
-internal/server/jwt.go:22  func GenerateToken(userID string, orgID string, role string) (string, error) { claims := Claims{User
-internal/model/user.go:15  type User struct { ID string; Email string; PasswordHash string; OrganizationID string; Role string;
-cmd/probo/main.go:67  router.Handle(&quot;/api/login&quot;, server.handleLogin).Methods(&quot;POST&quot;)
-</div>
-<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement secure authentication mechanisms that verify user identity before granting access to the platform, consistent with SOC2 Trust Services Criteria for logical access controls?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Add robust rate limiting to login attempts within `internal/server/auth.go:34` to prevent brute-force attacks. This enhancement to the `handleLogin` function will further strengthen logical access controls and align with SOC2 Trust Services Criteria.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
-</div></div>
-<div class="finding" id="f-f2" data-framework="SOC2" data-severity="No Issue Found">
-<div class="finding-header" onclick="toggleFinding('f2')">
-<div class="finding-left"><div class="finding-num">SOC2-002</div><div class="finding-question"></div></div>
-<div class="finding-right"><span class="badge badge-ok">No Issue Found</span><span class="chevron">&#8250;</span></div>
-</div>
-<div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The evidence, particularly the `RequireRole` middleware function in `internal/server/middleware.go`, directly demonstrates the implementation of role-based access control mechanisms, confirming the primary analysis&#x27;s finding of &#x27;No Issue Found&#x27; regarding RBAC enforcement.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">internal/graph/resolver.go:41  func (r *mutationResolver) CreateControl(ctx context.Context, input model.CreateControlInput) (*mode
-internal/server/middleware.go:45  func RequireRole(role string) func(http.Handler) http.Handler { return func(next http.Handler) http.
-internal/model/organization.go:12  type Organization struct { ID string; Name string; Plan string; CreatedAt time.Time; UpdatedAt time.
-internal/graph/schema.resolvers.go:89  func (r *queryResolver) Controls(ctx context.Context) ([]*model.Control, error) { orgID := auth.OrgI
-internal/graph/schema.resolvers.go:112  func (r *queryResolver) Evidence(ctx context.Context, controlID string) ([]*model.Evidence, error) {
-</div>
-<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system enforce role-based access control that restricts user capabilities according to the principle of least privilege, ensuring users can only access resources within their authorized scope?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">To continuously strengthen role-based access controls, verify that the `RequireRole` middleware in `internal/server/middleware.go` is applied consistently to all sensitive operations, including `CreateControl` in `internal/graph/resolver.go`, ensuring adherence to least privilege principles for SOC2 compliance.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
-</div></div>
-<div class="finding" id="f-f3" data-framework="SOC2" data-severity="Pattern of Concern">
-<div class="finding-header" onclick="toggleFinding('f3')">
-<div class="finding-left"><div class="finding-num">SOC2-003</div><div class="finding-question"></div></div>
-<div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
-</div>
-<div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The Go source code explicitly calls `http.Server.ListenAndServe()` without TLS, indicating a lack of in-application encryption for client-server communication, directly violating the &#x27;Encryption in Transit&#x27; requirement.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">cmd/probo/main.go:45  srv := &amp;http.Server{ Addr: cfg.ListenAddr, Handler: router }
-cmd/probo/main.go:71  log.Printf(&quot;Server starting on %s&quot;, cfg.ListenAddr); if err := srv.ListenAndServe(); err != nil { lo
-internal/config/config.go:18  type Config struct { ListenAddr string; DatabaseURL string; JWTSecret string; ... }
-internal/server/server.go:29  func New(cfg *config.Config) *Server { ... db, err := sql.Open(&quot;postgres&quot;, cfg.DatabaseURL) ... }
-</div>
-<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system enforce encryption of data in transit using industry-standard TLS protocols for all client-server and service-to-service communications?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">In `cmd/probo/main.go` line 71, replace `srv.ListenAndServe()` with `srv.ListenAndServeTLS()` and provide paths to TLS certificates and keys, or explicitly document and enforce deployment with a reverse proxy (e.g., Nginx, Caddy, or a cloud load balancer) that terminates TLS for all incoming traffic. This change is necessary to enforce encryption of data in transit, addressing SOC2-003.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
-</div></div>
-<div class="finding" id="f-f4" data-framework="SOC2" data-severity="Medium Risk">
-<div class="finding-header" onclick="toggleFinding('f4')">
-<div class="finding-left"><div class="finding-num">SOC2-004</div><div class="finding-question"></div></div>
-<div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
-</div>
-<div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The use of unstructured `log.Printf` for security-relevant events in application source code directly demonstrates a lack of comprehensive and detailed audit logging necessary for forensic investigation and SOC2 compliance.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">cmd/probo/main.go:71  log.Printf(&quot;Server starting on %s&quot;, cfg.ListenAddr)
-internal/server/auth.go:58  log.Printf(&quot;login attempt for user: %s&quot;, req.Email)
-internal/graph/resolver.go:67  log.Printf(&quot;error creating control: %v&quot;, err)
-internal/server/middleware.go:38  log.Printf(&quot;unauthorized access attempt from IP: %s&quot;, r.RemoteAddr)
-</div>
-<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system maintain comprehensive audit logs that capture security-relevant events, user actions, and system changes with sufficient detail for forensic investigation and compliance review?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Replace calls to `log.Printf` across `cmd/probo/main.go`, `internal/server/auth.go`, `internal/graph/resolver.go`, and `internal/server/middleware.go` with a structured logging library (e.g., `uber-go/zap`) to capture detailed, machine-readable audit trails, fulfilling SOC2-004 requirements for forensic investigation.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
-</div></div>
-<div class="finding" id="f-f5" data-framework="SOC2" data-severity="Pattern of Concern">
-<div class="finding-header" onclick="toggleFinding('f5')">
-<div class="finding-left"><div class="finding-num">SOC2-005</div><div class="finding-question"></div></div>
-<div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
-</div>
-<div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The primary analysis correctly identifies database migration files as application source code subject to change, and SOC2 requires formal change management processes for such modifications, validating the &#x27;Pattern of Concern&#x27; for SOC2-005.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">internal/postgres/migrations/001_initial.up.sql:1  CREATE TABLE organizations ( id UUID PRIMARY KEY DEFAULT gen_random_uuid(), name TEXT NOT NULL, ... 
-internal/postgres/migrations/002_add_controls.up.sql:1  CREATE TABLE controls ( id UUID PRIMARY KEY DEFAULT gen_random_uuid(), organization_id UUID REFERENC
-internal/postgres/migrations/003_add_evidence.up.sql:1  CREATE TABLE evidence ( id UUID PRIMARY KEY DEFAULT gen_random_uuid(), control_id UUID REFERENCES co
-go.mod:1  module github.com/getprobo/probo
-</div>
-<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the organization maintain formal change management processes including code review, testing, approval workflows, and deployment controls that ensure system changes are authorized, tested, and traceable?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">To ensure changes like those in `internal/postgres/migrations/*.up.sql` are authorized, tested, and traceable, configure a mandatory pull request review process for all changes to these files, requiring at least one approving review and integration with automated testing. This directly addresses the requirement for formal change management processes under SOC2-005.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
-</div></div>
-<div class="finding" id="f-f6" data-framework="SOC2" data-severity="High Risk">
-<div class="finding-header" onclick="toggleFinding('f6')">
-<div class="finding-left"><div class="finding-num">SOC2-006</div><div class="finding-question"></div></div>
-<div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
-</div>
-<div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">While incident response plans are primarily organizational policies, the provided source code evidence, specifically the logging of unauthorized access attempts in `internal/server/middleware.go`, indicates application-level incident detection. The absence of further code-level mechanisms for automated escalation or integration with an incident response system can be interpreted as a potential deficiency in the implementation supporting an organizational incident response plan (SOC2-006).</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: MEDIUM</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">cmd/probo/main.go:45  srv := &amp;http.Server{ Addr: cfg.ListenAddr, Handler: router }
-internal/server/middleware.go:38  log.Printf(&quot;unauthorized access attempt from IP: %s&quot;, r.RemoteAddr)
-internal/config/config.go:18  type Config struct { ListenAddr string; DatabaseURL string; JWTSecret string; ... }
-</div>
-<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the organization maintain an incident response plan with defined procedures for detecting, responding to, escalating, and recovering from security incidents, and are these procedures tested and updated regularly?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Modify `internal/server/middleware.go` to enhance the logging of unauthorized access attempts by integrating an automated alerting mechanism that dispatches notifications to an incident management system or a dedicated security operations team. This ensures that detected security incidents are promptly escalated for response, supporting the organization&#x27;s defined incident response procedures and fulfilling SOC2-006 requirements.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
-</div></div>
-<div class="finding" id="f-f7" data-framework="SOC2" data-severity="Medium Risk">
-<div class="finding-header" onclick="toggleFinding('f7')">
-<div class="finding-left"><div class="finding-num">SOC2-007</div><div class="finding-question"></div></div>
-<div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
-</div>
-<div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The presence of third-party Go module dependencies in `go.mod`, confirmed by checksums in `go.sum` and usage indicated in `internal/graph/generated.go`, directly establishes the scenario requiring a vendor risk management program for third-party software as per SOC2-007.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">go.mod:3  require ( github.com/99designs/gqlgen v0.17.x; github.com/lib/pq v1.10.x; github.com/golang-jwt/jwt/
-go.sum:1  [dependency checksums present for all modules]
-internal/graph/generated.go:1  // Code generated by github.com/99designs/gqlgen, DO NOT EDIT.
-</div>
-<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the organization assess and manage risks associated with third-party dependencies and vendor software, including monitoring for known vulnerabilities and ensuring timely patching?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">For dependencies identified in `go.mod` and `go.sum` (e.g., `github.com/99designs/gqlgen`), establish a documented process for assessing and managing risks, including regular vulnerability scanning and license compliance checks. This action addresses SOC2-007 by demonstrating the organization&#x27;s commitment to managing third-party software risks.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
-</div></div>
-<div class="finding" id="f-f8" data-framework="SOC2" data-severity="High Risk">
-<div class="finding-header" onclick="toggleFinding('f8')">
 <div class="finding-left"><div class="finding-num">SOC2-008</div><div class="finding-question"></div></div>
 <div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The application code clearly demonstrates the storage of critical organizational data in a PostgreSQL database, intrinsically requiring robust backup and recovery, and the codebase itself provides no evidence of these essential mechanisms.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: MEDIUM</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">internal/config/config.go:18  type Config struct { ListenAddr string; DatabaseURL string; JWTSecret string; ... }
-internal/postgres/migrations/001_initial.up.sql:1  CREATE TABLE organizations ( id UUID PRIMARY KEY DEFAULT gen_random_uuid(), name TEXT NOT NULL, ... 
-internal/server/server.go:29  func New(cfg *config.Config) *Server { ... db, err := sql.Open(&quot;postgres&quot;, cfg.DatabaseURL) ... }
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The application&#x27;s use of a PostgreSQL database, evidenced by `internal/config/config.go`, `internal/postgres/migrations/001_initial.up.sql`, and `internal/server/server.go`, confirms the existence of critical system data requiring organizational backup and recovery procedures for SOC2-008.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[SOURCE] internal/config/config.go:18  type Config struct { ListenAddr string; DatabaseURL string; JWTSecret string; ... }
+[CONFIG] internal/postgres/migrations/001_initial.up.sql:1  CREATE TABLE organizations ( id UUID PRIMARY KEY DEFAULT gen_random_uuid(), name TEXT NOT NULL, ... 
+[SOURCE] internal/server/server.go:29  func New(cfg *config.Config) *Server { ... db, err := sql.Open(&quot;postgres&quot;, cfg.DatabaseURL) ... }
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the organization implement and test backup procedures and disaster recovery plans that ensure the availability and recoverability of system data, including compliance artifacts and organizational records?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The `internal/postgres/migrations/001_initial.up.sql` file defines a critical `organizations` table, with its `DatabaseURL` configured in `internal/config/config.go`. Establish and regularly test an offsite backup and recovery plan for the PostgreSQL database storing this data to ensure its availability and recoverability, as required by SOC2 availability principles.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">For the `probo` application&#x27;s PostgreSQL database, as evidenced by `internal/server/server.go` utilizing `cfg.DatabaseURL` and the schema in `internal/postgres/migrations/001_initial.up.sql`, establish and regularly test comprehensive backup and disaster recovery plans to ensure compliance with SOC2-008 regarding system data availability and recoverability.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
-<div class="finding" id="f-f9" data-framework="SOC2" data-severity="Medium Risk">
-<div class="finding-header" onclick="toggleFinding('f9')">
+<div class="finding" id="f-f2" data-framework="SOC2" data-severity="Medium Risk">
+<div class="finding-header" onclick="toggleFinding('f2')">
+<div class="finding-left"><div class="finding-num">SOC2-004</div><div class="finding-question"></div></div>
+<div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
+</div>
+<div class="finding-body">
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The evidence clearly shows use of basic `log.Printf` in critical application areas (server startup, user authentication, errors, unauthorized access), which is insufficient for comprehensive, auditable logging required by SOC2 for forensic investigation and compliance review.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[SOURCE] cmd/probo/main.go:71  log.Printf(&quot;Server starting on %s&quot;, cfg.ListenAddr)
+[SOURCE] internal/server/auth.go:58  log.Printf(&quot;login attempt for user: %s&quot;, req.Email)
+[SOURCE] internal/graph/resolver.go:67  log.Printf(&quot;error creating control: %v&quot;, err)
+[SOURCE] internal/server/middleware.go:38  log.Printf(&quot;unauthorized access attempt from IP: %s&quot;, r.RemoteAddr)
+</div>
+<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system maintain comprehensive audit logs that capture security-relevant events, user actions, and system changes with sufficient detail for forensic investigation and compliance review?</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">In files like `cmd/probo/main.go`, `internal/server/auth.go`, `internal/graph/resolver.go`, and `internal/server/middleware.go`, replace `log.Printf` statements with calls to a structured logging library (e.g., `uber-go/zap` or `rs/zerolog`), ensuring security-relevant events include contextual key-value pairs for user IDs, timestamps, and event types. This change is critical to generate detailed audit logs that meet SOC2 requirements for forensic investigation and compliance review.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+</div></div>
+<div class="finding" id="f-f3" data-framework="SOC2" data-severity="Medium Risk">
+<div class="finding-header" onclick="toggleFinding('f3')">
+<div class="finding-left"><div class="finding-num">SOC2-007</div><div class="finding-question"></div></div>
+<div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
+</div>
+<div class="finding-body">
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The presence of third-party dependencies in `go.mod` and their usage confirmed by `generated.go` directly triggers the SOC2 requirement for assessing and managing vendor risk associated with these components.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[CONFIG] go.mod:3  require ( github.com/99designs/gqlgen v0.17.x; github.com/lib/pq v1.10.x; github.com/golang-jwt/jwt/
+[CONFIG] go.sum:1  [dependency checksums present for all modules]
+[SOURCE] internal/graph/generated.go:1  // Code generated by github.com/99designs/gqlgen, DO NOT EDIT.
+</div>
+<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the organization assess and manage risks associated with third-party dependencies and vendor software, including monitoring for known vulnerabilities and ensuring timely patching?</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Initiate a formal process to inventory, assess, and continuously monitor all third-party dependencies declared in `go.mod` and validated by `go.sum`, including regular vulnerability scanning and timely patching. This action is necessary to demonstrate effective vendor risk management and meet SOC2-007 requirements.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+</div></div>
+<div class="finding" id="f-f4" data-framework="SOC2" data-severity="Medium Risk">
+<div class="finding-header" onclick="toggleFinding('f4')">
 <div class="finding-left"><div class="finding-num">SOC2-009</div><div class="finding-question"></div></div>
 <div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The provided source code evidence, particularly the User model and login handler, clearly indicates a lack of implementation for multi-factor authentication, directly correlating with SOC2-009.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">internal/server/auth.go:34  func (s *Server) handleLogin(w http.ResponseWriter, r *http.Request) { ... hashedPassword, err := bc
-internal/model/user.go:15  type User struct { ID string; Email string; PasswordHash string; OrganizationID string; Role string;
-internal/server/jwt.go:22  func GenerateToken(userID string, orgID string, role string) (string, error) { ... }
-internal/graph/schema.graphqls:8  type Mutation { login(email: String!, password: String!): AuthPayload! ... }
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The provided source code for user authentication and the user model demonstrates a standard password-based login flow without any visible implementation or enforcement of multi-factor authentication, directly indicating a gap for SOC2-009.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[SOURCE] internal/server/auth.go:34  func (s *Server) handleLogin(w http.ResponseWriter, r *http.Request) { ... hashedPassword, err := bc
+[SOURCE] internal/model/user.go:15  type User struct { ID string; Email string; PasswordHash string; OrganizationID string; Role string;
+[SOURCE] internal/server/jwt.go:22  func GenerateToken(userID string, orgID string, role string) (string, error) { ... }
+[CONFIG] internal/graph/schema.graphqls:8  type Mutation { login(email: String!, password: String!): AuthPayload! ... }
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system support and enforce multi-factor authentication for user access, particularly for administrative and privileged operations?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Add `TOTPSecret string`, `MFAEnabled bool`, and `RecoveryCodes []string` fields to the `User` struct in `internal/model/user.go`. Update `internal/server/auth.go`&#x27;s `handleLogin` function to include a TOTP verification step post-password validation for users with MFA enabled, thus addressing SOC2-009 requirements for multi-factor authentication.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">In `internal/model/user.go`, extend the `User` struct to include fields such as `TOTPSecret string` and `MFAEnabled bool`. Subsequently, modify the `handleLogin` function in `internal/server/auth.go` and the `login` mutation in `internal/graph/schema.graphqls` to integrate a second-factor verification step during login when MFA is enabled, thus addressing SOC2-009 requirements for multi-factor authentication.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
-<div class="finding" id="f-f10" data-framework="SOC2" data-severity="Pattern of Concern">
-<div class="finding-header" onclick="toggleFinding('f10')">
-<div class="finding-left"><div class="finding-num">SOC2-010</div><div class="finding-question"></div></div>
+<div class="finding" id="f-f5" data-framework="SOC2" data-severity="Pattern of Concern">
+<div class="finding-header" onclick="toggleFinding('f5')">
+<div class="finding-left"><div class="finding-num">SOC2-003</div><div class="finding-question"></div></div>
 <div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The primary analysis correctly identifies the absence of essential security policy documentation (security policies, vulnerability disclosure procedures, code of conduct) within the repository, which is a fundamental requirement for SOC2 compliance. The evidence, including `README.md` and `go.mod`, establishes the context of a software project by an organization, but does not present or link to the required governance documents, confirming the identified compliance gap.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">README.md:1  # Probo - Open Source SOC2 Compliance Platform
-LICENSE:1  [License file present]
-go.mod:1  module github.com/getprobo/probo
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The application&#x27;s `main.go` explicitly initiates an HTTP server using `srv.ListenAndServe()`, which does not enforce TLS encryption for client-server communications, directly contradicting SOC2 requirements for encryption of data in transit.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[SOURCE] cmd/probo/main.go:45  srv := &amp;http.Server{ Addr: cfg.ListenAddr, Handler: router }
+[SOURCE] cmd/probo/main.go:71  log.Printf(&quot;Server starting on %s&quot;, cfg.ListenAddr); if err := srv.ListenAndServe(); err != nil { lo
+[SOURCE] internal/config/config.go:18  type Config struct { ListenAddr string; DatabaseURL string; JWTSecret string; ... }
+[SOURCE] internal/server/server.go:29  func New(cfg *config.Config) *Server { ... db, err := sql.Open(&quot;postgres&quot;, cfg.DatabaseURL) ... }
+</div>
+<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system enforce encryption of data in transit using industry-standard TLS protocols for all client-server and service-to-service communications?</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Modify `cmd/probo/main.go` at line 71 to invoke `srv.ListenAndServeTLS(cfg.CertPath, cfg.KeyPath)` rather than `srv.ListenAndServe()`, incorporating TLS certificate and key paths into the `Config` structure for direct application-level encryption. Without this change, data in transit will not be encrypted, leading to non-compliance with SOC2 requirements.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+</div></div>
+<div class="finding" id="f-f6" data-framework="SOC2" data-severity="No Issue Found">
+<div class="finding-header" onclick="toggleFinding('f6')">
+<div class="finding-left"><div class="finding-num">SOC2-001</div><div class="finding-question"></div></div>
+<div class="finding-right"><span class="badge badge-ok">No Issue Found</span><span class="chevron">&#8250;</span></div>
+</div>
+<div class="finding-body">
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The primary analysis&#x27;s finding of &#x27;No Issue Found&#x27; is well-supported by the evidence, which demonstrates the implementation of secure authentication mechanisms such as bcrypt for password hashing and JWT for token-based session management within the application&#x27;s source code.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[SOURCE] internal/server/auth.go:34  func (s *Server) handleLogin(w http.ResponseWriter, r *http.Request) { ... hashedPassword, err := bc
+[SOURCE] internal/server/middleware.go:18  func AuthMiddleware(next http.Handler) http.Handler { token := r.Header.Get(&quot;Authorization&quot;); claims
+[SOURCE] internal/server/jwt.go:22  func GenerateToken(userID string, orgID string, role string) (string, error) { claims := Claims{User
+[SOURCE] internal/model/user.go:15  type User struct { ID string; Email string; PasswordHash string; OrganizationID string; Role string;
+[SOURCE] cmd/probo/main.go:67  router.Handle(&quot;/api/login&quot;, server.handleLogin).Methods(&quot;POST&quot;)
+</div>
+<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement secure authentication mechanisms that verify user identity before granting access to the platform, consistent with SOC2 Trust Services Criteria for logical access controls?</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">No immediate remediation is required. `internal/server/auth.go` correctly uses bcrypt for password hashing and `internal/server/jwt.go` generates secure JSON Web Tokens, demonstrating adherence to SOC2 requirements for logical access controls.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+</div></div>
+<div class="finding" id="f-f7" data-framework="SOC2" data-severity="No Issue Found">
+<div class="finding-header" onclick="toggleFinding('f7')">
+<div class="finding-left"><div class="finding-num">SOC2-002</div><div class="finding-question"></div></div>
+<div class="finding-right"><span class="badge badge-ok">No Issue Found</span><span class="chevron">&#8250;</span></div>
+</div>
+<div class="finding-body">
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The Go source code evidence, specifically the `RequireRole` middleware and `auth.OrgI` context extraction in resolvers, directly indicates the implementation of role-based access control and organizational scoping, confirming that no issue was found regarding SOC2-002.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[SOURCE] internal/graph/resolver.go:41  func (r *mutationResolver) CreateControl(ctx context.Context, input model.CreateControlInput) (*mode
+[SOURCE] internal/server/middleware.go:45  func RequireRole(role string) func(http.Handler) http.Handler { return func(next http.Handler) http.
+[SOURCE] internal/model/organization.go:12  type Organization struct { ID string; Name string; Plan string; CreatedAt time.Time; UpdatedAt time.
+[SOURCE] internal/graph/schema.resolvers.go:89  func (r *queryResolver) Controls(ctx context.Context) ([]*model.Control, error) { orgID := auth.OrgI
+[SOURCE] internal/graph/schema.resolvers.go:112  func (r *queryResolver) Evidence(ctx context.Context, controlID string) ([]*model.Evidence, error) {
+</div>
+<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system enforce role-based access control that restricts user capabilities according to the principle of least privilege, ensuring users can only access resources within their authorized scope?</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The `internal/server/middleware.go` `RequireRole` function and `internal/graph/resolver.go` logic demonstrate appropriate role-based access control is currently enforced. Continue to review access control logic in files like `internal/graph/schema.resolvers.go` during feature development to maintain compliance with SOC2-002, preventing unauthorized access.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+</div></div>
+<div class="fp-section-header" style="background:#f6f8fa;border:1px solid #d0d7de;padding:12px 16px;margin:16px 0 8px;display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="toggleFpSection('soc2')"><div><span style="font-size:14px;font-weight:600;color:#57606a">Possible False Positives (3)</span><span style="font-size:12px;color:#8c959f;margin-left:12px">Gemini flagged these as likely pattern matches in non-source-code files. Review before acting.</span></div><span class="chevron fp-chevron" id="fp-chev-soc2" style="font-size:12px;color:#57606a">&#8250;</span></div>
+<div class="fp-findings-group" id="fp-group-soc2" style="display:none">
+<div class="finding" id="f-f8" data-framework="SOC2" data-severity="Pattern of Concern" data-fp="true" style="border-left:4px solid #d0d7de;opacity:0.85">
+<div class="finding-header" onclick="toggleFinding('f8')" style="background:#f6f8fa">
+<div class="finding-left"><div class="finding-num">SOC2-005 <span style="font-size:10px;color:#8c959f;text-transform:uppercase;letter-spacing:0.5px">· Possible False Positive</span></div><div class="finding-question" style="color:#57606a"></div></div>
+<div class="finding-right"><span class="badge" style="color:#8c959f;background:#f6f8fa;border:1px solid #d0d7de">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
+</div>
+<div class="finding-body">
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence cites only configuration files (.sql migrations and go.mod), which are outputs of development rather than direct proof of absent change management processes like code review or approval workflows.</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[CONFIG] internal/postgres/migrations/001_initial.up.sql:1  CREATE TABLE organizations ( id UUID PRIMARY KEY DEFAULT gen_random_uuid(), name TEXT NOT NULL, ... 
+[CONFIG] internal/postgres/migrations/002_add_controls.up.sql:1  CREATE TABLE controls ( id UUID PRIMARY KEY DEFAULT gen_random_uuid(), organization_id UUID REFERENC
+[CONFIG] internal/postgres/migrations/003_add_evidence.up.sql:1  CREATE TABLE evidence ( id UUID PRIMARY KEY DEFAULT gen_random_uuid(), control_id UUID REFERENCES co
+[CONFIG] go.mod:1  module github.com/getprobo/probo
+</div>
+<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the organization maintain formal change management processes including code review, testing, approval workflows, and deployment controls that ensure system changes are authorized, tested, and traceable?</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">For changes impacting files like `internal/postgres/migrations/*.up.sql` and `go.mod`, establish mandatory peer review and automated testing stages within the CI/CD pipeline prior to deployment. This ensures all system changes are authorized, tested, and traceable, satisfying SOC2-005 requirements.</div>
+</div></div>
+<div class="finding" id="f-f9" data-framework="SOC2" data-severity="High Risk" data-fp="true" style="border-left:4px solid #d0d7de;opacity:0.85">
+<div class="finding-header" onclick="toggleFinding('f9')" style="background:#f6f8fa">
+<div class="finding-left"><div class="finding-num">SOC2-006 <span style="font-size:10px;color:#8c959f;text-transform:uppercase;letter-spacing:0.5px">· Possible False Positive</span></div><div class="finding-question" style="color:#57606a"></div></div>
+<div class="finding-right"><span class="badge" style="color:#8c959f;background:#f6f8fa;border:1px solid #d0d7de">High Risk</span><span class="chevron">&#8250;</span></div>
+</div>
+<div class="finding-body">
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The provided source code evidence, showing basic logging for unauthorized access attempts and general server configuration, is insufficient to confirm the absence or inadequacy of an organizational incident response plan, which typically involves policies, procedures, and cross-functional teams that extend beyond application-level code.</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[SOURCE] cmd/probo/main.go:45  srv := &amp;http.Server{ Addr: cfg.ListenAddr, Handler: router }
+[SOURCE] internal/server/middleware.go:38  log.Printf(&quot;unauthorized access attempt from IP: %s&quot;, r.RemoteAddr)
+[SOURCE] internal/config/config.go:18  type Config struct { ListenAddr string; DatabaseURL string; JWTSecret string; ... }
+</div>
+<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the organization maintain an incident response plan with defined procedures for detecting, responding to, escalating, and recovering from security incidents, and are these procedures tested and updated regularly?</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">In `internal/server/middleware.go`, enhance the unauthorized access logging (currently at line 38) to integrate with a centralized security information and event management (SIEM) system or an incident alerting service. Additionally, within `cmd/probo/main.go`, initialize and configure an incident response client to manage the lifecycle of security incidents, ensuring compliance with SOC2-006 requirements for incident detection, response, and escalation.</div>
+</div></div>
+<div class="finding" id="f-f10" data-framework="SOC2" data-severity="Pattern of Concern" data-fp="true" style="border-left:4px solid #d0d7de;opacity:0.85">
+<div class="finding-header" onclick="toggleFinding('f10')" style="background:#f6f8fa">
+<div class="finding-left"><div class="finding-num">SOC2-010 <span style="font-size:10px;color:#8c959f;text-transform:uppercase;letter-spacing:0.5px">· Possible False Positive</span></div><div class="finding-question" style="color:#57606a"></div></div>
+<div class="finding-right"><span class="badge" style="color:#8c959f;background:#f6f8fa;border:1px solid #d0d7de">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
+</div>
+<div class="finding-body">
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-fp">POSSIBLE FALSE POSITIVE</div><div class="verdict-text">The evidence provided (README.md, LICENSE, go.mod) are general repository files that indicate project context or licensing, but do not directly contain or link to the specific security policies, vulnerability disclosure procedures, or codes of conduct required by SOC2-010.</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[DOCS] README.md:1  # Probo - Open Source SOC2 Compliance Platform
+[CONFIG] LICENSE:1  [License file present]
+[CONFIG] go.mod:1  module github.com/getprobo/probo
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the organization maintain and publish security policies, vulnerability disclosure procedures, and codes of conduct that demonstrate a commitment to information security governance?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">To address the absence of required governance documentation, create and publish distinct files within the repository (e.g., `SECURITY.md`, `CODE_OF_CONDUCT.md`) detailing the organization&#x27;s security policies, vulnerability disclosure procedures, and code of conduct. This documentation is crucial to demonstrate the organization&#x27;s commitment to information security governance, which is directly assessed by SOC2-010. Failure to provide such public documentation impedes the assessment of the organization&#x27;s adherence to SOC2 requirements.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">While the `README.md` describes the project as an &#x27;Open Source SOC2 Compliance Platform&#x27;, the repository lacks explicit documentation for security policies, vulnerability disclosure procedures, and a code of conduct. Add dedicated `SECURITY.md` and `CODE_OF_CONDUCT.md` files, or similar, that clearly document these policies within the repository to demonstrate commitment to information security governance as required by SOC2-010.</div>
 </div></div>
+</div>
 </div>
 <div class="framework-section" id="gdpr" data-framework="GDPR">
 <div class="framework-header"><div><div class="framework-name">GDPR</div><div class="framework-meta">EU DPAs &middot; Up to EUR 20M or 4% turnover</div></div><div class="framework-count">10 findings</div></div>
-<div class="finding" id="f-f11" data-framework="GDPR" data-severity="Medium Risk">
+<div class="finding" id="f-f11" data-framework="GDPR" data-severity="High Risk">
 <div class="finding-header" onclick="toggleFinding('f11')">
+<div class="finding-left"><div class="finding-num">GDPR-006</div><div class="finding-question"></div></div>
+<div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
+</div>
+<div class="finding-body">
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The application&#x27;s source code evidences basic security logging (IP addresses for unauthorized access) and sensitive data handling (via database/JWT config), but lacks any apparent technical capabilities or integrated features for comprehensive breach detection, alerting, or notification workflows, which is a high risk under GDPR.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[SOURCE] cmd/probo/main.go:45  srv := &amp;http.Server{ Addr: cfg.ListenAddr, Handler: router }
+[SOURCE] internal/server/middleware.go:38  log.Printf(&quot;unauthorized access attempt from IP: %s&quot;, r.RemoteAddr)
+[SOURCE] internal/config/config.go:18  type Config struct { ListenAddr string; DatabaseURL string; JWTSecret string; ... }
+</div>
+<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the organization have the technical capability and operational procedures to detect personal data breaches and notify the supervisory authority within 72 hours and affected data subjects without undue delay?</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The application&#x27;s core setup in `cmd/probo/main.go` and its logging of unauthorized access attempts in `internal/server/middleware.go` do not currently demonstrate integrated breach detection or notification capabilities. Enhance the logging in `internal/server/middleware.go` to securely forward events to a dedicated security monitoring system, and integrate breach management APIs into the `probo` service (e.g., via `cmd/probo/main.go`) to facilitate timely incident response and notification processes, thereby ensuring compliance with GDPR Articles 33 and 34.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+</div></div>
+<div class="finding" id="f-f12" data-framework="GDPR" data-severity="Medium Risk">
+<div class="finding-header" onclick="toggleFinding('f12')">
 <div class="finding-left"><div class="finding-num">GDPR-001</div><div class="finding-question"></div></div>
 <div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The application&#x27;s source code explicitly defines and processes personal data (User Email, PasswordHash, Organization data), which under GDPR Article 6 requires a documented lawful basis. The finding correctly highlights the need for this documentation, which is not evident in the provided code snippets.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">internal/model/user.go:15  type User struct { ID string; Email string; PasswordHash string; OrganizationID string; Role string;
-internal/model/organization.go:12  type Organization struct { ID string; Name string; Plan string; CreatedAt time.Time; UpdatedAt time.
-internal/graph/schema.resolvers.go:23  func (r *mutationResolver) CreateUser(ctx context.Context, input model.CreateUserInput) (*model.User
-internal/postgres/user_store.go:34  func (s *UserStore) Create(ctx context.Context, user *model.User) error { _, err := s.db.ExecContext
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The application&#x27;s source code explicitly defines and processes personal user data, directly engaging GDPR&#x27;s requirement for a lawful basis, which the primary analysis rightly flags as potentially missing.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[SOURCE] internal/model/user.go:15  type User struct { ID string; Email string; PasswordHash string; OrganizationID string; Role string;
+[SOURCE] internal/model/organization.go:12  type Organization struct { ID string; Name string; Plan string; CreatedAt time.Time; UpdatedAt time.
+[SOURCE] internal/graph/schema.resolvers.go:23  func (r *mutationResolver) CreateUser(ctx context.Context, input model.CreateUserInput) (*model.User
+[SOURCE] internal/postgres/user_store.go:34  func (s *UserStore) Create(ctx context.Context, user *model.User) error { _, err := s.db.ExecContext
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system identify and document a lawful basis under Article 6 of the GDPR for each category of personal data processing, and is this basis communicated to data subjects?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The personal data types defined in `internal/model/user.go` (e.g., Email, PasswordHash) and `internal/model/organization.go` (e.g., Name) are processed when creating users via `internal/graph/schema.resolvers.go` and `internal/postgres/user_store.go`. Document the specific lawful basis under GDPR Article 6 for processing these data types in your Record of Processing Activities and privacy policy to avoid non-compliance with lawful basis requirements.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
-</div></div>
-<div class="finding" id="f-f12" data-framework="GDPR" data-severity="Pattern of Concern">
-<div class="finding-header" onclick="toggleFinding('f12')">
-<div class="finding-left"><div class="finding-num">GDPR-002</div><div class="finding-question"></div></div>
-<div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
-</div>
-<div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The evidence shows user creation and storage of personal data (email) without any visible mechanism in the provided application source code to obtain, record, or manage user consent, which is a fundamental GDPR requirement for data processing.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">internal/graph/schema.graphqls:5  type Mutation { createUser(input: CreateUserInput!): User! login(email: String!, password: String!):
-internal/model/user.go:15  type User struct { ID string; Email string; PasswordHash string; OrganizationID string; Role string;
-internal/graph/schema.resolvers.go:23  func (r *mutationResolver) CreateUser(ctx context.Context, input model.CreateUserInput) (*model.User
-</div>
-<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system obtain, record, and manage user consent in a manner that is freely given, specific, informed, and unambiguous, with the ability for users to withdraw consent at any time?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">In `internal/model/user.go`, extend the `User` struct or add a `Consent` model to record `ConsentStatus`, `ConsentTimestamp`, and `ConsentVersion`. Update `internal/graph/schema.graphqls` and `internal/graph/schema.resolvers.go` for the `createUser` mutation to explicitly capture and link user consent during registration, ensuring GDPR requirements for explicit, informed consent are met.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Update internal documentation and the publicly accessible privacy policy to explicitly identify and communicate the lawful basis for processing personal data, such as `Email` and `PasswordHash` from `internal/model/user.go` and related organizational data from `internal/model/organization.go`, as processed by `internal/graph/schema.resolvers.go` and `internal/postgres/user_store.go`. Failure to document and communicate a lawful basis (Article 6 GDPR) for these processing activities exposes the platform to regulatory fines.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f13" data-framework="GDPR" data-severity="Medium Risk">
 <div class="finding-header" onclick="toggleFinding('f13')">
@@ -338,72 +341,72 @@ internal/graph/schema.resolvers.go:23  func (r *mutationResolver) CreateUser(ctx
 <div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The evidence shows user creation and storage mechanisms in source code files, but no corresponding data erasure capability, directly indicating a gap for GDPR Right to Erasure.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">internal/graph/schema.graphqls:5  type Mutation { createUser(input: CreateUserInput!): User! login(email: String!, password: String!):
-internal/postgres/user_store.go:34  func (s *UserStore) Create(ctx context.Context, user *model.User) error { ... }
-internal/model/user.go:15  type User struct { ID string; Email string; PasswordHash string; OrganizationID string; Role string;
-internal/postgres/migrations/001_initial.up.sql:1  CREATE TABLE organizations ( id UUID PRIMARY KEY DEFAULT gen_random_uuid(), name TEXT NOT NULL, ... 
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The evidence clearly shows the creation and storage of personal user data within the application&#x27;s source code and schema, but provides no indication of any mechanism for data erasure, which is a fundamental requirement for GDPR&#x27;s Right to Erasure.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[CONFIG] internal/graph/schema.graphqls:5  type Mutation { createUser(input: CreateUserInput!): User! login(email: String!, password: String!):
+[SOURCE] internal/postgres/user_store.go:34  func (s *UserStore) Create(ctx context.Context, user *model.User) error { ... }
+[SOURCE] internal/model/user.go:15  type User struct { ID string; Email string; PasswordHash string; OrganizationID string; Role string;
+[CONFIG] internal/postgres/migrations/001_initial.up.sql:1  CREATE TABLE organizations ( id UUID PRIMARY KEY DEFAULT gen_random_uuid(), name TEXT NOT NULL, ... 
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system provide data subjects with the ability to request and obtain the erasure of their personal data, and does the system process such requests completely and within the required timeframe?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Add a `deleteUser` mutation to `internal/graph/schema.graphqls` and implement a corresponding `Delete` method within `internal/postgres/user_store.go` to process user data erasure requests. This is crucial for enabling data subjects to exercise their Right to Erasure under GDPR Article 17, avoiding non-compliance penalties.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">The `internal/graph/schema.graphqls` file must be updated to include a `deleteUser` mutation, and `internal/postgres/user_store.go` requires a corresponding `Delete` function to process requests for the complete erasure of personal data associated with `model.User` records, as mandated by GDPR&#x27;s Right to Erasure (GDPR-003).</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
-<div class="finding" id="f-f14" data-framework="GDPR" data-severity="Pattern of Concern">
+<div class="finding" id="f-f14" data-framework="GDPR" data-severity="Medium Risk">
 <div class="finding-header" onclick="toggleFinding('f14')">
-<div class="finding-left"><div class="finding-num">GDPR-004</div><div class="finding-question"></div></div>
-<div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
-</div>
-<div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The evidence points to the application&#x27;s GraphQL API where data access is defined, but it does not show any specific feature or endpoint designed to facilitate data portability in a structured, machine-readable format as required by GDPR.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">internal/graph/schema.resolvers.go:89  func (r *queryResolver) Controls(ctx context.Context) ([]*model.Control, error) { orgID := auth.OrgI
-internal/graph/schema.resolvers.go:112  func (r *queryResolver) Evidence(ctx context.Context, controlID string) ([]*model.Evidence, error) {
-internal/graph/schema.graphqls:12  type Query { controls: [Control!]! evidence(controlID: ID!): [Evidence!]! me: User! ... }
-</div>
-<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system provide data subjects with the ability to receive their personal data in a structured, commonly used, and machine-readable format, and to transmit that data to another controller?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Update `internal/graph/schema.graphqls` to include a data export endpoint (e.g., `exportMyData`) and implement the corresponding resolver in `internal/graph/schema.resolvers.go` to generate and provide all user personal data in a structured, machine-readable format. This is critical for complying with GDPR Article 20, which grants data subjects the right to data portability.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
-</div></div>
-<div class="finding" id="f-f15" data-framework="GDPR" data-severity="Pattern of Concern">
-<div class="finding-header" onclick="toggleFinding('f15')">
-<div class="finding-left"><div class="finding-num">GDPR-005</div><div class="finding-question"></div></div>
-<div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
-</div>
-<div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The evidence directly shows a User struct with sensitive data (Email, PasswordHash) and a database retrieval function (GetByID) that likely fetches all fields, indicating a potential violation of data minimization and privacy by default if PasswordHash is retrieved unnecessarily.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">internal/model/user.go:15  type User struct { ID string; Email string; PasswordHash string; OrganizationID string; Role string;
-internal/graph/resolver.go:41  func (r *mutationResolver) CreateControl(ctx context.Context, input model.CreateControlInput) (*mode
-internal/server/middleware.go:18  func AuthMiddleware(next http.Handler) http.Handler { ... }
-internal/postgres/user_store.go:56  func (s *UserStore) GetByID(ctx context.Context, id string) (*model.User, error) { row := s.db.Query
-</div>
-<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system architecture incorporate data protection principles by design and by default, including data minimization, purpose limitation, storage limitation, and appropriate technical safeguards?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Refactor `internal/model/user.go` to separate `PasswordHash` into a dedicated authentication-specific model, and modify `internal/postgres/user_store.go`&#x27;s `GetByID` to only retrieve `PasswordHash` when explicitly required for authentication. This change is essential to uphold GDPR&#x27;s data minimization and privacy by design principles.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
-</div></div>
-<div class="finding" id="f-f16" data-framework="GDPR" data-severity="High Risk">
-<div class="finding-header" onclick="toggleFinding('f16')">
-<div class="finding-left"><div class="finding-num">GDPR-006</div><div class="finding-question"></div></div>
-<div class="finding-right"><span class="badge badge-high">High Risk</span><span class="chevron">&#8250;</span></div>
-</div>
-<div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The application code explicitly logs security-relevant events, including personal data (IP addresses), yet the evidence does not show a corresponding technical capability or integration for comprehensive breach detection and timely notification, which is a direct GDPR Article 33(1) gap.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">cmd/probo/main.go:45  srv := &amp;http.Server{ Addr: cfg.ListenAddr, Handler: router }
-internal/server/middleware.go:38  log.Printf(&quot;unauthorized access attempt from IP: %s&quot;, r.RemoteAddr)
-internal/config/config.go:18  type Config struct { ListenAddr string; DatabaseURL string; JWTSecret string; ... }
-</div>
-<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the organization have the technical capability and operational procedures to detect personal data breaches and notify the supervisory authority within 72 hours and affected data subjects without undue delay?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Enhance the logging mechanism at `internal/server/middleware.go:38` by forwarding these security event logs, which contain personal data like `r.RemoteAddr`, to a centralized Security Information and Event Management (SIEM) system or an automated incident response platform. This integration is critical for establishing the technical capability to detect personal data breaches and meet the 72-hour notification requirement under GDPR Article 33(1).</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
-</div></div>
-<div class="finding" id="f-f17" data-framework="GDPR" data-severity="Medium Risk">
-<div class="finding-header" onclick="toggleFinding('f17')">
 <div class="finding-left"><div class="finding-num">GDPR-007</div><div class="finding-question"></div></div>
 <div class="finding-right"><span class="badge badge-med">Medium Risk</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The evidence shows personal data being created and stored within the application&#x27;s database schema and models without any visible code for implementing data retention policies or automated cleanup mechanisms, directly indicating a compliance gap with GDPR-007.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">internal/postgres/migrations/001_initial.up.sql:1  CREATE TABLE organizations ( id UUID PRIMARY KEY DEFAULT gen_random_uuid(), name TEXT NOT NULL, crea
-internal/model/user.go:15  type User struct { ID string; Email string; PasswordHash string; OrganizationID string; Role string;
-internal/postgres/user_store.go:34  func (s *UserStore) Create(ctx context.Context, user *model.User) error { ... }
-internal/model/evidence.go:10  type Evidence struct { ID string; ControlID string; Title string; Description string; FileURL string
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The evidence clearly shows the definition and creation of personal data (user email, password hash) within source code files without any indication of implemented data retention or deletion policies, directly confirming the GDPR storage limitation risk.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[CONFIG] internal/postgres/migrations/001_initial.up.sql:1  CREATE TABLE organizations ( id UUID PRIMARY KEY DEFAULT gen_random_uuid(), name TEXT NOT NULL, crea
+[SOURCE] internal/model/user.go:15  type User struct { ID string; Email string; PasswordHash string; OrganizationID string; Role string;
+[SOURCE] internal/postgres/user_store.go:34  func (s *UserStore) Create(ctx context.Context, user *model.User) error { ... }
+[SOURCE] internal/model/evidence.go:10  type Evidence struct { ID string; ControlID string; Title string; Description string; FileURL string
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement data retention policies that ensure personal data is not kept longer than necessary for its processing purpose, with automated mechanisms for data cleanup or archival?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Modify `internal/postgres/migrations/001_initial.up.sql` to include `created_at` and `deleted_at` timestamps or a `retention_policy_id` for tables like `organizations` and `users` storing personal data. Update corresponding application models, such as `internal/model/user.go`, and implement automated data deletion or archival logic within services like `internal/postgres/user_store.go` to ensure personal data is not kept longer than necessary, as mandated by GDPR-007.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">To comply with GDPR Article 5(1)(e) (Storage Limitation), modify `internal/postgres/user_store.go` to include logic for applying data retention policies to user records, and consider schema additions in `internal/postgres/migrations/001_initial.up.sql` to facilitate time-based data expiry or anonymization. Without these mechanisms, personal data may be retained indefinitely, leading to regulatory non-compliance.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+</div></div>
+<div class="finding" id="f-f15" data-framework="GDPR" data-severity="Pattern of Concern">
+<div class="finding-header" onclick="toggleFinding('f15')">
+<div class="finding-left"><div class="finding-num">GDPR-002</div><div class="finding-question"></div></div>
+<div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
+</div>
+<div class="finding-body">
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The evidence shows user personal data (email) is collected during user creation via GraphQL and stored in the User model, but there is no corresponding code or schema for obtaining, recording, or managing user consent.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[CONFIG] internal/graph/schema.graphqls:5  type Mutation { createUser(input: CreateUserInput!): User! login(email: String!, password: String!):
+[SOURCE] internal/model/user.go:15  type User struct { ID string; Email string; PasswordHash string; OrganizationID string; Role string;
+[SOURCE] internal/graph/schema.resolvers.go:23  func (r *mutationResolver) CreateUser(ctx context.Context, input model.CreateUserInput) (*model.User
+</div>
+<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system obtain, record, and manage user consent in a manner that is freely given, specific, informed, and unambiguous, with the ability for users to withdraw consent at any time?</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Modify `internal/model/user.go` to include fields for verifiable consent records (e.g., `Consent map[string]ConsentRecord`). Update `internal/graph/schema.graphqls` and `internal/graph/schema.resolvers.go` to ensure specific, informed consent is explicitly captured and recorded during `createUser` for each processing purpose, to comply with GDPR Article 7 regarding lawful basis for processing personal data.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+</div></div>
+<div class="finding" id="f-f16" data-framework="GDPR" data-severity="Pattern of Concern">
+<div class="finding-header" onclick="toggleFinding('f16')">
+<div class="finding-left"><div class="finding-num">GDPR-004</div><div class="finding-question"></div></div>
+<div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
+</div>
+<div class="finding-body">
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The evidence, specifically the GraphQL schema (`internal/graph/schema.graphqls`) defining the API surface, indicates the presence of user data (`me: User!`) but lacks any explicit query or resolver for data portability, which is a clear requirement under GDPR Article 20.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[SOURCE] internal/graph/schema.resolvers.go:89  func (r *queryResolver) Controls(ctx context.Context) ([]*model.Control, error) { orgID := auth.OrgI
+[SOURCE] internal/graph/schema.resolvers.go:112  func (r *queryResolver) Evidence(ctx context.Context, controlID string) ([]*model.Evidence, error) {
+[CONFIG] internal/graph/schema.graphqls:12  type Query { controls: [Control!]! evidence(controlID: ID!): [Evidence!]! me: User! ... }
+</div>
+<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system provide data subjects with the ability to receive their personal data in a structured, commonly used, and machine-readable format, and to transmit that data to another controller?</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Add a new query to `internal/graph/schema.graphqls` (e.g., `exportMyData: ExportedData!`) and a corresponding resolver in `internal/graph/schema.resolvers.go` that allows data subjects to download their personal data in a structured, commonly used, and machine-readable format, thereby ensuring compliance with GDPR Article 20 on data portability.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+</div></div>
+<div class="finding" id="f-f17" data-framework="GDPR" data-severity="Pattern of Concern">
+<div class="finding-header" onclick="toggleFinding('f17')">
+<div class="finding-left"><div class="finding-num">GDPR-005</div><div class="finding-question"></div></div>
+<div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
+</div>
+<div class="finding-body">
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The source code evidence directly shows the structure of user data including sensitive fields like &#x27;Email&#x27; and &#x27;PasswordHash&#x27;, along with a generic retrieval method, indicating a potential lack of data minimization and purpose limitation by design.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[SOURCE] internal/model/user.go:15  type User struct { ID string; Email string; PasswordHash string; OrganizationID string; Role string;
+[SOURCE] internal/graph/resolver.go:41  func (r *mutationResolver) CreateControl(ctx context.Context, input model.CreateControlInput) (*mode
+[SOURCE] internal/server/middleware.go:18  func AuthMiddleware(next http.Handler) http.Handler { ... }
+[SOURCE] internal/postgres/user_store.go:56  func (s *UserStore) GetByID(ctx context.Context, id string) (*model.User, error) { row := s.db.Query
+</div>
+<div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system architecture incorporate data protection principles by design and by default, including data minimization, purpose limitation, storage limitation, and appropriate technical safeguards?</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Modify `internal/postgres/user_store.go` to exclude `PasswordHash` from default user retrieval queries and update `internal/graph/resolver.go` to implement explicit field-level access controls for sensitive user attributes like `Email`. This ensures data minimization and purpose limitation by design, upholding a core principle of GDPR-005.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f18" data-framework="GDPR" data-severity="Pattern of Concern">
 <div class="finding-header" onclick="toggleFinding('f18')">
@@ -411,13 +414,13 @@ internal/model/evidence.go:10  type Evidence struct { ID string; ControlID strin
 <div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The application&#x27;s source code defines a configurable database connection and creates tables likely containing personal data, yet lacks explicit code-level safeguards or configuration options for data residency or cross-border data transfer mechanisms as required by GDPR Chapter V.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">internal/config/config.go:18  type Config struct { ListenAddr string; DatabaseURL string; JWTSecret string; ... }
-internal/server/server.go:29  func New(cfg *config.Config) *Server { ... db, err := sql.Open(&quot;postgres&quot;, cfg.DatabaseURL) ... }
-internal/postgres/migrations/001_initial.up.sql:1  CREATE TABLE organizations ( id UUID PRIMARY KEY DEFAULT gen_random_uuid(), name TEXT NOT NULL, ... 
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The application&#x27;s `Config` struct and database connection logic enable external configuration of the database URL without explicit application-level safeguards to restrict cross-border data transfers, directly impacting GDPR Chapter V requirements.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[SOURCE] internal/config/config.go:18  type Config struct { ListenAddr string; DatabaseURL string; JWTSecret string; ... }
+[SOURCE] internal/server/server.go:29  func New(cfg *config.Config) *Server { ... db, err := sql.Open(&quot;postgres&quot;, cfg.DatabaseURL) ... }
+[CONFIG] internal/postgres/migrations/001_initial.up.sql:1  CREATE TABLE organizations ( id UUID PRIMARY KEY DEFAULT gen_random_uuid(), name TEXT NOT NULL, ... 
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system implement appropriate safeguards for the transfer of personal data to third countries or international organizations, consistent with GDPR Chapter V requirements?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">In `internal/config/config.go`, extend the `Config` struct at line 18 to include specific fields like `DataResidencyRegion string` and `CrossBorderTransferMechanism string`. This will allow explicit declaration of data processing jurisdiction and implemented transfer safeguards, ensuring compliance with GDPR Chapter V requirements for cross-border data transfers.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">In `internal/config/config.go`, add a `DataResidencyRegion` field to the `Config` struct, enabling operators to declare data processing jurisdiction. This explicit configuration is crucial for implementing data residency safeguards and mitigating unauthorized cross-border data transfer risks under GDPR Chapter V.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f19" data-framework="GDPR" data-severity="Pattern of Concern">
 <div class="finding-header" onclick="toggleFinding('f19')">
@@ -425,13 +428,13 @@ internal/postgres/migrations/001_initial.up.sql:1  CREATE TABLE organizations ( 
 <div class="finding-right"><span class="badge badge-concern">Pattern of Concern</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The application&#x27;s data models (Control, Evidence, Policy) indicate the processing of organizational and potentially personal data within a SaaS context, making the absence of explicit architectural support for Data Protection Impact Assessments a valid concern under GDPR.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">internal/model/control.go:10  type Control struct { ID string; OrganizationID string; Title string; Description string; Status str
-internal/model/evidence.go:10  type Evidence struct { ID string; ControlID string; Title string; Description string; FileURL string
-internal/model/policy.go:10  type Policy struct { ID string; OrganizationID string; Title string; Content string; Version int; Cr
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-confirmed">CONFIRMED</div><div class="verdict-text">The core application data models for &#x27;Control&#x27;, &#x27;Evidence&#x27;, and &#x27;Policy&#x27; in Go source files within a SAAS context indicate the system processes information that warrants a formal Data Protection Impact Assessment to evaluate potential high risks to data subjects.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[SOURCE] internal/model/control.go:10  type Control struct { ID string; OrganizationID string; Title string; Description string; Status str
+[SOURCE] internal/model/evidence.go:10  type Evidence struct { ID string; ControlID string; Title string; Description string; FileURL string
+[SOURCE] internal/model/policy.go:10  type Policy struct { ID string; OrganizationID string; Title string; Content string; Version int; Cr
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Has a Data Protection Impact Assessment been conducted for high-risk processing activities, and does the system architecture support the ongoing assessment and mitigation of data protection risks?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Add fields to the `Evidence` struct in `internal/model/evidence.go` (e.g., `DataSensitivity string`, `RetentionPolicy string`) and to the `Policy` struct in `internal/model/policy.go` for explicit data classification and retention periods. This architectural change directly supports ongoing assessment and mitigation of data protection risks by integrating DPIA outcomes into the system&#x27;s data management, as required by GDPR.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">For the data structures defined in `internal/model/evidence.go` and `internal/model/policy.go`, which handle potentially sensitive &#x27;Evidence&#x27; and &#x27;Policy&#x27; content, conduct a formal Data Protection Impact Assessment (DPIA) to evaluate processing risks and establish necessary mitigation strategies, fulfilling GDPR Article 35 obligations.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 <div class="finding" id="f-f20" data-framework="GDPR" data-severity="No Issue Found">
 <div class="finding-header" onclick="toggleFinding('f20')">
@@ -439,14 +442,14 @@ internal/model/policy.go:10  type Policy struct { ID string; OrganizationID stri
 <div class="finding-right"><span class="badge badge-ok">No Issue Found</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Independent Review</div><div class="verdict-label v-additional">ADDITIONAL RISK</div><div class="verdict-text">The primary analysis stated &#x27;No Issue Found&#x27; despite identifying personal data collection in the application&#x27;s source code, which necessitates GDPR-compliant privacy notices and a policy that are not evident in the provided evidence, thus understating a real compliance risk.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
-<div class="field-label">Evidence</div><div class="evidence-block">internal/graph/schema.graphqls:5  type Mutation { createUser(input: CreateUserInput!): User! login(email: String!, password: String!):
-internal/graph/schema.resolvers.go:23  func (r *mutationResolver) CreateUser(ctx context.Context, input model.CreateUserInput) (*model.User
-cmd/probo/main.go:67  router.Handle(&quot;/api/login&quot;, server.handleLogin).Methods(&quot;POST&quot;)
-README.md:1  # Probo - Open Source SOC2 Compliance Platform
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation"></div></div><div><div class="verdict-block"><div class="verdict-header">Gemini Verification</div><div class="verdict-label v-additional">ADDITIONAL RISK</div><div class="verdict-text">The primary analysis incorrectly stated &#x27;No Issue Found&#x27; despite evidence of personal data collection via user creation and login, which under GDPR necessitates a clear privacy policy and notice to data subjects.</div><div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: HIGH</div></div></div></div>
+<div class="field-label">Evidence</div><div class="evidence-block">[CONFIG] internal/graph/schema.graphqls:5  type Mutation { createUser(input: CreateUserInput!): User! login(email: String!, password: String!):
+[SOURCE] internal/graph/schema.resolvers.go:23  func (r *mutationResolver) CreateUser(ctx context.Context, input model.CreateUserInput) (*model.User
+[SOURCE] cmd/probo/main.go:67  router.Handle(&quot;/api/login&quot;, server.handleLogin).Methods(&quot;POST&quot;)
+[DOCS] README.md:1  # Probo - Open Source SOC2 Compliance Platform
 </div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">Does the system present users with clear, accessible, and comprehensive privacy notices at the point of data collection, and does the organization maintain a privacy policy that meets GDPR transparency requirements?</div>
-<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">At the point of user data collection, such as via `createUser` defined in `internal/graph/schema.graphqls` and handled by `internal/graph/schema.resolvers.go`, or during the `/api/login` process in `cmd/probo/main.go`, ensure a clear and accessible privacy notice is presented to users. Failure to provide transparent information at the time of collection violates GDPR Article 13 requirements.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
+<div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">Modify the user creation process, particularly related to `internal/graph/schema.graphqls` and `internal/graph/schema.resolvers.go`, and the login endpoint handled by `cmd/probo/main.go`, to explicitly present or link to a comprehensive privacy policy covering Article 13 requirements, to avoid non-compliance with GDPR data transparency standards.</div><div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>
 </div></div>
 </div>
 
@@ -483,11 +486,33 @@ README.md:1  # Probo - Open Source SOC2 Compliance Platform
 <div class="section-heading">How Findings Are Generated</div>
 <ul style="padding-left:20px;margin-bottom:16px;font-size:14px;line-height:2;color:#57606a">
 <li>Primary analysis by Claude Sonnet (Anthropic)</li>
-<li>Independent review by Gemini 2.5 Flash (Google)</li>
+<li>Verification by Gemini 2.5 Flash (Google)</li>
 <li>Question libraries are open source and community-maintained</li>
 <li>All questions cite regulatory source text</li>
 <li>Questions have not been validated by a licensed attorney</li>
 </ul>
+</div>
+<div class="section">
+<div class="section-heading">Why Two Models?</div>
+<p style="margin-bottom:12px"><strong>Claude Sonnet</strong> scans broadly — it finds every pattern that could indicate a compliance risk. This produces a comprehensive set of findings but includes noise from documentation files, config references, and test data.</p>
+<p style="margin-bottom:12px"><strong>Gemini 2.5 Flash</strong> then challenges each finding independently. It asks: is this evidence from actual application code? Would a regulator actually find this concerning? Is the severity appropriate?</p>
+<p style="margin-bottom:12px">The result is a tiered output:</p>
+<ul style="padding-left:20px;margin-bottom:16px;font-size:14px;line-height:2;color:#1a1a1a">
+<li><strong style="color:#1A7F37">CONFIRMED</strong> — Gemini agrees this is a real risk</li>
+<li><strong style="color:#9A6700">CONTEXT DEPENDENT</strong> — Risk depends on deployment/infrastructure</li>
+<li><strong style="color:#cf222e">POSSIBLE FALSE POSITIVE</strong> — Likely noise, review before acting</li>
+</ul>
+<p style="margin-bottom:12px"><strong>The confirmed count is the number you should act on.</strong> The total count shows the full scope of what was examined.</p>
+</div>
+<div class="section">
+<div class="section-heading">Evidence Tiers</div>
+<p style="margin-bottom:12px">Evidence is classified into three tiers based on file type:</p>
+<ul style="padding-left:20px;margin-bottom:16px;font-size:14px;line-height:2;color:#1a1a1a">
+<li><strong>[SOURCE]</strong> — Application source code (.ts, .py, .go, .rs, etc.) — strongest evidence</li>
+<li><strong>[CONFIG]</strong> — Configuration files (.yml, .json, .toml, Dockerfile) — moderate evidence</li>
+<li><strong>[DOCS]</strong> — Documentation (.md, .txt, .html) — context only, cannot produce High Risk findings</li>
+</ul>
+<p style="font-size:14px;color:#57606a">A finding is only classified as High Risk if supported by at least two source code files with matching evidence. Documentation references alone produce Pattern of Concern at most.</p>
 </div>
 <div class="section">
 <div class="section-heading">How to Use This Report</div>
@@ -505,6 +530,7 @@ README.md:1  # Probo - Open Source SOC2 Compliance Platform
 <script>
 function showTab(name,btn){document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));document.getElementById('tab-'+name).classList.add('active');document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active')}
 function toggleFinding(id){document.getElementById('f-'+id).classList.toggle('open')}
+function toggleFpSection(fwid){var g=document.getElementById('fp-group-'+fwid);var c=document.getElementById('fp-chev-'+fwid);if(g.style.display==='none'){g.style.display='block';c.style.transform='rotate(90deg)'}else{g.style.display='none';c.style.transform=''}}
 function expandAll(){document.querySelectorAll('.finding').forEach(f=>f.classList.add('open'))}
 function collapseAll(){document.querySelectorAll('.finding').forEach(f=>f.classList.remove('open'))}
 let aFw='all',aSev='all';

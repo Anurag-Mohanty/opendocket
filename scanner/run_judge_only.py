@@ -16,7 +16,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from scanner.agents.base_agent import Finding, Evidence, AgentResult, JudgeAgent
+from scanner.agents.base_agent import Finding, Evidence, AgentResult, JudgeAgent, classify_evidence_tier
 from scanner.domain_detector import DomainResult
 from scanner.report_generator import generate_html_report, generate_failed_gate_html
 
@@ -109,11 +109,13 @@ def parse_report(filepath: str) -> tuple[list[DomainResult], list[AgentResult]]:
             # Evidence
             ev_m = re.match(r"- `([^:]+):(\d+)`.*— `(.+)`", line)
             if ev_m:
+                ev_path = ev_m.group(1)
                 cur_finding.evidence.append(Evidence(
-                    file_path=ev_m.group(1),
+                    file_path=ev_path,
                     line_number=int(ev_m.group(2)),
                     content=ev_m.group(3),
                     match_type="search_pattern",
+                    tier=classify_evidence_tier(ev_path),
                 ))
                 continue
 

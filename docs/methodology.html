@@ -64,16 +64,32 @@ li{margin-bottom:8px}
 <tr><td style="padding:8px"><strong style="color:#CF222E">CRITICAL RISK</strong></td><td style="padding:8px">16+ high-severity findings</td><td style="padding:8px;color:#57606a">Immediate attention required</td></tr>
 </table>
 </div>
-<p>This classification is based on pattern count only. A CRITICAL classification for a large repo with many frameworks does not mean the repo is non-compliant — it means many areas warrant review. Compliance is often managed through infrastructure, policies, and vendor agreements not visible in source code.</p>
+<p>When the Gemini Verification Layer has run, classification is based on <strong>confirmed</strong> high-severity findings (not raw totals). This prevents documentation-only pattern matches from inflating the risk level.</p>
 
-<h2>Why Two Models</h2>
-<p>OpenDocket uses a dual-model approach:</p>
+<h2>Why Two Models?</h2>
+<p>OpenDocket uses a dual-model architecture — and this is the product differentiator.</p>
 <div class="card">
-<strong>Primary Scan (Claude Sonnet)</strong>
-<p style="margin-top:8px">Analyzes code evidence against each regulatory question.</p>
-<strong>Independent Review (Gemini 1.5 Flash)</strong>
-<p style="margin-top:8px">A different model from a different company challenges each finding for false positives.</p>
+<strong>Claude Sonnet (Anthropic) — Primary Scan</strong>
+<p style="margin-top:8px">Scans broadly — finds every pattern that could indicate a compliance risk. This produces a comprehensive set of findings but includes noise from documentation files, config references, and test data.</p>
+<strong style="display:block;margin-top:16px">Gemini 2.5 Flash (Google) — Verification Layer</strong>
+<p style="margin-top:8px">Challenges each finding independently. It asks: is this evidence from actual application code? Would a regulator actually find this concerning? Is the severity appropriate?</p>
 </div>
+<p>The result is a tiered output:</p>
+<ul>
+<li><strong style="color:#1A7F37">CONFIRMED</strong> — Gemini agrees this is a real risk</li>
+<li><strong style="color:#9A6700">CONTEXT DEPENDENT</strong> — Risk depends on deployment/infrastructure</li>
+<li><strong style="color:#cf222e">POSSIBLE FALSE POSITIVE</strong> — Likely noise, review before acting</li>
+</ul>
+<p><strong>The confirmed count is the number you should act on.</strong> The total count shows the full scope of what was examined.</p>
+
+<h2>Evidence Tiers</h2>
+<p>Evidence is classified into three tiers based on file type:</p>
+<div class="card">
+<strong>[SOURCE]</strong> — Application source code (.ts, .py, .go, .rs, .java, .php, .rb, etc.) — strongest evidence. Only source code evidence supports High Risk findings.<br><br>
+<strong>[CONFIG]</strong> — Configuration files (.yml, .json, .toml, Dockerfile) — moderate evidence. Config-only evidence caps findings at Medium Risk.<br><br>
+<strong>[DOCS]</strong> — Documentation (.md, .txt, .html, .css) — context only. Documentation-only evidence caps findings at Pattern of Concern.
+</div>
+<p>A finding is only classified as High Risk if supported by at least two source code files with matching evidence. This prevents monorepos with extensive documentation from generating inflated risk assessments.</p>
 
 <h2>What This Does Not Cover</h2>
 <div class="warning">OpenDocket scans source code only. Many compliance requirements are met through mechanisms not visible in code.</div>
