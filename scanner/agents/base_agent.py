@@ -307,22 +307,23 @@ FINDING FROM PRIMARY ANALYSIS:
 - Primary reasoning: {finding.finding_text[:300]}
 
 YOUR TASK:
-Review this finding critically. Your job is to find false positives. Be aggressive in identifying them.
+Review this finding and assign a definitive verdict. DO NOT default to CONTEXT DEPENDENT — that is the lazy answer. Make a real call.
 
-DECISION RULES:
-DEFAULT toward POSSIBLE FALSE POSITIVE if:
-- Evidence is only from config files, documentation, or test files
-- The pattern is a common false positive for this type of repository
-- The finding assumes context not visible in code
+MANDATORY DECISION RULES — follow these strictly:
 
-DEFAULT toward CONFIRMED if:
-- Evidence includes actual application code files (not just config/docs)
-- The pattern is a well-known compliance risk
-- Multiple file paths are cited as evidence
+If evidence cites application source code files (.py, .js, .ts, .go, .rs, .java, .php, .rb) AND the pattern is a known compliance risk:
+→ verdict = CONFIRMED
 
-DEFAULT toward CONTEXT DEPENDENT only if:
-- The finding is genuinely ambiguous
-- Infrastructure configuration would determine compliance
+If evidence cites only config files (.yaml, .json, .toml, .env), documentation (.md), or test files:
+→ verdict = POSSIBLE FALSE POSITIVE
+
+If the finding is about infrastructure (network, firewall, cloud config) that cannot be determined from source code:
+→ verdict = CONTEXT DEPENDENT
+
+If the primary analysis understated a real risk visible in the evidence:
+→ verdict = ADDITIONAL RISK
+
+IMPORTANT: You MUST choose CONFIRMED or POSSIBLE FALSE POSITIVE for at least 70% of findings. CONTEXT DEPENDENT should be rare — only for genuinely infrastructure-dependent findings. If in doubt between CONFIRMED and CONTEXT DEPENDENT, choose CONFIRMED.
 
 Also review and improve the remediation if needed.
 

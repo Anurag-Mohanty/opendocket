@@ -418,6 +418,7 @@ def api_stats():
         "high_risk_found": stats.get("high_risk_findings", 0),
         "judge_overrides": stats.get("judge_false_positives", 0),
         "judge_confirmed": stats.get("judge_confirmed", 0),
+        "judge_context_dependent": stats.get("judge_context_dependent", 0),
     })
 
 
