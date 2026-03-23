@@ -253,12 +253,24 @@ class JudgeAgent:
         import google.generativeai as genai
         api_key = gemini_api_key or os.environ.get("GEMINI_API_KEY")
         if not api_key:
-            raise RuntimeError("GEMINI_API_KEY not set. Independent review requires a Gemini API key.")
+            print("[WARNING] GEMINI_API_KEY not set. Independent review will be skipped.")
+            print("  Set GEMINI_API_KEY environment variable to enable Gemini review.")
+            self.model = None
+            return
         genai.configure(api_key=api_key)
         self.model = genai.GenerativeModel("gemini-1.5-flash")
 
     def review_all(self, agent_results: list[AgentResult], repo_context: dict) -> list[AgentResult]:
         """Review all findings across all framework results."""
+        if self.model is None:
+            # Mark all findings as NOT REVIEWED
+            for result in agent_results:
+                for finding in result.findings:
+                    finding.review_verdict = "NOT REVIEWED"
+                    finding.judge_reasoning = "Gemini API key not configured"
+                    finding.judge_confidence = ""
+                    finding.judge_model = ""
+            return agent_results
         for result in agent_results:
             for finding in result.findings:
                 print(f"  [Gemini] Reviewing {finding.question_id}...")

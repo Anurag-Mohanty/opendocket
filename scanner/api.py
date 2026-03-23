@@ -474,6 +474,16 @@ def api_events():
     return jsonify(get_event_counts(min(days, 90)))
 
 
+@app.route("/api/debug/env", methods=["GET"])
+def debug_env():
+    return jsonify({
+        "anthropic_key_set": bool(os.environ.get("ANTHROPIC_API_KEY")),
+        "gemini_key_set": bool(os.environ.get("GEMINI_API_KEY")),
+        "database_path": os.path.join("data", "opendocket.db"),
+        "daily_limit": DAILY_SCAN_LIMIT,
+    })
+
+
 # Serve static files
 @app.route("/")
 def serve_index():

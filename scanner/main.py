@@ -236,42 +236,54 @@ def regenerate_all_html():
                 continue
 
             if cur_finding:
+                stripped = line.strip()
+                # Remediation capture takes PRIORITY (must be before other checks)
+                if getattr(cur_finding, '_capture_rem', False):
+                    if stripped and not stripped.startswith(("#", "---", "|")):
+                        cur_finding.remediation = stripped
+                        cur_finding._capture_rem = False
+                    continue
+                # Remediation header detection
+                if "**Remediation" in line or "**REMEDIATION" in line:
+                    rem = line.split(":**")[-1].strip() if ":**" in line else ""
+                    if rem and len(rem) > 10:
+                        cur_finding.remediation = rem
+                    else:
+                        cur_finding._capture_rem = True
+                    continue
                 # Evidence
                 ev_m = _re.match(r"- `([^:]+):(\d+)`.*— `(.+)`", line)
                 if ev_m:
                     cur_finding.evidence.append(Evidence(
                         file_path=ev_m.group(1), line_number=int(ev_m.group(2)),
                         content=ev_m.group(3), match_type="search_pattern"))
+                    continue
                 # Severity (handle both emoji and text formats)
-                low = line.lower()
-                if "high risk" in low or ":red_circle:" in line:
-                    cur_finding.finding_level = "High Risk"
-                elif "medium risk" in low or ":orange_circle:" in line:
-                    cur_finding.finding_level = "Medium Risk"
-                elif "pattern of concern" in low or ":yellow_circle:" in line or ":blue_circle:" in line:
-                    cur_finding.finding_level = "Pattern of Concern"
-                elif "no issue found" in low or ":green_circle:" in line:
-                    cur_finding.finding_level = "No Issue Found"
-                # Legal question (bold text that looks like a question)
+                if "FINDING" in line or ":red_circle:" in line or ":orange_circle:" in line or ":green_circle:" in line or ":yellow_circle:" in line or ":blue_circle:" in line:
+                    low = line.lower()
+                    if "high risk" in low or ":red_circle:" in line:
+                        cur_finding.finding_level = "High Risk"
+                    elif "medium risk" in low or ":orange_circle:" in line:
+                        cur_finding.finding_level = "Medium Risk"
+                    elif "pattern of concern" in low or ":yellow_circle:" in line or ":blue_circle:" in line:
+                        cur_finding.finding_level = "Pattern of Concern"
+                    elif "no issue found" in low or ":green_circle:" in line:
+                        cur_finding.finding_level = "No Issue Found"
+                    continue
+                # Legal question (bold text with question mark)
                 if line.startswith("**") and "?" in line and not cur_finding.legal_question:
                     cur_finding.legal_question = line.strip("* \n")
+                    continue
                 # Regulatory standard (italic citation)
                 if line.startswith("*") and not line.startswith("**") and ("CFR" in line or "U.S.C." in line or "CC" in line or "Article" in line or "Section" in line):
                     cur_finding.regulatory_standard = line.strip("* \n")
-                # Finding text (substantive paragraph)
-                if not cur_finding.finding_text and len(line) > 40 and not line.startswith(("#", "*", "-", "|", ">", "---", "FINDING", "REMED", "EVID", "LEGAL", "REGUL")):
-                    cur_finding.finding_text = line.strip()
-                # Remediation (handle both formats)
-                if "**Remediation" in line or "**REMEDIATION" in line:
-                    rem = line.split(":**")[-1].strip() if ":**" in line else ""
-                    if not rem:
-                        # Text is on the next line(s) — flag to capture
-                        cur_finding._capture_rem = True
-                    else:
-                        cur_finding.remediation = rem
-                elif getattr(cur_finding, '_capture_rem', False) and line.strip() and not line.startswith(("#", "**", "---", "|")):
-                    cur_finding.remediation = line.strip()
-                    cur_finding._capture_rem = False
+                    continue
+                # Skip known headers
+                if stripped.startswith(("**LEGAL", "**REGULATORY", "**EVIDENCE", "**FINDING", "---")):
+                    continue
+                # Finding text (first substantive paragraph after severity)
+                if not cur_finding.finding_text and len(stripped) > 40 and not stripped.startswith(("#", "*", "-", "|", ">")):
+                    cur_finding.finding_text = stripped
 
         if cur_finding and cur_result:
             cur_result.findings.append(cur_finding)

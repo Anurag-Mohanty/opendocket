@@ -48,7 +48,8 @@ def _severity_class(level: str) -> str:
 
 def _verdict_css(verdict: str) -> str:
     return {"CONFIRMED": "v-confirmed", "CONTEXT DEPENDENT": "v-context",
-            "POSSIBLE FALSE POSITIVE": "v-fp", "ADDITIONAL RISK": "v-additional"}.get(verdict, "")
+            "POSSIBLE FALSE POSITIVE": "v-fp", "ADDITIONAL RISK": "v-additional",
+            "NOT REVIEWED": "v-context"}.get(verdict, "")
 
 
 def _select_top_findings(all_findings: list[Finding], n: int = 3) -> list[Finding]:
@@ -384,14 +385,14 @@ def generate_html_report(
         else:
             exec_para += "These patterns should be prioritized for remediation before production deployment."
 
-    # Consequence table
+    # Consequence table — ALL frameworks with high risk findings
     consequence_html = ""
-    for _, fw in top_fw_by_high[:3]:
+    for h_count, fw in top_fw_by_high:
         meta = FRAMEWORK_META.get(fw, {})
         consequence_html += (
-            f'<tr><td style="font-weight:600">{html.escape(fw)}</td>'
+            f'<tr><td style="font-weight:600">{html.escape(fw)} <span style="color:#CF222E;font-size:12px">({h_count} high)</span></td>'
             f'<td>{html.escape(meta.get("body", ""))}</td>'
-            f'<td>{html.escape(meta.get("risk", ""))}</td>'
+            f'<td style="color:#CF222E;font-weight:600">{html.escape(meta.get("risk", ""))}</td>'
             f'<td>{html.escape(meta.get("trend", ""))}</td></tr>\n'
         )
 
