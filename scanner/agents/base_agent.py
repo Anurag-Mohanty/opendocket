@@ -258,7 +258,7 @@ class JudgeAgent:
             self.model = None
             return
         genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel("gemini-1.5-flash")
+        self.model = genai.GenerativeModel("gemini-2.5-flash")
 
     def review_all(self, agent_results: list[AgentResult], repo_context: dict) -> list[AgentResult]:
         """Review all findings across all framework results."""
@@ -278,7 +278,7 @@ class JudgeAgent:
                 finding.review_verdict = verdict["verdict"]
                 finding.judge_reasoning = verdict["reasoning"]
                 finding.judge_confidence = verdict["confidence"]
-                finding.judge_model = "gemini-1.5-flash"
+                finding.judge_model = "gemini-2.5-flash"
                 finding.remediation_quality = verdict.get("remediation_quality", "")
                 improved = verdict.get("improved_remediation", "")
                 if improved:
