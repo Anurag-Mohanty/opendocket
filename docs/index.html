@@ -70,9 +70,9 @@
 <!-- Stats Bar -->
 <div class="stats-bar">
   <div class="stat-item"><div class="stat-num" id="stat-scans">--</div><div class="stat-label">repos scanned</div></div>
-  <div class="stat-item"><div class="stat-num" id="stat-lines">--</div><div class="stat-label">lines analyzed</div></div>
-  <div class="stat-item"><div class="stat-num" id="stat-findings">--</div><div class="stat-label">risks identified</div></div>
-  <div class="stat-item"><div class="stat-num" id="stat-overrides">--</div><div class="stat-label">judge reviews</div></div>
+  <div class="stat-item"><div class="stat-num" id="stat-findings">--</div><div class="stat-label">findings analyzed</div></div>
+  <div class="stat-item"><div class="stat-num" id="stat-overrides">--</div><div class="stat-label">confirmed risks</div></div>
+  <div class="stat-item"><div class="stat-num" id="stat-judged">--</div><div class="stat-label">Gemini verifications</div></div>
 </div>
 
 <!-- How It Works -->
@@ -192,15 +192,15 @@
 
     // Stats with counter animation
     fetch(API_BASE_URL+'/api/stats').then(r=>r.json()).then(d=>{
-      animateCount('stat-scans', d.total_scans||0);
-      document.getElementById('stat-lines').textContent=((d.total_lines_scanned||0)/1e6).toFixed(1)+'M';
-      animateCount('stat-findings', d.total_findings||0);
-      animateCount('stat-overrides', (d.judge_confirmed||0)+(d.judge_context_dependent||0)+(d.judge_overrides||0));
+      animateCount('stat-scans', d.total_scans||7);
+      animateCount('stat-findings', d.total_findings||274);
+      animateCount('stat-overrides', d.judge_confirmed||66);
+      animateCount('stat-judged', (d.judge_confirmed||0)+(d.judge_context_dependent||0)+(d.judge_false_positives||0)+(d.judge_overrides||0)||274);
     }).catch(()=>{
-      document.getElementById('stat-scans').textContent='8';
-      document.getElementById('stat-lines').textContent='2.4M';
-      document.getElementById('stat-findings').textContent='354';
-      document.getElementById('stat-overrides').textContent='80';
+      animateCount('stat-scans', 7);
+      animateCount('stat-findings', 274);
+      animateCount('stat-overrides', 66);
+      animateCount('stat-judged', 274);
     });
 
     function animateCount(id, target){
