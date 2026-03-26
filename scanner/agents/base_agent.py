@@ -35,9 +35,30 @@ TIER_3_EXTENSIONS = {
     '.html', '.css', '.scss',
 }
 
+# Directories that contain non-production code — demote to Tier 3
+NON_PRODUCTION_DIRS = {
+    'examples', 'example', 'demo', 'demos', 'sample', 'samples',
+    'test', 'tests', '__tests__', 'testing', 'test_fixtures',
+    'fixtures', 'fixture', 'mock', 'mocks', 'stubs',
+    'e2e', 'spec', 'specs', 'sandbox', 'playground',
+    'tutorial', 'tutorials', 'docs', 'documentation',
+    'stories', 'storybook', '.storybook',
+    'benchmark', 'benchmarks', 'perf',
+}
+
 
 def classify_evidence_tier(file_path: str) -> int:
-    """Classify a file into evidence tiers: 1=source, 2=config, 3=docs."""
+    """Classify a file into evidence tiers: 1=source, 2=config, 3=docs.
+
+    Files under example/test/demo directories are always Tier 3 regardless
+    of extension — they are not production code.
+    """
+    # Check if file is under a non-production directory
+    parts = file_path.replace("\\", "/").split("/")
+    for part in parts[:-1]:  # exclude filename itself
+        if part.lower() in NON_PRODUCTION_DIRS:
+            return 3
+
     basename = os.path.basename(file_path)
     if basename in TIER_2_FILENAMES:
         return 2
@@ -398,10 +419,16 @@ Review this finding and assign a definitive verdict. DO NOT default to CONTEXT D
 
 MANDATORY DECISION RULES — follow these strictly:
 
-If evidence cites application source code files (.py, .js, .ts, .go, .rs, .java, .php, .rb) AND the pattern is a known compliance risk:
+If evidence cites PRODUCTION application source code files (.py, .js, .ts, .go, .rs, .java, .php, .rb) AND the pattern is a known compliance risk:
 → verdict = CONFIRMED
 
 If evidence cites only config files (.yaml, .json, .toml, .env), documentation (.md), or test files:
+→ verdict = POSSIBLE FALSE POSITIVE
+
+If evidence comes from example/demo/test/sample/tutorial directories (e.g. examples/, demo/, test/, __tests__/, fixtures/, sandbox/):
+→ verdict = POSSIBLE FALSE POSITIVE (example code is not production code)
+
+If evidence files are tagged [DOCS] in the evidence list, they are non-production (examples, tests, docs):
 → verdict = POSSIBLE FALSE POSITIVE
 
 If the finding is about infrastructure (network, firewall, cloud config) that cannot be determined from source code:
