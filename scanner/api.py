@@ -216,6 +216,22 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
                 frameworks = ["soc2"]
             _log(scan_id, f"Frameworks triggered: {', '.join(f.upper() for f in frameworks)}")
 
+            # Log what the system learned from previous scans
+            try:
+                from scanner.database import _get_conn as _gc
+                with _gc() as _conn:
+                    corpus_size = _conn.execute("SELECT COUNT(*) as c FROM evidence_patterns").fetchone()
+                    qa_size = _conn.execute("SELECT COUNT(*) as c FROM question_accuracy").fetchone()
+                    disc_size = _conn.execute("SELECT COUNT(*) as c FROM discovered_patterns").fetchone()
+                if corpus_size and corpus_size["c"] > 0:
+                    _log(scan_id, f"--- Intelligence from previous scans ---")
+                    _log(scan_id, f"  [CORPUS] {corpus_size['c']} evidence patterns guiding search priority")
+                    _log(scan_id, f"  [ACCURACY] {qa_size['c']} question accuracy records for confidence context")
+                    if disc_size and disc_size["c"] > 0:
+                        _log(scan_id, f"  [DISCOVERY] {disc_size['c']} novel patterns added to question library from past scans")
+            except Exception:
+                pass
+
             if _cancelled():
                 raise InterruptedError("Scan cancelled by user")
 
@@ -346,9 +362,21 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
             save_findings(scan_id, findings_data)
 
             # Record intelligence corpus — evidence patterns, accuracy, remediations
+            _log(scan_id, "--- Product Improvements from this scan ---")
             domain_str = ", ".join(d.domain for d in domains)
+            patterns_added = 0
+            accuracy_updated = 0
+            remediations_improved = 0
+            novel_findings = 0
+            fp_reasons_learned = 0
+
             for result in agent_results:
                 for f in result.findings:
+                    # Count novel wildcard findings
+                    if f.question_id.endswith("-NOVEL") and f.finding_level != "No Issue Found":
+                        novel_findings += 1
+                        _log(scan_id, f"  [NEW QUESTION] {result.framework}: {f.category} — auto-added to question library")
+
                     if f.review_verdict and f.review_verdict not in ("NOT REVIEWED", ""):
                         try:
                             # Evidence file patterns
@@ -358,15 +386,18 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
                                     result.framework, f.question_id,
                                     evidence_files, f.review_verdict, domain_str,
                                 )
+                                patterns_added += len(evidence_files)
 
                             # Question-level accuracy with FP reasoning
                             fp_reason = ""
                             if f.review_verdict == "POSSIBLE FALSE POSITIVE" and f.judge_reasoning:
                                 fp_reason = f.judge_reasoning[:200]
+                                fp_reasons_learned += 1
                             record_question_accuracy(
                                 result.framework, f.question_id,
                                 f.review_verdict, domain_str, fp_reason,
                             )
+                            accuracy_updated += 1
 
                             # Store improved remediations from Gemini
                             improved = getattr(f, "improved_remediation", "")
@@ -376,9 +407,19 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
                                     improved, domain_str,
                                     quality="specific", source="gemini",
                                 )
+                                remediations_improved += 1
                         except Exception:
                             pass  # non-critical
-            _log(scan_id, f"Intelligence corpus updated (evidence + accuracy + remediations)")
+
+            _log(scan_id, f"  [CORPUS] {patterns_added} evidence file patterns recorded")
+            _log(scan_id, f"  [ACCURACY] {accuracy_updated} question accuracy rates updated")
+            if fp_reasons_learned:
+                _log(scan_id, f"  [FP INTEL] {fp_reasons_learned} false-positive reasons learned from Gemini")
+            if remediations_improved:
+                _log(scan_id, f"  [REMEDIATION] {remediations_improved} remediations improved and stored for reuse")
+            if novel_findings:
+                _log(scan_id, f"  [DISCOVERY] {novel_findings} novel compliance questions auto-added to library")
+            _log(scan_id, f"  System now has better search priority, accuracy data, and remediation quality for future scans")
 
             # Aggregate token usage across all agents
             total_tokens_in = sum(r.tokens_in for r in agent_results)
@@ -894,6 +935,98 @@ def api_discovered():
     """Get discovered novel patterns from wildcard scans."""
     fw = request.args.get("framework", "")
     return jsonify(get_discovered_patterns(framework=fw))
+
+
+@app.route("/api/learning", methods=["GET"])
+def api_learning():
+    """Consolidated system learning summary — what the system has taught itself."""
+    from scanner.database import _get_conn
+    with _get_conn() as conn:
+        corpus = conn.execute(
+            """SELECT COUNT(*) as patterns,
+                      COALESCE(SUM(confirmed_count), 0) as confirmed,
+                      COALESCE(SUM(fp_count), 0) as fp
+               FROM evidence_patterns"""
+        ).fetchone()
+
+        accuracy = conn.execute(
+            """SELECT COUNT(*) as questions_tracked,
+                      COALESCE(SUM(confirmed_count), 0) as total_confirmed,
+                      COALESCE(SUM(fp_count), 0) as total_fp
+               FROM question_accuracy"""
+        ).fetchone()
+
+        fp_reasons = conn.execute(
+            """SELECT framework, question_id, common_fp_reasons
+               FROM question_accuracy
+               WHERE common_fp_reasons != '[]'
+               ORDER BY fp_count DESC LIMIT 10"""
+        ).fetchall()
+
+        novel = conn.execute(
+            """SELECT framework, category, search_hint, occurrences, repos_seen, first_seen
+               FROM discovered_patterns ORDER BY last_seen DESC LIMIT 20"""
+        ).fetchall()
+
+        remediations = conn.execute(
+            """SELECT COUNT(*) as total, SUM(use_count) as total_uses
+               FROM remediation_library WHERE quality = 'specific'"""
+        ).fetchone()
+
+        feedback = conn.execute(
+            """SELECT COUNT(*) as total,
+                      SUM(CASE WHEN verdict = 'correct' THEN 1 ELSE 0 END) as correct,
+                      SUM(CASE WHEN verdict = 'incorrect' THEN 1 ELSE 0 END) as incorrect
+               FROM finding_feedback"""
+        ).fetchone()
+
+    # Parse FP reasons
+    fp_intel = []
+    for r in fp_reasons:
+        try:
+            reasons = json.loads(r["common_fp_reasons"])
+            if reasons:
+                fp_intel.append({
+                    "framework": r["framework"],
+                    "question_id": r["question_id"],
+                    "reasons": reasons[:3],
+                })
+        except (json.JSONDecodeError, TypeError):
+            pass
+
+    # Parse novel patterns
+    novel_list = []
+    for r in novel:
+        d = dict(r)
+        try:
+            d["repos_seen"] = json.loads(d.get("repos_seen", "[]"))
+        except (json.JSONDecodeError, TypeError):
+            d["repos_seen"] = []
+        novel_list.append(d)
+
+    return jsonify({
+        "corpus": {
+            "evidence_patterns": corpus["patterns"] if corpus else 0,
+            "confirmed_signals": corpus["confirmed"] if corpus else 0,
+            "fp_signals": corpus["fp"] if corpus else 0,
+        },
+        "accuracy": {
+            "questions_tracked": accuracy["questions_tracked"] if accuracy else 0,
+            "total_confirmed": accuracy["total_confirmed"] if accuracy else 0,
+            "total_fp": accuracy["total_fp"] if accuracy else 0,
+        },
+        "fp_intelligence": fp_intel,
+        "novel_questions": novel_list,
+        "remediations": {
+            "stored": remediations["total"] if remediations else 0,
+            "times_reused": remediations["total_uses"] if remediations else 0,
+        },
+        "human_feedback": {
+            "total": feedback["total"] if feedback else 0,
+            "correct": feedback["correct"] if feedback else 0,
+            "incorrect": feedback["incorrect"] if feedback else 0,
+        },
+    })
 
 
 @app.route("/api/debug/env", methods=["GET"])

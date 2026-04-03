@@ -130,6 +130,28 @@
       </div>
     </div>
 
+    <h2>System Learning</h2>
+    <div class="two-col">
+      <div class="panel">
+        <h3>What the system has taught itself</h3>
+        <div id="learning-summary" style="font-size:13px;line-height:2">
+          <div style="color:#6E7681;text-align:center;padding:20px">Loading...</div>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Novel Questions Discovered</h3>
+        <div id="novel-questions" style="font-size:13px;max-height:250px;overflow-y:auto">
+          <div style="color:#6E7681;text-align:center;padding:20px">Loading...</div>
+        </div>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:16px">
+      <h3>Top FP Intelligence — Why Gemini flags false positives</h3>
+      <div id="fp-intel" style="font-size:13px;max-height:200px;overflow-y:auto">
+        <div style="color:#6E7681;text-align:center;padding:20px">Loading...</div>
+      </div>
+    </div>
+
     <h2>Recent Scans</h2>
     <table class="scan-table">
       <thead><tr><th>Repository</th><th>Status</th><th>Score</th><th>High</th><th>Med</th><th>Duration</th><th>Tokens</th><th>LLM Calls</th><th>Time</th></tr></thead>
@@ -228,6 +250,48 @@
         const tok = (r.tokens_in||0)+(r.tokens_out||0);
         return `<tr><td style="font-weight:500">${r.repo_name||'--'}</td><td><span class="badge ${cls}">${r.status}</span></td><td>${r.opendocket_score||'--'}</td><td style="color:#F85149">${r.finding_high||0}</td><td style="color:#D29922">${r.finding_medium||0}</td><td>${dur}</td><td>${tok?fmtK(tok):'--'}</td><td>${r.llm_calls||'--'}</td><td style="color:#6E7681;font-size:12px">${r.timestamp?r.timestamp.substring(0,16):'--'}</td></tr>`;
       }).join('');
+    }).catch(()=>{});
+
+    // System learning
+    fetch(API+'/api/learning').then(r=>r.json()).then(d=>{
+      // Summary
+      const el = document.getElementById('learning-summary');
+      const c = d.corpus||{};
+      const a = d.accuracy||{};
+      const r = d.remediations||{};
+      const fb = d.human_feedback||{};
+      el.innerHTML = `
+        <div class="engage-row"><span class="etype">Evidence file patterns learned</span><span class="ecount" style="color:#58A6FF">${fmt(c.evidence_patterns)}</span></div>
+        <div class="engage-row"><span class="etype">Confirmed signals</span><span class="ecount" style="color:#3FB950">${fmt(c.confirmed_signals)}</span></div>
+        <div class="engage-row"><span class="etype">False positive signals</span><span class="ecount" style="color:#F85149">${fmt(c.fp_signals)}</span></div>
+        <div class="engage-row"><span class="etype">Question accuracy records</span><span class="ecount">${fmt(a.questions_tracked)}</span></div>
+        <div class="engage-row"><span class="etype">Improved remediations stored</span><span class="ecount">${fmt(r.stored)}</span></div>
+        <div class="engage-row"><span class="etype">Remediation reuse count</span><span class="ecount">${fmt(r.times_reused)}</span></div>
+        <div class="engage-row"><span class="etype">Human feedback received</span><span class="ecount">${fmt(fb.total)} <span style="font-size:11px;color:#6E7681">(${fmt(fb.correct)} correct, ${fmt(fb.incorrect)} corrections)</span></span></div>
+      `;
+
+      // Novel questions
+      const nq = d.novel_questions||[];
+      const nqEl = document.getElementById('novel-questions');
+      if(nq.length){
+        nqEl.innerHTML = nq.map(q=>{
+          const repos = (q.repos_seen||[]).join(', ')||'unknown';
+          return `<div style="padding:8px 0;border-bottom:1px solid #21262D"><span style="color:#58A6FF;font-weight:600">${q.framework}</span> <span style="color:#E6EDF3">${q.category}</span><div style="color:#6E7681;font-size:11px;margin-top:2px">Pattern: <code style="background:#21262D;padding:2px 6px;border-radius:3px">${q.search_hint}</code> &middot; Found in ${q.occurrences} scan(s) &middot; ${q.first_seen?.substring(0,10)||''}</div></div>`;
+        }).join('');
+      } else {
+        nqEl.innerHTML = '<div style="color:#6E7681;text-align:center;padding:20px">No novel patterns discovered yet. Run more scans!</div>';
+      }
+
+      // FP intelligence
+      const fpEl = document.getElementById('fp-intel');
+      const fpi = d.fp_intelligence||[];
+      if(fpi.length){
+        fpEl.innerHTML = fpi.map(f=>{
+          return `<div style="padding:8px 0;border-bottom:1px solid #21262D"><span style="font-weight:600">${f.framework}/${f.question_id}</span><div style="color:#8B949E;font-size:12px;margin-top:4px">${f.reasons.map(r=>'&bull; '+r.substring(0,150)).join('<br>')}</div></div>`;
+        }).join('');
+      } else {
+        fpEl.innerHTML = '<div style="color:#6E7681;text-align:center;padding:20px">No FP patterns learned yet</div>';
+      }
     }).catch(()=>{});
   </script>
 </body>
