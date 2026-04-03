@@ -270,7 +270,10 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
                         scan_id, "running",
                         progress=_prog("scan", f"{fw.upper()} complete", len(fw_complete), len(frameworks), fw.upper()),
                     )
-                _log(scan_id, f"  {fw.upper()} complete — {finding_count} findings ({len(fw_complete)}/{len(frameworks)})")
+                corpus_info = ""
+                if result.corpus_questions_boosted:
+                    corpus_info = f" | corpus: {result.corpus_questions_boosted} questions search-boosted, {result.corpus_prioritized_files} files prioritized"
+                _log(scan_id, f"  {fw.upper()} complete — {finding_count} findings ({len(fw_complete)}/{len(frameworks)}){corpus_info}")
                 return result
 
             from concurrent.futures import ThreadPoolExecutor, as_completed

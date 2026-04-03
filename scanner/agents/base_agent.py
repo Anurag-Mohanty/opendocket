@@ -131,6 +131,9 @@ class AgentResult:
     tokens_in: int = 0
     tokens_out: int = 0
     llm_calls: int = 0
+    corpus_prioritized_files: int = 0
+    corpus_questions_boosted: int = 0
+    corpus_globs_loaded: int = 0
 
 
 class BaseComplianceAgent:
@@ -146,6 +149,10 @@ class BaseComplianceAgent:
         self.tokens_in = 0
         self.tokens_out = 0
         self.llm_calls = 0
+        # Corpus stats
+        self.corpus_prioritized_files = 0
+        self.corpus_questions_boosted = 0
+        self.corpus_globs_loaded = 0
         # Load learned priority globs from the evidence corpus
         self._priority_cache: dict[str, list[str]] = {}
         try:
@@ -154,6 +161,7 @@ class BaseComplianceAgent:
                 globs = get_priority_globs(framework_name, q["id"], limit=10)
                 if globs:
                     self._priority_cache[q["id"]] = [g["file_glob"] for g in globs]
+                    self.corpus_globs_loaded += len(globs)
         except Exception:
             pass  # corpus not available yet, cold start
 
@@ -344,7 +352,9 @@ Rules:
                 remaining_files.append(fpath)
 
         if priority_files:
-            print(f"    [Corpus] {len(priority_files)} files prioritized for {question_id}")
+            self.corpus_prioritized_files += len(priority_files)
+            self.corpus_questions_boosted += 1
+            print(f"    [Corpus] {len(priority_files)}/{len(file_index)} files prioritized for {question_id}")
         return priority_files + remaining_files
 
     def scan(
@@ -391,6 +401,9 @@ Rules:
         result.tokens_in = self.tokens_in
         result.tokens_out = self.tokens_out
         result.llm_calls = self.llm_calls
+        result.corpus_prioritized_files = self.corpus_prioritized_files
+        result.corpus_questions_boosted = self.corpus_questions_boosted
+        result.corpus_globs_loaded = self.corpus_globs_loaded
         return result
 
     def _wildcard_scan(
