@@ -3,98 +3,211 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OpenDocket — Analytics Dashboard</title>
+  <title>OpenDocket — Operations Dashboard</title>
   <style>
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-    body { background:#FFFFFF; color:#0D1117; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; font-size:15px; line-height:1.6; }
-    a { color:#0052CC; text-decoration:none; }
+    body { background:#0D1117; color:#E6EDF3; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; font-size:14px; line-height:1.6; }
+    a { color:#58A6FF; text-decoration:none; }
     a:hover { text-decoration:underline; }
-    .header { padding:16px 24px; border-bottom:1px solid #E1E4E8; display:flex; justify-content:space-between; align-items:center; }
-    .header h1 { font-size:18px; font-weight:700; }
-    .header nav a { margin-left:20px; font-size:14px; color:#57606A; }
-    .container { max-width:1080px; margin:0 auto; padding:40px 24px; }
-    h2 { font-size:24px; font-weight:600; margin-bottom:24px; }
-    .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:40px; }
-    .stat-card { background:#F8F9FA; border:1px solid #E1E4E8; border-radius:6px; padding:20px; }
-    .stat-card .num { font-size:32px; font-weight:700; color:#0052CC; }
-    .stat-card .label { font-size:13px; color:#57606A; margin-top:4px; }
-    .recent-table { width:100%; border-collapse:collapse; }
-    .recent-table th { text-align:left; padding:8px 12px; font-size:12px; font-weight:600; color:#57606A; text-transform:uppercase; letter-spacing:0.5px; border-bottom:2px solid #E1E4E8; }
-    .recent-table td { padding:10px 12px; font-size:14px; border-bottom:1px solid #E1E4E8; }
-    .recent-table tr:hover td { background:#F8F9FA; }
-    .status-badge { padding:2px 8px; border-radius:3px; font-size:12px; font-weight:600; }
-    .status-complete { background:#F0FFF4; color:#1A7F37; }
-    .status-running { background:#F0F5FF; color:#0052CC; }
-    .status-failed { background:#FFF8F8; color:#CF222E; }
-    .status-queued { background:#FFFBE0; color:#9A6700; }
-    .status-cancelled { background:#FFFBE0; color:#9A6700; }
-    .judge-section { margin-top:40px; }
-    .judge-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
-    .judge-card { background:#F8F9FA; border:1px solid #E1E4E8; border-radius:6px; padding:16px; text-align:center; }
-    .judge-card .num { font-size:24px; font-weight:700; }
-    .judge-card .label { font-size:12px; color:#57606A; }
-    .judge-confirmed .num { color:#1A7F37; }
-    .judge-context .num { color:#9A6700; }
-    .judge-fp .num { color:#0052CC; }
-    .judge-additional .num { color:#CF222E; }
-    @media (max-width:768px) { .stats-grid, .judge-grid { grid-template-columns:repeat(2,1fr); } }
-    @media print { body { font-size:12px; } }
+
+    .header { background:#161B22; border-bottom:1px solid #30363D; padding:12px 24px; display:flex; justify-content:space-between; align-items:center; }
+    .header h1 { font-size:16px; font-weight:700; }
+    .header nav a { margin-left:20px; font-size:13px; color:#8B949E; }
+
+    .container { max-width:1200px; margin:0 auto; padding:24px; }
+    h2 { font-size:16px; font-weight:600; color:#8B949E; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px; margin-top:32px; }
+    h2:first-child { margin-top:0; }
+
+    .kpi-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; }
+    .kpi { background:#161B22; border:1px solid #30363D; border-radius:6px; padding:16px; }
+    .kpi .value { font-size:28px; font-weight:700; color:#E6EDF3; }
+    .kpi .label { font-size:11px; color:#8B949E; margin-top:2px; text-transform:uppercase; letter-spacing:0.5px; }
+    .kpi .sub { font-size:11px; color:#6E7681; margin-top:4px; }
+    .kpi.highlight .value { color:#58A6FF; }
+    .kpi.green .value { color:#3FB950; }
+    .kpi.amber .value { color:#D29922; }
+    .kpi.red .value { color:#F85149; }
+
+    .two-col { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px; }
+    .panel { background:#161B22; border:1px solid #30363D; border-radius:6px; padding:20px; }
+    .panel h3 { font-size:14px; font-weight:600; margin-bottom:12px; }
+
+    /* Duration chart */
+    .chart-bars { display:flex; align-items:flex-end; gap:4px; height:120px; padding-top:8px; }
+    .chart-bar { flex:1; min-width:20px; background:#30363D; border-radius:2px 2px 0 0; position:relative; transition:background 0.2s; cursor:default; }
+    .chart-bar:hover { background:#58A6FF; }
+    .chart-bar .bar-label { position:absolute; bottom:-20px; left:50%; transform:translateX(-50%); font-size:9px; color:#6E7681; white-space:nowrap; display:none; }
+    .chart-bar:hover .bar-label { display:block; }
+    .chart-bar .bar-val { position:absolute; top:-18px; left:50%; transform:translateX(-50%); font-size:10px; color:#8B949E; display:none; }
+    .chart-bar:hover .bar-val { display:block; }
+
+    /* Corpus table */
+    .corpus-table { width:100%; border-collapse:collapse; font-size:13px; }
+    .corpus-table th { text-align:left; padding:6px 8px; font-size:11px; color:#8B949E; text-transform:uppercase; border-bottom:1px solid #30363D; }
+    .corpus-table td { padding:6px 8px; border-bottom:1px solid #21262D; }
+    .corpus-table tr:hover td { background:#21262D; }
+    .bar-fill { height:6px; border-radius:3px; background:#30363D; position:relative; overflow:hidden; }
+    .bar-fill-inner { height:100%; border-radius:3px; }
+    .fill-green { background:#3FB950; }
+    .fill-red { background:#F85149; }
+
+    /* Recent scans table */
+    .scan-table { width:100%; border-collapse:collapse; font-size:13px; margin-top:16px; }
+    .scan-table th { text-align:left; padding:8px 10px; font-size:11px; color:#8B949E; text-transform:uppercase; border-bottom:1px solid #30363D; }
+    .scan-table td { padding:8px 10px; border-bottom:1px solid #21262D; }
+    .scan-table tr:hover td { background:#21262D; }
+    .badge { padding:2px 8px; border-radius:3px; font-size:11px; font-weight:600; }
+    .badge-complete { background:#0F3D1A; color:#3FB950; }
+    .badge-running { background:#0D419D; color:#58A6FF; }
+    .badge-failed { background:#4D1B1B; color:#F85149; }
+
+    /* Engagement */
+    .engage-row { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #21262D; font-size:13px; }
+    .engage-row .etype { color:#8B949E; }
+    .engage-row .ecount { font-weight:600; }
+
+    @media (max-width:768px) {
+      .kpi-grid { grid-template-columns:repeat(2,1fr); }
+      .two-col { grid-template-columns:1fr; }
+    }
   </style>
 </head>
 <body>
   <div class="header">
-    <h1>OpenDocket Dashboard</h1>
+    <h1>OpenDocket <span style="color:#8B949E;font-weight:400">/ Operations</span></h1>
     <nav>
       <a href="index.html">Home</a>
+      <a href="logs.html">Logs</a>
       <a href="methodology.html">Methodology</a>
       <a href="https://github.com/Anurag-Mohanty/opendocket">GitHub</a>
     </nav>
   </div>
+
   <div class="container">
-    <h2>Scan Analytics</h2>
-    <div class="stats-grid">
-      <div class="stat-card"><div class="num" id="d-scans">--</div><div class="label">Total Scans</div></div>
-      <div class="stat-card"><div class="num" id="d-lines">--</div><div class="label">Lines Scanned</div></div>
-      <div class="stat-card"><div class="num" id="d-findings">--</div><div class="label">Findings</div></div>
-      <div class="stat-card"><div class="num" id="d-high">--</div><div class="label">High Risk</div></div>
+    <h2>Key Metrics</h2>
+    <div class="kpi-grid">
+      <div class="kpi highlight"><div class="value" id="k-scans">--</div><div class="label">Total Scans</div><div class="sub" id="k-waitlist"></div></div>
+      <div class="kpi"><div class="value" id="k-avg-dur">--</div><div class="label">Avg Scan Duration</div><div class="sub" id="k-dur-range"></div></div>
+      <div class="kpi green"><div class="value" id="k-tokens">--</div><div class="label">Total Tokens Used</div><div class="sub" id="k-token-detail"></div></div>
+      <div class="kpi"><div class="value" id="k-calls">--</div><div class="label">LLM Calls</div><div class="sub">Claude + Gemini</div></div>
+      <div class="kpi amber"><div class="value" id="k-corpus">--</div><div class="label">Corpus Patterns</div><div class="sub" id="k-corpus-detail"></div></div>
     </div>
 
-    <div class="judge-section">
-      <h2>Independent Review (Gemini)</h2>
-      <div class="judge-grid">
-        <div class="judge-card judge-confirmed"><div class="num" id="d-confirmed">--</div><div class="label">Confirmed</div></div>
-        <div class="judge-card judge-context"><div class="num" id="d-context">--</div><div class="label">Context Dependent</div></div>
-        <div class="judge-card judge-fp"><div class="num" id="d-fp">--</div><div class="label">Possible False Positive</div></div>
-        <div class="judge-card judge-additional"><div class="num" id="d-additional">--</div><div class="label">Additional Risk</div></div>
+    <div class="two-col">
+      <div class="panel">
+        <h3>Scan Duration Trend</h3>
+        <div class="chart-bars" id="dur-chart"></div>
+        <div style="text-align:center;margin-top:24px;font-size:11px;color:#6E7681">Most recent scans (left = oldest)</div>
+      </div>
+      <div class="panel">
+        <h3>Evidence Corpus by Framework</h3>
+        <table class="corpus-table" id="corpus-table">
+          <thead><tr><th>Framework</th><th>Patterns</th><th>Confirmed</th><th>FP</th><th>Signal</th></tr></thead>
+          <tbody id="corpus-body"><tr><td colspan="5" style="color:#6E7681;text-align:center">Loading...</td></tr></tbody>
+        </table>
       </div>
     </div>
 
-    <h2 style="margin-top:40px">Recent Scans</h2>
-    <table class="recent-table" id="recent-table">
-      <thead><tr><th>Repository</th><th>Status</th><th>Score</th><th>High</th><th>Med</th><th>Duration</th><th>Time</th></tr></thead>
-      <tbody id="recent-body"><tr><td colspan="7" style="color:#57606A;text-align:center;padding:20px">Loading...</td></tr></tbody>
+    <div class="two-col">
+      <div class="panel">
+        <h3>Engagement (Last 30 Days)</h3>
+        <div id="engagement">
+          <div style="color:#6E7681;text-align:center;padding:20px">Loading...</div>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Token Breakdown by Scan</h3>
+        <div class="chart-bars" id="token-chart" style="height:100px"></div>
+        <div style="text-align:center;margin-top:24px;font-size:11px;color:#6E7681">Tokens per scan (left = oldest)</div>
+      </div>
+    </div>
+
+    <h2>Recent Scans</h2>
+    <table class="scan-table">
+      <thead><tr><th>Repository</th><th>Status</th><th>Score</th><th>High</th><th>Med</th><th>Duration</th><th>Tokens</th><th>LLM Calls</th><th>Time</th></tr></thead>
+      <tbody id="scan-body"><tr><td colspan="9" style="color:#6E7681;text-align:center;padding:20px">Loading...</td></tr></tbody>
     </table>
   </div>
-  <script>
-    fetch('/api/stats').then(r=>r.json()).then(d=>{
-      document.getElementById('d-scans').textContent=(d.total_scans||0).toLocaleString();
-      document.getElementById('d-lines').textContent=((d.total_lines_scanned||0)/1e6).toFixed(1)+'M';
-      document.getElementById('d-findings').textContent=(d.total_findings||0).toLocaleString();
-      document.getElementById('d-high').textContent=(d.high_risk_found||0).toLocaleString();
-      document.getElementById('d-confirmed').textContent=(d.judge_confirmed||0).toLocaleString();
-      document.getElementById('d-context').textContent='--';
-      document.getElementById('d-fp').textContent=(d.judge_overrides||0).toLocaleString();
-      document.getElementById('d-additional').textContent='--';
-    }).catch(()=>{});
 
-    fetch('/api/recent').then(r=>r.json()).then(rows=>{
-      const tbody=document.getElementById('recent-body');
-      if(!rows.length){tbody.innerHTML='<tr><td colspan="7" style="color:#57606A;text-align:center">No scans yet</td></tr>';return;}
-      tbody.innerHTML=rows.map(r=>{
-        const cls={'complete':'status-complete','running':'status-running','failed':'status-failed','queued':'status-queued'}[r.status]||'';
-        return `<tr><td>${r.repo_name||'—'}</td><td><span class="status-badge ${cls}">${r.status}</span></td><td>${r.opendocket_score||'—'}</td><td style="color:#CF222E">${r.finding_high||0}</td><td style="color:#9A6700">${r.finding_medium||0}</td><td>${r.scan_duration_seconds?r.scan_duration_seconds.toFixed(0)+'s':'—'}</td><td style="color:#57606A;font-size:12px">${r.timestamp?r.timestamp.substring(0,16):'—'}</td></tr>`;
+  <script>
+    const API = 'https://opendocket-production.up.railway.app';
+
+    function fmt(n) { return (n||0).toLocaleString(); }
+    function fmtK(n) { return n >= 1e6 ? (n/1e6).toFixed(1)+'M' : n >= 1e3 ? (n/1e3).toFixed(1)+'K' : fmt(n); }
+
+    // Load ops data
+    fetch(API+'/api/ops').then(r=>r.json()).then(d=>{
+      // KPIs
+      document.getElementById('k-scans').textContent = fmt(d.performance?.length || 0);
+      document.getElementById('k-waitlist').textContent = (d.waitlist_count||0) + ' on waitlist';
+      document.getElementById('k-avg-dur').textContent = d.duration.avg ? d.duration.avg.toFixed(0)+'s' : '--';
+      document.getElementById('k-dur-range').textContent = d.duration.min ? 'Min '+d.duration.min.toFixed(0)+'s / Max '+d.duration.max.toFixed(0)+'s' : '';
+      document.getElementById('k-tokens').textContent = fmtK(d.tokens.total);
+      document.getElementById('k-token-detail').textContent = fmtK(d.tokens.total_in)+' in / '+fmtK(d.tokens.total_out)+' out';
+      document.getElementById('k-calls').textContent = fmt(d.tokens.total_calls);
+      document.getElementById('k-corpus').textContent = fmt(d.corpus.total_patterns);
+      document.getElementById('k-corpus-detail').textContent = fmt(d.corpus.confirmed)+' confirmed / '+fmt(d.corpus.false_positives)+' FP';
+
+      // Duration chart
+      const perf = [...(d.performance||[])].reverse(); // oldest first
+      const maxDur = Math.max(...perf.map(p=>p.scan_duration_seconds||0), 1);
+      const durChart = document.getElementById('dur-chart');
+      durChart.innerHTML = perf.map(p=>{
+        const dur = p.scan_duration_seconds||0;
+        const pct = Math.max(dur/maxDur*100, 2);
+        const color = dur > 600 ? '#F85149' : dur > 300 ? '#D29922' : '#3FB950';
+        return `<div class="chart-bar" style="height:${pct}%;background:${color}"><span class="bar-val">${dur.toFixed(0)}s</span><span class="bar-label">${(p.repo_name||'').split('/')[1]||'?'}</span></div>`;
       }).join('');
-    }).catch(()=>{document.getElementById('recent-body').innerHTML='<tr><td colspan="7" style="color:#57606A;text-align:center">Could not load data. Is the API running?</td></tr>';});
+
+      // Token chart
+      const maxTok = Math.max(...perf.map(p=>(p.tokens_in||0)+(p.tokens_out||0)), 1);
+      const tokChart = document.getElementById('token-chart');
+      tokChart.innerHTML = perf.map(p=>{
+        const tok = (p.tokens_in||0)+(p.tokens_out||0);
+        const pct = Math.max(tok/maxTok*100, 2);
+        return `<div class="chart-bar" style="height:${pct}%;background:#58A6FF"><span class="bar-val">${fmtK(tok)}</span><span class="bar-label">${(p.repo_name||'').split('/')[1]||'?'}</span></div>`;
+      }).join('');
+
+      // Corpus table
+      const cBody = document.getElementById('corpus-body');
+      const fw = d.corpus.by_framework || [];
+      if(fw.length) {
+        const maxP = Math.max(...fw.map(f=>f.patterns||0), 1);
+        cBody.innerHTML = fw.map(f=>{
+          const total = (f.confirmed||0)+(f.fp||0);
+          const rate = total > 0 ? Math.round((f.confirmed||0)/total*100) : 0;
+          const barW = Math.round((f.patterns||0)/maxP*100);
+          return `<tr><td style="font-weight:600">${f.framework}</td><td>${f.patterns}</td><td style="color:#3FB950">${f.confirmed||0}</td><td style="color:#F85149">${f.fp||0}</td><td><div class="bar-fill" style="width:${barW}%"><div class="bar-fill-inner fill-green" style="width:${rate}%"></div></div><span style="font-size:10px;color:#6E7681">${rate}%</span></td></tr>`;
+        }).join('');
+      } else {
+        cBody.innerHTML = '<tr><td colspan="5" style="color:#6E7681;text-align:center">No corpus data yet</td></tr>';
+      }
+
+      // Engagement
+      const engDiv = document.getElementById('engagement');
+      const eng = d.engagement || {};
+      const engKeys = Object.keys(eng);
+      if(engKeys.length) {
+        const labels = {'page_view':'Page Views','report_open':'Report Opens','share':'Shares','email_submitted':'Emails','issue_opened':'Issues'};
+        engDiv.innerHTML = engKeys.map(k=>`<div class="engage-row"><span class="etype">${labels[k]||k}</span><span class="ecount">${fmt(eng[k])}</span></div>`).join('');
+      } else {
+        engDiv.innerHTML = '<div style="color:#6E7681;text-align:center;padding:20px">No events tracked yet</div>';
+      }
+    }).catch(e=>{
+      console.error('Ops API failed:', e);
+    });
+
+    // Recent scans with token data
+    fetch(API+'/api/recent').then(r=>r.json()).then(rows=>{
+      const tbody = document.getElementById('scan-body');
+      if(!rows.length) { tbody.innerHTML='<tr><td colspan="9" style="color:#6E7681;text-align:center">No scans</td></tr>'; return; }
+      tbody.innerHTML = rows.map(r=>{
+        const cls = {'complete':'badge-complete','running':'badge-running','failed':'badge-failed'}[r.status]||'';
+        const dur = r.scan_duration_seconds ? r.scan_duration_seconds.toFixed(0)+'s' : '--';
+        const tok = (r.tokens_in||0)+(r.tokens_out||0);
+        return `<tr><td style="font-weight:500">${r.repo_name||'--'}</td><td><span class="badge ${cls}">${r.status}</span></td><td>${r.opendocket_score||'--'}</td><td style="color:#F85149">${r.finding_high||0}</td><td style="color:#D29922">${r.finding_medium||0}</td><td>${dur}</td><td>${tok?fmtK(tok):'--'}</td><td>${r.llm_calls||'--'}</td><td style="color:#6E7681;font-size:12px">${r.timestamp?r.timestamp.substring(0,16):'--'}</td></tr>`;
+      }).join('');
+    }).catch(()=>{});
   </script>
 </body>
 </html>

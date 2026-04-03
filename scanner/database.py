@@ -60,6 +60,9 @@ def init_db():
                 finding_concern INTEGER DEFAULT 0,
                 finding_ok INTEGER DEFAULT 0,
                 used_byok INTEGER DEFAULT 0,
+                tokens_in INTEGER DEFAULT 0,
+                tokens_out INTEGER DEFAULT 0,
+                llm_calls INTEGER DEFAULT 0,
                 error_message TEXT,
                 report_url TEXT
             );
@@ -165,6 +168,7 @@ def update_scan_status(scan_id: str, status: str, progress: str = "", **kwargs):
                 "domains_detected", "frameworks_triggered", "lines_of_code",
                 "files_scanned", "scan_duration_seconds", "opendocket_score",
                 "finding_high", "finding_medium", "finding_concern", "finding_ok",
+                "tokens_in", "tokens_out", "llm_calls",
                 "error_message", "report_url",
             ):
                 if isinstance(value, (list, dict)):
@@ -392,7 +396,8 @@ def get_recent_scans(limit: int = 20) -> list[dict]:
         rows = conn.execute(
             """SELECT scan_id, repo_name, status, timestamp, opendocket_score,
                       finding_high, finding_medium, finding_concern, finding_ok,
-                      scan_duration_seconds, frameworks_triggered
+                      scan_duration_seconds, frameworks_triggered,
+                      tokens_in, tokens_out, llm_calls
                FROM scans
                ORDER BY timestamp DESC
                LIMIT ?""",

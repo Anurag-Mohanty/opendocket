@@ -357,8 +357,13 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
                                 pass  # non-critical, don't fail the scan
             _log(scan_id, f"Evidence patterns recorded for corpus")
 
+            # Aggregate token usage across all agents
+            total_tokens_in = sum(r.tokens_in for r in agent_results)
+            total_tokens_out = sum(r.tokens_out for r in agent_results)
+            total_llm_calls = sum(r.llm_calls for r in agent_results)
+
             duration = time.time() - start_time
-            _log(scan_id, f"Scan complete — score {score}, {high} high-risk, {duration:.0f}s")
+            _log(scan_id, f"Scan complete — score {score}, {high} high-risk, {duration:.0f}s, {total_llm_calls} LLM calls, {total_tokens_in+total_tokens_out} tokens")
             update_scan_status(
                 scan_id, "complete",
                 progress="Scan complete",
@@ -368,6 +373,9 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
                 finding_concern=concern,
                 finding_ok=ok,
                 scan_duration_seconds=duration,
+                tokens_in=total_tokens_in,
+                tokens_out=total_tokens_out,
+                llm_calls=total_llm_calls,
                 report_url=f"/reports/{repo_ctx.name}_report.html",
             )
 
@@ -663,6 +671,89 @@ def api_stats():
         "total_lines_scanned": stats.get("total_lines", 0),
         "total_findings": stats.get("total_findings", 0),
         "confirmed_high": stats.get("confirmed_high", 0),
+    })
+
+
+@app.route("/api/ops", methods=["GET"])
+def api_ops():
+    """Operational dashboard data — performance, tokens, corpus, trends."""
+    from scanner.database import _get_conn
+    with _get_conn() as conn:
+        # Scan performance trends (last 20 scans with duration)
+        perf_rows = conn.execute(
+            """SELECT repo_name, scan_duration_seconds, tokens_in, tokens_out,
+                      llm_calls, finding_high, finding_medium, opendocket_score,
+                      timestamp, frameworks_triggered
+               FROM scans
+               WHERE status = 'complete' AND scan_duration_seconds > 0
+               ORDER BY timestamp DESC LIMIT 20"""
+        ).fetchall()
+        perf = [dict(r) for r in perf_rows]
+
+        # Token usage totals
+        token_row = conn.execute(
+            """SELECT COALESCE(SUM(tokens_in), 0) as total_in,
+                      COALESCE(SUM(tokens_out), 0) as total_out,
+                      COALESCE(SUM(llm_calls), 0) as total_calls
+               FROM scans WHERE status = 'complete'"""
+        ).fetchone()
+
+        # Corpus stats
+        corpus_row = conn.execute(
+            """SELECT COUNT(*) as total_patterns,
+                      COALESCE(SUM(confirmed_count), 0) as total_confirmed,
+                      COALESCE(SUM(fp_count), 0) as total_fp,
+                      COALESCE(SUM(hit_count), 0) as total_hits
+               FROM evidence_patterns"""
+        ).fetchone()
+
+        corpus_by_fw = conn.execute(
+            """SELECT framework, COUNT(*) as patterns,
+                      SUM(confirmed_count) as confirmed, SUM(fp_count) as fp
+               FROM evidence_patterns GROUP BY framework
+               ORDER BY confirmed DESC"""
+        ).fetchall()
+
+        # Event counts (page views, shares, etc.)
+        event_rows = conn.execute(
+            """SELECT event_type, COUNT(*) as cnt FROM events
+               WHERE timestamp > datetime('now', '-30 days')
+               GROUP BY event_type"""
+        ).fetchall()
+
+        # Waitlist count
+        wl_row = conn.execute("SELECT COUNT(*) as cnt FROM waitlist").fetchone()
+
+        # Average scan duration
+        avg_row = conn.execute(
+            """SELECT AVG(scan_duration_seconds) as avg_dur,
+                      MIN(scan_duration_seconds) as min_dur,
+                      MAX(scan_duration_seconds) as max_dur
+               FROM scans
+               WHERE status = 'complete' AND scan_duration_seconds > 0"""
+        ).fetchone()
+
+    return jsonify({
+        "performance": perf,
+        "tokens": {
+            "total_in": token_row["total_in"] if token_row else 0,
+            "total_out": token_row["total_out"] if token_row else 0,
+            "total_calls": token_row["total_calls"] if token_row else 0,
+            "total": (token_row["total_in"] + token_row["total_out"]) if token_row else 0,
+        },
+        "corpus": {
+            "total_patterns": corpus_row["total_patterns"] if corpus_row else 0,
+            "confirmed": corpus_row["total_confirmed"] if corpus_row else 0,
+            "false_positives": corpus_row["total_fp"] if corpus_row else 0,
+            "by_framework": [dict(r) for r in corpus_by_fw],
+        },
+        "duration": {
+            "avg": round(avg_row["avg_dur"] or 0, 1) if avg_row else 0,
+            "min": round(avg_row["min_dur"] or 0, 1) if avg_row else 0,
+            "max": round(avg_row["max_dur"] or 0, 1) if avg_row else 0,
+        },
+        "engagement": {e["event_type"]: e["cnt"] for e in event_rows},
+        "waitlist_count": wl_row["cnt"] if wl_row else 0,
     })
 
 

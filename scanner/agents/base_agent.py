@@ -128,6 +128,9 @@ class Finding:
 class AgentResult:
     framework: str
     findings: list[Finding] = field(default_factory=list)
+    tokens_in: int = 0
+    tokens_out: int = 0
+    llm_calls: int = 0
 
 
 class BaseComplianceAgent:
@@ -139,6 +142,10 @@ class BaseComplianceAgent:
             self.config = yaml.safe_load(f)
         self.questions = self.config["questions"]
         self.client = Anthropic()
+        # Token usage tracking
+        self.tokens_in = 0
+        self.tokens_out = 0
+        self.llm_calls = 0
         # Load learned priority globs from the evidence corpus
         self._priority_cache: dict[str, list[str]] = {}
         try:
@@ -271,6 +278,10 @@ Rules:
             max_tokens=1024,
             messages=[{"role": "user", "content": prompt}],
         )
+        self.llm_calls += 1
+        if hasattr(response, "usage") and response.usage:
+            self.tokens_in += getattr(response.usage, "input_tokens", 0)
+            self.tokens_out += getattr(response.usage, "output_tokens", 0)
 
         return self._parse_llm_response(question, evidence, response.content[0].text)
 
@@ -362,6 +373,9 @@ Rules:
             )
             result.findings.append(finding)
 
+        result.tokens_in = self.tokens_in
+        result.tokens_out = self.tokens_out
+        result.llm_calls = self.llm_calls
         return result
 
     def review_findings(self, findings: list[Finding]) -> list[Finding]:
