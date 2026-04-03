@@ -630,8 +630,13 @@ def stop_scan(scan_id):
         cancel.set()
         _log(scan_id, "Stop requested by user")
         return jsonify({"ok": True, "message": "Cancellation signal sent"})
-    # No cancel flag means thread already finished
-    return jsonify({"ok": True, "message": "Scan is no longer running"})
+    # No cancel flag means thread died (e.g. deploy killed it) — force update DB
+    update_scan_status(
+        scan_id, "cancelled",
+        progress="Scan cancelled (orphaned)",
+        error_message="Scan thread lost — likely due to server restart",
+    )
+    return jsonify({"ok": True, "message": "Orphaned scan marked as cancelled"})
 
 
 @app.route("/api/scan/<scan_id>/restart", methods=["POST"])
