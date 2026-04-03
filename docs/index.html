@@ -76,6 +76,7 @@
 <!-- Stats Bar -->
 <div class="stats-bar">
   <div class="stat-item"><div class="stat-num" id="stat-scans">--</div><div class="stat-label">repos scanned</div></div>
+  <div class="stat-item"><div class="stat-num" id="stat-lines">--</div><div class="stat-label">lines of code evaluated</div></div>
   <div class="stat-item"><div class="stat-num" id="stat-findings">--</div><div class="stat-label">findings analyzed</div></div>
   <div class="stat-item"><div class="stat-num" id="stat-overrides">--</div><div class="stat-label">confirmed risks</div></div>
   <div class="stat-item"><div class="stat-num" id="stat-judged">--</div><div class="stat-label">Gemini verifications</div></div>
@@ -189,18 +190,17 @@
 <script>
     const API_BASE_URL = 'https://opendocket-production.up.railway.app';
 
-    // Stats with counter animation
+    // Stats with counter animation — live from API, no hardcoded fallbacks
     fetch(API_BASE_URL+'/api/stats').then(r=>r.json()).then(d=>{
-      animateCount('stat-scans', d.total_scans||7);
-      animateCount('stat-findings', d.total_findings||274);
-      animateCount('stat-overrides', d.confirmed_high||15);
-      animateCount('stat-judged', (d.judge_confirmed||0)+(d.judge_context_dependent||0)+(d.judge_false_positives||0)+(d.judge_overrides||0)||274);
-    }).catch(()=>{
-      animateCount('stat-scans', 7);
-      animateCount('stat-findings', 274);
-      animateCount('stat-overrides', 15);
-      animateCount('stat-judged', 274);
-    });
+      animateCount('stat-scans', d.total_scans||0);
+      const lines=d.total_lines_scanned||0;
+      if(lines>=1e6){document.getElementById('stat-lines').textContent=(lines/1e6).toFixed(1)+'M';}
+      else if(lines>=1e3){animateCount('stat-lines',Math.round(lines/1e3));document.getElementById('stat-lines').textContent=Math.round(lines/1e3).toLocaleString()+'K';}
+      else{animateCount('stat-lines',lines);}
+      animateCount('stat-findings', d.total_findings||0);
+      animateCount('stat-overrides', d.judge_confirmed||0);
+      animateCount('stat-judged', (d.judge_confirmed||0)+(d.judge_context_dependent||0)+(d.judge_overrides||0));
+    }).catch(()=>{});
 
     function animateCount(id, target){
       const el=document.getElementById(id);
