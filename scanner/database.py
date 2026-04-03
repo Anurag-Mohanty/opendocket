@@ -14,7 +14,13 @@ from datetime import datetime, timedelta
 from contextlib import contextmanager
 
 
-DB_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "opendocket.db")
+# Database path — configurable via DATABASE_URL env var.
+# SQLite (default): uses file path at data/opendocket.db
+# When ready to migrate to Postgres: set DATABASE_URL=postgresql://...
+# and swap this module's connection layer.
+DATABASE_URL = os.environ.get("DATABASE_URL", "")
+DB_PATH = os.environ.get("DB_PATH",
+    os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "opendocket.db"))
 
 
 def _ensure_db_dir():
@@ -23,6 +29,12 @@ def _ensure_db_dir():
 
 @contextmanager
 def _get_conn():
+    """Get a database connection. Currently SQLite, migration-ready for Postgres."""
+    if DATABASE_URL.startswith("postgresql"):
+        raise NotImplementedError(
+            "Postgres support planned. Set DATABASE_URL to migrate. "
+            "Migration script: scanner/migrate_to_postgres.py (TODO)"
+        )
     _ensure_db_dir()
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
