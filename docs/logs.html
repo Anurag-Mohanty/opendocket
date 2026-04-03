@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenDocket — Scan Logs</title>
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    body { background:#0D1117; color:#E6EDF3; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; font-size:14px; line-height:1.6; }
+    a { color:#58A6FF; text-decoration:none; }
+    a:hover { text-decoration:underline; }
+
+    .header {
+      padding:12px 24px;
+      border-bottom:1px solid #30363D;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      background:#161B22;
+    }
+    .header h1 { font-size:16px; font-weight:700; display:flex; align-items:center; gap:8px; }
+    .header nav a { margin-left:20px; font-size:13px; color:#8B949E; }
+    .header nav a:hover { color:#E6EDF3; }
+
+    .container { max-width:1080px; margin:0 auto; padding:24px; }
+
+    .scan-info {
+      display:flex;
+      gap:24px;
+      align-items:center;
+      padding:16px 20px;
+      background:#161B22;
+      border:1px solid #30363D;
+      border-radius:6px;
+      margin-bottom:20px;
+      flex-wrap:wrap;
+    }
+    .scan-info .label { font-size:11px; color:#8B949E; text-transform:uppercase; letter-spacing:0.5px; }
+    .scan-info .value { font-size:14px; font-weight:600; }
+    .scan-info .status { padding:3px 10px; border-radius:12px; font-size:12px; font-weight:600; }
+    .status-running { background:#0D419D; color:#58A6FF; }
+    .status-complete { background:#0F3D1A; color:#3FB950; }
+    .status-failed { background:#4D1B1B; color:#F85149; }
+    .status-cancelled { background:#3D2E00; color:#D29922; }
+    .status-queued { background:#3D2E00; color:#D29922; }
+
+    .controls {
+      display:flex;
+      gap:8px;
+      margin-bottom:20px;
+    }
+    .controls button {
+      padding:6px 14px;
+      border:1px solid #30363D;
+      border-radius:4px;
+      font-size:13px;
+      font-weight:500;
+      cursor:pointer;
+      font-family:inherit;
+      background:#21262D;
+      color:#E6EDF3;
+      transition:background 0.15s;
+    }
+    .controls button:hover { background:#30363D; }
+    .controls button.active { background:#0052CC; border-color:#0052CC; color:#fff; }
+    .controls button.danger { background:#CF222E; border-color:#CF222E; color:#fff; }
+    .controls button.danger:hover { background:#A5202A; }
+
+    .log-container {
+      background:#010409;
+      border:1px solid #30363D;
+      border-radius:6px;
+      overflow:hidden;
+    }
+    .log-header {
+      padding:10px 16px;
+      background:#161B22;
+      border-bottom:1px solid #30363D;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-size:12px;
+      color:#8B949E;
+    }
+    .log-header .live-dot {
+      width:8px; height:8px; border-radius:50%; background:#3FB950;
+      display:inline-block; margin-right:6px;
+      animation:pulse 1.2s infinite;
+    }
+    .log-header .live-dot.stopped { background:#8B949E; animation:none; }
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+
+    .log-body {
+      padding:12px 16px;
+      max-height:60vh;
+      overflow-y:auto;
+      font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+      font-size:13px;
+      line-height:1.8;
+    }
+    .log-line {
+      padding:1px 0;
+      white-space:pre-wrap;
+      word-break:break-all;
+    }
+    .log-line:hover { background:#161B22; }
+    .log-line .ts { color:#6E7681; margin-right:8px; }
+    .log-line .msg { color:#E6EDF3; }
+    .log-line .msg.error { color:#F85149; }
+    .log-line .msg.success { color:#3FB950; }
+    .log-line .msg.info { color:#58A6FF; }
+
+    .empty-state {
+      padding:40px;
+      text-align:center;
+      color:#8B949E;
+    }
+    .empty-state .icon { font-size:32px; margin-bottom:12px; }
+
+    .progress-bar-container {
+      margin-bottom:20px;
+      background:#161B22;
+      border:1px solid #30363D;
+      border-radius:6px;
+      padding:16px 20px;
+    }
+    .progress-steps {
+      display:flex;
+      gap:4px;
+      margin-bottom:8px;
+    }
+    .progress-step {
+      flex:1;
+      height:4px;
+      border-radius:2px;
+      background:#21262D;
+      transition:background 0.3s;
+    }
+    .progress-step.done { background:#3FB950; }
+    .progress-step.active { background:#58A6FF; animation:pulse 1.2s infinite; }
+    .progress-step.fail { background:#F85149; }
+    .progress-labels {
+      display:flex;
+      justify-content:space-between;
+      font-size:11px;
+      color:#6E7681;
+    }
+
+    @media (max-width:768px) {
+      .container { padding:16px; }
+      .scan-info { flex-direction:column; gap:12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>OpenDocket <span style="color:#8B949E;font-weight:400">/ Scan Logs</span></h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="methodology.html">Methodology</a>
+    </nav>
+  </div>
+
+  <div class="container">
+    <div class="scan-info" id="scan-info">
+      <div><div class="label">Scan ID</div><div class="value" id="info-id">—</div></div>
+      <div><div class="label">Repository</div><div class="value" id="info-repo">—</div></div>
+      <div><div class="label">Status</div><div class="value"><span class="status" id="info-status">—</span></div></div>
+      <div><div class="label">Duration</div><div class="value" id="info-duration">—</div></div>
+      <div><div class="label">Step</div><div class="value" id="info-step">—</div></div>
+    </div>
+
+    <div class="progress-bar-container" id="progress-bar">
+      <div class="progress-steps" id="progress-steps">
+        <div class="progress-step" data-step="clone"></div>
+        <div class="progress-step" data-step="qualify"></div>
+        <div class="progress-step" data-step="domain"></div>
+        <div class="progress-step" data-step="scan"></div>
+        <div class="progress-step" data-step="judge"></div>
+        <div class="progress-step" data-step="report"></div>
+      </div>
+      <div class="progress-labels">
+        <span>Clone</span><span>Qualify</span><span>Domain</span><span>Scan</span><span>Review</span><span>Report</span>
+      </div>
+    </div>
+
+    <div class="controls" id="controls">
+      <button id="auto-scroll-btn" class="active" onclick="toggleAutoScroll()">Auto-scroll</button>
+      <button onclick="clearLogs()">Clear Display</button>
+      <button id="ctrl-stop" class="danger" onclick="stopFromLogs()" style="display:none">Stop Scan</button>
+      <button id="ctrl-restart" onclick="restartFromLogs()" style="display:none">Restart Scan</button>
+    </div>
+
+    <div class="log-container">
+      <div class="log-header">
+        <span><span class="live-dot" id="live-dot"></span><span id="log-status-text">Connecting...</span></span>
+        <span id="log-count">0 lines</span>
+      </div>
+      <div class="log-body" id="log-body">
+        <div class="empty-state" id="empty-state">
+          <div class="icon">&#128269;</div>
+          <div>Waiting for scan logs...</div>
+          <div style="margin-top:8px;font-size:12px">Logs appear in real-time as the scan progresses</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE_URL = 'https://opendocket-production.up.railway.app';
+    const STEPS = ['clone','qualify','domain','scan','judge','report'];
+
+    let scanId = new URLSearchParams(window.location.search).get('scan_id');
+    let autoScroll = true;
+    let logAfter = 0;
+    let pollInterval = null;
+    let statusInterval = null;
+    let scanActive = false;
+
+    function init() {
+      if (!scanId) {
+        document.getElementById('log-body').innerHTML = '<div class="empty-state"><div class="icon">&#9888;</div><div>No scan_id provided</div><div style="margin-top:8px;font-size:12px">Use ?scan_id=... in the URL or start a scan from the <a href="index.html">home page</a></div></div>';
+        document.getElementById('live-dot').classList.add('stopped');
+        document.getElementById('log-status-text').textContent = 'No scan selected';
+        return;
+      }
+      document.getElementById('info-id').textContent = scanId.substring(0, 8) + '...';
+      fetchStatus();
+      fetchLogs();
+      statusInterval = setInterval(fetchStatus, 3000);
+      pollInterval = setInterval(fetchLogs, 2000);
+    }
+
+    function fetchStatus() {
+      fetch(API_BASE_URL + '/api/scan/' + scanId).then(r => r.json()).then(d => {
+        if (d.error) {
+          document.getElementById('info-repo').textContent = 'Not found';
+          return;
+        }
+        document.getElementById('info-repo').textContent = d.repo_name || '—';
+        const statusEl = document.getElementById('info-status');
+        statusEl.textContent = d.status;
+        statusEl.className = 'status status-' + d.status;
+
+        const p = d.progress || {};
+        const stepText = p.detail || p.step || '—';
+        document.getElementById('info-step').textContent = stepText;
+
+        // Duration
+        if (d.summary && d.summary.duration_seconds) {
+          document.getElementById('info-duration').textContent = Math.round(d.summary.duration_seconds) + 's';
+        }
+
+        // Progress bar
+        const curStep = p.step || '';
+        let reached = false;
+        STEPS.forEach(s => {
+          const el = document.querySelector('.progress-step[data-step="' + s + '"]');
+          if (!el) return;
+          if (s === curStep) {
+            reached = true;
+            el.className = 'progress-step active';
+          } else if (!reached) {
+            el.className = 'progress-step done';
+          } else {
+            el.className = 'progress-step';
+          }
+        });
+
+        // Controls
+        scanActive = d.status === 'running' || d.status === 'queued';
+        document.getElementById('ctrl-stop').style.display = scanActive ? 'block' : 'none';
+        document.getElementById('ctrl-restart').style.display = (!scanActive && d.status !== 'complete') ? 'block' : 'none';
+        document.getElementById('live-dot').classList.toggle('stopped', !scanActive);
+        document.getElementById('log-status-text').textContent = scanActive ? 'Live' : d.status;
+
+        if (d.status === 'complete') {
+          STEPS.forEach(s => {
+            const el = document.querySelector('.progress-step[data-step="' + s + '"]');
+            if (el) el.className = 'progress-step done';
+          });
+        } else if (d.status === 'cancelled' || d.status === 'failed') {
+          const curEl = document.querySelector('.progress-step.active');
+          if (curEl) curEl.className = 'progress-step fail';
+        }
+
+        // Stop polling if done
+        if (!scanActive) {
+          if (statusInterval) { clearInterval(statusInterval); statusInterval = null; }
+          // One final log fetch
+          setTimeout(fetchLogs, 1000);
+          setTimeout(() => { if (pollInterval) { clearInterval(pollInterval); pollInterval = null; } }, 3000);
+        }
+      }).catch(() => {});
+    }
+
+    function fetchLogs() {
+      fetch(API_BASE_URL + '/api/scan/' + scanId + '/logs?after=' + logAfter).then(r => r.json()).then(d => {
+        if (d.logs && d.logs.length > 0) {
+          document.getElementById('empty-state')?.remove();
+          const body = document.getElementById('log-body');
+          d.logs.forEach(line => {
+            const div = document.createElement('div');
+            div.className = 'log-line';
+            // Parse timestamp and message
+            const match = line.match(/^\[(\d{2}:\d{2}:\d{2})\]\s*(.*)/);
+            if (match) {
+              const msgClass = classifyMsg(match[2]);
+              div.innerHTML = '<span class="ts">' + match[1] + '</span><span class="msg ' + msgClass + '">' + escapeHtml(match[2]) + '</span>';
+            } else {
+              div.innerHTML = '<span class="msg">' + escapeHtml(line) + '</span>';
+            }
+            body.appendChild(div);
+          });
+          if (autoScroll) body.scrollTop = body.scrollHeight;
+          logAfter = d.next_after;
+        }
+        document.getElementById('log-count').textContent = (d.total || 0) + ' lines';
+      }).catch(() => {});
+    }
+
+    function classifyMsg(msg) {
+      if (/fail|error|exception/i.test(msg)) return 'error';
+      if (/complete|passed|success|done/i.test(msg)) return 'success';
+      if (/starting|detecting|running|cloning|reviewing/i.test(msg)) return 'info';
+      return '';
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function toggleAutoScroll() {
+      autoScroll = !autoScroll;
+      document.getElementById('auto-scroll-btn').classList.toggle('active', autoScroll);
+    }
+
+    function clearLogs() {
+      document.getElementById('log-body').innerHTML = '';
+    }
+
+    function stopFromLogs() {
+      const btn = document.getElementById('ctrl-stop');
+      btn.textContent = 'Stopping...'; btn.disabled = true;
+      fetch(API_BASE_URL + '/api/scan/' + scanId + '/stop', { method: 'POST' })
+        .then(r => r.json())
+        .then(() => { btn.textContent = 'Stop Scan'; btn.disabled = false; })
+        .catch(() => { btn.textContent = 'Stop Scan'; btn.disabled = false; });
+    }
+
+    function restartFromLogs() {
+      const btn = document.getElementById('ctrl-restart');
+      btn.textContent = 'Restarting...'; btn.disabled = true;
+      fetch(API_BASE_URL + '/api/scan/' + scanId + '/restart', { method: 'POST' })
+        .then(r => r.json())
+        .then(d => {
+          btn.textContent = 'Restart Scan'; btn.disabled = false;
+          if (d.scan_id) {
+            // Navigate to new scan's logs
+            window.location.href = 'logs.html?scan_id=' + d.scan_id;
+          }
+        })
+        .catch(() => { btn.textContent = 'Restart Scan'; btn.disabled = false; });
+    }
+
+    init();
+  </script>
+</body>
+</html>

@@ -9,7 +9,7 @@ import re
 import sys
 import time
 import threading
-from collections import defaultdict
+from collections import defaultdict, deque
 from datetime import datetime, timedelta
 
 from flask import Flask, jsonify, request
@@ -53,6 +53,23 @@ AGENTS = {
     "ferpa": FERPAAgent,
     "glba": GLBAAgent,
 }
+
+# ── Scan cancellation flags and params for restart ──
+_cancel_flags: dict[str, threading.Event] = {}
+_scan_params: dict[str, dict] = {}
+
+# ── Scan log ring buffers (last 200 lines per scan) ──
+_scan_logs: dict[str, deque] = {}
+_LOG_MAX = 200
+
+
+def _log(scan_id: str, message: str):
+    """Append a timestamped log line for a scan."""
+    if scan_id not in _scan_logs:
+        _scan_logs[scan_id] = deque(maxlen=_LOG_MAX)
+    ts = datetime.utcnow().strftime("%H:%M:%S")
+    _scan_logs[scan_id].append(f"[{ts}] {message}")
+
 
 app = Flask(__name__, static_folder="../docs", static_url_path="")
 CORS(app, origins=[
@@ -118,6 +135,10 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
     start_time = time.time()
     old_key = os.environ.get("ANTHROPIC_API_KEY")
     old_gemini = os.environ.get("GEMINI_API_KEY")
+    cancel = _cancel_flags.get(scan_id)
+
+    def _cancelled():
+        return cancel and cancel.is_set()
 
     try:
         if api_key:
@@ -136,12 +157,20 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
                 p["fw_current"] = fw_current
             return _json.dumps(p)
 
+        _log(scan_id, f"Scan started for {repo_url}")
         update_scan_status(scan_id, "running", _prog("clone", "Cloning repository"))
+        _log(scan_id, "Cloning repository...")
         repo_ctx = fetch_and_qualify(repo_url)
+        _log(scan_id, f"Clone complete — {len(repo_ctx.file_index)} files indexed")
+
+        if _cancelled():
+            raise InterruptedError("Scan cancelled by user")
 
         try:
             update_scan_status(scan_id, "running", _prog("qualify", "Running qualification gates"))
+            _log(scan_id, "Running qualification gates...")
             if not repo_ctx.qualification.qualified:
+                _log(scan_id, f"Did not qualify: {'; '.join(repo_ctx.qualification.reasons)}")
                 update_scan_status(
                     scan_id, "complete",
                     progress=_prog("qualify", "Repository did not qualify"),
@@ -163,8 +192,15 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
                 increment_stat("scans_this_month")
                 return
 
+            _log(scan_id, "Qualification passed")
+
+            if _cancelled():
+                raise InterruptedError("Scan cancelled by user")
+
             update_scan_status(scan_id, "running", _prog("domain", "Detecting domains and frameworks"))
+            _log(scan_id, "Detecting domains...")
             domains = detect_domains(repo_ctx.path)
+            _log(scan_id, f"Domains detected: {', '.join(d.domain for d in domains)}")
 
             update_scan_status(
                 scan_id, "running", _prog("domain", "Mapping frameworks"),
@@ -175,6 +211,10 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
             frameworks = map_frameworks(domains)
             if not frameworks:
                 frameworks = ["soc2"]
+            _log(scan_id, f"Frameworks triggered: {', '.join(f.upper() for f in frameworks)}")
+
+            if _cancelled():
+                raise InterruptedError("Scan cancelled by user")
 
             update_scan_status(
                 scan_id, "running",
@@ -185,8 +225,11 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
             agent_results = []
             fw_complete = []
             for i, fw in enumerate(frameworks):
+                if _cancelled():
+                    raise InterruptedError("Scan cancelled by user")
                 agent_class = AGENTS.get(fw)
                 if agent_class:
+                    _log(scan_id, f"Running {fw.upper()} agent ({i+1}/{len(frameworks)})...")
                     update_scan_status(
                         scan_id, "running",
                         progress=_prog("scan", f"Running {fw.upper()} agent", i, len(frameworks), fw.upper()),
@@ -195,10 +238,17 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
                     result = agent.scan(repo_ctx.path, repo_ctx.file_index, repo_ctx.readme_content)
                     agent_results.append(result)
                     fw_complete.append(fw.upper())
+                    finding_count = len(result.findings)
+                    _log(scan_id, f"  {fw.upper()} complete — {finding_count} findings")
+
+            if _cancelled():
+                raise InterruptedError("Scan cancelled by user")
 
             # Independent review pass (Gemini)
             g_key = gemini_key or os.environ.get("GEMINI_API_KEY")
+            total_findings = sum(len(r.findings) for r in agent_results)
             if g_key:
+                _log(scan_id, f"Starting Gemini independent review ({total_findings} findings, 5 concurrent workers)...")
                 update_scan_status(scan_id, "running", _prog("judge", "Running Gemini independent review"))
                 try:
                     from scanner.agents.base_agent import JudgeAgent
@@ -207,11 +257,26 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
                         "repo_name": repo_ctx.name,
                         "domains": ", ".join(d.domain for d in domains),
                     }
-                    judge.review_all(agent_results, repo_ctx_dict)
+
+                    def _judge_progress(done, total, qid):
+                        _log(scan_id, f"  Gemini reviewed {qid} ({done}/{total})")
+                        update_scan_status(
+                            scan_id, "running",
+                            _prog("judge", f"Reviewing findings ({done}/{total})",
+                                  fw_done=done, fw_total=total, fw_current=qid),
+                        )
+
+                    judge.review_all(agent_results, repo_ctx_dict, progress_callback=_judge_progress)
+                    _log(scan_id, "Gemini review complete")
                 except Exception as e:
+                    _log(scan_id, f"Gemini review failed: {e}")
                     print(f"[OpenDocket] Gemini review failed: {e}")
             else:
+                _log(scan_id, "Skipping Gemini review (no API key)")
                 update_scan_status(scan_id, "running", _prog("judge", "Skipping (no Gemini key)"))
+
+            if _cancelled():
+                raise InterruptedError("Scan cancelled by user")
 
             # Calculate stats
             all_findings = [f for r in agent_results for f in r.findings]
@@ -222,6 +287,7 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
             score = calculate_score(agent_results)
 
             # Generate reports
+            _log(scan_id, "Generating reports...")
             update_scan_status(scan_id, "running", _prog("report", "Generating reports"))
 
             html_report = generate_html_report(repo_ctx.name, repo_url, domains, agent_results)
@@ -253,6 +319,7 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
             save_findings(scan_id, findings_data)
 
             duration = time.time() - start_time
+            _log(scan_id, f"Scan complete — score {score}, {high} high-risk, {duration:.0f}s")
             update_scan_status(
                 scan_id, "complete",
                 progress="Scan complete",
@@ -282,7 +349,16 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
         finally:
             cleanup_repo(repo_ctx.path)
 
+    except InterruptedError:
+        _log(scan_id, "Scan cancelled by user")
+        update_scan_status(
+            scan_id, "cancelled",
+            progress="Scan cancelled",
+            error_message="Cancelled by user",
+            scan_duration_seconds=time.time() - start_time,
+        )
     except Exception as e:
+        _log(scan_id, f"Scan failed: {e}")
         update_scan_status(
             scan_id, "failed",
             progress="Scan failed",
@@ -293,6 +369,7 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
         increment_stat("scans_today")
         increment_stat("scans_this_month")
     finally:
+        _cancel_flags.pop(scan_id, None)
         if old_key:
             os.environ["ANTHROPIC_API_KEY"] = old_key
         elif api_key and "ANTHROPIC_API_KEY" in os.environ:
@@ -352,6 +429,16 @@ def start_scan():
 
     scan_id = create_scan(repo_url, repo_name, used_byok=is_byok)
 
+    # Set up cancellation flag
+    _cancel_flags[scan_id] = threading.Event()
+
+    # Store scan params for restart capability
+    _scan_params[scan_id] = {
+        "repo_url": repo_url,
+        "anthropic_key": anthropic_key,
+        "gemini_key": gemini_key,
+    }
+
     thread = threading.Thread(
         target=_run_scan,
         args=(scan_id, repo_url, anthropic_key, gemini_key),
@@ -403,8 +490,90 @@ def get_scan_status(scan_id):
         }
     elif scan["status"] == "failed":
         response["error"] = scan.get("error_message", "Unknown error")
+    elif scan["status"] == "cancelled":
+        response["error"] = scan.get("error_message", "Cancelled by user")
 
     return jsonify(response)
+
+
+@app.route("/api/scan/<scan_id>/stop", methods=["POST"])
+def stop_scan(scan_id):
+    """Cancel a running scan."""
+    scan = get_scan(scan_id)
+    if not scan:
+        return jsonify({"error": "Scan not found"}), 404
+    if scan["status"] not in ("queued", "running"):
+        return jsonify({"error": f"Scan is already {scan['status']}"}), 400
+    cancel = _cancel_flags.get(scan_id)
+    if cancel:
+        cancel.set()
+        _log(scan_id, "Stop requested by user")
+        return jsonify({"ok": True, "message": "Cancellation signal sent"})
+    # No cancel flag means thread already finished
+    return jsonify({"ok": True, "message": "Scan is no longer running"})
+
+
+@app.route("/api/scan/<scan_id>/restart", methods=["POST"])
+def restart_scan(scan_id):
+    """Restart a cancelled or failed scan as a new scan."""
+    scan = get_scan(scan_id)
+    if not scan:
+        return jsonify({"error": "Scan not found"}), 404
+    if scan["status"] in ("queued", "running"):
+        return jsonify({"error": "Scan is still running — stop it first"}), 400
+
+    # Get original params if available, otherwise use request body
+    data = request.get_json(silent=True) or {}
+    params = _scan_params.get(scan_id, {})
+    repo_url = params.get("repo_url") or data.get("repo_url", "").strip()
+    if not repo_url:
+        # Reconstruct from repo_name
+        repo_name = scan.get("repo_name", "")
+        if repo_name:
+            repo_url = f"https://github.com/{repo_name}"
+        else:
+            return jsonify({"error": "Could not determine repo URL"}), 400
+
+    anthropic_key = params.get("anthropic_key") or data.get("anthropic_api_key") or None
+    gemini_key = params.get("gemini_key") or data.get("gemini_api_key") or None
+    repo_name = _extract_repo_name(repo_url)
+
+    new_scan_id = create_scan(repo_url, repo_name, used_byok=bool(anthropic_key))
+    _cancel_flags[new_scan_id] = threading.Event()
+    _scan_params[new_scan_id] = {
+        "repo_url": repo_url,
+        "anthropic_key": anthropic_key,
+        "gemini_key": gemini_key,
+    }
+
+    thread = threading.Thread(
+        target=_run_scan,
+        args=(new_scan_id, repo_url, anthropic_key, gemini_key),
+        daemon=True,
+    )
+    thread.start()
+    _log(new_scan_id, f"Restarted from scan {scan_id[:8]}...")
+
+    return jsonify({
+        "scan_id": new_scan_id,
+        "status": "queued",
+        "repo_name": repo_name,
+        "restarted_from": scan_id,
+    })
+
+
+@app.route("/api/scan/<scan_id>/logs", methods=["GET"])
+def get_scan_logs(scan_id):
+    """Return the log buffer for a scan."""
+    logs = _scan_logs.get(scan_id, [])
+    after = int(request.args.get("after", 0))
+    log_list = list(logs)
+    return jsonify({
+        "scan_id": scan_id,
+        "total": len(log_list),
+        "logs": log_list[after:],
+        "next_after": len(log_list),
+    })
 
 
 @app.route("/api/stats", methods=["GET"])
@@ -508,6 +677,11 @@ def serve_privacy():
 @app.route("/dashboard.html")
 def serve_dashboard():
     return app.send_static_file("dashboard.html")
+
+
+@app.route("/logs.html")
+def serve_logs():
+    return app.send_static_file("logs.html")
 
 
 def main():

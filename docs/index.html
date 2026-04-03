@@ -17,6 +17,7 @@
   <div class="nav-links">
     <a href="#directory">Directory</a>
     <a href="dashboard.html">Dashboard</a>
+    <a href="logs.html">Logs</a>
     <a href="methodology.html">Methodology</a>
     <a href="questions.html">Questions</a>
     <a href="https://github.com/Anurag-Mohanty/opendocket">GitHub</a>
@@ -58,6 +59,11 @@
           <div class="pstep" data-step="scan"><span class="picon">&#9675;</span> Running compliance agents <span class="pdetail" style="color:#8B949E"></span></div>
           <div class="pstep" data-step="judge"><span class="picon">&#9675;</span> Gemini independent review</div>
           <div class="pstep" data-step="report"><span class="picon">&#9675;</span> Generating report</div>
+        </div>
+        <div style="margin-top:12px;display:flex;gap:8px" id="scan-controls" class="scan-controls">
+          <button id="stop-btn" onclick="stopScan()" style="flex:1;padding:7px 12px;background:#CF222E;color:#fff;border:none;border-radius:4px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font);display:none">Stop Scan</button>
+          <button id="restart-btn" onclick="restartScan()" style="flex:1;padding:7px 12px;background:#9A6700;color:#fff;border:none;border-radius:4px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font);display:none">Restart Scan</button>
+          <a id="logs-btn" style="flex:1;padding:7px 12px;background:#30363D;color:#E6EDF3;border:none;border-radius:4px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font);text-align:center;text-decoration:none;display:none" target="_blank">View Logs</a>
         </div>
         <div style="margin-top:10px;font-size:11px;color:#6E7681">Typical scan: 3-5 minutes</div>
         <div id="prog-fact" style="margin-top:6px;font-size:11px;color:#8B949E;font-style:italic"></div>
@@ -211,10 +217,21 @@
     }
 
     // Scan
-    let scanTimer=null,scanStart=0;
+    let scanTimer=null,scanStart=0,currentScanId=null,factTimer=null;
     const STEPS=['clone','qualify','domain','scan','judge','report'];
     const FACTS=['HIPAA fines averaged $9.48M per breach in 2024','45% of AI-generated code has security flaws','GDPR has issued \u20AC6.2B in fines since 2018','The Gemini review catches false positives','PCI-DSS violations can result in loss of payment processing','CCPA class actions average $750 per consumer'];
     let factIdx=0;
+
+    function showControls(state){
+      // state: 'running', 'stopped', 'done', 'hidden'
+      const stopBtn=document.getElementById('stop-btn');
+      const restartBtn=document.getElementById('restart-btn');
+      const logsBtn=document.getElementById('logs-btn');
+      stopBtn.style.display=state==='running'?'block':'none';
+      restartBtn.style.display=(state==='stopped')?'block':'none';
+      logsBtn.style.display=(state==='running'||state==='stopped')?'block':'none';
+      if(currentScanId)logsBtn.href='logs.html?scan_id='+currentScanId;
+    }
 
     function startScan(){
       const url=document.getElementById('scan-url').value.trim();
@@ -227,6 +244,7 @@
       document.getElementById('scan-btn').disabled=true;
       document.getElementById('scan-status').textContent='Submitting...';
       document.getElementById('scan-result').style.display='none';
+      showControls('hidden');
       fetch(API_BASE_URL+'/api/scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
       .then(r=>r.json()).then(d=>{
         if(d.error){document.getElementById('scan-status').textContent=d.error;document.getElementById('scan-btn').disabled=false;return;}
@@ -234,19 +252,52 @@
           document.getElementById('scan-btn').disabled=false;
           document.getElementById('scan-status').style.display='none';
           const res=document.getElementById('scan-result');res.style.display='block';
-          res.innerHTML='<strong style="color:#1A7F37">Cached scan available</strong><br><span style="color:#8B949E">'+d.message+'</span><br><a href="'+d.report_url+'" style="color:#58A6FF;font-weight:600">View Report &rarr;</a>';
+          const reportHref=d.report_url?(API_BASE_URL+d.report_url):('#');
+          res.innerHTML='<strong style="color:#1A7F37">Cached scan available</strong><br><span style="color:#8B949E">'+d.message+'</span><br><a href="'+reportHref+'" style="color:#58A6FF;font-weight:600">View Report &rarr;</a>';
           return;
         }
+        currentScanId=d.scan_id;
         document.getElementById('scan-status').style.display='none';
         const prog=document.getElementById('scan-progress');prog.style.display='block';
         document.getElementById('prog-repo').textContent=d.repo_name||'';
         scanStart=Date.now();
         scanTimer=setInterval(()=>{const s=Math.floor((Date.now()-scanStart)/1000);document.getElementById('prog-timer').textContent=Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60},1000);
         factIdx=0;document.getElementById('prog-fact').textContent=FACTS[0];
-        setInterval(()=>{factIdx=(factIdx+1)%FACTS.length;document.getElementById('prog-fact').textContent=FACTS[factIdx]},20000);
+        if(factTimer)clearInterval(factTimer);
+        factTimer=setInterval(()=>{factIdx=(factIdx+1)%FACTS.length;document.getElementById('prog-fact').textContent=FACTS[factIdx]},20000);
         document.querySelectorAll('.pstep').forEach(s=>{s.className='pstep';s.querySelector('.picon').innerHTML='&#9675;'});
+        showControls('running');
         pollScan(d.scan_id);
       }).catch(e=>{document.getElementById('scan-status').textContent='Error: '+e.message;document.getElementById('scan-btn').disabled=false;});
+    }
+
+    function stopScan(){
+      if(!currentScanId)return;
+      const btn=document.getElementById('stop-btn');
+      btn.textContent='Stopping...';btn.disabled=true;
+      fetch(API_BASE_URL+'/api/scan/'+currentScanId+'/stop',{method:'POST'})
+      .then(r=>r.json()).then(()=>{
+        btn.textContent='Stop Scan';btn.disabled=false;
+      }).catch(()=>{btn.textContent='Stop Scan';btn.disabled=false;});
+    }
+
+    function restartScan(){
+      if(!currentScanId)return;
+      const btn=document.getElementById('restart-btn');
+      btn.textContent='Restarting...';btn.disabled=true;
+      fetch(API_BASE_URL+'/api/scan/'+currentScanId+'/restart',{method:'POST'})
+      .then(r=>r.json()).then(d=>{
+        btn.textContent='Restart Scan';btn.disabled=false;
+        if(d.error){alert(d.error);return;}
+        // Reset UI for new scan
+        currentScanId=d.scan_id;
+        scanStart=Date.now();
+        document.querySelectorAll('.pstep').forEach(s=>{s.className='pstep';s.querySelector('.picon').innerHTML='&#9675;'});
+        document.getElementById('scan-result').style.display='none';
+        document.getElementById('scan-progress').style.display='block';
+        showControls('running');
+        pollScan(d.scan_id);
+      }).catch(()=>{btn.textContent='Restart Scan';btn.disabled=false;});
     }
 
     function pollScan(id){
@@ -256,7 +307,8 @@
         STEPS.forEach(s=>{
           const el=document.querySelector('.pstep[data-step="'+s+'"]');if(!el)return;
           if(s===curStep){reached=true;el.className='pstep active';el.querySelector('.picon').innerHTML='&#9679;';
-            const det=el.querySelector('.pdetail');if(det&&p.fw_current)det.textContent='('+p.fw_current+' \u2014 '+(p.fw_done||0)+'/'+( p.fw_total||'?')+')';
+            const det=el.querySelector('.pdetail');
+            if(det&&p.fw_current)det.textContent='('+p.fw_current+' \u2014 '+(p.fw_done||0)+'/'+( p.fw_total||'?')+')';
           }else if(!reached){el.className='pstep done';el.querySelector('.picon').innerHTML='&#10003;';}
           else{el.className='pstep';el.querySelector('.picon').innerHTML='&#9675;';}
         });
@@ -265,15 +317,25 @@
           document.querySelectorAll('.pstep').forEach(s=>{s.className='pstep done';s.querySelector('.picon').innerHTML='&#10003;'});
           document.getElementById('scan-progress').style.display='none';
           document.getElementById('scan-btn').disabled=false;
+          showControls('done');
           const sm=d.summary||{};const hi=sm.high_risk||0;
           let rl='LOW',rc='#1A7F37';if(hi>15){rl='CRITICAL';rc='#CF222E'}else if(hi>5){rl='ELEVATED';rc='#CF222E'}else if(hi>0){rl='MODERATE';rc='#9A6700'}
           const res=document.getElementById('scan-result');res.style.display='block';
-          res.innerHTML='<div style="font-size:18px;font-weight:700;color:'+rc+'">'+rl+' RISK</div><div style="margin:8px 0;color:#E6EDF3">'+hi+' high-risk &middot; '+(sm.medium_risk||0)+' medium &middot; '+((sm.frameworks||[]).length||'?')+' frameworks</div><a href="'+(d.report_url||'')+'" style="display:inline-block;padding:8px 20px;background:#0052CC;color:#fff;border-radius:4px;font-weight:600;text-decoration:none">View Full Report &rarr;</a>';
+          const rptUrl=d.report_url?(API_BASE_URL+d.report_url):'#';
+          res.innerHTML='<div style="font-size:18px;font-weight:700;color:'+rc+'">'+rl+' RISK</div><div style="margin:8px 0;color:#E6EDF3">'+hi+' high-risk &middot; '+(sm.medium_risk||0)+' medium &middot; '+((sm.frameworks||[]).length||'?')+' frameworks</div><a href="'+rptUrl+'" style="display:inline-block;padding:8px 20px;background:#0052CC;color:#fff;border-radius:4px;font-weight:600;text-decoration:none">View Full Report &rarr;</a>';
         }else if(d.status==='failed'){
           clearInterval(scanTimer);
           document.getElementById('scan-btn').disabled=false;
+          showControls('stopped');
           document.getElementById('scan-status').style.display='block';
           document.getElementById('scan-status').innerHTML='<span style="color:#CF222E">Failed: '+(d.error||'Unknown')+'</span>';
+        }else if(d.status==='cancelled'){
+          clearInterval(scanTimer);
+          document.getElementById('scan-btn').disabled=false;
+          showControls('stopped');
+          document.querySelectorAll('.pstep.active').forEach(s=>{s.className='pstep fail';s.querySelector('.picon').innerHTML='&#10007;'});
+          document.getElementById('scan-status').style.display='block';
+          document.getElementById('scan-status').innerHTML='<span style="color:#9A6700">Scan cancelled. You can restart it.</span>';
         }else{setTimeout(()=>pollScan(id),3000);}
       }).catch(()=>setTimeout(()=>pollScan(id),5000));
     }

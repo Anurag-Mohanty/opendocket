@@ -355,8 +355,9 @@ class JudgeAgent:
         genai.configure(api_key=api_key)
         self.model = genai.GenerativeModel("gemini-2.5-flash")
 
-    def review_all(self, agent_results: list[AgentResult], repo_context: dict) -> list[AgentResult]:
-        """Review all findings across all framework results."""
+    def review_all(self, agent_results: list[AgentResult], repo_context: dict,
+                    progress_callback=None) -> list[AgentResult]:
+        """Review all findings across all framework results using concurrent threads."""
         if self.model is None:
             # Mark all findings as NOT REVIEWED
             for result in agent_results:
@@ -366,19 +367,47 @@ class JudgeAgent:
                     finding.judge_confidence = ""
                     finding.judge_model = ""
             return agent_results
+
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+
+        # Build flat list of (finding, framework) pairs
+        tasks = []
         for result in agent_results:
             for finding in result.findings:
-                print(f"  [Gemini] Reviewing {finding.question_id}...")
-                verdict = self._review_single(finding, result.framework, repo_context)
-                finding.review_verdict = verdict["verdict"]
-                finding.judge_reasoning = verdict["reasoning"]
-                finding.judge_confidence = verdict["confidence"]
-                finding.judge_model = "gemini-2.5-flash"
-                finding.remediation_quality = verdict.get("remediation_quality", "")
-                improved = verdict.get("improved_remediation", "")
-                if improved:
-                    finding.improved_remediation = improved
-                    print(f"    -> Remediation improved by Gemini")
+                tasks.append((finding, result.framework))
+
+        total = len(tasks)
+        completed = 0
+
+        def _review_task(finding, framework):
+            return finding, self._review_single(finding, framework, repo_context)
+
+        # Run up to 5 concurrent Gemini reviews
+        with ThreadPoolExecutor(max_workers=5) as executor:
+            futures = {
+                executor.submit(_review_task, finding, fw): finding.question_id
+                for finding, fw in tasks
+            }
+            for future in as_completed(futures):
+                qid = futures[future]
+                try:
+                    finding, verdict = future.result()
+                    finding.review_verdict = verdict["verdict"]
+                    finding.judge_reasoning = verdict["reasoning"]
+                    finding.judge_confidence = verdict["confidence"]
+                    finding.judge_model = "gemini-2.5-flash"
+                    finding.remediation_quality = verdict.get("remediation_quality", "")
+                    improved = verdict.get("improved_remediation", "")
+                    if improved:
+                        finding.improved_remediation = improved
+                except Exception as e:
+                    print(f"  [Gemini] Error reviewing {qid}: {e}")
+
+                completed += 1
+                print(f"  [Gemini] Reviewed {qid} ({completed}/{total})")
+                if progress_callback:
+                    progress_callback(completed, total, qid)
+
         return agent_results
 
     def _review_single(self, finding: Finding, framework: str, repo_context: dict) -> dict:
