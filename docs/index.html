@@ -118,16 +118,9 @@
   </div>
   <div class="dir-table-card">
     <table class="dir-table" id="dir-table">
-      <thead><tr><th onclick="sortDir(0)">Repository</th><th onclick="sortDir(1)" style="text-align:right">Stars</th><th>Domain</th><th>Frameworks</th><th onclick="sortDir(4)" style="text-align:center">Confirmed High</th><th onclick="sortDir(5)" style="text-align:center">Findings</th><th onclick="sortDir(6)" style="text-align:center">Risk</th><th>Report</th></tr></thead>
-      <tbody>
-        <tr data-cat="healthcare"><td class="repo-name"><a href="https://github.com/openemr/openemr" target="_blank">openemr/openemr</a></td><td style="text-align:right" class="stars">2,900</td><td>Healthcare</td><td>HIPAA, SOC2, GDPR</td><td style="text-align:center;color:var(--red);font-weight:700">5</td><td style="text-align:center;color:var(--text-muted)">30</td><td style="text-align:center"><span class="score-dot elevated"></span>Elevated</td><td><a href="reports/openemr_report.html">View</a></td></tr>
-        <tr data-cat="payments"><td class="repo-name"><a href="https://github.com/juspay/hyperswitch" target="_blank">juspay/hyperswitch</a></td><td style="text-align:right" class="stars">12,500</td><td>Fintech</td><td>PCI-DSS, SOC2, GDPR +3</td><td style="text-align:center;color:var(--red);font-weight:700">5</td><td style="text-align:center;color:var(--text-muted)">56</td><td style="text-align:center"><span class="score-dot elevated"></span>Elevated</td><td><a href="reports/hyperswitch_report.html">View</a></td></tr>
-        <tr data-cat="saas"><td class="repo-name"><a href="https://github.com/getprobo/probo" target="_blank">getprobo/probo</a></td><td style="text-align:right" class="stars">200</td><td>SaaS</td><td>SOC2, GDPR</td><td style="text-align:center;color:var(--red);font-weight:700">3</td><td style="text-align:center;color:var(--text-muted)">20</td><td style="text-align:center"><span class="score-dot moderate"></span>Moderate</td><td><a href="reports/probo_report.html">View</a></td></tr>
-        <tr data-cat="healthcare"><td class="repo-name"><a href="https://github.com/medplum/medplum" target="_blank">medplum/medplum</a></td><td style="text-align:right" class="stars">4,200</td><td>Healthcare</td><td>HIPAA, SOC2, GDPR +3</td><td style="text-align:center;color:var(--red);font-weight:700">2</td><td style="text-align:center;color:var(--text-muted)">56</td><td style="text-align:center"><span class="score-dot moderate"></span>Moderate</td><td><a href="reports/medplum_report.html">View</a></td></tr>
-        <tr data-cat="saas"><td class="repo-name"><a href="https://github.com/supabase/supabase" target="_blank">supabase/supabase</a></td><td style="text-align:right" class="stars">74,000</td><td>SaaS</td><td>SOC2, GDPR +4</td><td style="text-align:center;color:var(--green);font-weight:700">0</td><td style="text-align:center;color:var(--text-muted)">56</td><td style="text-align:center"><span class="score-dot low"></span>Low</td><td><a href="reports/supabase_report.html">View</a></td></tr>
-        <tr data-cat="infra"><td class="repo-name"><a href="https://github.com/hashicorp/vault" target="_blank">hashicorp/vault</a></td><td style="text-align:right" class="stars">31,000</td><td>Infrastructure</td><td>SOC2, GDPR +4</td><td style="text-align:center;color:var(--green);font-weight:700">0</td><td style="text-align:center;color:var(--text-muted)">56</td><td style="text-align:center"><span class="score-dot low"></span>Low</td><td><a href="reports/vault_report.html">View</a></td></tr>
-        <tr data-cat="saas" class="failed-row"><td class="repo-name"><a href="https://github.com/formbricks/formbricks" target="_blank">formbricks/formbricks</a></td><td style="text-align:right" class="stars">9,200</td><td>SaaS</td><td>9 frameworks</td><td style="text-align:center">—</td><td style="text-align:center;color:var(--text-muted)">94</td><td style="text-align:center;color:var(--text-muted)">Pending rescan</td><td><span style="color:var(--text-muted)">—</span></td></tr>
-        <tr data-cat="infra" class="failed-row"><td>kelseyhightower/nocode</td><td style="text-align:right">60,000</td><td>—</td><td>—</td><td style="text-align:center">—</td><td style="text-align:center">—</td><td style="text-align:center;color:var(--text-muted)">Did not qualify</td><td><a href="reports/failed_gate_example.html">Gate</a></td></tr>
+      <thead><tr><th onclick="sortDir(0)">Repository</th><th>Domain</th><th>Frameworks</th><th onclick="sortDir(3)" style="text-align:center">High Risk</th><th onclick="sortDir(4)" style="text-align:center">Findings</th><th onclick="sortDir(5)" style="text-align:center">Risk</th><th>Report</th><th></th></tr></thead>
+      <tbody id="dir-body">
+        <tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:20px">Loading directory...</td></tr>
       </tbody>
     </table>
   </div>
@@ -357,6 +350,59 @@
       .then(r=>r.json()).then(()=>document.getElementById('waitlist-email').value='Thanks!').catch(()=>{});
     }
 
+    // Directory
+    function loadDirectory(){
+      fetch(API_BASE_URL+'/api/directory').then(r=>r.json()).then(rows=>{
+        const tbody=document.getElementById('dir-body');
+        if(!rows||!rows.length){tbody.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:20px">No scans yet. Scan a repository above.</td></tr>';return;}
+        tbody.innerHTML=rows.map(r=>{
+          const hi=r.finding_high||0;
+          const total=(r.finding_high||0)+(r.finding_medium||0)+(r.finding_concern||0)+(r.finding_ok||0);
+          let rl='Low',rc='var(--green)',dot='low';
+          if(hi>15){rl='Critical';rc='var(--red)';dot='critical';}
+          else if(hi>5){rl='Elevated';rc='var(--orange)';dot='elevated';}
+          else if(hi>0){rl='Moderate';rc='var(--amber)';dot='moderate';}
+
+          // Domain from domains_detected
+          const domains=r.domains_detected||[];
+          let domain='—';
+          if(Array.isArray(domains)&&domains.length){
+            domain=domains.map(d=>typeof d==='object'?d.domain:d).filter(Boolean).join(', ')||'—';
+          }
+
+          // Frameworks display
+          const fws=r.frameworks_triggered||[];
+          let fwText='—';
+          if(Array.isArray(fws)&&fws.length){
+            const shown=fws.slice(0,3).map(f=>f.toUpperCase()).join(', ');
+            fwText=fws.length>3?shown+' +'+(fws.length-3):shown;
+          }
+
+          // Did not qualify check
+          const isFailedGate=r.error_message&&!r.report_url;
+          if(isFailedGate){
+            return '<tr style="color:var(--text-muted);font-style:italic"><td class="repo-name">'+r.repo_name+'</td><td>—</td><td>—</td><td style="text-align:center">—</td><td style="text-align:center">—</td><td style="text-align:center">Did not qualify</td><td>'+(r.report_url?'<a href="'+API_BASE_URL+r.report_url+'">Gate</a>':'—')+'</td><td><button onclick="deleteFromDir(\''+r.scan_id+'\')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:13px" title="Delete scan">&#10005;</button></td></tr>';
+          }
+
+          const hiColor=hi>0?'var(--red)':'var(--green)';
+          return '<tr data-cat="'+domain.toLowerCase().split(',')[0].trim()+'"><td class="repo-name"><a href="https://github.com/'+r.repo_name+'" target="_blank">'+r.repo_name+'</a></td><td>'+domain+'</td><td>'+fwText+'</td><td style="text-align:center;color:'+hiColor+';font-weight:700">'+hi+'</td><td style="text-align:center;color:var(--text-muted)">'+total+'</td><td style="text-align:center"><span class="score-dot '+dot+'"></span>'+rl+'</td><td>'+(r.report_url?'<a href="'+API_BASE_URL+r.report_url+'">View</a>':'—')+'</td><td><button onclick="deleteFromDir(\''+r.scan_id+'\')" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:13px" title="Delete scan">&#10005;</button></td></tr>';
+        }).join('');
+      }).catch(()=>{
+        document.getElementById('dir-body').innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:20px">Could not load directory</td></tr>';
+      });
+    }
+
+    function deleteFromDir(scanId){
+      if(!confirm('Delete this scan from the directory?'))return;
+      fetch(API_BASE_URL+'/api/scan/'+scanId,{method:'DELETE'})
+      .then(r=>r.json()).then(d=>{
+        if(d.error){alert(d.error);return;}
+        loadDirectory();
+      }).catch(e=>alert('Error: '+e.message));
+    }
+
+    loadDirectory();
+
     function filterDir(cat){
       document.querySelectorAll('.dir-tab').forEach(t=>t.classList.toggle('active',t.textContent.toLowerCase()===cat||cat==='all'&&t.textContent==='All'));
       document.querySelectorAll('#dir-table tbody tr').forEach(r=>{r.style.display=(cat==='all'||r.dataset.cat===cat)?'':'none'});
@@ -365,7 +411,7 @@
       const tb=document.querySelector('#dir-table tbody');const rows=Array.from(tb.rows);const t=document.querySelector('#dir-table');
       const dir=t.dataset.sc==col&&t.dataset.sd==='asc'?'desc':'asc';t.dataset.sc=col;t.dataset.sd=dir;
       rows.sort((a,b)=>{let av=a.cells[col].textContent.replace(/[^0-9.-]/g,'')||'0';let bv=b.cells[col].textContent.replace(/[^0-9.-]/g,'')||'0';
-      if(col===0||col===2||col===3){av=a.cells[col].textContent;bv=b.cells[col].textContent;return dir==='asc'?av.localeCompare(bv):bv.localeCompare(av)}
+      if(col===0||col===1||col===2){av=a.cells[col].textContent;bv=b.cells[col].textContent;return dir==='asc'?av.localeCompare(bv):bv.localeCompare(av)}
       return dir==='asc'?parseFloat(av)-parseFloat(bv):parseFloat(bv)-parseFloat(av)});
       rows.forEach(r=>tb.appendChild(r));
     }

@@ -244,9 +244,9 @@ def get_directory_with_scores() -> list[dict]:
     """Get all completed scans for the directory."""
     with _get_conn() as conn:
         rows = conn.execute(
-            """SELECT repo_name, frameworks_triggered, opendocket_score,
-                      finding_high, finding_medium, finding_concern, finding_ok,
-                      report_url, timestamp
+            """SELECT scan_id, repo_name, frameworks_triggered, domains_detected,
+                      opendocket_score, finding_high, finding_medium, finding_concern,
+                      finding_ok, report_url, timestamp, error_message
                FROM scans
                WHERE status = 'complete'
                ORDER BY timestamp DESC"""
@@ -254,11 +254,12 @@ def get_directory_with_scores() -> list[dict]:
         results = []
         for row in rows:
             d = dict(row)
-            if d.get("frameworks_triggered"):
-                try:
-                    d["frameworks_triggered"] = json.loads(d["frameworks_triggered"])
-                except (json.JSONDecodeError, TypeError):
-                    pass
+            for jf in ("frameworks_triggered", "domains_detected"):
+                if d.get(jf):
+                    try:
+                        d[jf] = json.loads(d[jf])
+                    except (json.JSONDecodeError, TypeError):
+                        pass
             results.append(d)
         return results
 
