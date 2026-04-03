@@ -612,16 +612,23 @@ def delete_scan_endpoint(scan_id):
 
 @app.route("/api/stats", methods=["GET"])
 def api_stats():
-    stats = get_stats()
+    # Compute stats from actual scan data — the source of truth
+    from scanner.database import _get_conn
+    with _get_conn() as conn:
+        row = conn.execute("""
+            SELECT
+                COUNT(*) as total_scans,
+                COALESCE(SUM(finding_high), 0) as confirmed_high,
+                COALESCE(SUM(finding_high + finding_medium + finding_concern + finding_ok), 0) as total_findings,
+                COALESCE(SUM(lines_of_code), 0) as total_lines
+            FROM scans WHERE status = 'complete'
+        """).fetchone()
+        stats = dict(row) if row else {}
     return jsonify({
         "total_scans": stats.get("total_scans", 0),
-        "total_repos": stats.get("total_repos_unique", 0),
-        "total_lines_scanned": stats.get("total_lines_scanned", 0),
+        "total_lines_scanned": stats.get("total_lines", 0),
         "total_findings": stats.get("total_findings", 0),
-        "high_risk_found": stats.get("high_risk_findings", 0),
-        "judge_overrides": stats.get("judge_false_positives", 0),
-        "judge_confirmed": stats.get("judge_confirmed", 0),
-        "judge_context_dependent": stats.get("judge_context_dependent", 0),
+        "confirmed_high": stats.get("confirmed_high", 0),
     })
 
 
