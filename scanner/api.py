@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from scanner.database import (
     init_db, create_scan, update_scan_status, save_findings,
-    get_scan, get_stats, increment_stat, add_to_waitlist,
+    get_scan, delete_scan, get_stats, increment_stat, add_to_waitlist,
     get_directory_with_scores, get_recent_scans, get_recent_scan,
     track_event, get_event_counts,
 )
@@ -574,6 +574,35 @@ def get_scan_logs(scan_id):
         "logs": log_list[after:],
         "next_after": len(log_list),
     })
+
+
+@app.route("/api/scan/<scan_id>", methods=["DELETE"])
+def delete_scan_endpoint(scan_id):
+    """Delete a scan, its findings, and report files."""
+    scan = get_scan(scan_id)
+    if not scan:
+        return jsonify({"error": "Scan not found"}), 404
+    if scan["status"] in ("queued", "running"):
+        return jsonify({"error": "Cannot delete a running scan — stop it first"}), 400
+
+    # Delete report files if they exist
+    repo_name = scan.get("repo_name", "").replace("/", "_")
+    if repo_name:
+        for path in [
+            os.path.join("docs", "reports", f"{repo_name}_report.html"),
+            os.path.join("reports", f"{repo_name}_report.md"),
+        ]:
+            if os.path.exists(path):
+                os.remove(path)
+
+    # Delete from database
+    delete_scan(scan_id)
+
+    # Clean up in-memory state
+    _scan_logs.pop(scan_id, None)
+    _scan_params.pop(scan_id, None)
+
+    return jsonify({"ok": True, "message": f"Scan {scan_id[:8]}... deleted"})
 
 
 @app.route("/api/stats", methods=["GET"])

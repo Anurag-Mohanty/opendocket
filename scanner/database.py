@@ -184,6 +184,17 @@ def save_findings(scan_id: str, findings_data: list[dict]):
             )
 
 
+def delete_scan(scan_id: str) -> bool:
+    """Delete a scan and its findings. Returns True if found and deleted."""
+    with _get_conn() as conn:
+        row = conn.execute("SELECT scan_id FROM scans WHERE scan_id = ?", (scan_id,)).fetchone()
+        if not row:
+            return False
+        conn.execute("DELETE FROM findings WHERE scan_id = ?", (scan_id,))
+        conn.execute("DELETE FROM scans WHERE scan_id = ?", (scan_id,))
+        return True
+
+
 def get_scan(scan_id: str) -> dict | None:
     """Get a scan record by ID."""
     with _get_conn() as conn:

@@ -253,7 +253,7 @@
           document.getElementById('scan-status').style.display='none';
           const res=document.getElementById('scan-result');res.style.display='block';
           const reportHref=d.report_url?(API_BASE_URL+d.report_url):('#');
-          res.innerHTML='<strong style="color:#1A7F37">Cached scan available</strong><br><span style="color:#8B949E">'+d.message+'</span><br><a href="'+reportHref+'" style="color:#58A6FF;font-weight:600">View Report &rarr;</a>';
+          res.innerHTML='<strong style="color:#1A7F37">Cached scan available</strong><br><span style="color:#8B949E">'+d.message+'</span><br><div style="display:flex;gap:8px;margin-top:10px"><a href="'+reportHref+'" style="flex:1;display:inline-block;padding:8px 16px;background:#0052CC;color:#fff;border-radius:4px;font-weight:600;text-decoration:none;text-align:center">View Report &rarr;</a><button onclick="deleteScanAndRerun(\''+d.scan_id+'\')" style="flex:1;padding:8px 16px;background:#21262D;color:#E6EDF3;border:1px solid #30363D;border-radius:4px;font-weight:600;cursor:pointer;font-family:var(--font)">Delete &amp; Rescan</button></div>';
           return;
         }
         currentScanId=d.scan_id;
@@ -298,6 +298,16 @@
         showControls('running');
         pollScan(d.scan_id);
       }).catch(()=>{btn.textContent='Restart Scan';btn.disabled=false;});
+    }
+
+    function deleteScanAndRerun(scanId){
+      if(!confirm('Delete cached scan and run a fresh one?'))return;
+      fetch(API_BASE_URL+'/api/scan/'+scanId,{method:'DELETE'})
+      .then(r=>r.json()).then(d=>{
+        if(d.error){alert(d.error);return;}
+        document.getElementById('scan-result').style.display='none';
+        startScan();
+      }).catch(e=>alert('Error: '+e.message));
     }
 
     function pollScan(id){
