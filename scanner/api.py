@@ -252,9 +252,16 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
                 agent_class = AGENTS.get(fw)
                 if not agent_class:
                     return None
-                _log(scan_id, f"Running {fw.upper()} agent ({idx+1}/{len(frameworks)})...")
                 agent = agent_class()
                 agent._repo_name = repo_ctx.name
+                # Log learned questions
+                discovered = [q for q in agent.questions if q.get("category", "").startswith("[Discovered]")]
+                if discovered:
+                    _log(scan_id, f"Running {fw.upper()} agent ({idx+1}/{len(frameworks)}) — {len(agent.questions)} questions ({len(discovered)} learned from previous scans)")
+                    for dq in discovered:
+                        _log(scan_id, f"    [LEARNED] {dq['id']}: {dq['category']}")
+                else:
+                    _log(scan_id, f"Running {fw.upper()} agent ({idx+1}/{len(frameworks)}) — {len(agent.questions)} questions")
                 result = agent.scan(repo_ctx.path, repo_ctx.file_index, repo_ctx.readme_content)
                 finding_count = len(result.findings)
                 with fw_lock:

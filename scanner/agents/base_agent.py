@@ -356,6 +356,16 @@ Rules:
         """Run all questions against the repository."""
         result = AgentResult(framework=self.framework_name)
 
+        # Log how many questions come from discoveries vs original library
+        discovered = [q for q in self.questions if q.get("category", "").startswith("[Discovered]")]
+        original = len(self.questions) - len(discovered)
+        if discovered:
+            print(f"  {self.framework_name}: {len(self.questions)} questions ({original} original + {len(discovered)} learned from previous scans)")
+            for dq in discovered:
+                print(f"    [LEARNED] {dq['id']}: {dq['category']}")
+        else:
+            print(f"  {self.framework_name}: {len(self.questions)} questions")
+
         for question in self.questions:
             print(f"  Analyzing {question['id']}: {question['category']}...")
 
