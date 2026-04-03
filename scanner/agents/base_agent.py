@@ -284,6 +284,7 @@ Rules:
         response = self.client.messages.create(
             model="claude-sonnet-4-20250514",
             max_tokens=1024,
+            temperature=0,
             messages=[{"role": "user", "content": prompt}],
         )
         self.llm_calls += 1
@@ -472,6 +473,7 @@ SEARCH_HINT: [A keyword or pattern that could detect this issue in other repos, 
             response = self.client.messages.create(
                 model="claude-sonnet-4-20250514",
                 max_tokens=1024,
+                temperature=0,
                 messages=[{"role": "user", "content": prompt}],
             )
             self.llm_calls += 1
