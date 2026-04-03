@@ -166,6 +166,22 @@ def init_db():
                 pages_viewed TEXT DEFAULT '[]'
             );
 
+            CREATE TABLE IF NOT EXISTS discovered_patterns (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                framework TEXT NOT NULL,
+                category TEXT NOT NULL,
+                search_hint TEXT NOT NULL,
+                finding_text TEXT DEFAULT '',
+                severity TEXT DEFAULT 'Medium Risk',
+                occurrences INTEGER DEFAULT 1,
+                repos_seen TEXT DEFAULT '[]',
+                status TEXT DEFAULT 'candidate',
+                first_seen TEXT NOT NULL,
+                last_seen TEXT NOT NULL
+            );
+
+            CREATE INDEX IF NOT EXISTS idx_discovered_fw ON discovered_patterns(framework);
+            CREATE INDEX IF NOT EXISTS idx_discovered_status ON discovered_patterns(status);
             CREATE INDEX IF NOT EXISTS idx_feedback_scan ON finding_feedback(scan_id);
             CREATE INDEX IF NOT EXISTS idx_visitors_last ON visitors(last_seen);
             CREATE INDEX IF NOT EXISTS idx_qa_fw_q ON question_accuracy(framework, question_id);
@@ -721,6 +737,145 @@ def get_best_remediation(framework: str, question_id: str, domain: str = "") -> 
             (framework, question_id),
         ).fetchone()
         return row["remediation"] if row else None
+
+
+# ── Discovered Patterns (from wildcard scans) ──
+
+def store_discovered_pattern(framework: str, category: str, search_hint: str,
+                              finding_text: str = "", severity: str = "Medium Risk",
+                              repo_name: str = ""):
+    """Store a novel pattern discovered by the wildcard scan.
+
+    Deduplicates by matching framework + search_hint (fuzzy).
+    Tracks how many repos independently surfaced this pattern.
+    Patterns seen in 3+ repos become 'promoted' candidates for
+    addition to the question library.
+    """
+    now = datetime.utcnow().isoformat()
+    hint_lower = search_hint.lower().strip()
+
+    with _get_conn() as conn:
+        # Check for existing similar pattern (same framework, similar hint)
+        rows = conn.execute(
+            """SELECT id, search_hint, repos_seen, occurrences FROM discovered_patterns
+               WHERE framework = ? AND status != 'rejected'""",
+            (framework,),
+        ).fetchall()
+
+        for row in rows:
+            existing_hint = row["search_hint"].lower().strip()
+            # Match if hints overlap significantly (substring match)
+            if hint_lower in existing_hint or existing_hint in hint_lower:
+                repos = json.loads(row["repos_seen"] or "[]")
+                if repo_name and repo_name not in repos:
+                    repos.append(repo_name)
+                new_occ = row["occurrences"] + 1
+                # Auto-promote if seen in 3+ different repos
+                conn.execute(
+                    """UPDATE discovered_patterns
+                       SET occurrences = ?, repos_seen = ?, last_seen = ?,
+                           status = 'active' WHERE id = ?""",
+                    (new_occ, json.dumps(repos), now, row["id"]),
+                )
+                return
+
+        # New pattern — add immediately and auto-add to question library
+        repos = json.dumps([repo_name] if repo_name else [])
+        conn.execute(
+            """INSERT INTO discovered_patterns
+               (framework, category, search_hint, finding_text, severity,
+                occurrences, repos_seen, status, first_seen, last_seen)
+               VALUES (?, ?, ?, ?, ?, 1, ?, 'active', ?, ?)""",
+            (framework, category, search_hint, finding_text, severity,
+             repos, now, now),
+        )
+        _auto_add_question(framework, search_hint, category, finding_text, severity)
+
+
+def _auto_add_question(framework: str, search_hint: str, category: str,
+                        finding_text: str, severity: str):
+    """Auto-append a discovered pattern as a new question to the framework YAML."""
+    import yaml as _yaml
+
+    # Map framework name to YAML file
+    fw_lower = framework.lower().replace("-", "_")
+    config_dir = os.path.join(os.path.dirname(__file__), "config")
+    yaml_path = os.path.join(config_dir, f"{fw_lower}_questions.yaml")
+
+    if not os.path.exists(yaml_path):
+        print(f"  [Auto-add] YAML not found: {yaml_path}")
+        return
+
+    try:
+        with open(yaml_path, "r") as f:
+            config = _yaml.safe_load(f)
+
+        questions = config.get("questions", [])
+        existing_ids = {q["id"] for q in questions}
+
+        # Generate next ID
+        max_num = 0
+        prefix = framework.upper().replace("_", "") + "-"
+        for qid in existing_ids:
+            if qid.startswith(prefix):
+                try:
+                    num = int(qid.replace(prefix, ""))
+                    max_num = max(max_num, num)
+                except ValueError:
+                    pass
+        new_id = f"{prefix}{max_num + 1:03d}"
+
+        # Check dedup — don't add if search_hint already exists in any question's patterns
+        all_patterns = set()
+        for q in questions:
+            for p in q.get("search_patterns", []):
+                all_patterns.add(p.lower())
+        if search_hint.lower() in all_patterns:
+            print(f"  [Auto-add] Pattern '{search_hint}' already in {framework} library")
+            return
+
+        new_question = {
+            "id": new_id,
+            "category": f"[Discovered] {category}",
+            "legal_question": finding_text or f"Does this system have adequate controls for {category}?",
+            "regulatory_standard": config.get("full_name", framework),
+            "search_patterns": [search_hint],
+            "absence_patterns": [],
+        }
+
+        questions.append(new_question)
+        config["questions"] = questions
+
+        with open(yaml_path, "w") as f:
+            _yaml.dump(config, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+
+        print(f"  [Auto-add] Added {new_id} to {framework}: {category} (hint: {search_hint})")
+    except Exception as e:
+        print(f"  [Auto-add] Failed for {framework}: {e}")
+
+
+def get_discovered_patterns(framework: str = "", status: str = "") -> list[dict]:
+    """Get discovered patterns, optionally filtered by framework/status."""
+    with _get_conn() as conn:
+        query = "SELECT * FROM discovered_patterns WHERE 1=1"
+        params = []
+        if framework:
+            query += " AND framework = ?"
+            params.append(framework)
+        if status:
+            query += " AND status = ?"
+            params.append(status)
+        query += " ORDER BY occurrences DESC, last_seen DESC"
+        rows = conn.execute(query, params).fetchall()
+        results = []
+        for r in rows:
+            d = dict(r)
+            try:
+                d["repos_seen"] = json.loads(d.get("repos_seen", "[]"))
+            except (json.JSONDecodeError, TypeError):
+                pass
+            results.append(d)
+        return results
 
 
 # ── Finding Feedback ──

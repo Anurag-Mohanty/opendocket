@@ -24,7 +24,7 @@ from scanner.database import (
     track_event, get_event_counts, record_evidence_patterns,
     record_question_accuracy, store_remediation,
     save_feedback, get_feedback_for_scan, get_feedback_stats,
-    record_visitor, get_visitor_stats,
+    record_visitor, get_visitor_stats, get_discovered_patterns,
 )
 from scanner.repo_fetcher import fetch_and_qualify, cleanup_repo
 from scanner.domain_detector import detect_domains
@@ -238,6 +238,7 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
                     return None
                 _log(scan_id, f"Running {fw.upper()} agent ({idx+1}/{len(frameworks)})...")
                 agent = agent_class()
+                agent._repo_name = repo_ctx.name
                 result = agent.scan(repo_ctx.path, repo_ctx.file_index, repo_ctx.readme_content)
                 finding_count = len(result.findings)
                 with fw_lock:
@@ -886,6 +887,13 @@ def api_visitor():
 def api_visitors():
     """Get visitor metrics."""
     return jsonify(get_visitor_stats())
+
+
+@app.route("/api/discovered", methods=["GET"])
+def api_discovered():
+    """Get discovered novel patterns from wildcard scans."""
+    fw = request.args.get("framework", "")
+    return jsonify(get_discovered_patterns(framework=fw))
 
 
 @app.route("/api/debug/env", methods=["GET"])

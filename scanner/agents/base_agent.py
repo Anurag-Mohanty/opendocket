@@ -373,10 +373,143 @@ Rules:
             )
             result.findings.append(finding)
 
+        # Wildcard pass — catch novel issues patterns missed
+        wildcard_finding = self._wildcard_scan(repo_path, file_index, readme_content, result.findings, getattr(self, '_repo_name', ''))
+        if wildcard_finding:
+            result.findings.append(wildcard_finding)
+
         result.tokens_in = self.tokens_in
         result.tokens_out = self.tokens_out
         result.llm_calls = self.llm_calls
         return result
+
+    def _wildcard_scan(
+        self,
+        repo_path: str,
+        file_index: list[str],
+        readme_content: str,
+        existing_findings: list[Finding],
+        repo_name: str = "",
+    ) -> Finding | None:
+        """Open-ended scan: ask Claude what the standard questions might have missed."""
+        # Build file tree summary (top-level dirs + file count)
+        dir_counts: dict[str, int] = {}
+        for fpath in file_index:
+            parts = fpath.replace("\\", "/").split("/")
+            top = parts[0] if len(parts) > 1 else "(root)"
+            dir_counts[top] = dir_counts.get(top, 0) + 1
+        tree_summary = "\n".join(f"  {d}/ ({c} files)" for d, c in sorted(dir_counts.items(), key=lambda x: -x[1])[:20])
+
+        # Summarize what was already found
+        found_summary = ""
+        for f in existing_findings:
+            found_summary += f"  - {f.question_id}: {f.finding_level} — {f.category}\n"
+
+        framework_desc = self.config.get("description", "")
+        framework_name = self.config.get("full_name", self.framework_name)
+
+        prompt = f"""You are a compliance analyst reviewing a software repository for {framework_name} compliance.
+
+FRAMEWORK: {self.framework_name}
+DESCRIPTION: {framework_desc}
+
+The standard question library has already checked these areas:
+{found_summary}
+
+REPOSITORY STRUCTURE:
+{tree_summary}
+
+README (first 2000 chars):
+{readme_content[:2000]}
+
+YOUR TASK:
+Identify ONE significant {self.framework_name} compliance risk that the standard questions above likely MISSED.
+
+Think about:
+- Compliance risks specific to this repository's architecture or technology stack
+- Risks in areas the standard questions don't cover (e.g. third-party dependencies, deployment patterns, data flows between services)
+- Risks that emerge from the combination of components, not individual files
+
+RULES:
+- Do NOT repeat anything already covered by the standard questions above
+- Only report a finding if you are genuinely confident it represents a real compliance gap
+- If the standard questions adequately covered this framework, respond with FINDING_LEVEL: No Issue Found
+- Be specific — reference directory names or technology choices visible in the file tree
+
+Respond in EXACTLY this format:
+
+CATEGORY: [Short category name for this novel finding]
+FINDING_LEVEL: [High Risk / Medium Risk / Pattern of Concern / No Issue Found]
+FINDING_TEXT: [2-3 sentences describing the risk. Be specific.]
+REMEDIATION: [Specific actionable fix. Reference directories/files visible in the tree. 2-3 sentences max.]
+SEARCH_HINT: [A keyword or pattern that could detect this issue in other repos, for future scanning]
+"""
+
+        try:
+            response = self.client.messages.create(
+                model="claude-sonnet-4-20250514",
+                max_tokens=1024,
+                messages=[{"role": "user", "content": prompt}],
+            )
+            self.llm_calls += 1
+            if hasattr(response, "usage") and response.usage:
+                self.tokens_in += getattr(response.usage, "input_tokens", 0)
+                self.tokens_out += getattr(response.usage, "output_tokens", 0)
+
+            text = response.content[0].text
+            # Parse response
+            category = ""
+            finding_level = "No Issue Found"
+            finding_text = ""
+            remediation = ""
+            search_hint = ""
+
+            for line in text.split("\n"):
+                line = line.strip()
+                if line.startswith("CATEGORY:"):
+                    category = line.replace("CATEGORY:", "").strip()
+                elif line.startswith("FINDING_LEVEL:"):
+                    level = line.replace("FINDING_LEVEL:", "").strip()
+                    if level in ("High Risk", "Medium Risk", "Pattern of Concern", "No Issue Found"):
+                        finding_level = level
+                elif line.startswith("FINDING_TEXT:"):
+                    finding_text = line.replace("FINDING_TEXT:", "").strip()
+                elif line.startswith("REMEDIATION:"):
+                    remediation = line.replace("REMEDIATION:", "").strip()
+                elif line.startswith("SEARCH_HINT:"):
+                    search_hint = line.replace("SEARCH_HINT:", "").strip()
+
+            if finding_level == "No Issue Found":
+                print(f"  [Wildcard] No novel {self.framework_name} issues found")
+                return None
+
+            print(f"  [Wildcard] Novel finding: {category} ({finding_level})")
+
+            # Store the search hint for future question library enrichment
+            if search_hint:
+                try:
+                    from scanner.database import store_discovered_pattern
+                    store_discovered_pattern(
+                        self.framework_name, category, search_hint,
+                        finding_text, finding_level, repo_name,
+                    )
+                except Exception:
+                    pass
+
+            qid = f"{self.framework_name}-NOVEL"
+            return Finding(
+                question_id=qid,
+                category=f"[Novel] {category}",
+                legal_question=f"Open-ended {self.framework_name} compliance review identified a risk not covered by standard questions.",
+                regulatory_standard=self.config.get("full_name", self.framework_name),
+                evidence=[],
+                finding_level=finding_level,
+                finding_text=finding_text,
+                remediation=remediation,
+            )
+        except Exception as e:
+            print(f"  [Wildcard] Failed: {e}")
+            return None
 
     def review_findings(self, findings: list[Finding]) -> list[Finding]:
         """Legacy stub — use JudgeAgent instead."""
