@@ -30,6 +30,17 @@ REPO_URLS = {
     "nocode": "https://github.com/kelseyhightower/nocode",
 }
 
+# Known domains for seeded repos (since seed doesn't run domain detection)
+REPO_DOMAINS_SEED = {
+    "medplum": [{"domain": "healthcare", "confidence": 95}, {"domain": "saas", "confidence": 60}],
+    "openemr": [{"domain": "healthcare", "confidence": 98}],
+    "hyperswitch": [{"domain": "fintech", "confidence": 92}, {"domain": "payments", "confidence": 90}, {"domain": "saas", "confidence": 55}],
+    "probo": [{"domain": "saas", "confidence": 80}],
+    "supabase": [{"domain": "saas", "confidence": 88}, {"domain": "infrastructure", "confidence": 65}],
+    "vault": [{"domain": "infrastructure", "confidence": 95}, {"domain": "saas", "confidence": 40}],
+    "nocode": [],
+}
+
 
 def parse_report(filepath: str) -> dict:
     """Parse a markdown report and extract metadata."""
@@ -183,10 +194,12 @@ def seed():
         score = max(0, round(100 - raw_penalty / num_fw * 2))
 
         scan_id = create_scan(repo_url, repo_name)
+        seed_domains = REPO_DOMAINS_SEED.get(repo_key, [])
         update_scan_status(
             scan_id, "complete",
             progress="Seeded from existing report",
             frameworks_triggered=data["frameworks"],
+            domains_detected=seed_domains,
             opendocket_score=score,
             finding_high=display_high,
             finding_medium=display_medium,

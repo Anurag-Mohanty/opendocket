@@ -368,12 +368,18 @@
           else if(hi>5){rl='Elevated';rc='var(--orange)';dot='elevated';}
           else if(hi>0){rl='Moderate';rc='var(--amber)';dot='moderate';}
 
-          // Domain from domains_detected
+          // Domain from domains_detected — use primary (highest confidence) domain
           const domains=r.domains_detected||[];
           let domain='—';
+          let primaryDomain='';
           if(Array.isArray(domains)&&domains.length){
-            domain=domains.map(d=>typeof d==='object'?d.domain:d).filter(Boolean).join(', ')||'—';
+            const domainNames=domains.map(d=>typeof d==='object'?d.domain:d).filter(Boolean);
+            primaryDomain=domainNames[0]||'';
+            domain=domainNames.slice(0,2).map(d=>d.charAt(0).toUpperCase()+d.slice(1)).join(', ')||'—';
           }
+          // Map domain to filter category
+          const catMap={'healthcare':'healthcare','fintech':'payments','payments':'payments','ecommerce':'payments','saas':'saas','infrastructure':'infra','infra':'infra'};
+          const filterCat=catMap[primaryDomain]||primaryDomain||'other';
 
           // Frameworks display
           const fws=r.frameworks_triggered||[];
@@ -390,7 +396,7 @@
           }
 
           const hiColor=hi>0?'var(--red)':'var(--green)';
-          return '<tr data-cat="'+domain.toLowerCase().split(',')[0].trim()+'"><td class="repo-name"><a href="https://github.com/'+r.repo_name+'" target="_blank">'+r.repo_name+'</a></td><td>'+domain+'</td><td>'+fwText+'</td><td style="text-align:center;color:'+hiColor+';font-weight:700">'+hi+'</td><td style="text-align:center;color:var(--text-muted)">'+total+'</td><td style="text-align:center"><span class="score-dot '+dot+'"></span>'+rl+'</td><td>'+(r.report_url?'<a href="'+API_BASE_URL+r.report_url+'">View</a>':'—')+'</td><td><button onclick="deleteFromDir(\''+r.scan_id+'\')" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:13px" title="Delete scan">&#10005;</button></td></tr>';
+          return '<tr data-cat="'+filterCat+'"><td class="repo-name"><a href="https://github.com/'+r.repo_name+'" target="_blank">'+r.repo_name+'</a></td><td>'+domain+'</td><td>'+fwText+'</td><td style="text-align:center;color:'+hiColor+';font-weight:700">'+hi+'</td><td style="text-align:center;color:var(--text-muted)">'+total+'</td><td style="text-align:center"><span class="score-dot '+dot+'"></span>'+rl+'</td><td>'+(r.report_url?'<a href="'+API_BASE_URL+r.report_url+'">View</a>':'—')+'</td><td><button onclick="deleteFromDir(\''+r.scan_id+'\')" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:13px" title="Delete scan">&#10005;</button></td></tr>';
         }).join('');
       }).catch(()=>{
         document.getElementById('dir-body').innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:20px">Could not load directory</td></tr>';
