@@ -770,6 +770,12 @@ def main():
             seed()
         except Exception as e:
             print(f"[OpenDocket API] Seed failed: {e}")
+        # Backfill evidence corpus from existing reports
+        try:
+            from scanner.backfill_corpus import backfill
+            backfill()
+        except Exception as e:
+            print(f"[OpenDocket API] Corpus backfill failed: {e}")
     port = int(os.environ.get("PORT", 8080))
     debug = os.environ.get("FLASK_DEBUG", "0") == "1"
     print(f"[OpenDocket API] Starting on port {port}")
