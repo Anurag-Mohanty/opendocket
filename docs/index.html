@@ -190,6 +190,13 @@
     const API_BASE_URL = 'https://opendocket-production.up.railway.app';
 
     // Stats — computed from actual scan data, no stale counters
+    // Visitor tracking (privacy-safe: random ID, no PII)
+    (function(){
+      let vid=localStorage.getItem('od_vid');
+      if(!vid){vid=crypto.randomUUID();localStorage.setItem('od_vid',vid);}
+      fetch(API_BASE_URL+'/api/visitor',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({visitor_id:vid,page:'home'})}).catch(()=>{});
+    })();
+
     fetch(API_BASE_URL+'/api/stats').then(r=>r.json()).then(d=>{
       animateCount('stat-scans', d.total_scans||0);
       const lines=d.total_lines_scanned||0;

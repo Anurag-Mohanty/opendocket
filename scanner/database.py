@@ -147,6 +147,27 @@ def init_db():
                 last_used TEXT NOT NULL
             );
 
+            CREATE TABLE IF NOT EXISTS finding_feedback (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                scan_id TEXT NOT NULL,
+                framework TEXT NOT NULL,
+                question_id TEXT NOT NULL,
+                verdict TEXT NOT NULL,
+                reason TEXT DEFAULT '',
+                submitted_at TEXT NOT NULL,
+                FOREIGN KEY (scan_id) REFERENCES scans(scan_id)
+            );
+
+            CREATE TABLE IF NOT EXISTS visitors (
+                visitor_id TEXT PRIMARY KEY,
+                first_seen TEXT NOT NULL,
+                last_seen TEXT NOT NULL,
+                visit_count INTEGER DEFAULT 1,
+                pages_viewed TEXT DEFAULT '[]'
+            );
+
+            CREATE INDEX IF NOT EXISTS idx_feedback_scan ON finding_feedback(scan_id);
+            CREATE INDEX IF NOT EXISTS idx_visitors_last ON visitors(last_seen);
             CREATE INDEX IF NOT EXISTS idx_qa_fw_q ON question_accuracy(framework, question_id);
             CREATE INDEX IF NOT EXISTS idx_qa_domain ON question_accuracy(domain);
             CREATE INDEX IF NOT EXISTS idx_remediation_fw_q ON remediation_library(framework, question_id);
@@ -700,3 +721,96 @@ def get_best_remediation(framework: str, question_id: str, domain: str = "") -> 
             (framework, question_id),
         ).fetchone()
         return row["remediation"] if row else None
+
+
+# ── Finding Feedback ──
+
+def save_feedback(scan_id: str, framework: str, question_id: str,
+                   verdict: str, reason: str = "") -> int:
+    """Save human feedback on a finding. Returns the feedback ID."""
+    now = datetime.utcnow().isoformat()
+    with _get_conn() as conn:
+        cursor = conn.execute(
+            """INSERT INTO finding_feedback
+               (scan_id, framework, question_id, verdict, reason, submitted_at)
+               VALUES (?, ?, ?, ?, ?, ?)""",
+            (scan_id, framework, question_id, verdict, reason, now),
+        )
+        return cursor.lastrowid
+
+
+def get_feedback_for_scan(scan_id: str) -> list[dict]:
+    """Get all feedback for a scan."""
+    with _get_conn() as conn:
+        rows = conn.execute(
+            """SELECT * FROM finding_feedback WHERE scan_id = ?
+               ORDER BY submitted_at DESC""",
+            (scan_id,),
+        ).fetchall()
+        return [dict(r) for r in rows]
+
+
+def get_feedback_stats() -> dict:
+    """Get aggregate feedback stats."""
+    with _get_conn() as conn:
+        row = conn.execute(
+            """SELECT COUNT(*) as total,
+                      SUM(CASE WHEN verdict = 'incorrect' THEN 1 ELSE 0 END) as incorrect,
+                      SUM(CASE WHEN verdict = 'correct' THEN 1 ELSE 0 END) as correct
+               FROM finding_feedback"""
+        ).fetchone()
+        return dict(row) if row else {"total": 0, "incorrect": 0, "correct": 0}
+
+
+# ── Visitor Tracking ──
+
+def record_visitor(visitor_id: str, page: str = ""):
+    """Record a unique visitor. Privacy-safe: ID is a random client-generated hash."""
+    now = datetime.utcnow().isoformat()
+    with _get_conn() as conn:
+        row = conn.execute(
+            "SELECT visitor_id, pages_viewed FROM visitors WHERE visitor_id = ?",
+            (visitor_id,),
+        ).fetchone()
+        if row:
+            pages = json.loads(row["pages_viewed"] or "[]")
+            if page and page not in pages:
+                pages.append(page)
+                if len(pages) > 20:
+                    pages = pages[-20:]
+            conn.execute(
+                """UPDATE visitors SET last_seen = ?, visit_count = visit_count + 1,
+                   pages_viewed = ? WHERE visitor_id = ?""",
+                (now, json.dumps(pages), visitor_id),
+            )
+        else:
+            conn.execute(
+                """INSERT INTO visitors (visitor_id, first_seen, last_seen, visit_count, pages_viewed)
+                   VALUES (?, ?, ?, 1, ?)""",
+                (visitor_id, now, now, json.dumps([page] if page else [])),
+            )
+
+
+def get_visitor_stats() -> dict:
+    """Get visitor metrics."""
+    with _get_conn() as conn:
+        total = conn.execute("SELECT COUNT(*) as cnt FROM visitors").fetchone()
+        today = conn.execute(
+            "SELECT COUNT(*) as cnt FROM visitors WHERE last_seen > datetime('now', '-1 day')"
+        ).fetchone()
+        week = conn.execute(
+            "SELECT COUNT(*) as cnt FROM visitors WHERE last_seen > datetime('now', '-7 days')"
+        ).fetchone()
+        month = conn.execute(
+            "SELECT COUNT(*) as cnt FROM visitors WHERE last_seen > datetime('now', '-30 days')"
+        ).fetchone()
+        returning = conn.execute(
+            "SELECT COUNT(*) as cnt FROM visitors WHERE visit_count > 1"
+        ).fetchone()
+        return {
+            "total": total["cnt"] if total else 0,
+            "today": today["cnt"] if today else 0,
+            "this_week": week["cnt"] if week else 0,
+            "this_month": month["cnt"] if month else 0,
+            "returning": returning["cnt"] if returning else 0,
+        }

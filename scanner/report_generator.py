@@ -378,6 +378,7 @@ _METHODOLOGY_TAB = """
 def generate_html_report(
     repo_name: str, repo_url: str,
     domains: list[DomainResult], agent_results: list[AgentResult],
+    scan_id: str = "",
 ) -> str:
     """Generate a professional light-mode HTML compliance report with tabs."""
     scan_date = datetime.now().strftime('%Y-%m-%d')
@@ -608,6 +609,7 @@ def generate_html_report(
 <div class="field-label">Evidence</div><div class="evidence-block">{ev_text}</div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">{html.escape(f.finding_text)}</div>
 <div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">{html.escape(f.improved_remediation if f.improved_remediation else f.remediation)}</div>{'<div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>' if f.improved_remediation else ''}
+<div class="feedback-row" id="fb-{fid}" style="margin-top:12px;padding:10px 12px;background:#f6f8fa;border:1px solid #eaeef2;border-radius:4px;font-size:12px;display:flex;align-items:center;gap:8px"><span style="color:#57606a">Is this finding accurate?</span><button onclick="submitFeedback('{html.escape(result.framework)}','{html.escape(f.question_id)}','correct','{fid}')" style="padding:3px 10px;border:1px solid #d0d7de;border-radius:3px;background:#fff;cursor:pointer;font-size:12px">Yes</button><button onclick="showFeedbackReason('{fid}')" style="padding:3px 10px;border:1px solid #d0d7de;border-radius:3px;background:#fff;cursor:pointer;font-size:12px">No, because...</button><div id="fb-reason-{fid}" style="display:none;flex:1"><input type="text" id="fb-input-{fid}" placeholder="Why is this incorrect?" style="width:100%;padding:4px 8px;border:1px solid #d0d7de;border-radius:3px;font-size:12px"><button onclick="submitFeedback('{html.escape(result.framework)}','{html.escape(f.question_id)}','incorrect','{fid}')" style="margin-left:4px;padding:3px 10px;border:none;background:#0052CC;color:#fff;border-radius:3px;cursor:pointer;font-size:12px">Submit</button></div></div>
 </div></div>\n'''
 
         # False positive section — collapsed by default, grey border
@@ -703,6 +705,17 @@ function filterFramework(fw,btn){{aFw=fw;document.querySelectorAll('[data-type=f
 function filterSeverity(sev,btn){{aSev=sev;document.querySelectorAll('[data-type=sev]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');applyF()}}
 function applyF(){{document.querySelectorAll('.finding').forEach(f=>{{const ok=(aFw==='all'||f.dataset.framework===aFw)&&(aSev==='all'||f.dataset.severity===aSev);f.style.display=ok?'':'none'}});document.querySelectorAll('.framework-section').forEach(s=>{{s.style.display=(aFw==='all'||s.dataset.framework===aFw)?'':'none'}})}}
 fetch('/api/track',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{event:'report_open',repo:'{e(repo_name)}',source:document.referrer||'direct'}})}}).catch(()=>{{}});
+var _scanId='{scan_id}';
+function showFeedbackReason(fid){{document.getElementById('fb-reason-'+fid).style.display='flex'}}
+function submitFeedback(fw,qid,verdict,fid){{
+  var reason='';if(verdict==='incorrect'){{reason=(document.getElementById('fb-input-'+fid)||{{}}).value||''}}
+  fetch('/api/feedback',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{scan_id:_scanId,framework:fw,question_id:qid,verdict:verdict,reason:reason}})}})
+  .then(function(r){{return r.json()}}).then(function(){{
+    var el=document.getElementById('fb-'+fid);
+    el.innerHTML=verdict==='correct'?'<span style="color:#1A7F37;font-weight:600">Thanks — marked as accurate</span>':'<span style="color:#0052CC;font-weight:600">Thanks — feedback recorded</span>';
+  }}).catch(function(){{alert('Could not submit feedback')}});
+}}
+(function(){{let vid=localStorage.getItem('od_vid');if(!vid){{vid=crypto.randomUUID();localStorage.setItem('od_vid',vid)}};fetch('/api/visitor',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{visitor_id:vid,page:'report_{e(repo_name)}' }})}}).catch(function(){{}});}})();
 </script>
 </body>
 </html>"""

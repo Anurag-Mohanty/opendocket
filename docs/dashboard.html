@@ -86,11 +86,19 @@
   <div class="container">
     <h2>Key Metrics</h2>
     <div class="kpi-grid">
-      <div class="kpi highlight"><div class="value" id="k-scans">--</div><div class="label">Total Scans</div><div class="sub" id="k-waitlist"></div></div>
+      <div class="kpi highlight"><div class="value" id="k-visitors">--</div><div class="label">Unique Visitors</div><div class="sub" id="k-visitor-detail"></div></div>
+      <div class="kpi"><div class="value" id="k-scans">--</div><div class="label">Total Scans</div><div class="sub" id="k-waitlist"></div></div>
       <div class="kpi"><div class="value" id="k-avg-dur">--</div><div class="label">Avg Scan Duration</div><div class="sub" id="k-dur-range"></div></div>
       <div class="kpi green"><div class="value" id="k-tokens">--</div><div class="label">Total Tokens Used</div><div class="sub" id="k-token-detail"></div></div>
-      <div class="kpi"><div class="value" id="k-calls">--</div><div class="label">LLM Calls</div><div class="sub">Claude + Gemini</div></div>
       <div class="kpi amber"><div class="value" id="k-corpus">--</div><div class="label">Corpus Patterns</div><div class="sub" id="k-corpus-detail"></div></div>
+    </div>
+
+    <div class="kpi-grid" style="margin-top:12px">
+      <div class="kpi"><div class="value" id="k-calls">--</div><div class="label">LLM Calls</div><div class="sub">Claude + Gemini</div></div>
+      <div class="kpi"><div class="value" id="k-feedback-total">--</div><div class="label">Feedback Received</div><div class="sub" id="k-feedback-detail"></div></div>
+      <div class="kpi"><div class="value" id="k-v-today">--</div><div class="label">Visitors Today</div></div>
+      <div class="kpi"><div class="value" id="k-v-week">--</div><div class="label">Visitors This Week</div></div>
+      <div class="kpi"><div class="value" id="k-v-returning">--</div><div class="label">Returning Visitors</div></div>
     </div>
 
     <div class="two-col">
@@ -147,6 +155,19 @@
       document.getElementById('k-calls').textContent = fmt(d.tokens.total_calls);
       document.getElementById('k-corpus').textContent = fmt(d.corpus.total_patterns);
       document.getElementById('k-corpus-detail').textContent = fmt(d.corpus.confirmed)+' confirmed / '+fmt(d.corpus.false_positives)+' FP';
+
+      // Visitors
+      const v = d.visitors || {};
+      document.getElementById('k-visitors').textContent = fmt(v.total);
+      document.getElementById('k-visitor-detail').textContent = fmt(v.this_month)+' this month';
+      document.getElementById('k-v-today').textContent = fmt(v.today);
+      document.getElementById('k-v-week').textContent = fmt(v.this_week);
+      document.getElementById('k-v-returning').textContent = fmt(v.returning);
+
+      // Feedback
+      const fb = d.feedback || {};
+      document.getElementById('k-feedback-total').textContent = fmt(fb.total);
+      document.getElementById('k-feedback-detail').textContent = fmt(fb.correct||0)+' correct / '+fmt(fb.incorrect||0)+' incorrect';
 
       // Duration chart
       const perf = [...(d.performance||[])].reverse(); // oldest first

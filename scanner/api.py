@@ -23,6 +23,8 @@ from scanner.database import (
     get_directory_with_scores, get_recent_scans, get_recent_scan,
     track_event, get_event_counts, record_evidence_patterns,
     record_question_accuracy, store_remediation,
+    save_feedback, get_feedback_for_scan, get_feedback_stats,
+    record_visitor, get_visitor_stats,
 )
 from scanner.repo_fetcher import fetch_and_qualify, cleanup_repo
 from scanner.domain_detector import detect_domains
@@ -314,7 +316,7 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
             _log(scan_id, "Generating reports...")
             update_scan_status(scan_id, "running", _prog("report", "Generating reports"))
 
-            html_report = generate_html_report(repo_ctx.name, repo_url, domains, agent_results)
+            html_report = generate_html_report(repo_ctx.name, repo_url, domains, agent_results, scan_id=scan_id)
             html_path = os.path.join("docs", "reports", f"{repo_ctx.name}_report.html")
             os.makedirs(os.path.dirname(html_path), exist_ok=True)
             with open(html_path, "w") as f:
@@ -774,6 +776,8 @@ def api_ops():
         },
         "engagement": {e["event_type"]: e["cnt"] for e in event_rows},
         "waitlist_count": wl_row["cnt"] if wl_row else 0,
+        "visitors": get_visitor_stats(),
+        "feedback": get_feedback_stats(),
     })
 
 
@@ -827,6 +831,61 @@ def api_track():
 def api_events():
     days = int(request.args.get("days", 7))
     return jsonify(get_event_counts(min(days, 90)))
+
+
+@app.route("/api/feedback", methods=["POST"])
+def api_feedback():
+    """Submit human feedback on a finding."""
+    data = request.get_json(silent=True) or {}
+    scan_id = data.get("scan_id", "").strip()
+    framework = data.get("framework", "").strip()
+    question_id = data.get("question_id", "").strip()
+    verdict = data.get("verdict", "").strip()  # "correct" or "incorrect"
+    reason = data.get("reason", "").strip()
+
+    if not all([scan_id, framework, question_id, verdict]):
+        return jsonify({"error": "scan_id, framework, question_id, and verdict are required"}), 400
+    if verdict not in ("correct", "incorrect"):
+        return jsonify({"error": "verdict must be 'correct' or 'incorrect'"}), 400
+
+    feedback_id = save_feedback(scan_id, framework, question_id, verdict, reason)
+
+    # Feed human correction into accuracy tracking (weighted as stronger signal)
+    if verdict == "incorrect" and reason:
+        record_question_accuracy(
+            framework, question_id, "POSSIBLE FALSE POSITIVE",
+            domain="", fp_reason=f"[HUMAN] {reason[:200]}",
+        )
+    elif verdict == "correct":
+        record_question_accuracy(
+            framework, question_id, "CONFIRMED", domain="",
+        )
+
+    return jsonify({"ok": True, "feedback_id": feedback_id})
+
+
+@app.route("/api/feedback/<scan_id>", methods=["GET"])
+def api_get_feedback(scan_id):
+    """Get all feedback for a scan."""
+    return jsonify(get_feedback_for_scan(scan_id))
+
+
+@app.route("/api/visitor", methods=["POST"])
+def api_visitor():
+    """Record a unique visitor. Client generates the ID (privacy-safe)."""
+    data = request.get_json(silent=True) or {}
+    vid = data.get("visitor_id", "").strip()
+    page = data.get("page", "").strip()
+    if not vid:
+        return jsonify({"error": "visitor_id required"}), 400
+    record_visitor(vid, page)
+    return jsonify({"ok": True})
+
+
+@app.route("/api/visitors", methods=["GET"])
+def api_visitors():
+    """Get visitor metrics."""
+    return jsonify(get_visitor_stats())
 
 
 @app.route("/api/debug/env", methods=["GET"])
