@@ -139,6 +139,16 @@ class BaseComplianceAgent:
             self.config = yaml.safe_load(f)
         self.questions = self.config["questions"]
         self.client = Anthropic()
+        # Load learned priority globs from the evidence corpus
+        self._priority_cache: dict[str, list[str]] = {}
+        try:
+            from scanner.database import get_priority_globs
+            for q in self.questions:
+                globs = get_priority_globs(framework_name, q["id"], limit=10)
+                if globs:
+                    self._priority_cache[q["id"]] = [g["file_glob"] for g in globs]
+        except Exception:
+            pass  # corpus not available yet, cold start
 
     def search_codebase(
         self,
@@ -307,6 +317,25 @@ Rules:
             remediation=remediation,
         )
 
+    def _prioritize_file_index(self, file_index: list[str], question_id: str) -> list[str]:
+        """Reorder file index so files matching learned priority globs come first."""
+        priority_globs = self._priority_cache.get(question_id)
+        if not priority_globs:
+            return file_index
+
+        import fnmatch
+        priority_files = []
+        remaining_files = []
+        for fpath in file_index:
+            if any(fnmatch.fnmatch(fpath, g) for g in priority_globs):
+                priority_files.append(fpath)
+            else:
+                remaining_files.append(fpath)
+
+        if priority_files:
+            print(f"    [Corpus] {len(priority_files)} files prioritized for {question_id}")
+        return priority_files + remaining_files
+
     def scan(
         self,
         repo_path: str,
@@ -319,8 +348,11 @@ Rules:
         for question in self.questions:
             print(f"  Analyzing {question['id']}: {question['category']}...")
 
+            # Reorder file index based on learned evidence patterns
+            ordered_index = self._prioritize_file_index(file_index, question["id"])
+
             evidence = self.search_codebase(
-                repo_path, file_index, question.get("search_patterns", [])
+                repo_path, ordered_index, question.get("search_patterns", [])
             )
             absence_evidence = self.check_absence(
                 repo_path, file_index, question.get("absence_patterns", [])

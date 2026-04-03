@@ -21,7 +21,7 @@ from scanner.database import (
     init_db, create_scan, update_scan_status, save_findings,
     get_scan, delete_scan, get_stats, increment_stat, add_to_waitlist,
     get_directory_with_scores, get_recent_scans, get_recent_scan,
-    track_event, get_event_counts,
+    track_event, get_event_counts, record_evidence_patterns,
 )
 from scanner.repo_fetcher import fetch_and_qualify, cleanup_repo
 from scanner.domain_detector import detect_domains
@@ -224,22 +224,40 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
 
             agent_results = []
             fw_complete = []
-            for i, fw in enumerate(frameworks):
+            fw_lock = threading.Lock()
+
+            def _run_agent(fw, idx):
+                """Run a single framework agent (called from thread pool)."""
                 if _cancelled():
-                    raise InterruptedError("Scan cancelled by user")
+                    return None
                 agent_class = AGENTS.get(fw)
-                if agent_class:
-                    _log(scan_id, f"Running {fw.upper()} agent ({i+1}/{len(frameworks)})...")
+                if not agent_class:
+                    return None
+                _log(scan_id, f"Running {fw.upper()} agent ({idx+1}/{len(frameworks)})...")
+                agent = agent_class()
+                result = agent.scan(repo_ctx.path, repo_ctx.file_index, repo_ctx.readme_content)
+                finding_count = len(result.findings)
+                with fw_lock:
+                    fw_complete.append(fw.upper())
                     update_scan_status(
                         scan_id, "running",
-                        progress=_prog("scan", f"Running {fw.upper()} agent", i, len(frameworks), fw.upper()),
+                        progress=_prog("scan", f"{fw.upper()} complete", len(fw_complete), len(frameworks), fw.upper()),
                     )
-                    agent = agent_class()
-                    result = agent.scan(repo_ctx.path, repo_ctx.file_index, repo_ctx.readme_content)
-                    agent_results.append(result)
-                    fw_complete.append(fw.upper())
-                    finding_count = len(result.findings)
-                    _log(scan_id, f"  {fw.upper()} complete — {finding_count} findings")
+                _log(scan_id, f"  {fw.upper()} complete — {finding_count} findings ({len(fw_complete)}/{len(frameworks)})")
+                return result
+
+            from concurrent.futures import ThreadPoolExecutor, as_completed
+            max_agents = min(3, len(frameworks))
+            _log(scan_id, f"Running {len(frameworks)} framework agents ({max_agents} concurrent)...")
+            with ThreadPoolExecutor(max_workers=max_agents) as executor:
+                futures = {
+                    executor.submit(_run_agent, fw, i): fw
+                    for i, fw in enumerate(frameworks)
+                }
+                for future in as_completed(futures):
+                    result = future.result()
+                    if result:
+                        agent_results.append(result)
 
             if _cancelled():
                 raise InterruptedError("Scan cancelled by user")
@@ -322,6 +340,22 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
                         "file_evidence_count": len(f.evidence),
                     })
             save_findings(scan_id, findings_data)
+
+            # Record evidence patterns to build the corpus
+            domain_str = ", ".join(d.domain for d in domains)
+            for result in agent_results:
+                for f in result.findings:
+                    if f.review_verdict and f.review_verdict not in ("NOT REVIEWED", ""):
+                        evidence_files = [e.file_path for e in f.evidence] if f.evidence else []
+                        if evidence_files:
+                            try:
+                                record_evidence_patterns(
+                                    result.framework, f.question_id,
+                                    evidence_files, f.review_verdict, domain_str,
+                                )
+                            except Exception:
+                                pass  # non-critical, don't fail the scan
+            _log(scan_id, f"Evidence patterns recorded for corpus")
 
             duration = time.time() - start_time
             _log(scan_id, f"Scan complete — score {score}, {high} high-risk, {duration:.0f}s")

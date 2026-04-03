@@ -105,11 +105,26 @@ def init_db():
                 timestamp TEXT NOT NULL
             );
 
+            CREATE TABLE IF NOT EXISTS evidence_patterns (
+                pattern_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                framework TEXT NOT NULL,
+                question_id TEXT NOT NULL,
+                file_glob TEXT NOT NULL,
+                code_pattern TEXT DEFAULT '',
+                domain TEXT DEFAULT '',
+                hit_count INTEGER DEFAULT 0,
+                miss_count INTEGER DEFAULT 0,
+                confirmed_count INTEGER DEFAULT 0,
+                fp_count INTEGER DEFAULT 0,
+                last_updated TEXT NOT NULL
+            );
+
             CREATE INDEX IF NOT EXISTS idx_events_type ON events(event_type);
             CREATE INDEX IF NOT EXISTS idx_events_ts ON events(timestamp);
             CREATE INDEX IF NOT EXISTS idx_scans_status ON scans(status);
             CREATE INDEX IF NOT EXISTS idx_scans_repo ON scans(repo_url_hash);
             CREATE INDEX IF NOT EXISTS idx_findings_scan ON findings(scan_id);
+            CREATE INDEX IF NOT EXISTS idx_evidence_fw_q ON evidence_patterns(framework, question_id);
         """)
 
         # Initialize stats if empty
@@ -382,5 +397,83 @@ def get_recent_scans(limit: int = 20) -> list[dict]:
                ORDER BY timestamp DESC
                LIMIT ?""",
             (limit,),
+        ).fetchall()
+        return [dict(r) for r in rows]
+
+
+# ── Evidence Pattern Corpus ──
+
+def record_evidence_patterns(framework: str, question_id: str, evidence_files: list[str],
+                              verdict: str, domain: str = ""):
+    """Record which file patterns produced evidence for a finding.
+
+    Called after each confirmed/FP finding to build the learned corpus.
+    Extracts directory-level globs from actual evidence paths.
+    """
+    now = datetime.utcnow().isoformat()
+    is_confirmed = verdict == "CONFIRMED"
+
+    # Extract directory-level globs from evidence paths
+    # e.g. "src/auth/session.ts" → "src/auth/**"
+    globs = set()
+    for fpath in evidence_files:
+        parts = fpath.replace("\\", "/").split("/")
+        if len(parts) >= 2:
+            globs.add("/".join(parts[:2]) + "/**")
+        elif len(parts) == 1:
+            ext = os.path.splitext(parts[0])[1]
+            globs.add(f"*{ext}" if ext else parts[0])
+
+    with _get_conn() as conn:
+        for glob in globs:
+            row = conn.execute(
+                """SELECT pattern_id FROM evidence_patterns
+                   WHERE framework = ? AND question_id = ? AND file_glob = ?""",
+                (framework, question_id, glob),
+            ).fetchone()
+
+            if row:
+                if is_confirmed:
+                    conn.execute(
+                        """UPDATE evidence_patterns
+                           SET hit_count = hit_count + 1, confirmed_count = confirmed_count + 1,
+                               last_updated = ? WHERE pattern_id = ?""",
+                        (now, row["pattern_id"]),
+                    )
+                else:
+                    conn.execute(
+                        """UPDATE evidence_patterns
+                           SET hit_count = hit_count + 1, fp_count = fp_count + 1,
+                               last_updated = ? WHERE pattern_id = ?""",
+                        (now, row["pattern_id"]),
+                    )
+            else:
+                conn.execute(
+                    """INSERT INTO evidence_patterns
+                       (framework, question_id, file_glob, domain,
+                        hit_count, confirmed_count, fp_count, last_updated)
+                       VALUES (?, ?, ?, ?, 1, ?, ?, ?)""",
+                    (framework, question_id, glob, domain,
+                     1 if is_confirmed else 0,
+                     0 if is_confirmed else 1,
+                     now),
+                )
+
+
+def get_priority_globs(framework: str, question_id: str, limit: int = 10) -> list[dict]:
+    """Get the highest-signal file globs for a question, ordered by confirmation rate.
+
+    Returns globs where evidence was most often confirmed (not FP),
+    so agents can search these paths first.
+    """
+    with _get_conn() as conn:
+        rows = conn.execute(
+            """SELECT file_glob, hit_count, confirmed_count, fp_count,
+                      CAST(confirmed_count AS REAL) / MAX(hit_count, 1) as confirm_rate
+               FROM evidence_patterns
+               WHERE framework = ? AND question_id = ? AND confirmed_count > 0
+               ORDER BY confirm_rate DESC, confirmed_count DESC
+               LIMIT ?""",
+            (framework, question_id, limit),
         ).fetchall()
         return [dict(r) for r in rows]
