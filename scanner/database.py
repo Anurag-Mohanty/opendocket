@@ -122,6 +122,34 @@ def init_db():
                 last_updated TEXT NOT NULL
             );
 
+            CREATE TABLE IF NOT EXISTS question_accuracy (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                framework TEXT NOT NULL,
+                question_id TEXT NOT NULL,
+                domain TEXT DEFAULT '',
+                confirmed_count INTEGER DEFAULT 0,
+                fp_count INTEGER DEFAULT 0,
+                context_count INTEGER DEFAULT 0,
+                total_scans INTEGER DEFAULT 0,
+                common_fp_reasons TEXT DEFAULT '[]',
+                last_updated TEXT NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS remediation_library (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                framework TEXT NOT NULL,
+                question_id TEXT NOT NULL,
+                domain TEXT DEFAULT '',
+                remediation TEXT NOT NULL,
+                source TEXT DEFAULT 'gemini',
+                quality TEXT DEFAULT 'specific',
+                use_count INTEGER DEFAULT 0,
+                last_used TEXT NOT NULL
+            );
+
+            CREATE INDEX IF NOT EXISTS idx_qa_fw_q ON question_accuracy(framework, question_id);
+            CREATE INDEX IF NOT EXISTS idx_qa_domain ON question_accuracy(domain);
+            CREATE INDEX IF NOT EXISTS idx_remediation_fw_q ON remediation_library(framework, question_id);
             CREATE INDEX IF NOT EXISTS idx_events_type ON events(event_type);
             CREATE INDEX IF NOT EXISTS idx_events_ts ON events(timestamp);
             CREATE INDEX IF NOT EXISTS idx_scans_status ON scans(status);
@@ -482,3 +510,193 @@ def get_priority_globs(framework: str, question_id: str, limit: int = 10) -> lis
             (framework, question_id, limit),
         ).fetchall()
         return [dict(r) for r in rows]
+
+
+# ── Question Accuracy Tracking ──
+
+def record_question_accuracy(framework: str, question_id: str, verdict: str,
+                              domain: str = "", fp_reason: str = ""):
+    """Track per-question confirmation/FP rates by domain.
+
+    Called after each judged finding. Aggregates accuracy data
+    so reports can show confidence context to readers.
+    """
+    now = datetime.utcnow().isoformat()
+
+    with _get_conn() as conn:
+        row = conn.execute(
+            """SELECT id, common_fp_reasons FROM question_accuracy
+               WHERE framework = ? AND question_id = ? AND domain = ?""",
+            (framework, question_id, domain),
+        ).fetchone()
+
+        if row:
+            if verdict == "CONFIRMED":
+                conn.execute(
+                    """UPDATE question_accuracy
+                       SET confirmed_count = confirmed_count + 1, total_scans = total_scans + 1,
+                           last_updated = ? WHERE id = ?""",
+                    (now, row["id"]),
+                )
+            elif verdict == "POSSIBLE FALSE POSITIVE":
+                reasons = json.loads(row["common_fp_reasons"] or "[]")
+                if fp_reason and fp_reason not in reasons:
+                    reasons.append(fp_reason)
+                    if len(reasons) > 10:
+                        reasons = reasons[-10:]
+                conn.execute(
+                    """UPDATE question_accuracy
+                       SET fp_count = fp_count + 1, total_scans = total_scans + 1,
+                           common_fp_reasons = ?, last_updated = ? WHERE id = ?""",
+                    (json.dumps(reasons), now, row["id"]),
+                )
+            elif verdict == "CONTEXT DEPENDENT":
+                conn.execute(
+                    """UPDATE question_accuracy
+                       SET context_count = context_count + 1, total_scans = total_scans + 1,
+                           last_updated = ? WHERE id = ?""",
+                    (now, row["id"]),
+                )
+        else:
+            reasons = json.dumps([fp_reason] if fp_reason else [])
+            conn.execute(
+                """INSERT INTO question_accuracy
+                   (framework, question_id, domain, confirmed_count, fp_count,
+                    context_count, total_scans, common_fp_reasons, last_updated)
+                   VALUES (?, ?, ?, ?, ?, ?, 1, ?, ?)""",
+                (framework, question_id, domain,
+                 1 if verdict == "CONFIRMED" else 0,
+                 1 if verdict == "POSSIBLE FALSE POSITIVE" else 0,
+                 1 if verdict == "CONTEXT DEPENDENT" else 0,
+                 reasons, now),
+            )
+
+
+def get_question_accuracy(framework: str, question_id: str) -> dict:
+    """Get accuracy stats for a question across all domains."""
+    with _get_conn() as conn:
+        row = conn.execute(
+            """SELECT SUM(confirmed_count) as confirmed, SUM(fp_count) as fp,
+                      SUM(context_count) as context, SUM(total_scans) as total
+               FROM question_accuracy
+               WHERE framework = ? AND question_id = ?""",
+            (framework, question_id),
+        ).fetchone()
+        if not row or not row["total"]:
+            return {"confirmed": 0, "fp": 0, "context": 0, "total": 0,
+                    "confirm_rate": 0, "fp_reasons": []}
+
+        total = row["total"]
+        confirmed = row["confirmed"] or 0
+
+        reason_rows = conn.execute(
+            """SELECT common_fp_reasons FROM question_accuracy
+               WHERE framework = ? AND question_id = ? AND common_fp_reasons != '[]'""",
+            (framework, question_id),
+        ).fetchall()
+        all_reasons = []
+        for r in reason_rows:
+            try:
+                all_reasons.extend(json.loads(r["common_fp_reasons"]))
+            except (json.JSONDecodeError, TypeError):
+                pass
+        unique_reasons = list(dict.fromkeys(all_reasons))[:5]
+
+        return {
+            "confirmed": confirmed,
+            "fp": row["fp"] or 0,
+            "context": row["context"] or 0,
+            "total": total,
+            "confirm_rate": round(confirmed / max(total, 1) * 100),
+            "fp_reasons": unique_reasons,
+        }
+
+
+def get_cross_repo_confidence(framework: str, question_id: str, domain: str = "") -> dict:
+    """Get cross-repo finding correlation — how often this question is confirmed
+    in repos with similar domain profiles."""
+    with _get_conn() as conn:
+        overall = conn.execute(
+            """SELECT SUM(confirmed_count) as confirmed, SUM(total_scans) as total
+               FROM question_accuracy WHERE framework = ? AND question_id = ?""",
+            (framework, question_id),
+        ).fetchone()
+
+        domain_row = None
+        if domain:
+            primary_domain = domain.split(",")[0].strip()
+            domain_row = conn.execute(
+                """SELECT confirmed_count, fp_count, total_scans
+                   FROM question_accuracy
+                   WHERE framework = ? AND question_id = ? AND domain LIKE ?""",
+                (framework, question_id, f"%{primary_domain}%"),
+            ).fetchone()
+
+        result = {
+            "overall_confirmed": (overall["confirmed"] or 0) if overall else 0,
+            "overall_total": (overall["total"] or 0) if overall else 0,
+            "overall_rate": 0,
+        }
+        if result["overall_total"] > 0:
+            result["overall_rate"] = round(result["overall_confirmed"] / result["overall_total"] * 100)
+
+        if domain_row:
+            dtotal = domain_row["total_scans"] or 0
+            result["domain_confirmed"] = domain_row["confirmed_count"] or 0
+            result["domain_total"] = dtotal
+            result["domain_rate"] = round((domain_row["confirmed_count"] or 0) / max(dtotal, 1) * 100)
+
+        return result
+
+
+# ── Remediation Library ──
+
+def store_remediation(framework: str, question_id: str, remediation: str,
+                       domain: str = "", quality: str = "specific", source: str = "gemini"):
+    """Store an improved remediation for future reuse."""
+    now = datetime.utcnow().isoformat()
+    with _get_conn() as conn:
+        row = conn.execute(
+            """SELECT id FROM remediation_library
+               WHERE framework = ? AND question_id = ? AND domain = ?""",
+            (framework, question_id, domain),
+        ).fetchone()
+        if row:
+            conn.execute(
+                """UPDATE remediation_library
+                   SET remediation = ?, quality = ?, source = ?,
+                       use_count = use_count + 1, last_used = ?
+                   WHERE id = ?""",
+                (remediation, quality, source, now, row["id"]),
+            )
+        else:
+            conn.execute(
+                """INSERT INTO remediation_library
+                   (framework, question_id, domain, remediation, source, quality, use_count, last_used)
+                   VALUES (?, ?, ?, ?, ?, ?, 1, ?)""",
+                (framework, question_id, domain, remediation, source, quality, now),
+            )
+
+
+def get_best_remediation(framework: str, question_id: str, domain: str = "") -> str | None:
+    """Get the best stored remediation — prefers domain-specific, then any."""
+    with _get_conn() as conn:
+        if domain:
+            primary_domain = domain.split(",")[0].strip()
+            row = conn.execute(
+                """SELECT remediation FROM remediation_library
+                   WHERE framework = ? AND question_id = ? AND domain LIKE ?
+                   AND quality = 'specific'
+                   ORDER BY use_count DESC LIMIT 1""",
+                (framework, question_id, f"%{primary_domain}%"),
+            ).fetchone()
+            if row:
+                return row["remediation"]
+
+        row = conn.execute(
+            """SELECT remediation FROM remediation_library
+               WHERE framework = ? AND question_id = ? AND quality = 'specific'
+               ORDER BY use_count DESC LIMIT 1""",
+            (framework, question_id),
+        ).fetchone()
+        return row["remediation"] if row else None

@@ -579,13 +579,32 @@ def generate_html_report(
                 if f.judge_confidence:
                     verdict_html += f'<div class="verdict-model">Gemini 2.5 Flash &middot; Confidence: {html.escape(f.judge_confidence)}</div>'
                 verdict_html += '</div>'
+
+            # Cross-repo accuracy context
+            accuracy_html = ""
+            try:
+                from scanner.database import get_question_accuracy
+                acc = get_question_accuracy(result.framework, f.question_id)
+                if acc["total"] >= 2:
+                    rate = acc["confirm_rate"]
+                    rate_color = "#1A7F37" if rate >= 60 else "#9A6700" if rate >= 30 else "#8c959f"
+                    accuracy_html = f'<div style="margin-top:8px;padding:8px 12px;background:#f6f8fa;border:1px solid #eaeef2;border-radius:4px;font-size:12px">'
+                    accuracy_html += f'<span style="font-weight:600;color:#57606a">Cross-repo signal:</span> '
+                    accuracy_html += f'Confirmed in <span style="color:{rate_color};font-weight:700">{rate}%</span> of scans '
+                    accuracy_html += f'<span style="color:#8c959f">({acc["confirmed"]}/{acc["total"]} repos)</span>'
+                    if acc["fp_reasons"]:
+                        accuracy_html += f'<div style="margin-top:4px;color:#8c959f">Common FP reasons: {html.escape(acc["fp_reasons"][0][:120])}</div>'
+                    accuracy_html += '</div>'
+            except Exception:
+                pass
+
             framework_findings_html += f'''<div class="finding" id="f-{fid}" data-framework="{html.escape(result.framework)}" data-severity="{html.escape(f.finding_level)}">
 <div class="finding-header" onclick="toggleFinding('{fid}')">
 <div class="finding-left"><div class="finding-num">{html.escape(f.question_id)}</div><div class="finding-question">{html.escape(f.legal_question[:130])}</div></div>
 <div class="finding-right"><span class="badge badge-{sev_cls}">{html.escape(f.finding_level)}</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
-<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation">{html.escape(f.regulatory_standard)}</div></div><div>{verdict_html}</div></div>
+<div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation">{html.escape(f.regulatory_standard)}</div></div><div>{verdict_html}{accuracy_html}</div></div>
 <div class="field-label">Evidence</div><div class="evidence-block">{ev_text}</div>
 <div class="field-label">Finding</div><div class="field-value" style="margin-bottom:16px">{html.escape(f.finding_text)}</div>
 <div class="field-label" style="color:#1A7F37">Remediation</div><div class="remediation-block">{html.escape(f.improved_remediation if f.improved_remediation else f.remediation)}</div>{'<div style="font-size:12px;color:#0052CC;font-style:italic;margin-top:4px">Remediation refined by Gemini review</div>' if f.improved_remediation else ''}

@@ -16,7 +16,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from scanner.database import init_db, record_evidence_patterns
+from scanner.database import init_db, record_evidence_patterns, record_question_accuracy
 
 REPORTS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "docs", "reports")
 
@@ -76,12 +76,20 @@ def parse_findings_from_html(html_path: str) -> list[dict]:
             }
             verdict = verdict_map.get(v_class, verdict_match.group(2).strip())
 
+        # Extract FP reasoning text
+        fp_reason = ""
+        if verdict == "POSSIBLE FALSE POSITIVE":
+            reason_match = re.search(r'class="verdict-text">(.*?)</div>', chunk, re.DOTALL)
+            if reason_match:
+                fp_reason = re.sub(r'<[^>]+>', '', reason_match.group(1)).strip()[:200]
+
         if file_paths and verdict:
             findings.append({
                 "framework": framework,
                 "question_id": qid,
-                "evidence_files": list(set(file_paths)),  # deduplicate
+                "evidence_files": list(set(file_paths)),
                 "verdict": verdict,
+                "fp_reason": fp_reason,
             })
 
     return findings
@@ -111,6 +119,10 @@ def backfill():
             record_evidence_patterns(
                 f["framework"], f["question_id"],
                 f["evidence_files"], f["verdict"], domain,
+            )
+            record_question_accuracy(
+                f["framework"], f["question_id"],
+                f["verdict"], domain, f.get("fp_reason", ""),
             )
             total_patterns += len(f["evidence_files"])
 

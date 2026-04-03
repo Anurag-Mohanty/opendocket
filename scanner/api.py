@@ -22,6 +22,7 @@ from scanner.database import (
     get_scan, delete_scan, get_stats, increment_stat, add_to_waitlist,
     get_directory_with_scores, get_recent_scans, get_recent_scan,
     track_event, get_event_counts, record_evidence_patterns,
+    record_question_accuracy, store_remediation,
 )
 from scanner.repo_fetcher import fetch_and_qualify, cleanup_repo
 from scanner.domain_detector import detect_domains
@@ -341,21 +342,40 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
                     })
             save_findings(scan_id, findings_data)
 
-            # Record evidence patterns to build the corpus
+            # Record intelligence corpus — evidence patterns, accuracy, remediations
             domain_str = ", ".join(d.domain for d in domains)
             for result in agent_results:
                 for f in result.findings:
                     if f.review_verdict and f.review_verdict not in ("NOT REVIEWED", ""):
-                        evidence_files = [e.file_path for e in f.evidence] if f.evidence else []
-                        if evidence_files:
-                            try:
+                        try:
+                            # Evidence file patterns
+                            evidence_files = [e.file_path for e in f.evidence] if f.evidence else []
+                            if evidence_files:
                                 record_evidence_patterns(
                                     result.framework, f.question_id,
                                     evidence_files, f.review_verdict, domain_str,
                                 )
-                            except Exception:
-                                pass  # non-critical, don't fail the scan
-            _log(scan_id, f"Evidence patterns recorded for corpus")
+
+                            # Question-level accuracy with FP reasoning
+                            fp_reason = ""
+                            if f.review_verdict == "POSSIBLE FALSE POSITIVE" and f.judge_reasoning:
+                                fp_reason = f.judge_reasoning[:200]
+                            record_question_accuracy(
+                                result.framework, f.question_id,
+                                f.review_verdict, domain_str, fp_reason,
+                            )
+
+                            # Store improved remediations from Gemini
+                            improved = getattr(f, "improved_remediation", "")
+                            if improved:
+                                store_remediation(
+                                    result.framework, f.question_id,
+                                    improved, domain_str,
+                                    quality="specific", source="gemini",
+                                )
+                        except Exception:
+                            pass  # non-critical
+            _log(scan_id, f"Intelligence corpus updated (evidence + accuracy + remediations)")
 
             # Aggregate token usage across all agents
             total_tokens_in = sum(r.tokens_in for r in agent_results)
