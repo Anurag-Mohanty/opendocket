@@ -278,10 +278,15 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
             if _cancelled():
                 raise InterruptedError("Scan cancelled by user")
 
-            # Calculate stats
+            # Calculate stats — use confirmed counts when judge has run
             all_findings = [f for r in agent_results for f in r.findings]
-            high = sum(1 for f in all_findings if f.finding_level == "High Risk")
-            med = sum(1 for f in all_findings if f.finding_level == "Medium Risk")
+            has_judge = any(f.review_verdict and f.review_verdict != "NOT REVIEWED" for f in all_findings)
+            if has_judge:
+                high = sum(1 for f in all_findings if f.finding_level == "High Risk" and f.review_verdict == "CONFIRMED")
+                med = sum(1 for f in all_findings if f.finding_level == "Medium Risk" and f.review_verdict == "CONFIRMED")
+            else:
+                high = sum(1 for f in all_findings if f.finding_level == "High Risk")
+                med = sum(1 for f in all_findings if f.finding_level == "Medium Risk")
             concern = sum(1 for f in all_findings if f.finding_level == "Pattern of Concern")
             ok = sum(1 for f in all_findings if f.finding_level == "No Issue Found")
             score = calculate_score(agent_results)

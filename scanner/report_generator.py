@@ -118,9 +118,14 @@ def generate_markdown_report(
     lines.append("")
     all_findings = [f for r in agent_results for f in r.findings]
     high = sum(1 for f in all_findings if f.finding_level == "High Risk")
-    label, _, desc = risk_classification(high)
+    confirmed_high = sum(1 for f in all_findings if f.finding_level == "High Risk" and f.review_verdict == "CONFIRMED")
+    has_judge = any(f.review_verdict and f.review_verdict != "NOT REVIEWED" for f in all_findings)
+    label, _, desc = risk_classification(high, confirmed_high=confirmed_high if has_judge else None)
     lines.append(f"## Risk Pattern Index: {label}")
-    lines.append(f"{desc}")
+    if has_judge:
+        lines.append(f"{confirmed_high} confirmed high-risk findings out of {high} total patterns identified.")
+    else:
+        lines.append(f"{desc}")
     lines.append("")
     lines.append("| Finding Level | Count |")
     lines.append("|---|---|")
