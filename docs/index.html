@@ -47,9 +47,14 @@
         <input type="password" id="gemini-key" placeholder="Gemini API key (independent review)">
         <div class="key-note">Both keys are used only for this scan and never stored.</div>
       </div>
+      <input type="email" id="notify-email" placeholder="Email for notification (optional)" style="width:100%;padding:8px 12px;border:1px solid #30363D;border-radius:4px;font-size:13px;color:var(--text-on-dark);background:var(--bg-dark);margin-bottom:8px;font-family:var(--font);outline:none">
       <button class="scan-btn" id="scan-btn" onclick="startScan()">Scan Repository</button>
       <div class="scan-note">3 free scans per hour &middot; No account required</div>
       <div id="scan-status" style="margin-top:12px;font-size:13px;color:#8B949E"></div>
+      <div id="queue-status" style="display:none;margin-top:12px;padding:12px;background:#161B22;border:1px solid #30363D;border-radius:4px;font-size:13px;color:#E6EDF3;text-align:center">
+        <div id="queue-msg" style="font-weight:600"></div>
+        <div id="queue-detail" style="color:#8B949E;margin-top:4px;font-size:12px"></div>
+      </div>
       <div id="scan-progress" style="display:none;margin-top:16px;background:#0D1117;border:1px solid #30363D;border-radius:4px;padding:14px;font-size:13px;color:#E6EDF3">
         <div style="display:flex;justify-content:space-between;margin-bottom:10px"><span id="prog-repo" style="font-weight:600"></span><span id="prog-timer" style="color:#8B949E;font-family:monospace">0:00</span></div>
         <div id="prog-steps">
@@ -237,8 +242,10 @@
       const body={repo_url:url};
       const ak=document.getElementById('anthropic-key').value.trim();
       const gk=document.getElementById('gemini-key').value.trim();
+      const em=document.getElementById('notify-email').value.trim();
       if(ak)body.anthropic_api_key=ak;
       if(gk)body.gemini_api_key=gk;
+      if(em)body.email=em;
       document.getElementById('scan-btn').disabled=true;
       document.getElementById('scan-status').textContent='Submitting...';
       document.getElementById('scan-result').style.display='none';
@@ -246,6 +253,23 @@
       fetch(API_BASE_URL+'/api/scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
       .then(r=>r.json()).then(d=>{
         if(d.error){document.getElementById('scan-status').textContent=d.error;document.getElementById('scan-btn').disabled=false;return;}
+        if(d.already_queued){
+          document.getElementById('scan-btn').disabled=false;
+          document.getElementById('scan-status').style.display='none';
+          currentScanId=d.scan_id;
+          if(d.queue_position>0){
+            document.getElementById('queue-status').style.display='block';
+            document.getElementById('queue-msg').textContent='#'+d.queue_position+' in queue';
+            document.getElementById('queue-detail').textContent='Estimated wait: ~'+d.estimated_wait_minutes+' minutes. '+( d.email_notification?'We\'ll email you when ready.':'');
+          }
+          document.getElementById('scan-progress').style.display='block';
+          document.getElementById('prog-repo').textContent=d.repo_name||'';
+          scanStart=Date.now();
+          scanTimer=setInterval(()=>{const s=Math.floor((Date.now()-scanStart)/1000);document.getElementById('prog-timer').textContent=Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60},1000);
+          showControls('running');
+          pollScan(d.scan_id);
+          return;
+        }
         if(d.cached){
           document.getElementById('scan-btn').disabled=false;
           document.getElementById('scan-status').style.display='none';
@@ -312,6 +336,15 @@
     function pollScan(id){
       fetch(API_BASE_URL+'/api/scan/'+id).then(r=>r.json()).then(d=>{
         const p=d.progress||{};const curStep=p.step||'';
+        // Show queue position if waiting
+        const queueEl=document.getElementById('queue-status');
+        if(d.queue_position && d.queue_position > 0){
+          queueEl.style.display='block';
+          document.getElementById('queue-msg').textContent='#'+d.queue_position+' in queue';
+          document.getElementById('queue-detail').textContent='Estimated wait: ~'+d.estimated_wait_minutes+' minutes';
+        } else {
+          queueEl.style.display='none';
+        }
         let reached=false;
         STEPS.forEach(s=>{
           const el=document.querySelector('.pstep[data-step="'+s+'"]');if(!el)return;

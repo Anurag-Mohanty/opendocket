@@ -61,6 +61,147 @@ AGENTS = {
 _cancel_flags: dict[str, threading.Event] = {}
 _scan_params: dict[str, dict] = {}
 
+# ── Scan queue system ──
+MAX_CONCURRENT_SCANS = 2
+_scan_queue: list[dict] = []  # [{scan_id, repo_url, api_key, gemini_key, email}]
+_active_scans: set[str] = set()  # scan_ids currently running
+_queue_lock = threading.Lock()
+AVG_SCAN_MINUTES = 10
+
+
+def _queue_worker():
+    """Background thread that processes the scan queue."""
+    while True:
+        time.sleep(2)
+        with _queue_lock:
+            if len(_active_scans) >= MAX_CONCURRENT_SCANS or not _scan_queue:
+                continue
+            # Pick next scan from queue
+            job = _scan_queue.pop(0)
+            _active_scans.add(job["scan_id"])
+
+        # Start the scan in a new thread
+        def _run_and_cleanup(j):
+            try:
+                _run_scan(j["scan_id"], j["repo_url"], j.get("api_key"), j.get("gemini_key"))
+                # Send email notification if provided
+                email = j.get("email")
+                if email:
+                    _send_completion_email(j["scan_id"], email)
+            finally:
+                with _queue_lock:
+                    _active_scans.discard(j["scan_id"])
+
+        thread = threading.Thread(target=_run_and_cleanup, args=(job,), daemon=True)
+        thread.start()
+
+
+def _get_queue_position(scan_id: str) -> int:
+    """Get 1-based queue position for a scan, or 0 if not queued."""
+    with _queue_lock:
+        for i, job in enumerate(_scan_queue):
+            if job["scan_id"] == scan_id:
+                return i + 1
+    return 0
+
+
+def _is_repo_in_flight(repo_name: str) -> str | None:
+    """Check if a repo is already queued or running. Returns scan_id or None."""
+    with _queue_lock:
+        # Check queue
+        for job in _scan_queue:
+            if _extract_repo_name(job["repo_url"]) == repo_name:
+                return job["scan_id"]
+    # Check active scans via DB
+    from scanner.database import _get_conn
+    with _get_conn() as conn:
+        row = conn.execute(
+            "SELECT scan_id FROM scans WHERE repo_name = ? AND status IN ('queued', 'running') LIMIT 1",
+            (repo_name,),
+        ).fetchone()
+        if row:
+            return row["scan_id"]
+    return None
+
+
+def _send_completion_email(scan_id: str, email: str):
+    """Send scan completion notification. Uses simple SMTP or logs if not configured."""
+    scan = get_scan(scan_id)
+    if not scan:
+        return
+    repo_name = scan.get("repo_name", "unknown")
+    report_url = scan.get("report_url", "")
+    score = scan.get("opendocket_score", 0)
+    high = scan.get("finding_high", 0)
+    status = scan.get("status", "complete")
+
+    # Build the full report URL
+    base_url = os.environ.get("PUBLIC_URL", "https://opendocket-production.up.railway.app")
+    full_report_url = f"{base_url}{report_url}" if report_url else base_url
+
+    print(f"[Email] Notification for {repo_name} -> {email}")
+    print(f"  Status: {status}, Score: {score}, High: {high}")
+    print(f"  Report: {full_report_url}")
+
+    # Try sending via SMTP if configured
+    smtp_host = os.environ.get("SMTP_HOST")
+    smtp_user = os.environ.get("SMTP_USER")
+    smtp_pass = os.environ.get("SMTP_PASS")
+    from_email = os.environ.get("SMTP_FROM", "noreply@opendocket.dev")
+
+    if smtp_host and smtp_user:
+        try:
+            import smtplib
+            from email.mime.text import MIMEText
+            from email.mime.multipart import MIMEMultipart
+
+            msg = MIMEMultipart("alternative")
+            msg["Subject"] = f"OpenDocket: {repo_name} scan complete — {'High Risk' if high > 0 else 'Low Risk'}"
+            msg["From"] = from_email
+            msg["To"] = email
+
+            text = f"""Your OpenDocket compliance scan for {repo_name} is complete.
+
+Score: {score}/100
+Confirmed High Risks: {high}
+Status: {status}
+
+View your full report: {full_report_url}
+
+This is an automated notification from OpenDocket."""
+
+            html_body = f"""<div style="font-family:-apple-system,sans-serif;max-width:600px;margin:0 auto">
+<div style="background:#0D1117;padding:20px 24px;border-radius:8px 8px 0 0">
+<h2 style="color:#fff;margin:0;font-size:18px">OpenDocket</h2>
+</div>
+<div style="padding:24px;border:1px solid #d0d7de;border-top:none;border-radius:0 0 8px 8px">
+<p>Your compliance scan for <strong>{repo_name}</strong> is complete.</p>
+<table style="width:100%;border-collapse:collapse;margin:16px 0">
+<tr><td style="padding:8px 0;color:#57606a">Score</td><td style="padding:8px 0;font-weight:700">{score}/100</td></tr>
+<tr><td style="padding:8px 0;color:#57606a">Confirmed High Risks</td><td style="padding:8px 0;font-weight:700;color:{'#CF222E' if high > 0 else '#1A7F37'}">{high}</td></tr>
+</table>
+<a href="{full_report_url}" style="display:inline-block;padding:10px 24px;background:#0052CC;color:#fff;border-radius:4px;text-decoration:none;font-weight:600">View Full Report</a>
+<p style="margin-top:24px;font-size:12px;color:#8c959f">This is an automated notification from OpenDocket. Not legal advice.</p>
+</div></div>"""
+
+            msg.attach(MIMEText(text, "plain"))
+            msg.attach(MIMEText(html_body, "html"))
+
+            with smtplib.SMTP(smtp_host, int(os.environ.get("SMTP_PORT", 587))) as server:
+                server.starttls()
+                server.login(smtp_user, smtp_pass)
+                server.send_message(msg)
+            print(f"[Email] Sent to {email}")
+        except Exception as e:
+            print(f"[Email] Failed to send: {e}")
+    else:
+        print(f"[Email] SMTP not configured — skipping send")
+
+
+# Start queue worker thread
+_queue_thread = threading.Thread(target=_queue_worker, daemon=True)
+_queue_thread.start()
+
 # ── Scan log ring buffers (last 200 lines per scan) ──
 _scan_logs: dict[str, deque] = {}
 _LOG_MAX = 200
@@ -542,6 +683,7 @@ def start_scan():
             return jsonify({"error": limit_err, "byok_required": True}), 429
 
     repo_name = _extract_repo_name(repo_url)
+    email = data.get("email", "").strip() or None
 
     # Check for cached scan within last 24 hours
     cached = get_recent_scan(repo_name, hours=24)
@@ -561,6 +703,20 @@ def start_scan():
             },
         })
 
+    # Dedup — don't queue the same repo if it's already queued or running
+    existing = _is_repo_in_flight(repo_name)
+    if existing:
+        pos = _get_queue_position(existing)
+        return jsonify({
+            "scan_id": existing,
+            "status": "queued",
+            "repo_name": repo_name,
+            "already_queued": True,
+            "queue_position": pos,
+            "estimated_wait_minutes": pos * AVG_SCAN_MINUTES if pos > 0 else 0,
+            "message": "This repo is already being scanned" if pos == 0 else f"This repo is #{pos} in queue",
+        })
+
     scan_id = create_scan(repo_url, repo_name, used_byok=is_byok)
 
     # Set up cancellation flag
@@ -573,19 +729,35 @@ def start_scan():
         "gemini_key": gemini_key,
     }
 
-    thread = threading.Thread(
-        target=_run_scan,
-        args=(scan_id, repo_url, anthropic_key, gemini_key),
-        daemon=True,
-    )
-    thread.start()
+    # Add to queue instead of spawning thread directly
+    with _queue_lock:
+        _scan_queue.append({
+            "scan_id": scan_id,
+            "repo_url": repo_url,
+            "api_key": anthropic_key,
+            "gemini_key": gemini_key,
+            "email": email,
+        })
+        queue_pos = len(_scan_queue)
+        active_count = len(_active_scans)
+
+    # Estimate wait
+    if active_count < MAX_CONCURRENT_SCANS:
+        wait_minutes = 0
+        effective_status = "queued"
+    else:
+        wait_minutes = queue_pos * AVG_SCAN_MINUTES
+        effective_status = "queued"
 
     return jsonify({
         "scan_id": scan_id,
-        "status": "queued",
+        "status": effective_status,
         "repo_name": repo_name,
         "byok": is_byok,
         "gemini_review": bool(gemini_key or os.environ.get("GEMINI_API_KEY")),
+        "queue_position": queue_pos,
+        "estimated_wait_minutes": wait_minutes,
+        "email_notification": bool(email),
     })
 
 
@@ -609,6 +781,13 @@ def get_scan_status(scan_id):
         "status": scan["status"],
         "progress": progress,
     }
+
+    # Add queue position if scan is queued
+    if scan["status"] == "queued":
+        pos = _get_queue_position(scan_id)
+        if pos > 0:
+            response["queue_position"] = pos
+            response["estimated_wait_minutes"] = pos * AVG_SCAN_MINUTES
 
     if scan["status"] == "complete":
         response["report_url"] = scan.get("report_url", "")
