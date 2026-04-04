@@ -74,15 +74,44 @@ def clone_repo(url: str, target_dir: str | None = None) -> str:
             timeout=300,
         )
 
-        # Size gate — abort if clone exceeds limit
+        # Size gate — if over limit, retry with sparse checkout (skip heavy dirs)
         size_mb = _get_dir_size_mb(target_dir)
         print(f"[OpenDocket] Clone size: {size_mb:.0f}MB")
         if size_mb > MAX_CLONE_SIZE_MB:
+            print(f"[OpenDocket] Over {MAX_CLONE_SIZE_MB}MB — retrying with sparse checkout...")
             cleanup_repo(target_dir)
-            raise RuntimeError(
-                f"Repository clone exceeds {MAX_CLONE_SIZE_MB}MB size limit "
-                f"({size_mb:.0f}MB). Aborting scan."
-            )
+            os.makedirs(target_dir, exist_ok=True)
+
+            # Init sparse checkout — exclude docs, images, binaries, test fixtures
+            subprocess.run(["git", "init", target_dir], capture_output=True, check=True, timeout=30)
+            subprocess.run(["git", "-C", target_dir, "remote", "add", "origin", url],
+                           capture_output=True, check=True, timeout=10)
+            subprocess.run(["git", "-C", target_dir, "config", "core.sparseCheckout", "true"],
+                           capture_output=True, check=True, timeout=10)
+
+            sparse_file = os.path.join(target_dir, ".git", "info", "sparse-checkout")
+            os.makedirs(os.path.dirname(sparse_file), exist_ok=True)
+            with open(sparse_file, "w") as f:
+                f.write("/*\n")
+                f.write("!docs/\n!doc/\n!documentation/\n")
+                f.write("!images/\n!img/\n!assets/\n!static/\n!public/\n!media/\n")
+                f.write("!*.png\n!*.jpg\n!*.jpeg\n!*.gif\n!*.svg\n!*.ico\n")
+                f.write("!*.mp4\n!*.webm\n!*.mov\n!*.mp3\n!*.wav\n")
+                f.write("!*.woff\n!*.woff2\n!*.ttf\n!*.eot\n")
+                f.write("!*.zip\n!*.tar\n!*.gz\n!*.bz2\n")
+                f.write("!vendor/\n!node_modules/\n!.git/\n")
+
+            subprocess.run(["git", "-C", target_dir, "pull", "--depth", "1", "origin", "HEAD"],
+                           capture_output=True, check=True, timeout=300)
+
+            size_mb = _get_dir_size_mb(target_dir)
+            print(f"[OpenDocket] Sparse clone size: {size_mb:.0f}MB")
+            if size_mb > MAX_CLONE_SIZE_MB * 2:
+                cleanup_repo(target_dir)
+                raise RuntimeError(
+                    f"Repository still exceeds size limit after sparse checkout "
+                    f"({size_mb:.0f}MB). Aborting scan."
+                )
 
         return target_dir
     except subprocess.CalledProcessError:

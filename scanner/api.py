@@ -143,34 +143,12 @@ def _send_completion_email(scan_id: str, email: str):
     print(f"  Status: {status}, Score: {score}, High: {high}")
     print(f"  Report: {full_report_url}")
 
-    # Try sending via SMTP if configured
-    smtp_host = os.environ.get("SMTP_HOST")
-    smtp_user = os.environ.get("SMTP_USER")
-    smtp_pass = os.environ.get("SMTP_PASS")
-    from_email = os.environ.get("SMTP_FROM", "noreply@opendocket.dev")
+    # Send via Resend API (preferred) or SMTP fallback
+    resend_key = os.environ.get("RESEND_API_KEY")
+    from_email = os.environ.get("EMAIL_FROM", "OpenDocket <noreply@opendocket.dev>")
 
-    if smtp_host and smtp_user:
-        try:
-            import smtplib
-            from email.mime.text import MIMEText
-            from email.mime.multipart import MIMEMultipart
-
-            msg = MIMEMultipart("alternative")
-            msg["Subject"] = f"OpenDocket: {repo_name} scan complete — {'High Risk' if high > 0 else 'Low Risk'}"
-            msg["From"] = from_email
-            msg["To"] = email
-
-            text = f"""Your OpenDocket compliance scan for {repo_name} is complete.
-
-Score: {score}/100
-Confirmed High Risks: {high}
-Status: {status}
-
-View your full report: {full_report_url}
-
-This is an automated notification from OpenDocket."""
-
-            html_body = f"""<div style="font-family:-apple-system,sans-serif;max-width:600px;margin:0 auto">
+    subject = f"OpenDocket: {repo_name} scan complete"
+    html_body = f"""<div style="font-family:-apple-system,sans-serif;max-width:600px;margin:0 auto">
 <div style="background:#0D1117;padding:20px 24px;border-radius:8px 8px 0 0">
 <h2 style="color:#fff;margin:0;font-size:18px">OpenDocket</h2>
 </div>
@@ -184,18 +162,51 @@ This is an automated notification from OpenDocket."""
 <p style="margin-top:24px;font-size:12px;color:#8c959f">This is an automated notification from OpenDocket. Not legal advice.</p>
 </div></div>"""
 
-            msg.attach(MIMEText(text, "plain"))
-            msg.attach(MIMEText(html_body, "html"))
-
-            with smtplib.SMTP(smtp_host, int(os.environ.get("SMTP_PORT", 587))) as server:
-                server.starttls()
-                server.login(smtp_user, smtp_pass)
-                server.send_message(msg)
-            print(f"[Email] Sent to {email}")
+    if resend_key:
+        try:
+            import urllib.request
+            import json as _j
+            req = urllib.request.Request(
+                "https://api.resend.com/emails",
+                data=_j.dumps({
+                    "from": from_email,
+                    "to": [email],
+                    "subject": subject,
+                    "html": html_body,
+                }).encode(),
+                headers={
+                    "Authorization": f"Bearer {resend_key}",
+                    "Content-Type": "application/json",
+                },
+            )
+            urllib.request.urlopen(req, timeout=10)
+            print(f"[Email] Sent via Resend to {email}")
         except Exception as e:
-            print(f"[Email] Failed to send: {e}")
+            print(f"[Email] Resend failed: {e}")
     else:
-        print(f"[Email] SMTP not configured — skipping send")
+        # SMTP fallback
+        smtp_host = os.environ.get("SMTP_HOST")
+        smtp_user = os.environ.get("SMTP_USER")
+        smtp_pass = os.environ.get("SMTP_PASS")
+        if smtp_host and smtp_user:
+            try:
+                import smtplib
+                from email.mime.text import MIMEText
+                from email.mime.multipart import MIMEMultipart
+                msg = MIMEMultipart("alternative")
+                msg["Subject"] = subject
+                msg["From"] = from_email
+                msg["To"] = email
+                msg.attach(MIMEText(html_body, "html"))
+                with smtplib.SMTP(smtp_host, int(os.environ.get("SMTP_PORT", 587))) as server:
+                    server.starttls()
+                    server.login(smtp_user, smtp_pass)
+                    server.send_message(msg)
+                print(f"[Email] Sent via SMTP to {email}")
+            except Exception as e:
+                print(f"[Email] SMTP failed: {e}")
+        else:
+            print(f"[Email] No email provider configured — skipping send")
 
 
 # Start queue worker thread
