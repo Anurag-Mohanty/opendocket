@@ -162,13 +162,21 @@
   <script>
     const API = 'https://opendocket-production.up.railway.app';
 
+    // Admin auth — token entered once, stored in session
+    let adminToken = sessionStorage.getItem('od_admin') || '';
+    if (!adminToken) {
+      adminToken = prompt('Enter admin token to access the dashboard:') || '';
+      if (adminToken) sessionStorage.setItem('od_admin', adminToken);
+    }
+    function authUrl(path) { return API + path + (path.includes('?') ? '&' : '?') + 'token=' + encodeURIComponent(adminToken); }
+
     function fmt(n) { return (n||0).toLocaleString(); }
     function fmtK(n) { return n >= 1e6 ? (n/1e6).toFixed(1)+'M' : n >= 1e3 ? (n/1e3).toFixed(1)+'K' : fmt(n); }
 
     // Load ops data
-    fetch(API+'/api/ops').then(r=>r.json()).then(d=>{
+    fetch(authUrl('/api/ops')).then(r=>r.json()).then(d=>{
       // KPIs
-      document.getElementById('k-scans').textContent = fmt(d.performance?.length || 0);
+      document.getElementById('k-scans').textContent = fmt(d.total_scans || d.performance?.length || 0);
       document.getElementById('k-waitlist').textContent = (d.waitlist_count||0) + ' on waitlist';
       document.getElementById('k-avg-dur').textContent = d.duration.avg ? d.duration.avg.toFixed(0)+'s' : '--';
       document.getElementById('k-dur-range').textContent = d.duration.min ? 'Min '+d.duration.min.toFixed(0)+'s / Max '+d.duration.max.toFixed(0)+'s' : '';
@@ -253,7 +261,7 @@
     }).catch(()=>{});
 
     // System learning
-    fetch(API+'/api/learning').then(r=>r.json()).then(d=>{
+    fetch(authUrl('/api/learning')).then(r=>r.json()).then(d=>{
       // Summary
       const el = document.getElementById('learning-summary');
       const c = d.corpus||{};

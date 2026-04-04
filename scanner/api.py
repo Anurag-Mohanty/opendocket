@@ -104,6 +104,19 @@ MONTHLY_SCAN_LIMIT = int(os.environ.get("MONTHLY_SCAN_LIMIT", 2000))
 
 GITHUB_URL_RE = re.compile(r"^https://github\.com/[\w.\-]+/[\w.\-]+/?$")
 
+# Admin authentication for protected endpoints
+ADMIN_TOKEN = os.environ.get("ADMIN_TOKEN", "")
+
+
+def _require_admin():
+    """Check admin token from query param or Authorization header. Returns error response or None."""
+    if not ADMIN_TOKEN:
+        return None  # No token configured = no protection (dev mode)
+    token = request.args.get("token", "") or request.headers.get("Authorization", "").replace("Bearer ", "")
+    if token != ADMIN_TOKEN:
+        return jsonify({"error": "Unauthorized. Admin access required."}), 401
+    return None
+
 
 def _check_rate_limit(ip: str) -> bool:
     """Returns True if request is allowed."""
@@ -755,7 +768,10 @@ def api_stats():
 
 @app.route("/api/ops", methods=["GET"])
 def api_ops():
-    """Operational dashboard data — performance, tokens, corpus, trends."""
+    """Operational dashboard data — admin only."""
+    auth_err = _require_admin()
+    if auth_err:
+        return auth_err
     from scanner.database import _get_conn
     with _get_conn() as conn:
         # Scan performance trends (last 20 scans with duration)
@@ -812,7 +828,12 @@ def api_ops():
                WHERE status = 'complete' AND scan_duration_seconds > 0"""
         ).fetchone()
 
+    # Total scan count (including seeded)
+    with _get_conn() as conn:
+        total_row = conn.execute("SELECT COUNT(*) as cnt FROM scans WHERE status = 'complete'").fetchone()
+
     return jsonify({
+        "total_scans": total_row["cnt"] if total_row else 0,
         "performance": perf,
         "tokens": {
             "total_in": token_row["total_in"] if token_row else 0,
@@ -941,20 +962,29 @@ def api_visitor():
 
 @app.route("/api/visitors", methods=["GET"])
 def api_visitors():
-    """Get visitor metrics."""
+    """Get visitor metrics — admin only."""
+    auth_err = _require_admin()
+    if auth_err:
+        return auth_err
     return jsonify(get_visitor_stats())
 
 
 @app.route("/api/discovered", methods=["GET"])
 def api_discovered():
-    """Get discovered novel patterns from wildcard scans."""
+    """Get discovered novel patterns — admin only."""
+    auth_err = _require_admin()
+    if auth_err:
+        return auth_err
     fw = request.args.get("framework", "")
     return jsonify(get_discovered_patterns(framework=fw))
 
 
 @app.route("/api/learning", methods=["GET"])
 def api_learning():
-    """Consolidated system learning summary — what the system has taught itself."""
+    """Consolidated system learning summary — admin only."""
+    auth_err = _require_admin()
+    if auth_err:
+        return auth_err
     from scanner.database import _get_conn
     with _get_conn() as conn:
         corpus = conn.execute(
@@ -1046,6 +1076,9 @@ def api_learning():
 
 @app.route("/api/debug/env", methods=["GET"])
 def debug_env():
+    auth_err = _require_admin()
+    if auth_err:
+        return auth_err
     return jsonify({
         "anthropic_key_set": bool(os.environ.get("ANTHROPIC_API_KEY")),
         "gemini_key_set": bool(os.environ.get("GEMINI_API_KEY")),
