@@ -220,16 +220,50 @@
 
     function init() {
       if (!scanId) {
-        document.getElementById('log-body').innerHTML = '<div class="empty-state"><div class="icon">&#9888;</div><div>No scan_id provided</div><div style="margin-top:8px;font-size:12px">Use ?scan_id=... in the URL or start a scan from the <a href="index.html">home page</a></div></div>';
-        document.getElementById('live-dot').classList.add('stopped');
-        document.getElementById('log-status-text').textContent = 'No scan selected';
+        // No scan_id in URL — try to find the latest running or most recent scan
+        document.getElementById('log-status-text').textContent = 'Finding latest scan...';
+        fetch(API_BASE_URL + '/api/recent').then(r => r.json()).then(scans => {
+          // Prefer running/queued, then most recent complete
+          var active = scans.find(s => s.status === 'running' || s.status === 'queued');
+          var latest = active || scans[0];
+          if (latest) {
+            scanId = latest.scan_id;
+            window.history.replaceState(null, '', 'logs.html?scan_id=' + scanId);
+            startMonitoring();
+          }
+          // Always show the recent scans picker
+          showRecentScans(scans);
+        }).catch(() => {
+          document.getElementById('log-body').innerHTML = '<div class="empty-state"><div class="icon">&#9888;</div><div>Could not load scans</div></div>';
+          document.getElementById('live-dot').classList.add('stopped');
+          document.getElementById('log-status-text').textContent = 'Error';
+        });
         return;
       }
+      startMonitoring();
+      // Also load recent scans for the picker
+      fetch(API_BASE_URL + '/api/recent').then(r => r.json()).then(showRecentScans).catch(() => {});
+    }
+
+    function startMonitoring() {
       document.getElementById('info-id').textContent = scanId.substring(0, 8) + '...';
       fetchStatus();
       fetchLogs();
       statusInterval = setInterval(fetchStatus, 3000);
       pollInterval = setInterval(fetchLogs, 2000);
+    }
+
+    function showRecentScans(scans) {
+      if (!scans || !scans.length) return;
+      var picker = document.createElement('div');
+      picker.style.cssText = 'margin-bottom:16px;display:flex;gap:6px;flex-wrap:wrap;align-items:center';
+      picker.innerHTML = '<span style="font-size:12px;color:#8B949E;margin-right:4px">Recent:</span>' +
+        scans.slice(0, 8).map(s => {
+          var color = s.status === 'running' ? '#58A6FF' : s.status === 'complete' ? '#3FB950' : '#8B949E';
+          var active = s.scan_id === scanId ? 'background:#30363D;' : '';
+          return '<a href="logs.html?scan_id=' + s.scan_id + '" style="padding:3px 10px;border:1px solid #30363D;border-radius:3px;font-size:12px;color:' + color + ';text-decoration:none;' + active + '">' + (s.repo_name || '?').split('/')[1] + '</a>';
+        }).join('');
+      document.getElementById('controls').before(picker);
     }
 
     function fetchStatus() {
