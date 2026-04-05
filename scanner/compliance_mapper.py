@@ -9,9 +9,9 @@ from scanner.domain_detector import DomainResult
 
 # Domain -> list of applicable frameworks
 DOMAIN_FRAMEWORK_MAP: dict[str, list[str]] = {
-    "healthcare": ["hipaa", "soc2"],
+    "healthcare": ["hipaa", "soc2", "hitrust"],
     "fintech": ["pci_dss", "sox", "soc2", "glba"],
-    "saas": ["soc2"],
+    "saas": ["soc2", "nist_csf", "iso27001"],
     "ecommerce": ["soc2", "pci_dss"],
     "communication": ["tcpa", "soc2"],
     "gdpr": ["gdpr"],
@@ -20,6 +20,13 @@ DOMAIN_FRAMEWORK_MAP: dict[str, list[str]] = {
     "coppa": ["coppa"],
     "ferpa": ["ferpa"],
     "glba": ["glba"],
+    "nist_csf": ["nist_csf"],
+    "iso27001": ["iso27001"],
+    "dora": ["dora"],
+    "psd2": ["psd2"],
+    "bipa": ["bipa"],
+    "eu_ai_act": ["eu_ai_act"],
+    "hitrust": ["hitrust"],
 }
 
 # Minimum confidence to trigger a framework scan
@@ -62,6 +69,27 @@ FINANCIAL_SIGNALS = {
     "investment_advisor", "financial_privacy",
 }
 
+# Biometric signals (triggers BIPA)
+BIOMETRIC_SIGNALS = {
+    "biometric", "fingerprint", "facial_recognition", "face_detect",
+    "iris_scan", "voiceprint", "retina", "face_id", "touch_id",
+    "face_encoding", "biometric_template",
+}
+
+# AI/ML signals (triggers EU AI Act)
+AI_SIGNALS = {
+    "machine_learning", "neural_network", "deep_learning", "model_training",
+    "ai_system", "tensorflow", "pytorch", "sklearn", "scikit_learn",
+    "huggingface", "transformer", "llm", "inference", "training_data",
+    "prediction_model", "classification_model",
+}
+
+# EU fintech signals (triggers DORA + PSD2)
+EU_FINTECH_SIGNALS = {
+    "dora", "psd2", "sca", "3ds", "3d_secure", "strong_customer_authentication",
+    "digital_resilience", "ict_risk", "esma", "eba",
+}
+
 
 def _has_signals(domains: list[DomainResult], signal_set: set) -> bool:
     """Check if any detected domain contains signals from the given set."""
@@ -75,13 +103,7 @@ def _has_signals(domains: list[DomainResult], signal_set: set) -> bool:
 def map_frameworks(domains: list[DomainResult]) -> list[str]:
     """Given detected domains, return deduplicated list of frameworks to scan.
 
-    Applies cross-cutting rules:
-    - Any domain with EU signals -> add GDPR
-    - Any domain with SMS signals -> add TCPA
-    - Any SaaS/ecommerce/fintech -> add CCPA (broad US applicability)
-    - Children signals -> add COPPA
-    - Education signals -> add FERPA
-    - Financial institution signals -> add GLBA
+    Applies cross-cutting rules for broad-applicability frameworks.
     """
     frameworks: set[str] = set()
 
@@ -90,7 +112,9 @@ def map_frameworks(domains: list[DomainResult]) -> list[str]:
             for fw in DOMAIN_FRAMEWORK_MAP.get(domain.domain, []):
                 frameworks.add(fw)
 
-    # Cross-cutting rules
+    detected_domains = {d.domain for d in domains if d.confidence >= CONFIDENCE_THRESHOLD}
+
+    # Cross-cutting rules — existing
     if _has_signals(domains, EU_SIGNALS):
         frameworks.add("gdpr")
 
@@ -107,8 +131,33 @@ def map_frameworks(domains: list[DomainResult]) -> list[str]:
         frameworks.add("glba")
 
     # CCPA applies broadly to SaaS, ecommerce, fintech with US users
-    detected_domains = {d.domain for d in domains if d.confidence >= CONFIDENCE_THRESHOLD}
     if detected_domains & {"saas", "ecommerce", "fintech", "ccpa"}:
         frameworks.add("ccpa")
+
+    # Cross-cutting rules — new frameworks
+    # NIST CSF + ISO 27001 apply to any substantial software with security controls
+    if detected_domains & {"saas", "fintech", "healthcare", "ecommerce"}:
+        frameworks.add("nist_csf")
+        frameworks.add("iso27001")
+
+    # DORA + PSD2 for EU fintech
+    if detected_domains & {"fintech", "ecommerce"} and _has_signals(domains, EU_FINTECH_SIGNALS):
+        frameworks.add("dora")
+        frameworks.add("psd2")
+    # PSD2 also for any payment processing
+    if detected_domains & {"fintech"} and _has_signals(domains, {"psd2", "sca", "3ds", "3d_secure"}):
+        frameworks.add("psd2")
+
+    # HITRUST for healthcare
+    if "healthcare" in detected_domains:
+        frameworks.add("hitrust")
+
+    # BIPA for biometric data
+    if _has_signals(domains, BIOMETRIC_SIGNALS):
+        frameworks.add("bipa")
+
+    # EU AI Act for ML/AI systems
+    if _has_signals(domains, AI_SIGNALS):
+        frameworks.add("eu_ai_act")
 
     return sorted(frameworks)

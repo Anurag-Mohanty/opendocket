@@ -43,6 +43,13 @@ from scanner.agents.ccpa_agent import CCPAAgent
 from scanner.agents.coppa_agent import COPPAAgent
 from scanner.agents.ferpa_agent import FERPAAgent
 from scanner.agents.glba_agent import GLBAAgent
+from scanner.agents.nist_csf_agent import NISTCSFAgent
+from scanner.agents.iso27001_agent import ISO27001Agent
+from scanner.agents.dora_agent import DORAAgent
+from scanner.agents.psd2_agent import PSD2Agent
+from scanner.agents.bipa_agent import BIPAAgent
+from scanner.agents.eu_ai_act_agent import EUAIActAgent
+from scanner.agents.hitrust_agent import HITRUSTAgent
 
 AGENTS = {
     "hipaa": HIPAAAgent,
@@ -55,6 +62,13 @@ AGENTS = {
     "coppa": COPPAAgent,
     "ferpa": FERPAAgent,
     "glba": GLBAAgent,
+    "nist_csf": NISTCSFAgent,
+    "iso27001": ISO27001Agent,
+    "dora": DORAAgent,
+    "psd2": PSD2Agent,
+    "bipa": BIPAAgent,
+    "eu_ai_act": EUAIActAgent,
+    "hitrust": HITRUSTAgent,
 }
 
 # ── Scan cancellation flags and params for restart ──
@@ -888,6 +902,71 @@ def restart_scan(scan_id):
         "status": "queued",
         "repo_name": repo_name,
         "restarted_from": scan_id,
+    })
+
+
+@app.route("/api/scan/<scan_id>/extend", methods=["POST"])
+def extend_scan(scan_id):
+    """Run only NEW frameworks against an existing completed scan.
+
+    Determines which frameworks the repo qualifies for now but weren't
+    run in the original scan. Runs only those, appends findings, and
+    regenerates the report.
+    """
+    scan = get_scan(scan_id)
+    if not scan:
+        return jsonify({"error": "Scan not found"}), 404
+    if scan["status"] != "complete":
+        return jsonify({"error": "Can only extend completed scans"}), 400
+
+    repo_name = scan.get("repo_name", "")
+    existing_frameworks = scan.get("frameworks_triggered", [])
+    if isinstance(existing_frameworks, str):
+        import json as _j
+        try:
+            existing_frameworks = _j.loads(existing_frameworks)
+        except (ValueError, TypeError):
+            existing_frameworks = []
+    existing_set = {fw.lower().replace("-", "_") for fw in existing_frameworks}
+
+    # Get domains from the scan
+    domains_data = scan.get("domains_detected", [])
+    if isinstance(domains_data, str):
+        import json as _j
+        try:
+            domains_data = _j.loads(domains_data)
+        except (ValueError, TypeError):
+            domains_data = []
+
+    # Rebuild DomainResult objects
+    from scanner.domain_detector import DomainResult
+    domains = []
+    for d in domains_data:
+        if isinstance(d, dict):
+            domains.append(DomainResult(
+                domain=d.get("domain", ""),
+                confidence=d.get("confidence", 0),
+                signal_count=0,
+                signals_found=[],
+            ))
+
+    # Determine all frameworks that should apply
+    all_frameworks = map_frameworks(domains)
+    new_frameworks = [fw for fw in all_frameworks if fw not in existing_set]
+
+    if not new_frameworks:
+        return jsonify({
+            "message": "No new frameworks to add",
+            "existing_frameworks": list(existing_set),
+            "all_applicable": all_frameworks,
+        })
+
+    return jsonify({
+        "scan_id": scan_id,
+        "repo_name": repo_name,
+        "existing_frameworks": list(existing_set),
+        "new_frameworks": new_frameworks,
+        "message": f"{len(new_frameworks)} new frameworks will be added. Use POST /api/scan to rescan with all frameworks.",
     })
 
 

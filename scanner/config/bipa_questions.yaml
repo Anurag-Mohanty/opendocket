@@ -1,0 +1,171 @@
+framework: BIPA
+full_name: Illinois Biometric Information Privacy Act (740 ILCS 14)
+description: >
+  BIPA regulates the collection, use, storage, and destruction of
+  biometric identifiers and biometric information. It requires
+  informed consent, purpose limitation, retention policies, and
+  secure storage. Violations carry penalties of $1,000-$5,000 per
+  violation with private right of action.
+
+questions:
+  - id: BIPA-001
+    category: Collection Notice
+    legal_question: >
+      Does the system provide written notice before collecting
+      biometric identifiers or information as required under
+      740 ILCS 14/15(b)?
+    regulatory_standard: "BIPA, 740 ILCS 14/15(b)"
+    search_patterns:
+      - "biometric_notice"
+      - "consent_display"
+      - "collection_notice"
+      - "disclosure_statement"
+      - "biometric_consent"
+      - "data_collection_notification"
+    absence_patterns: []
+
+  - id: BIPA-002
+    category: Written Consent
+    legal_question: >
+      Does the system obtain written or electronic consent
+      before collecting biometric data as required under
+      740 ILCS 14/15(b)?
+    regulatory_standard: "BIPA, 740 ILCS 14/15(b)"
+    search_patterns:
+      - "consent_signature"
+      - "consent_store"
+      - "biometric_agreement"
+      - "user_acknowledgment"
+      - "accept_terms"
+      - "opt_in_biometric"
+    absence_patterns: []
+
+  - id: BIPA-003
+    category: Purpose Limitation
+    legal_question: >
+      Is the specific purpose for biometric data collection
+      documented and limited as required under 740 ILCS 14/15(a)?
+    regulatory_standard: "BIPA, 740 ILCS 14/15(a)(1)"
+    search_patterns:
+      - "collection_purpose"
+      - "purpose_limitation"
+      - "intended_use"
+      - "biometric_purpose"
+      - "use_case_define"
+    absence_patterns: []
+
+  - id: BIPA-004
+    category: Retention Policy
+    legal_question: >
+      Does the system implement and enforce retention schedules
+      for biometric data as required under 740 ILCS 14/15(a)?
+    regulatory_standard: "BIPA, 740 ILCS 14/15(a)(2)"
+    search_patterns:
+      - "retention_period"
+      - "deletion_schedule"
+      - "data_expiration"
+      - "purge_after"
+      - "ttl"
+      - "auto_delete"
+      - "retention_policy"
+    absence_patterns: []
+
+  - id: BIPA-005
+    category: Secure Storage
+    legal_question: >
+      Is biometric data stored using encryption and access
+      controls meeting industry standards as required under
+      740 ILCS 14/15(e)?
+    regulatory_standard: "BIPA, 740 ILCS 14/15(e)"
+    search_patterns:
+      - "encrypt_biometric"
+      - "secure_storage"
+      - "access_control_biometric"
+      - "biometric_encrypt"
+      - "protected_store"
+    absence_patterns:
+      - "plain_biometric"
+      - "unencrypted"
+
+  - id: BIPA-006
+    category: Transmission Security
+    legal_question: >
+      Is biometric data encrypted when transmitted as required
+      under 740 ILCS 14/15(e)?
+    regulatory_standard: "BIPA, 740 ILCS 14/15(e)"
+    search_patterns:
+      - "tls"
+      - "https"
+      - "secure_transport"
+      - "encrypt_transit"
+      - "ssl"
+    absence_patterns:
+      - "http://"
+      - "unencrypted_transport"
+
+  - id: BIPA-007
+    category: No Unauthorized Disclosure
+    legal_question: >
+      Does the system prevent sale, lease, or disclosure of
+      biometric data without consent as required under
+      740 ILCS 14/15(c)?
+    regulatory_standard: "BIPA, 740 ILCS 14/15(c)"
+    search_patterns:
+      - "third_party_restriction"
+      - "data_sharing_control"
+      - "no_sell"
+      - "disclosure_prevent"
+      - "consent_check"
+    absence_patterns:
+      - "share_biometric"
+      - "export_biometric"
+      - "third_party_send"
+
+  - id: BIPA-008
+    category: Destruction Policy
+    legal_question: >
+      Does the system implement secure destruction of biometric
+      data when retention purpose expires as required under
+      740 ILCS 14/15(a)?
+    regulatory_standard: "BIPA, 740 ILCS 14/15(a)"
+    search_patterns:
+      - "secure_delete"
+      - "data_wipe"
+      - "destruction_policy"
+      - "shred"
+      - "crypto_erase"
+      - "permanent_delete"
+    absence_patterns: []
+
+  - id: BIPA-009
+    category: Biometric Data Collection
+    legal_question: >
+      Does the system collect biometric identifiers such as
+      fingerprints, facial geometry, iris scans, or voiceprints?
+    regulatory_standard: "BIPA, 740 ILCS 14/10 (Definitions)"
+    search_patterns:
+      - "biometric"
+      - "fingerprint"
+      - "facial_recognition"
+      - "face_detect"
+      - "iris_scan"
+      - "voiceprint"
+      - "retina"
+      - "face_id"
+      - "touch_id"
+      - "face_encoding"
+    absence_patterns: []
+
+  - id: BIPA-010
+    category: Audit Trail
+    legal_question: >
+      Does the system log biometric data access events for
+      accountability and audit purposes?
+    regulatory_standard: "BIPA, 740 ILCS 14/15 (General)"
+    search_patterns:
+      - "access_log_biometric"
+      - "audit_trail"
+      - "biometric_access_log"
+      - "who_accessed"
+      - "access_tracking"
+    absence_patterns: []

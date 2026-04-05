@@ -1,0 +1,197 @@
+framework: ISO-27001
+full_name: ISO/IEC 27001:2022 Information Security Management
+description: >
+  ISO 27001 is the international standard for information security
+  management systems (ISMS). These questions assess code-level
+  implementation of Annex A controls related to secure development,
+  access control, cryptography, and operational security.
+
+questions:
+  - id: ISO27001-001
+    category: Source Code Access Control
+    legal_question: >
+      Is access to source code controlled, logged, and restricted
+      to authorized personnel as required under ISO 27001 Annex A
+      Control 8.4?
+    regulatory_standard: "ISO 27001:2022, Annex A, Control 8.4 (Access to Source Code)"
+    search_patterns:
+      - "CODEOWNERS"
+      - "branch_protection"
+      - "required_review"
+      - "protected_branch"
+      - "merge_request"
+      - "pull_request"
+      - "approval_required"
+    absence_patterns: []
+
+  - id: ISO27001-002
+    category: Secure Coding Practices
+    legal_question: >
+      Are secure coding principles applied including input
+      validation, output encoding, and protection against
+      injection attacks as required under ISO 27001 Control 8.28?
+    regulatory_standard: "ISO 27001:2022, Annex A, Control 8.28 (Secure Coding)"
+    search_patterns:
+      - "sanitize"
+      - "validate_input"
+      - "parameterized"
+      - "prepared_statement"
+      - "escape_html"
+      - "xss_protect"
+      - "csrf_token"
+      - "content_security_policy"
+    absence_patterns:
+      - "eval("
+      - "innerHTML"
+      - "dangerouslySetInnerHTML"
+      - "exec("
+      - "raw_sql"
+
+  - id: ISO27001-003
+    category: Role-Based Access Control
+    legal_question: >
+      Does the system implement role-based access control with
+      least privilege principles as required under ISO 27001
+      Controls 8.1-8.3?
+    regulatory_standard: "ISO 27001:2022, Annex A, Controls 8.1, 8.2, 8.3 (User Access)"
+    search_patterns:
+      - "role"
+      - "permission"
+      - "rbac"
+      - "acl"
+      - "authorize"
+      - "access_control"
+      - "privilege"
+      - "admin_only"
+    absence_patterns:
+      - "admin.*true"
+      - "isAdmin.*false"
+      - "skip_auth"
+
+  - id: ISO27001-004
+    category: Encryption at Rest
+    legal_question: >
+      Is sensitive data encrypted at rest using approved
+      cryptographic algorithms as required under ISO 27001
+      Control 8.24?
+    regulatory_standard: "ISO 27001:2022, Annex A, Control 8.24 (Use of Cryptography)"
+    search_patterns:
+      - "encrypt"
+      - "aes"
+      - "cipher"
+      - "crypto"
+      - "kms"
+      - "key_management"
+      - "fernet"
+      - "bcrypt"
+      - "argon2"
+    absence_patterns:
+      - "plaintext"
+      - "base64_encode"
+      - "unencrypted"
+
+  - id: ISO27001-005
+    category: Encryption in Transit
+    legal_question: >
+      Is data encrypted in transit using TLS 1.2 or higher
+      as required under ISO 27001 Control 8.24?
+    regulatory_standard: "ISO 27001:2022, Annex A, Control 8.24"
+    search_patterns:
+      - "https"
+      - "tls"
+      - "ssl"
+      - "certificate"
+      - "cert_verify"
+      - "secure_transport"
+      - "hsts"
+    absence_patterns:
+      - "http://"
+      - "verify.*false"
+      - "insecure"
+      - "ssl.*disable"
+
+  - id: ISO27001-006
+    category: Key Management
+    legal_question: >
+      Are cryptographic keys properly managed with rotation
+      policies as required under ISO 27001 Controls 8.24-8.26?
+    regulatory_standard: "ISO 27001:2022, Annex A, Controls 8.24, 8.25, 8.26"
+    search_patterns:
+      - "key_rotation"
+      - "key_management"
+      - "key_store"
+      - "key_vault"
+      - "rotate_key"
+      - "key_expiry"
+    absence_patterns:
+      - "hardcoded_key"
+      - "static_key"
+
+  - id: ISO27001-007
+    category: Change Management
+    legal_question: >
+      Are changes to systems tracked, reviewed, and auditable
+      as required under ISO 27001 Control 8.32?
+    regulatory_standard: "ISO 27001:2022, Annex A, Control 8.32 (Change Management)"
+    search_patterns:
+      - "changelog"
+      - "version_control"
+      - "migration"
+      - "schema_version"
+      - "audit_trail"
+      - "change_log"
+      - "release_notes"
+    absence_patterns: []
+
+  - id: ISO27001-008
+    category: Logging and Monitoring
+    legal_question: >
+      Are security events logged with tamper protection
+      as required under ISO 27001 Control 8.15?
+    regulatory_standard: "ISO 27001:2022, Annex A, Control 8.15 (Logging)"
+    search_patterns:
+      - "audit_log"
+      - "security_log"
+      - "access_log"
+      - "tamper_detect"
+      - "immutable_log"
+      - "log_retention"
+      - "structured_logging"
+    absence_patterns:
+      - "log_disable"
+      - "no_log"
+
+  - id: ISO27001-009
+    category: Vulnerability Management
+    legal_question: >
+      Does the system implement technical vulnerability
+      management processes as required under ISO 27001
+      Control 8.8?
+    regulatory_standard: "ISO 27001:2022, Annex A, Control 8.8 (Technical Vulnerability Management)"
+    search_patterns:
+      - "vulnerability_scan"
+      - "security_audit"
+      - "dependabot"
+      - "snyk"
+      - "cve"
+      - "security_advisory"
+      - "patch_management"
+    absence_patterns: []
+
+  - id: ISO27001-010
+    category: Data Classification
+    legal_question: >
+      Is information classified and labeled according to
+      sensitivity as required under ISO 27001 Control 5.12?
+    regulatory_standard: "ISO 27001:2022, Annex A, Control 5.12 (Classification of Information)"
+    search_patterns:
+      - "classification"
+      - "sensitivity"
+      - "confidential"
+      - "restricted"
+      - "public"
+      - "internal"
+      - "data_label"
+      - "pii"
+      - "sensitive_data"
+    absence_patterns: []

@@ -1,0 +1,193 @@
+framework: HITRUST
+full_name: HITRUST Common Security Framework (CSF)
+description: >
+  HITRUST CSF is a comprehensive security framework that maps to
+  HIPAA, NIST, ISO 27001, and other standards. It is widely adopted
+  in healthcare for demonstrating security compliance. These questions
+  assess code-level controls specific to healthcare data protection.
+
+questions:
+  - id: HITRUST-001
+    category: PHI Access Control
+    legal_question: >
+      Does the system implement role-based access control
+      specifically for Protected Health Information as mapped
+      to HIPAA 45 CFR 164.312(a)(1)?
+    regulatory_standard: "HITRUST CSF; HIPAA 45 CFR §164.312(a)(1)"
+    search_patterns:
+      - "phi_access"
+      - "rbac"
+      - "role_check"
+      - "patient_access"
+      - "access_restriction"
+      - "authorize_phi"
+      - "hipaa_access"
+    absence_patterns:
+      - "public_access"
+      - "open_access"
+
+  - id: HITRUST-002
+    category: Encryption Standards
+    legal_question: >
+      Is PHI encrypted using FIPS 140-2 validated modules
+      as required under HITRUST CSF encryption controls?
+    regulatory_standard: "HITRUST CSF; HIPAA 45 CFR §164.312(a)(2)(iv); NIST SP 800-111"
+    search_patterns:
+      - "fips_140"
+      - "aes_256"
+      - "encrypt"
+      - "cipher"
+      - "kms"
+      - "encryption_key"
+      - "fernet"
+      - "pgcrypto"
+    absence_patterns:
+      - "plaintext"
+      - "base64"
+      - "unencrypted"
+      - "md5"
+
+  - id: HITRUST-003
+    category: TLS Enforcement
+    legal_question: >
+      Is all PHI transmitted over TLS 1.2 or higher with
+      certificate validation as required under HITRUST CSF?
+    regulatory_standard: "HITRUST CSF; HIPAA 45 CFR §164.312(e)(1)"
+    search_patterns:
+      - "tls"
+      - "https"
+      - "ssl"
+      - "certificate_verify"
+      - "hsts"
+      - "secure_transport"
+      - "min_tls_version"
+    absence_patterns:
+      - "http://"
+      - "verify_ssl.*false"
+      - "insecure"
+      - "tls_1_0"
+
+  - id: HITRUST-004
+    category: Audit Log Integrity
+    legal_question: >
+      Are PHI access audit logs protected from tampering
+      with integrity verification as required under HITRUST CSF?
+    regulatory_standard: "HITRUST CSF; HIPAA 45 CFR §164.312(b)"
+    search_patterns:
+      - "audit_log"
+      - "tamper_detect"
+      - "immutable_log"
+      - "log_integrity"
+      - "checksum"
+      - "hash_log"
+      - "append_only"
+    absence_patterns:
+      - "delete_log"
+      - "truncate_log"
+
+  - id: HITRUST-005
+    category: Audit Log Retention
+    legal_question: >
+      Are audit logs retained for a minimum of 6 years
+      as required under HITRUST CSF retention controls?
+    regulatory_standard: "HITRUST CSF; HIPAA 45 CFR §164.530(j)"
+    search_patterns:
+      - "log_retention"
+      - "archive"
+      - "retention_policy"
+      - "6_year"
+      - "long_term_storage"
+      - "cold_storage"
+    absence_patterns:
+      - "delete_old_logs"
+      - "log_rotate.*delete"
+
+  - id: HITRUST-006
+    category: Strong Authentication
+    legal_question: >
+      Does the system enforce strong authentication with
+      password policies and MFA for PHI access as required
+      under HITRUST CSF?
+    regulatory_standard: "HITRUST CSF; HIPAA 45 CFR §164.312(d)"
+    search_patterns:
+      - "password_policy"
+      - "mfa"
+      - "two_factor"
+      - "password_strength"
+      - "min_length"
+      - "account_lockout"
+      - "session_timeout"
+    absence_patterns:
+      - "weak_password"
+      - "no_mfa"
+
+  - id: HITRUST-007
+    category: Secure Development
+    legal_question: >
+      Are secure coding practices applied including OWASP
+      guidelines as required under HITRUST CSF development
+      controls?
+    regulatory_standard: "HITRUST CSF; ISO 27001 A.8.28"
+    search_patterns:
+      - "owasp"
+      - "security_lint"
+      - "code_review"
+      - "sast"
+      - "static_analysis"
+      - "security_scan"
+      - "sonarqube"
+    absence_patterns:
+      - "eval("
+      - "innerHTML"
+      - "sql_inject"
+
+  - id: HITRUST-008
+    category: Breach Notification
+    legal_question: >
+      Does the system implement automated breach detection
+      and notification capabilities as required under HITRUST
+      CSF incident management controls?
+    regulatory_standard: "HITRUST CSF; HIPAA 45 CFR §164.404 (Breach Notification)"
+    search_patterns:
+      - "breach_detect"
+      - "breach_notification"
+      - "incident_alert"
+      - "security_incident"
+      - "breach_report"
+      - "notification_trigger"
+    absence_patterns: []
+
+  - id: HITRUST-009
+    category: PHI Backup
+    legal_question: >
+      Does the system implement tested backup and recovery
+      procedures specifically for PHI as required under
+      HITRUST CSF?
+    regulatory_standard: "HITRUST CSF; HIPAA 45 CFR §164.308(a)(7)"
+    search_patterns:
+      - "backup"
+      - "restore"
+      - "disaster_recovery"
+      - "replication"
+      - "snapshot"
+      - "recovery_test"
+    absence_patterns: []
+
+  - id: HITRUST-010
+    category: Minimum Necessary
+    legal_question: >
+      Does the system enforce the minimum necessary standard
+      limiting PHI access to only what is needed for the
+      intended purpose?
+    regulatory_standard: "HITRUST CSF; HIPAA 45 CFR §164.502(b) (Minimum Necessary)"
+    search_patterns:
+      - "minimum_necessary"
+      - "least_privilege"
+      - "data_minimization"
+      - "need_to_know"
+      - "field_level_access"
+      - "column_permission"
+      - "redact"
+    absence_patterns:
+      - "select_all"
+      - "fetch_all"

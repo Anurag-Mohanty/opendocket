@@ -1,0 +1,165 @@
+framework: DORA
+full_name: EU Digital Operational Resilience Act (Regulation 2022/2554)
+description: >
+  DORA establishes requirements for ICT risk management, incident
+  reporting, digital operational resilience testing, and third-party
+  risk management for EU financial entities. These questions assess
+  code-level implementation of DORA requirements.
+
+questions:
+  - id: DORA-001
+    category: ICT Risk Management Framework
+    legal_question: >
+      Does the system implement an ICT risk management framework
+      with documented policies as required under DORA Article 6?
+    regulatory_standard: "DORA, Article 6 (ICT Risk Management Framework)"
+    search_patterns:
+      - "risk_management"
+      - "risk_framework"
+      - "risk_policy"
+      - "risk_register"
+      - "ict_risk"
+      - "operational_risk"
+    absence_patterns: []
+
+  - id: DORA-002
+    category: ICT Incident Detection
+    legal_question: >
+      Does the system implement mechanisms for prompt detection
+      of ICT-related incidents as required under DORA Article 10?
+    regulatory_standard: "DORA, Article 10 (Detection)"
+    search_patterns:
+      - "incident_detect"
+      - "alert_rule"
+      - "anomaly_detect"
+      - "real_time_monitor"
+      - "health_check"
+      - "circuit_breaker"
+      - "error_rate"
+    absence_patterns: []
+
+  - id: DORA-003
+    category: Incident Classification
+    legal_question: >
+      Can ICT incidents be classified by severity and impact
+      as required under DORA Article 18 for incident reporting?
+    regulatory_standard: "DORA, Article 18 (Classification of ICT-related incidents)"
+    search_patterns:
+      - "severity_level"
+      - "incident_classify"
+      - "priority"
+      - "critical"
+      - "major"
+      - "minor"
+      - "impact_assessment"
+    absence_patterns: []
+
+  - id: DORA-004
+    category: Incident Response
+    legal_question: >
+      Does the system implement incident response and communication
+      procedures as required under DORA Article 11?
+    regulatory_standard: "DORA, Article 11 (Response and Recovery)"
+    search_patterns:
+      - "incident_response"
+      - "playbook"
+      - "escalation"
+      - "notification"
+      - "status_page"
+      - "postmortem"
+      - "root_cause"
+    absence_patterns: []
+
+  - id: DORA-005
+    category: Resilience Testing
+    legal_question: >
+      Does the system undergo regular resilience testing including
+      scenario-based testing as required under DORA Article 24?
+    regulatory_standard: "DORA, Article 24 (General requirements for digital operational resilience testing)"
+    search_patterns:
+      - "resilience_test"
+      - "chaos_engineering"
+      - "load_test"
+      - "stress_test"
+      - "failover_test"
+      - "penetration_test"
+      - "disaster_recovery_test"
+    absence_patterns: []
+
+  - id: DORA-006
+    category: Threat-Led Penetration Testing
+    legal_question: >
+      Does the system support threat-led penetration testing
+      (TLPT) as required under DORA Article 26?
+    regulatory_standard: "DORA, Article 26 (Threat-led penetration testing)"
+    search_patterns:
+      - "penetration_test"
+      - "security_test"
+      - "tlpt"
+      - "red_team"
+      - "attack_simulation"
+      - "vulnerability_assess"
+    absence_patterns: []
+
+  - id: DORA-007
+    category: Third-Party ICT Risk
+    legal_question: >
+      Does the system monitor and manage ICT third-party service
+      provider risks as required under DORA Article 28?
+    regulatory_standard: "DORA, Article 28 (General principles of ICT third-party risk management)"
+    search_patterns:
+      - "vendor_risk"
+      - "third_party"
+      - "sla_monitor"
+      - "dependency_track"
+      - "vendor_compliance"
+      - "service_level"
+      - "contract_monitor"
+    absence_patterns: []
+
+  - id: DORA-008
+    category: Business Continuity
+    legal_question: >
+      Does the system implement and test business continuity
+      plans as required under DORA Article 11?
+    regulatory_standard: "DORA, Article 11 (Response and Recovery)"
+    search_patterns:
+      - "business_continuity"
+      - "disaster_recovery"
+      - "failover"
+      - "backup_restore"
+      - "rto"
+      - "rpo"
+      - "redundancy"
+    absence_patterns: []
+
+  - id: DORA-009
+    category: Data Integrity
+    legal_question: >
+      Does the system ensure data integrity and protection
+      during ICT incidents as required under DORA Article 9?
+    regulatory_standard: "DORA, Article 9 (Protection and Prevention)"
+    search_patterns:
+      - "data_integrity"
+      - "checksum"
+      - "hash_verify"
+      - "tamper_detect"
+      - "data_validation"
+      - "consistency_check"
+    absence_patterns: []
+
+  - id: DORA-010
+    category: ICT Change Management
+    legal_question: >
+      Does the system implement controlled ICT change management
+      processes as required under DORA Article 9?
+    regulatory_standard: "DORA, Article 9 (Protection and Prevention)"
+    search_patterns:
+      - "change_management"
+      - "deployment_pipeline"
+      - "ci_cd"
+      - "rollback"
+      - "canary_deploy"
+      - "feature_flag"
+      - "blue_green"
+    absence_patterns: []

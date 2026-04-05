@@ -85,6 +85,50 @@ DOMAIN_SIGNALS: dict[str, list[str]] = {
         "insurance", "investment_advisor",
         "financial_privacy", "customer_financial",
     ],
+    "nist_csf": [
+        "nist", "csf", "cybersecurity_framework",
+        "asset_inventory", "risk_assessment", "incident_response",
+        "recovery_plan", "governance_framework",
+        "continuous_monitoring", "supply_chain_risk",
+        "threat_model", "vulnerability_management",
+    ],
+    "iso27001": [
+        "iso_27001", "iso27001", "isms",
+        "annex_a", "information_security",
+        "security_management", "iso_27002",
+        "certification", "security_policy",
+        "security_control",
+    ],
+    "dora": [
+        "dora", "digital_resilience",
+        "ict_risk", "operational_resilience",
+        "resilience_testing", "threat_led",
+        "tlpt", "ict_incident",
+    ],
+    "psd2": [
+        "psd2", "sca", "strong_customer_authentication",
+        "3ds", "3d_secure", "threeds",
+        "payment_service_provider", "dynamic_linking",
+        "transaction_risk_analysis",
+    ],
+    "bipa": [
+        "biometric", "facial_recognition", "fingerprint",
+        "iris_scan", "voiceprint", "retina_scan",
+        "face_detect", "face_id", "touch_id",
+        "face_encoding", "biometric_template",
+    ],
+    "eu_ai_act": [
+        "machine_learning", "neural_network", "deep_learning",
+        "model_training", "ai_system", "prediction_model",
+        "classification_model", "tensorflow", "pytorch",
+        "sklearn", "scikit_learn", "huggingface",
+        "transformer", "llm", "inference",
+        "training_data", "model_card",
+    ],
+    "hitrust": [
+        "hitrust", "csf_healthcare",
+        "hitrust_certification", "hitrust_assessment",
+    ],
 }
 
 # File extensions to scan for signals

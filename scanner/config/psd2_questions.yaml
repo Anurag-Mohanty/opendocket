@@ -1,0 +1,169 @@
+framework: PSD2
+full_name: EU Payment Services Directive 2 / Strong Customer Authentication
+description: >
+  PSD2 requires Strong Customer Authentication (SCA) for electronic
+  payments in the EU. These questions assess code-level implementation
+  of SCA requirements, 3D Secure, transaction risk analysis, and
+  payment security controls.
+
+questions:
+  - id: PSD2-001
+    category: Strong Customer Authentication
+    legal_question: >
+      Does the system enforce multi-factor authentication for
+      electronic payment transactions as required under PSD2
+      Article 97?
+    regulatory_standard: "PSD2, Article 97 (Authentication)"
+    search_patterns:
+      - "sca"
+      - "strong_authentication"
+      - "multi_factor"
+      - "mfa_payment"
+      - "two_factor"
+      - "authenticate_transaction"
+    absence_patterns:
+      - "skip_auth"
+      - "bypass_sca"
+
+  - id: PSD2-002
+    category: Authentication Factors
+    legal_question: >
+      Does the system support at least two of three factor types
+      (knowledge, possession, inherence) as required under PSD2
+      Regulatory Technical Standards?
+    regulatory_standard: "PSD2 RTS on SCA, Article 4"
+    search_patterns:
+      - "knowledge_factor"
+      - "possession_factor"
+      - "biometric"
+      - "password"
+      - "otp"
+      - "push_notification"
+      - "fingerprint"
+      - "face_id"
+    absence_patterns: []
+
+  - id: PSD2-003
+    category: Dynamic Linking
+    legal_question: >
+      Is the authentication code dynamically linked to the
+      transaction amount and payee as required under PSD2
+      RTS Article 5?
+    regulatory_standard: "PSD2 RTS, Article 5 (Dynamic Linking)"
+    search_patterns:
+      - "dynamic_link"
+      - "transaction_binding"
+      - "amount_verify"
+      - "payee_verify"
+      - "transaction_sign"
+      - "hmac"
+    absence_patterns: []
+
+  - id: PSD2-004
+    category: 3D Secure Implementation
+    legal_question: >
+      Does the system implement EMV 3D Secure 2 protocol
+      for card-not-present transactions?
+    regulatory_standard: "PSD2 RTS (3DS2 Protocol Requirements)"
+    search_patterns:
+      - "3ds"
+      - "3d_secure"
+      - "threeds"
+      - "directory_server"
+      - "acs"
+      - "eci"
+      - "authentication_value"
+    absence_patterns: []
+
+  - id: PSD2-005
+    category: SCA Exemptions
+    legal_question: >
+      Are SCA exemptions properly managed with cumulative
+      limits and risk thresholds as required under PSD2 RTS?
+    regulatory_standard: "PSD2 RTS, Articles 10-18 (Exemptions)"
+    search_patterns:
+      - "exemption"
+      - "low_value"
+      - "trusted_beneficiary"
+      - "recurring_payment"
+      - "whitelist"
+      - "risk_threshold"
+    absence_patterns: []
+
+  - id: PSD2-006
+    category: Transaction Risk Analysis
+    legal_question: >
+      Does the system implement transaction risk analysis (TRA)
+      for exemption eligibility as required under PSD2 RTS
+      Article 18?
+    regulatory_standard: "PSD2 RTS, Article 18 (Transaction Risk Analysis)"
+    search_patterns:
+      - "risk_analysis"
+      - "fraud_score"
+      - "risk_score"
+      - "transaction_risk"
+      - "fraud_detection"
+      - "risk_engine"
+    absence_patterns: []
+
+  - id: PSD2-007
+    category: Authentication Data Protection
+    legal_question: >
+      Is sensitive authentication data (credentials, PINs, OTPs)
+      protected from unauthorized access as required under PSD2?
+    regulatory_standard: "PSD2, Article 97; PSD2 RTS, Article 22"
+    search_patterns:
+      - "credential_store"
+      - "secure_enclave"
+      - "tokenize"
+      - "mask_pin"
+      - "encrypt_credential"
+      - "hash_password"
+    absence_patterns:
+      - "plain_password"
+      - "store_pin"
+      - "log_credential"
+
+  - id: PSD2-008
+    category: Authentication Rate Limiting
+    legal_question: >
+      Are authentication attempts rate-limited with lockout
+      mechanisms to prevent brute force attacks?
+    regulatory_standard: "PSD2 RTS, Article 4 (Security Measures)"
+    search_patterns:
+      - "rate_limit"
+      - "attempt_limit"
+      - "lockout"
+      - "brute_force"
+      - "max_retries"
+      - "throttle"
+    absence_patterns: []
+
+  - id: PSD2-009
+    category: Transaction Monitoring
+    legal_question: >
+      Does the system monitor transactions in real-time for
+      unauthorized or fraudulent activity?
+    regulatory_standard: "PSD2, Article 96 (Incident Reporting); RTS Article 2"
+    search_patterns:
+      - "transaction_monitor"
+      - "fraud_monitor"
+      - "suspicious_activity"
+      - "real_time_check"
+      - "velocity_check"
+      - "pattern_detect"
+    absence_patterns: []
+
+  - id: PSD2-010
+    category: Consent and Audit Trail
+    legal_question: >
+      Are customer consent and payment authorization decisions
+      logged with complete audit trails?
+    regulatory_standard: "PSD2, Article 98 (Regulatory Technical Standards)"
+    search_patterns:
+      - "consent_log"
+      - "authorization_log"
+      - "payment_audit"
+      - "transaction_history"
+      - "approval_record"
+    absence_patterns: []

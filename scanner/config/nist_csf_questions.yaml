@@ -1,0 +1,209 @@
+framework: NIST-CSF
+full_name: NIST Cybersecurity Framework 2.0
+description: >
+  The NIST Cybersecurity Framework provides a comprehensive set of
+  guidelines for managing cybersecurity risk. Version 2.0 adds the
+  Govern function. These questions assess code-level implementation
+  of controls across Identify, Protect, Detect, Respond, Recover,
+  and Govern functions.
+
+questions:
+  - id: NIST-CSF-001
+    category: Asset Identification
+    legal_question: >
+      Does the system maintain an inventory of software assets,
+      dependencies, and data flows as required under the NIST CSF
+      Identify function for asset management?
+    regulatory_standard: "NIST CSF 2.0, ID.AM (Asset Management)"
+    search_patterns:
+      - "asset_inventory"
+      - "dependency"
+      - "package.json"
+      - "requirements.txt"
+      - "go.mod"
+      - "Cargo.toml"
+      - "sbom"
+      - "software_bill"
+      - "manifest"
+      - "lockfile"
+    absence_patterns:
+      - "TODO.*dependency"
+      - "outdated"
+
+  - id: NIST-CSF-002
+    category: Risk Assessment
+    legal_question: >
+      Does the system implement vulnerability scanning and risk
+      assessment processes as required under the NIST CSF Identify
+      function for risk assessment?
+    regulatory_standard: "NIST CSF 2.0, ID.RA (Risk Assessment)"
+    search_patterns:
+      - "vulnerability"
+      - "cve"
+      - "security_scan"
+      - "risk_assessment"
+      - "threat_model"
+      - "dependabot"
+      - "snyk"
+      - "trivy"
+      - "grype"
+      - "audit"
+    absence_patterns:
+      - "known_vulnerability"
+      - "insecure"
+
+  - id: NIST-CSF-003
+    category: Secrets Management
+    legal_question: >
+      Does the system properly isolate secrets and credentials
+      from source code as required under the NIST CSF Protect
+      function for access control?
+    regulatory_standard: "NIST CSF 2.0, PR.AC (Access Control)"
+    search_patterns:
+      - "os.environ"
+      - "process.env"
+      - "vault"
+      - "secrets_manager"
+      - "key_vault"
+      - "dotenv"
+      - "config_secret"
+      - "credential_store"
+    absence_patterns:
+      - "password"
+      - "api_key"
+      - "secret_key"
+      - "private_key"
+      - "hardcoded"
+
+  - id: NIST-CSF-004
+    category: Multi-Factor Authentication
+    legal_question: >
+      Does the system enforce multi-factor authentication for
+      privileged access as required under the NIST CSF Protect
+      function?
+    regulatory_standard: "NIST CSF 2.0, PR.AC-7 (Authentication)"
+    search_patterns:
+      - "mfa"
+      - "two_factor"
+      - "2fa"
+      - "totp"
+      - "multi_factor"
+      - "authenticator"
+      - "webauthn"
+      - "fido"
+      - "passkey"
+    absence_patterns:
+      - "skip_mfa"
+      - "disable_2fa"
+
+  - id: NIST-CSF-005
+    category: Security Logging
+    legal_question: >
+      Does the system implement comprehensive security event
+      logging as required under the NIST CSF Detect function
+      for anomalies and events?
+    regulatory_standard: "NIST CSF 2.0, DE.AE (Anomalies and Events)"
+    search_patterns:
+      - "audit_log"
+      - "security_event"
+      - "access_log"
+      - "structured_log"
+      - "syslog"
+      - "event_capture"
+      - "log_level"
+      - "winston"
+      - "pino"
+      - "bunyan"
+    absence_patterns:
+      - "console.log"
+      - "print("
+
+  - id: NIST-CSF-006
+    category: Anomaly Detection
+    legal_question: >
+      Does the system implement automated anomaly detection
+      and alerting as required under the NIST CSF Detect function
+      for continuous monitoring?
+    regulatory_standard: "NIST CSF 2.0, DE.CM (Continuous Monitoring)"
+    search_patterns:
+      - "anomaly_detect"
+      - "alert_rule"
+      - "threshold"
+      - "monitor"
+      - "health_check"
+      - "watchdog"
+      - "prometheus"
+      - "grafana"
+      - "datadog"
+      - "sentry"
+    absence_patterns: []
+
+  - id: NIST-CSF-007
+    category: Incident Response
+    legal_question: >
+      Does the system implement incident response procedures
+      and automation as required under the NIST CSF Respond
+      function for response planning?
+    regulatory_standard: "NIST CSF 2.0, RS.RP (Response Planning)"
+    search_patterns:
+      - "incident_response"
+      - "playbook"
+      - "escalation"
+      - "on_call"
+      - "pagerduty"
+      - "opsgenie"
+      - "alert_handler"
+      - "breach_notification"
+    absence_patterns: []
+
+  - id: NIST-CSF-008
+    category: Backup and Recovery
+    legal_question: >
+      Does the system implement tested backup and disaster
+      recovery procedures as required under the NIST CSF
+      Recover function?
+    regulatory_standard: "NIST CSF 2.0, RC.RP (Recovery Planning)"
+    search_patterns:
+      - "backup"
+      - "disaster_recovery"
+      - "restore"
+      - "failover"
+      - "rto"
+      - "rpo"
+      - "replication"
+      - "snapshot"
+    absence_patterns: []
+
+  - id: NIST-CSF-009
+    category: Supply Chain Risk
+    legal_question: >
+      Does the system manage supply chain and third-party
+      dependency risks as required under the NIST CSF Govern
+      function for risk management?
+    regulatory_standard: "NIST CSF 2.0, GV.SC (Supply Chain Risk Management)"
+    search_patterns:
+      - "vendor_risk"
+      - "third_party"
+      - "supply_chain"
+      - "dependency_check"
+      - "license_audit"
+      - "sbom"
+      - "software_composition"
+    absence_patterns: []
+
+  - id: NIST-CSF-010
+    category: Security Governance
+    legal_question: >
+      Does the system establish cybersecurity governance
+      policies and procedures as required under the NIST CSF
+      Govern function?
+    regulatory_standard: "NIST CSF 2.0, GV.PO (Policy)"
+    search_patterns:
+      - "security_policy"
+      - "SECURITY.md"
+      - "governance"
+      - "compliance_check"
+      - "policy_enforce"
+      - "security_review"
+      - "CODEOWNERS"
+    absence_patterns: []

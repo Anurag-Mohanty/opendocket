@@ -1,0 +1,180 @@
+framework: EU-AI-ACT
+full_name: EU Artificial Intelligence Act (Regulation 2024/1689)
+description: >
+  The EU AI Act establishes a risk-based regulatory framework for
+  artificial intelligence systems. It classifies AI by risk level
+  and imposes requirements for transparency, human oversight,
+  data governance, and bias mitigation. These questions assess
+  code-level compliance for AI/ML systems.
+
+questions:
+  - id: EUAI-001
+    category: Risk Classification
+    legal_question: >
+      Is the AI system classified according to risk level
+      (unacceptable, high, limited, minimal) as defined
+      under EU AI Act Article 6 and Annex III?
+    regulatory_standard: "EU AI Act, Article 6; Annex III"
+    search_patterns:
+      - "risk_classification"
+      - "risk_level"
+      - "high_risk"
+      - "ai_category"
+      - "system_classification"
+      - "risk_assess"
+    absence_patterns: []
+
+  - id: EUAI-002
+    category: Prohibited Practices Detection
+    legal_question: >
+      Does the system avoid prohibited AI practices including
+      social scoring, real-time biometric surveillance, and
+      manipulative techniques as defined under Article 5?
+    regulatory_standard: "EU AI Act, Article 5 (Prohibited AI Practices)"
+    search_patterns:
+      - "social_score"
+      - "behavior_score"
+      - "surveillance"
+      - "real_time_biometric"
+      - "emotion_recognition"
+      - "manipulation"
+      - "subliminal"
+    absence_patterns:
+      - "social_credit"
+      - "mass_surveillance"
+      - "predictive_policing"
+
+  - id: EUAI-003
+    category: Transparency
+    legal_question: >
+      Does the system disclose to users that they are interacting
+      with an AI system as required under Article 52?
+    regulatory_standard: "EU AI Act, Article 52 (Transparency Obligations)"
+    search_patterns:
+      - "ai_disclosure"
+      - "ai_notice"
+      - "ai_generated"
+      - "is_ai"
+      - "machine_generated"
+      - "automated_decision"
+      - "bot_disclosure"
+    absence_patterns: []
+
+  - id: EUAI-004
+    category: Human Oversight
+    legal_question: >
+      Can humans override, review, or intervene in AI system
+      decisions as required under Article 14 for high-risk
+      AI systems?
+    regulatory_standard: "EU AI Act, Article 14 (Human Oversight)"
+    search_patterns:
+      - "human_review"
+      - "manual_override"
+      - "human_in_the_loop"
+      - "escalate_to_human"
+      - "approval_required"
+      - "review_queue"
+      - "override"
+    absence_patterns:
+      - "fully_automated"
+      - "no_review"
+
+  - id: EUAI-005
+    category: Data Governance
+    legal_question: >
+      Is training data quality tracked with documentation
+      of data sources, preprocessing, and potential biases
+      as required under Article 10?
+    regulatory_standard: "EU AI Act, Article 10 (Data and Data Governance)"
+    search_patterns:
+      - "training_data"
+      - "dataset_quality"
+      - "data_source"
+      - "data_card"
+      - "model_card"
+      - "data_documentation"
+      - "preprocessing"
+    absence_patterns: []
+
+  - id: EUAI-006
+    category: Bias Detection
+    legal_question: >
+      Does the system monitor for and mitigate bias and
+      discrimination in AI outputs as required under
+      Article 10(2)(f)?
+    regulatory_standard: "EU AI Act, Article 10(2)(f) (Bias Examination)"
+    search_patterns:
+      - "bias_detect"
+      - "fairness"
+      - "discrimination"
+      - "disparate_impact"
+      - "demographic_parity"
+      - "equalized_odds"
+      - "protected_attribute"
+    absence_patterns: []
+
+  - id: EUAI-007
+    category: Explainability
+    legal_question: >
+      Can the AI system's decisions be explained to affected
+      individuals as required for high-risk systems?
+    regulatory_standard: "EU AI Act, Article 13 (Transparency and Information)"
+    search_patterns:
+      - "explainability"
+      - "interpretability"
+      - "feature_importance"
+      - "shap"
+      - "lime"
+      - "attention_weights"
+      - "decision_explanation"
+    absence_patterns: []
+
+  - id: EUAI-008
+    category: Model Performance Logging
+    legal_question: >
+      Are model predictions, performance metrics, and decisions
+      logged for audit purposes as required under Article 12?
+    regulatory_standard: "EU AI Act, Article 12 (Record-Keeping)"
+    search_patterns:
+      - "prediction_log"
+      - "model_metric"
+      - "accuracy_monitor"
+      - "performance_track"
+      - "decision_log"
+      - "inference_log"
+      - "mlflow"
+      - "wandb"
+    absence_patterns: []
+
+  - id: EUAI-009
+    category: Robustness Testing
+    legal_question: >
+      Is the AI system tested for robustness against
+      adversarial inputs and edge cases as required under
+      Article 15?
+    regulatory_standard: "EU AI Act, Article 15 (Accuracy, Robustness, Cybersecurity)"
+    search_patterns:
+      - "adversarial_test"
+      - "robustness"
+      - "edge_case"
+      - "stress_test"
+      - "fuzzing"
+      - "perturbation"
+      - "out_of_distribution"
+    absence_patterns: []
+
+  - id: EUAI-010
+    category: Synthetic Content Disclosure
+    legal_question: >
+      Are AI-generated or synthetic content outputs labeled
+      as such as required under Article 52(3)?
+    regulatory_standard: "EU AI Act, Article 52(3) (Deepfake Transparency)"
+    search_patterns:
+      - "deepfake"
+      - "synthetic_media"
+      - "ai_generated_label"
+      - "content_label"
+      - "watermark"
+      - "provenance"
+      - "c2pa"
+    absence_patterns: []
