@@ -51,9 +51,14 @@
       <button class="scan-btn" id="scan-btn" onclick="startScan()">Scan Repository</button>
       <div class="scan-note">3 free scans per hour &middot; No account required</div>
       <div id="scan-status" style="margin-top:12px;font-size:13px;color:#8B949E"></div>
-      <div id="queue-status" style="display:none;margin-top:12px;padding:12px;background:#161B22;border:1px solid #30363D;border-radius:4px;font-size:13px;color:#E6EDF3;text-align:center">
-        <div id="queue-msg" style="font-weight:600"></div>
-        <div id="queue-detail" style="color:#8B949E;margin-top:4px;font-size:12px"></div>
+      <div id="queue-status" style="display:none;margin-top:12px;padding:14px;background:#161B22;border:1px solid #30363D;border-radius:4px;font-size:13px;color:#E6EDF3;text-align:center">
+        <div id="queue-msg" style="font-weight:600;font-size:15px"></div>
+        <div id="queue-timer" style="font-family:monospace;font-size:24px;color:#58A6FF;margin:8px 0"></div>
+        <div id="queue-detail" style="color:#8B949E;font-size:12px"></div>
+        <div id="queue-email-prompt" style="margin-top:10px;display:none">
+          <div style="color:#8B949E;font-size:12px;margin-bottom:6px">Leave your email — we'll send you the report when it's ready</div>
+          <div style="display:flex;gap:6px"><input type="email" id="queue-email-input" placeholder="your@email.com" style="flex:1;padding:6px 10px;border:1px solid #30363D;border-radius:4px;font-size:13px;color:#E6EDF3;background:#0D1117;outline:none;font-family:var(--font)"><button onclick="submitQueueEmail()" style="padding:6px 14px;background:#0052CC;color:#fff;border:none;border-radius:4px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font)">Notify me</button></div>
+        </div>
       </div>
       <div id="scan-progress" style="display:none;margin-top:16px;background:#0D1117;border:1px solid #30363D;border-radius:4px;padding:14px;font-size:13px;color:#E6EDF3">
         <div style="display:flex;justify-content:space-between;margin-bottom:10px"><span id="prog-repo" style="font-weight:600"></span><span id="prog-timer" style="color:#8B949E;font-family:monospace">0:00</span></div>
@@ -83,7 +88,7 @@
   <div class="stat-item"><div class="stat-num" id="stat-scans">--</div><div class="stat-label">repos scanned</div></div>
   <div class="stat-item"><div class="stat-num" id="stat-lines">--</div><div class="stat-label">lines of code evaluated</div></div>
   <div class="stat-item"><div class="stat-num" id="stat-findings">--</div><div class="stat-label">findings analyzed</div></div>
-  <div class="stat-item"><div class="stat-num" id="stat-confirmed">--</div><div class="stat-label">confirmed high risks</div></div>
+  <div class="stat-item"><div class="stat-num" id="stat-confirmed">--</div><div class="stat-label">areas for review</div></div>
 </div>
 
 <!-- How It Works -->
@@ -123,7 +128,7 @@
   </div>
   <div class="dir-table-card">
     <table class="dir-table" id="dir-table">
-      <thead><tr><th onclick="sortDir(0)">Repository</th><th>Domain</th><th>Frameworks</th><th onclick="sortDir(3)" style="text-align:center">High Risk</th><th onclick="sortDir(4)" style="text-align:center">Findings</th><th onclick="sortDir(5)" style="text-align:center">Risk</th><th>Report</th><th></th></tr></thead>
+      <thead><tr><th onclick="sortDir(0)">Repository</th><th>Domain</th><th>Frameworks</th><th onclick="sortDir(3)" style="text-align:center">Review Areas</th><th onclick="sortDir(4)" style="text-align:center">Examined</th><th onclick="sortDir(5)" style="text-align:center">Status</th><th>Report</th><th></th></tr></thead>
       <tbody id="dir-body">
         <tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:20px">Loading directory...</td></tr>
       </tbody>
@@ -265,9 +270,9 @@
           document.getElementById('scan-status').style.display='none';
           currentScanId=d.scan_id;
           if(d.queue_position>0){
-            document.getElementById('queue-status').style.display='block';
-            document.getElementById('queue-msg').textContent='#'+d.queue_position+' in queue';
-            document.getElementById('queue-detail').textContent='Estimated wait: ~'+d.estimated_wait_minutes+' minutes. '+( d.email_notification?'We\'ll email you when ready.':'');
+            document.getElementById('queue-msg').textContent='Your scan is #'+d.queue_position+' in queue';
+            document.getElementById('queue-detail').textContent='Estimated wait: ~'+d.estimated_wait_minutes+' minutes';
+            showQueueTimer(d.estimated_wait_minutes);
           }
           document.getElementById('scan-progress').style.display='block';
           document.getElementById('prog-repo').textContent=d.repo_name||'';
@@ -295,6 +300,12 @@
         if(factTimer)clearInterval(factTimer);
         factTimer=setInterval(()=>{factIdx=(factIdx+1)%FACTS.length;document.getElementById('prog-fact').textContent=FACTS[factIdx]},20000);
         document.querySelectorAll('.pstep').forEach(s=>{s.className='pstep';s.querySelector('.picon').innerHTML='&#9675;'});
+        // Show queue timer if there's a wait
+        if(d.queue_position && d.estimated_wait_minutes > 0){
+          document.getElementById('queue-msg').textContent='Your scan is #'+d.queue_position+' in queue';
+          document.getElementById('queue-detail').textContent='Estimated wait: ~'+d.estimated_wait_minutes+' minutes';
+          showQueueTimer(d.estimated_wait_minutes);
+        }
         showControls('running');
         pollScan(d.scan_id);
       }).catch(e=>{document.getElementById('scan-status').textContent='Error: '+e.message;document.getElementById('scan-btn').disabled=false;});
@@ -329,6 +340,35 @@
       }).catch(()=>{btn.textContent='Restart Scan';btn.disabled=false;});
     }
 
+    let queueCountdown=null;
+    function showQueueTimer(waitMinutes){
+      const queueEl=document.getElementById('queue-status');
+      queueEl.style.display='block';
+      document.getElementById('queue-email-prompt').style.display='block';
+      // Copy email from scan form if filled
+      const scanEmail=document.getElementById('notify-email').value.trim();
+      if(scanEmail)document.getElementById('queue-email-input').value=scanEmail;
+      // Countdown
+      let remaining=waitMinutes*60;
+      if(queueCountdown)clearInterval(queueCountdown);
+      function updateTimer(){
+        if(remaining<=0){document.getElementById('queue-timer').textContent='Starting soon...';return;}
+        const m=Math.floor(remaining/60);const s=remaining%60;
+        document.getElementById('queue-timer').textContent=m+':'+(s<10?'0':'')+s;
+        remaining--;
+      }
+      updateTimer();
+      queueCountdown=setInterval(updateTimer,1000);
+    }
+
+    function submitQueueEmail(){
+      const email=document.getElementById('queue-email-input').value.trim();
+      if(!email||!currentScanId)return;
+      // Re-submit the scan with the email to register notification
+      fetch(API_BASE_URL+'/api/feedback',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({scan_id:currentScanId,framework:'SYSTEM',question_id:'EMAIL_NOTIFY',verdict:'correct',reason:email})}).catch(()=>{});
+      document.getElementById('queue-email-prompt').innerHTML='<span style="color:#1A7F37;font-weight:600">We\'ll email you at '+email+' when ready.</span>';
+    }
+
     function deleteCachedScan(scanId){
       if(!confirm('Delete this cached scan? You can then rescan when ready.'))return;
       fetch(API_BASE_URL+'/api/scan/'+scanId,{method:'DELETE'})
@@ -343,14 +383,15 @@
     function pollScan(id){
       fetch(API_BASE_URL+'/api/scan/'+id).then(r=>r.json()).then(d=>{
         const p=d.progress||{};const curStep=p.step||'';
-        // Show queue position if waiting
+        // Show queue position if waiting, hide when scan starts
         const queueEl=document.getElementById('queue-status');
         if(d.queue_position && d.queue_position > 0){
           queueEl.style.display='block';
-          document.getElementById('queue-msg').textContent='#'+d.queue_position+' in queue';
-          document.getElementById('queue-detail').textContent='Estimated wait: ~'+d.estimated_wait_minutes+' minutes';
-        } else {
+          document.getElementById('queue-msg').textContent='Your scan is #'+d.queue_position+' in queue';
+        } else if(curStep){
+          // Scan has started — hide queue timer
           queueEl.style.display='none';
+          if(queueCountdown){clearInterval(queueCountdown);queueCountdown=null;}
         }
         let reached=false;
         STEPS.forEach(s=>{
@@ -371,7 +412,7 @@
           let rl='LOW',rc='#1A7F37';if(hi>15){rl='CRITICAL';rc='#CF222E'}else if(hi>5){rl='ELEVATED';rc='#CF222E'}else if(hi>0){rl='MODERATE';rc='#9A6700'}
           const res=document.getElementById('scan-result');res.style.display='block';
           const rptUrl=d.report_url?(API_BASE_URL+d.report_url):'#';
-          res.innerHTML='<div style="font-size:18px;font-weight:700;color:'+rc+'">'+rl+' RISK</div><div style="margin:8px 0;color:#E6EDF3">'+hi+' high-risk &middot; '+(sm.medium_risk||0)+' medium &middot; '+((sm.frameworks||[]).length||'?')+' frameworks</div><a href="'+rptUrl+'" style="display:inline-block;padding:8px 20px;background:#0052CC;color:#fff;border-radius:4px;font-weight:600;text-decoration:none">View Full Report &rarr;</a>';
+          res.innerHTML='<div style="font-size:18px;font-weight:700;color:'+rc+'">'+rl+'</div><div style="margin:8px 0;color:#E6EDF3">'+hi+' areas for review &middot; '+(sm.medium_risk||0)+' additional observations &middot; '+((sm.frameworks||[]).length||'?')+' frameworks</div><a href="'+rptUrl+'" style="display:inline-block;padding:8px 20px;background:#0052CC;color:#fff;border-radius:4px;font-weight:600;text-decoration:none">View Full Report &rarr;</a>';
         }else if(d.status==='failed'){
           clearInterval(scanTimer);
           document.getElementById('scan-btn').disabled=false;
@@ -404,8 +445,8 @@
           const hi=r.finding_high||0;
           const total=(r.finding_high||0)+(r.finding_medium||0)+(r.finding_concern||0)+(r.finding_ok||0);
           let rl='Low',rc='var(--green)',dot='low';
-          if(hi>15){rl='Critical';rc='var(--red)';dot='critical';}
-          else if(hi>5){rl='Elevated';rc='var(--orange)';dot='elevated';}
+          if(hi>10){rl='Needs Attention';rc='var(--red)';dot='critical';}
+          else if(hi>3){rl='Needs Review';rc='var(--orange)';dot='elevated';}
           else if(hi>0){rl='Moderate';rc='var(--amber)';dot='moderate';}
 
           // Domain from domains_detected — use primary (highest confidence) domain

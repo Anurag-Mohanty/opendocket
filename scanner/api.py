@@ -388,10 +388,22 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
             domains = detect_domains(repo_ctx.path)
             _log(scan_id, f"Domains detected: {', '.join(d.domain for d in domains)}")
 
+            # Estimate lines of code from file index
+            total_lines = 0
+            for rel_path in repo_ctx.file_index[:500]:
+                try:
+                    fpath = os.path.join(repo_ctx.path, rel_path)
+                    if os.path.getsize(fpath) < 256 * 1024:
+                        with open(fpath, "r", errors="ignore") as _f:
+                            total_lines += sum(1 for _ in _f)
+                except (OSError, IOError):
+                    pass
+
             update_scan_status(
                 scan_id, "running", _prog("domain", "Mapping frameworks"),
                 domains_detected=[{"domain": d.domain, "confidence": d.confidence} for d in domains],
                 files_scanned=len(repo_ctx.file_index),
+                lines_of_code=total_lines,
             )
 
             frameworks = map_frameworks(domains)

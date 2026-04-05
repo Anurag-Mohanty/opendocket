@@ -33,16 +33,17 @@ def risk_classification(high_count: int, confirmed_high: int | None = None) -> t
     """Return (label, color, description) for risk classification.
 
     When confirmed_high is available (judge ran), use that for classification.
+    Labels are neutral — these are areas for review, not accusations.
     """
     count = confirmed_high if confirmed_high is not None else high_count
     if count == 0:
-        return "LOW RISK", "#1A7F37", "No confirmed high-severity findings"
+        return "LOW", "#1A7F37", "No areas requiring immediate attention"
     elif count <= 3:
-        return "MODERATE RISK", "#9A6700", f"{count} confirmed high-severity findings require attention"
+        return "MODERATE", "#9A6700", f"{count} areas identified for compliance review"
     elif count <= 10:
-        return "ELEVATED RISK", "#CF222E", f"{count} confirmed high-severity findings — prioritize remediation"
+        return "NEEDS REVIEW", "#CF222E", f"{count} areas identified — review recommended before production"
     else:
-        return "CRITICAL RISK", "#CF222E", f"{count} confirmed high-severity findings — immediate attention required"
+        return "NEEDS ATTENTION", "#CF222E", f"{count} areas identified — compliance review recommended"
 
 
 def _severity_class(level: str) -> str:
@@ -198,7 +199,7 @@ def calculate_score(agent_results: list[AgentResult]) -> int:
     confirmed_high = sum(1 for f in all_findings if f.finding_level == "High Risk" and f.review_verdict == "CONFIRMED")
     has_judge = any(f.review_verdict and f.review_verdict != "NOT REVIEWED" for f in all_findings)
     label, _, _ = risk_classification(high, confirmed_high=confirmed_high if has_judge else None)
-    return {"LOW RISK": 95, "MODERATE RISK": 65, "ELEVATED RISK": 30, "CRITICAL RISK": 10}.get(label, 50)
+    return {"LOW": 95, "MODERATE": 65, "NEEDS REVIEW": 30, "NEEDS ATTENTION": 10}.get(label, 50)
 
 
 # ── CSS for light-mode reports ──
