@@ -77,6 +77,47 @@ _scan_params: dict[str, dict] = {}
 
 # ── Scan queue system ──
 MAX_CONCURRENT_SCANS = int(os.environ.get("MAX_CONCURRENT_SCANS", 1))
+# Persistent report storage — survives deploys via Railway volume
+_DATA_DIR = os.environ.get("DATA_DIR", os.path.join(os.path.dirname(os.path.dirname(__file__)), "data"))
+REPORTS_DIR = os.path.join(_DATA_DIR, "reports")
+MD_REPORTS_DIR = os.path.join(_DATA_DIR, "md_reports")
+os.makedirs(REPORTS_DIR, exist_ok=True)
+os.makedirs(MD_REPORTS_DIR, exist_ok=True)
+
+
+def _migrate_reports_to_volume():
+    """One-time migration: copy reports from ephemeral paths to persistent volume.
+
+    On deploy, the container has the old reports in docs/reports/ and reports/
+    from the previous run. Copy them to the volume so they survive future deploys.
+    Only copies files that don't already exist on the volume (no overwrites).
+    """
+    import shutil
+    _root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    # HTML reports: docs/reports/ -> REPORTS_DIR
+    old_html = os.path.join(_root, "docs", "reports")
+    if os.path.isdir(old_html):
+        for f in os.listdir(old_html):
+            if f.endswith(".html"):
+                dest = os.path.join(REPORTS_DIR, f)
+                if not os.path.exists(dest):
+                    shutil.copy2(os.path.join(old_html, f), dest)
+                    print(f"[Migration] Copied {f} to persistent volume")
+
+    # Markdown reports: reports/ -> MD_REPORTS_DIR
+    old_md = os.path.join(_root, "reports")
+    if os.path.isdir(old_md):
+        for f in os.listdir(old_md):
+            if f.endswith(".md"):
+                dest = os.path.join(MD_REPORTS_DIR, f)
+                if not os.path.exists(dest):
+                    shutil.copy2(os.path.join(old_md, f), dest)
+                    print(f"[Migration] Copied {f} to persistent volume")
+
+
+_migrate_reports_to_volume()
+
 _scan_queue: list[dict] = []  # [{scan_id, repo_url, api_key, gemini_key, email}]
 _active_scans: set[str] = set()  # scan_ids currently running
 _queue_lock = threading.Lock()
@@ -174,7 +215,7 @@ def _send_completion_email(scan_id: str, email: str):
 <p>Your compliance scan for <strong>{repo_name}</strong> is complete.</p>
 <table style="width:100%;border-collapse:collapse;margin:16px 0">
 <tr><td style="padding:8px 0;color:#57606a">Score</td><td style="padding:8px 0;font-weight:700">{score}/100</td></tr>
-<tr><td style="padding:8px 0;color:#57606a">Confirmed High Risks</td><td style="padding:8px 0;font-weight:700;color:{'#CF222E' if high > 0 else '#1A7F37'}">{high}</td></tr>
+<tr><td style="padding:8px 0;color:#57606a">Priority Findings</td><td style="padding:8px 0;font-weight:700;color:{'#CF222E' if high > 0 else '#1A7F37'}">{high}</td></tr>
 </table>
 <a href="{full_report_url}" style="display:inline-block;padding:10px 24px;background:#0052CC;color:#fff;border-radius:4px;text-decoration:none;font-weight:600">View Full Report</a>
 <p style="margin-top:24px;font-size:12px;color:#8c959f">This is an automated notification from OpenDocket. Not legal advice.</p>
@@ -368,8 +409,7 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
                     repo_ctx.qualification.reasons,
                     repo_ctx.qualification.stats,
                 )
-                report_path = os.path.join("docs", "reports", f"{repo_ctx.name}_report.html")
-                os.makedirs(os.path.dirname(report_path), exist_ok=True)
+                report_path = os.path.join(REPORTS_DIR, f"{repo_ctx.name}_report.html")
                 with open(report_path, "w") as f:
                     f.write(report)
                 update_scan_status(scan_id, "complete", report_url=f"/reports/{repo_ctx.name}_report.html")
@@ -539,14 +579,12 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
             update_scan_status(scan_id, "running", _prog("report", "Generating reports"))
 
             html_report = generate_html_report(repo_ctx.name, repo_url, domains, agent_results, scan_id=scan_id)
-            html_path = os.path.join("docs", "reports", f"{repo_ctx.name}_report.html")
-            os.makedirs(os.path.dirname(html_path), exist_ok=True)
+            html_path = os.path.join(REPORTS_DIR, f"{repo_ctx.name}_report.html")
             with open(html_path, "w") as f:
                 f.write(html_report)
 
             md_report = generate_markdown_report(repo_ctx.name, repo_url, domains, agent_results)
-            md_path = os.path.join("reports", f"{repo_ctx.name}_report.md")
-            os.makedirs(os.path.dirname(md_path), exist_ok=True)
+            md_path = os.path.join(MD_REPORTS_DIR, f"{repo_ctx.name}_report.md")
             with open(md_path, "w") as f:
                 f.write(md_report)
 
@@ -632,7 +670,7 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
             total_llm_calls = sum(r.llm_calls for r in agent_results)
 
             duration = time.time() - start_time
-            _log(scan_id, f"Scan complete — score {score}, {high} high-risk, {duration:.0f}s, {total_llm_calls} LLM calls, {total_tokens_in+total_tokens_out} tokens")
+            _log(scan_id, f"Scan complete — score {score}, {high} priority findings, {duration:.0f}s, {total_llm_calls} LLM calls, {total_tokens_in+total_tokens_out} tokens")
             update_scan_status(
                 scan_id, "complete",
                 progress="Scan complete",
@@ -1359,6 +1397,78 @@ def api_learning():
     })
 
 
+@app.route("/api/admin/regenerate-reports", methods=["POST"])
+def regenerate_reports():
+    """Re-render all HTML reports from stored markdown using current template.
+
+    Reads markdown from persistent volume, regenerates HTML with latest
+    report_generator code (e.g. neutral labels), writes back to volume.
+    """
+    auth_err = _require_admin()
+    if auth_err:
+        return auth_err
+
+    from scanner.regenerate_html import parse_md_to_results
+
+    results = []
+    # Check both persistent volume and legacy locations for markdown reports
+    md_dirs = [MD_REPORTS_DIR]
+    legacy_md = os.path.join(os.path.dirname(os.path.dirname(__file__)), "reports")
+    if os.path.isdir(legacy_md) and legacy_md != MD_REPORTS_DIR:
+        md_dirs.append(legacy_md)
+
+    for md_dir in md_dirs:
+        if not os.path.isdir(md_dir):
+            continue
+        for filename in sorted(os.listdir(md_dir)):
+            if not filename.endswith("_report.md"):
+                continue
+            repo_key = filename.replace("_report.md", "")
+            filepath = os.path.join(md_dir, filename)
+
+            try:
+                with open(filepath, "r", errors="ignore") as f:
+                    content = f.read()
+
+                total_findings = 0
+                if "DOES NOT QUALIFY" in content:
+                    reasons = [l[2:] for l in content.splitlines() if l.startswith("- ") and "qualifying" not in l.lower()][:5]
+                    repo_url = f"https://github.com/unknown/{repo_key}"
+                    html_out = generate_failed_gate_html(repo_key, repo_url, reasons, {"status": "failed"})
+                else:
+                    # Look up repo URL from DB
+                    scan = None
+                    try:
+                        scans = get_recent_scans(limit=50)
+                        for s in scans:
+                            name = s.get("repo_name", "")
+                            if name.endswith(f"/{repo_key}") or name == repo_key:
+                                scan = s
+                                break
+                    except Exception:
+                        pass
+                    repo_url = f"https://github.com/{scan['repo_name']}" if scan else f"https://github.com/unknown/{repo_key}"
+
+                    domains, agent_results = parse_md_to_results(filepath)
+                    if not agent_results:
+                        results.append({"repo": repo_key, "status": "skipped", "reason": "no findings parsed"})
+                        continue
+
+                    scan_id = scan.get("scan_id", "") if scan else ""
+                    html_out = generate_html_report(repo_key, repo_url, domains, agent_results, scan_id=scan_id)
+                    total_findings = sum(len(r.findings) for r in agent_results)
+
+                out_path = os.path.join(REPORTS_DIR, f"{repo_key}_report.html")
+                with open(out_path, "w") as f:
+                    f.write(html_out)
+
+                results.append({"repo": repo_key, "status": "regenerated", "findings": total_findings})
+            except Exception as exc:
+                results.append({"repo": repo_key, "status": "error", "error": str(exc)})
+
+    return jsonify({"ok": True, "reports": results, "count": len(results)})
+
+
 @app.route("/api/debug/env", methods=["GET"])
 def debug_env():
     auth_err = _require_admin()
@@ -1380,6 +1490,11 @@ def serve_index():
 
 @app.route("/reports/<path:filename>")
 def serve_report(filename):
+    from flask import send_from_directory
+    # Serve from persistent volume first, fall back to static
+    report_path = os.path.join(REPORTS_DIR, filename)
+    if os.path.exists(report_path):
+        return send_from_directory(REPORTS_DIR, filename)
     return app.send_static_file(f"reports/{filename}")
 
 

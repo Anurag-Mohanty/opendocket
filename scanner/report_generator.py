@@ -46,6 +46,12 @@ def risk_classification(high_count: int, confirmed_high: int | None = None) -> t
         return "NEEDS ATTENTION", "#CF222E", f"{count} areas identified — compliance review recommended"
 
 
+def _display_level(level: str) -> str:
+    """Neutral display labels for finding severity (internal strings stay for parsing)."""
+    return {"High Risk": "Priority", "Medium Risk": "Review",
+            "Pattern of Concern": "Pattern of Concern", "No Issue Found": "No Issue Found"}.get(level, level)
+
+
 def _severity_class(level: str) -> str:
     return {"High Risk": "high", "Medium Risk": "med",
             "Pattern of Concern": "concern", "No Issue Found": "ok"}.get(level, "")
@@ -124,7 +130,7 @@ def generate_markdown_report(
     label, _, desc = risk_classification(high, confirmed_high=confirmed_high if has_judge else None)
     lines.append(f"## Risk Pattern Index: {label}")
     if has_judge:
-        lines.append(f"{confirmed_high} confirmed high-risk findings out of {high} total patterns identified.")
+        lines.append(f"{confirmed_high} confirmed priority findings out of {high} total patterns identified.")
     else:
         lines.append(f"{desc}")
     lines.append("")
@@ -132,7 +138,7 @@ def generate_markdown_report(
     lines.append("|---|---|")
     for level in ("High Risk", "Medium Risk", "Pattern of Concern", "No Issue Found"):
         count = sum(1 for f in all_findings if f.finding_level == level)
-        lines.append(f"| {level} | {count} |")
+        lines.append(f"| {_display_level(level)} | {count} |")
     lines.append("")
     for result in agent_results:
         lines.append(f"## {result.framework} Findings")
@@ -152,7 +158,7 @@ def generate_markdown_report(
             lines.append("")
             emoji = {"High Risk": "🔴", "Medium Risk": "🟠",
                      "Pattern of Concern": "🔵", "No Issue Found": "🟢"}.get(finding.finding_level, "")
-            lines.append(f"**{emoji} {finding.finding_level}**")
+            lines.append(f"**{emoji} {_display_level(finding.finding_level)}**")
             lines.append("")
             lines.append(finding.finding_text)
             lines.append("")
@@ -361,9 +367,9 @@ _METHODOLOGY_TAB = """
 <ul style="padding-left:20px;margin-bottom:16px;font-size:14px;line-height:2;color:#1a1a1a">
 <li><strong>[SOURCE]</strong> — Application source code (.ts, .py, .go, .rs, etc.) — strongest evidence</li>
 <li><strong>[CONFIG]</strong> — Configuration files (.yml, .json, .toml, Dockerfile) — moderate evidence</li>
-<li><strong>[DOCS]</strong> — Documentation (.md, .txt, .html) — context only, cannot produce High Risk findings</li>
+<li><strong>[DOCS]</strong> — Documentation (.md, .txt, .html) — context only, cannot produce Priority findings</li>
 </ul>
-<p style="font-size:14px;color:#57606a">A finding is only classified as High Risk if supported by at least two source code files with matching evidence. Documentation references alone produce Pattern of Concern at most.</p>
+<p style="font-size:14px;color:#57606a">A finding is only classified as Priority if supported by at least two source code files with matching evidence. Documentation references alone produce Pattern of Concern at most.</p>
 </div>
 <div class="section">
 <div class="section-heading">How to Use This Report</div>
@@ -435,24 +441,24 @@ def generate_html_report(
             f"were confirmed as genuine risks and {judge_fp} were identified as false positives. "
         )
         if display_high > 0:
-            exec_para += f"{display_high} confirmed high-severity findings require immediate attention."
+            exec_para += f"{display_high} confirmed priority findings warrant further review."
         else:
-            exec_para += "No high-severity findings were confirmed after independent review."
+            exec_para += "No priority findings were confirmed after independent review."
     else:
         exec_para = (
-            f"This analysis identified {total} compliance risk patterns across {fw_names_str}. "
-            f"Of these, {high} are classified as high-severity — patterns consistent with potential non-compliance "
-            f"that regulators actively investigate. "
+            f"This analysis identified {total} compliance patterns across {fw_names_str}. "
+            f"Of these, {high} are classified as priority — patterns consistent with areas "
+            f"that regulators commonly review. "
         )
         if high > 0:
-            exec_para += f"The most serious gaps were found in {top_fw_names}. "
-            exec_para += "These patterns should be prioritized for remediation before production deployment."
+            exec_para += f"The most notable patterns were found in {top_fw_names}. "
+            exec_para += "These areas should be reviewed as part of compliance planning."
 
     # Consequence table — only frameworks with CONFIRMED findings
     consequence_html = ""
     for conf_count, fw in top_fw_by_confirmed:
         meta = FRAMEWORK_META.get(fw, {})
-        label = f"({conf_count} confirmed)" if has_judge else f"({conf_count} high)"
+        label = f"({conf_count} confirmed)" if has_judge else f"({conf_count} priority)"
         consequence_html += (
             f'<tr><td style="font-weight:600">{html.escape(fw)} <span style="color:#CF222E;font-size:12px">{label}</span></td>'
             f'<td>{html.escape(meta.get("body", ""))}</td>'
@@ -490,7 +496,7 @@ def generate_html_report(
         verdict_tag = f' &middot; Review: {html.escape(f.review_verdict)}' if f.review_verdict else ""
         top_findings_html += (
             f'<div class="top-finding"><div class="top-finding-q">{html.escape(f.legal_question)}</div>'
-            f'<div class="top-finding-meta"><span class="badge badge-{sev_cls}">{html.escape(f.finding_level)}</span>'
+            f'<div class="top-finding-meta"><span class="badge badge-{sev_cls}">{html.escape(_display_level(f.finding_level))}</span>'
             f'<span>{html.escape(getattr(f, "_framework", ""))}</span>'
             f'<span>{html.escape(f.question_id)}</span>'
             f'<span>{html.escape(first_ev)}</span>{verdict_tag}</div>'
@@ -525,7 +531,7 @@ def generate_html_report(
             continue  # skip false positives from recommendations
         rem_text = f.improved_remediation if f.improved_remediation else f.remediation
         priority_cls = "rec-p-high" if f.finding_level == "High Risk" else "rec-p-med"
-        priority_label = "High" if f.finding_level == "High Risk" else "Medium"
+        priority_label = "Priority" if f.finding_level == "High Risk" else "Review"
         recommendations_html += (
             f'<div class="rec-item"><div class="rec-priority {priority_cls}">{priority_label}</div>'
             f'<div><div class="rec-text">{html.escape(rem_text)}</div>'
@@ -538,7 +544,7 @@ def generate_html_report(
     if remaining > 0:
         recommendations_html += f'<div style="font-size:13px;color:#57606a;padding:12px 0;border-top:1px solid #d0d7de">+ {remaining} more recommendations in the Findings tab</div>\n'
     if not recommendations_html:
-        recommendations_html = '<p style="color:#57606a">No high or medium risk recommendations.</p>'
+        recommendations_html = '<p style="color:#57606a">No priority or review recommendations.</p>'
 
     # Framework filter buttons (for findings tab)
     fw_filter_btns = ""
@@ -612,7 +618,7 @@ def generate_html_report(
             framework_findings_html += f'''<div class="finding" id="f-{fid}" data-framework="{html.escape(result.framework)}" data-severity="{html.escape(f.finding_level)}">
 <div class="finding-header" onclick="toggleFinding('{fid}')">
 <div class="finding-left"><div class="finding-num">{html.escape(f.question_id)}</div><div class="finding-question">{html.escape(f.legal_question[:130])}</div></div>
-<div class="finding-right"><span class="badge badge-{sev_cls}">{html.escape(f.finding_level)}</span><span class="chevron">&#8250;</span></div>
+<div class="finding-right"><span class="badge badge-{sev_cls}">{html.escape(_display_level(f.finding_level))}</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
 <div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation">{html.escape(f.regulatory_standard)}</div></div><div>{verdict_html}{accuracy_html}</div></div>
@@ -649,7 +655,7 @@ def generate_html_report(
                 framework_findings_html += f'''<div class="finding" id="f-{fid}" data-framework="{html.escape(result.framework)}" data-severity="{html.escape(f.finding_level)}" data-fp="true" style="border-left:4px solid #d0d7de;opacity:0.85">
 <div class="finding-header" onclick="toggleFinding('{fid}')" style="background:#f6f8fa">
 <div class="finding-left"><div class="finding-num">{html.escape(f.question_id)} <span style="font-size:10px;color:#8c959f;text-transform:uppercase;letter-spacing:0.5px">· Possible False Positive</span></div><div class="finding-question" style="color:#57606a">{html.escape(f.legal_question[:130])}</div></div>
-<div class="finding-right"><span class="badge" style="color:#8c959f;background:#f6f8fa;border:1px solid #d0d7de">{html.escape(f.finding_level)}</span><span class="chevron">&#8250;</span></div>
+<div class="finding-right"><span class="badge" style="color:#8c959f;background:#f6f8fa;border:1px solid #d0d7de">{html.escape(_display_level(f.finding_level))}</span><span class="chevron">&#8250;</span></div>
 </div>
 <div class="finding-body">
 <div class="finding-grid"><div><div class="field-label">Regulatory Standard</div><div class="citation">{html.escape(f.regulatory_standard)}</div></div><div>{verdict_html}</div></div>
@@ -682,18 +688,18 @@ def generate_html_report(
 <div class="tab-panel active" id="tab-overview">
 <div class="callout callout-amber" style="margin-bottom:24px;padding:20px 24px"><div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#9A6700;margin-bottom:12px">Important Limitations of This Report</div><div style="font-size:13px;line-height:1.8"><strong>This report is not legal advice and is not defensible in court.</strong> It provides directional guidance only. To obtain a defensible compliance assessment, engage a licensed attorney and certified auditor.<br><br><strong>Scope limitations:</strong> Only public repository content was analyzed. Infrastructure configuration, deployment settings, operational policies, vendor contracts, and staff training are outside scope.<br><br><strong>A true compliance audit</strong> would also review: vendor contracts and BAAs, staff training records, incident response procedures, physical security controls, and system audit logs — none of which are visible in source code.</div></div>
 <div class="section" id="summary"><div class="section-heading">Risk Assessment</div><p style="font-size:15px;line-height:1.8;margin-bottom:24px">{e(exec_para)}</p>
-<div class="risk-index"><div class="risk-label" style="color:{risk_color}">{e(risk_label)}</div><div class="risk-desc">{'<strong>' + str(judge_confirmed) + ' confirmed findings</strong> (' + str(confirmed_high) + ' high-severity)<br><span style="font-size:12px;color:#8c959f">' + str(total) + ' areas examined · ' + str(judge_fp) + ' false positives filtered by Gemini</span>' if has_judge else e(risk_desc)}</div></div>
+<div class="risk-index"><div class="risk-label" style="color:{risk_color}">{e(risk_label)}</div><div class="risk-desc">{'<strong>' + str(judge_confirmed) + ' confirmed findings</strong> (' + str(confirmed_high) + ' priority)<br><span style="font-size:12px;color:#8c959f">' + str(total) + ' areas examined · ' + str(judge_fp) + ' false positives filtered by Gemini</span>' if has_judge else e(risk_desc)}</div></div>
 {'<div class="section-heading">What This Means If Unaddressed</div><table class="table"><thead><tr><th>Framework</th><th>Regulatory Body</th><th>Max Penalty</th><th>Enforcement Trend</th></tr></thead><tbody>' + consequence_html + '</tbody></table>' if consequence_html else ''}
 <div class="section-heading">Top Findings</div>{top_findings_html}
 <div class="judge-block"><div class="judge-title">Gemini Verification Layer</div><div style="font-size:13px;color:#57606a;line-height:1.7;margin-bottom:14px;padding:10px 12px;background:rgba(110,64,201,0.05);border-radius:4px"><strong>How to read this:</strong> The confirmed count is your action list. The false positive count shows where the scanner found keyword patterns in documentation rather than application source code. Click any finding to see exactly what evidence was found and why Gemini made its determination.</div><div class="judge-stats"><div class="judge-stat"><span class="judge-stat-n j-confirmed">{judge_confirmed}</span><span class="judge-stat-l">Confirmed</span></div><div class="judge-stat"><span class="judge-stat-n j-context">{judge_context}</span><span class="judge-stat-l">Context dependent</span></div><div class="judge-stat"><span class="judge-stat-n j-fp">{judge_fp}</span><span class="judge-stat-l">Possible false positives</span></div><div class="judge-stat"><span class="judge-stat-n j-additional">{judge_additional}</span><span class="judge-stat-l">Additional risk</span></div></div><div class="judge-note">Primary: Claude Sonnet (Anthropic). Verification: Gemini 2.5 Flash (Google). Neither constitutes legal advice.</div></div>
 <div class="section-heading">Recommended Actions</div>{recommendations_html}
-<div class="section-heading" style="margin-top:32px">Risk Scorecard</div><table class="table"><thead><tr>{'<th>Framework</th><th>Confirmed Risks</th><th>False Positives</th><th>Other</th><th>Total Examined</th>' if has_judge else '<th>Framework</th><th>High Risk</th><th>Medium</th><th>Concern</th><th>No Issue</th>'}</tr></thead><tbody>{scorecard_html}</tbody></table>
+<div class="section-heading" style="margin-top:32px">Risk Scorecard</div><table class="table"><thead><tr>{'<th>Framework</th><th>Confirmed Risks</th><th>False Positives</th><th>Other</th><th>Total Examined</th>' if has_judge else '<th>Framework</th><th>Priority</th><th>Review</th><th>Concern</th><th>No Issue</th>'}</tr></thead><tbody>{scorecard_html}</tbody></table>
 <div class="section-heading" style="margin-top:24px">Domains Detected</div>{domains_html}
 </div></div>
 
 <!-- TAB 2: FINDINGS -->
 <div class="tab-panel" id="tab-findings">
-<div class="filter-bar"><span class="filter-label">Framework:</span><button class="filter-btn active" data-type="fw" onclick="filterFramework('all',this)">All ({total})</button>{fw_filter_btns}<div class="filter-sep"></div><span class="filter-label">Severity:</span><button class="filter-btn active" data-type="sev" onclick="filterSeverity('all',this)">All</button><button class="filter-btn" data-type="sev" onclick="filterSeverity('High Risk',this)">High ({display_high})</button><button class="filter-btn" data-type="sev" onclick="filterSeverity('Medium Risk',this)">Medium ({med})</button><button class="filter-btn" data-type="sev" onclick="filterSeverity('Pattern of Concern',this)">Concern ({concern})</button></div>
+<div class="filter-bar"><span class="filter-label">Framework:</span><button class="filter-btn active" data-type="fw" onclick="filterFramework('all',this)">All ({total})</button>{fw_filter_btns}<div class="filter-sep"></div><span class="filter-label">Severity:</span><button class="filter-btn active" data-type="sev" onclick="filterSeverity('all',this)">All</button><button class="filter-btn" data-type="sev" onclick="filterSeverity('High Risk',this)">Priority ({display_high})</button><button class="filter-btn" data-type="sev" onclick="filterSeverity('Medium Risk',this)">Review ({med})</button><button class="filter-btn" data-type="sev" onclick="filterSeverity('Pattern of Concern',this)">Concern ({concern})</button></div>
 {framework_findings_html}
 </div>
 

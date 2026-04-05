@@ -409,7 +409,7 @@
           document.getElementById('scan-btn').disabled=false;
           showControls('done');
           const sm=d.summary||{};const hi=sm.high_risk||0;
-          let rl='LOW',rc='#1A7F37';if(hi>15){rl='CRITICAL';rc='#CF222E'}else if(hi>5){rl='ELEVATED';rc='#CF222E'}else if(hi>0){rl='MODERATE';rc='#9A6700'}
+          let rl='LOW',rc='#1A7F37';if(hi>15){rl='NEEDS ATTENTION';rc='#CF222E'}else if(hi>5){rl='NEEDS REVIEW';rc='#9A6700'}else if(hi>0){rl='REVIEW SUGGESTED';rc='#9A6700'}
           const res=document.getElementById('scan-result');res.style.display='block';
           const rptUrl=d.report_url?(API_BASE_URL+d.report_url):'#';
           res.innerHTML='<div style="font-size:18px;font-weight:700;color:'+rc+'">'+rl+'</div><div style="margin:8px 0;color:#E6EDF3">'+hi+' areas for review &middot; '+(sm.medium_risk||0)+' additional observations &middot; '+((sm.frameworks||[]).length||'?')+' frameworks</div><a href="'+rptUrl+'" style="display:inline-block;padding:8px 20px;background:#0052CC;color:#fff;border-radius:4px;font-weight:600;text-decoration:none">View Full Report &rarr;</a>';
