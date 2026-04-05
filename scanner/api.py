@@ -76,7 +76,7 @@ _cancel_flags: dict[str, threading.Event] = {}
 _scan_params: dict[str, dict] = {}
 
 # ── Scan queue system ──
-MAX_CONCURRENT_SCANS = 2
+MAX_CONCURRENT_SCANS = int(os.environ.get("MAX_CONCURRENT_SCANS", 1))
 _scan_queue: list[dict] = []  # [{scan_id, repo_url, api_key, gemini_key, email}]
 _active_scans: set[str] = set()  # scan_ids currently running
 _queue_lock = threading.Lock()
@@ -102,9 +102,13 @@ def _queue_worker():
                 email = j.get("email")
                 if email:
                     _send_completion_email(j["scan_id"], email)
+            except Exception as e:
+                print(f"[Queue] Scan {j['scan_id'][:8]} crashed: {e}")
+                _log(j["scan_id"], f"CRASH: {e}")
             finally:
                 with _queue_lock:
                     _active_scans.discard(j["scan_id"])
+                print(f"[Queue] Slot freed. Active: {len(_active_scans)}, Queued: {len(_scan_queue)}")
 
         thread = threading.Thread(target=_run_and_cleanup, args=(job,), daemon=True)
         thread.start()
