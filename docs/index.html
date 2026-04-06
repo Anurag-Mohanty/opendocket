@@ -104,7 +104,7 @@
       <div class="step-card">
         <div class="step-num">2</div>
         <h3>It asks legal questions</h3>
-        <p>Based on the domain, OpenDocket loads compliance frameworks — 10 frameworks, 94 questions from actual regulatory text. The questions a regulator would ask in a deposition or audit.</p>
+        <p>Based on the domain, OpenDocket loads compliance frameworks — 17 frameworks, 160+ questions from actual regulatory text. The questions a regulator would ask in a deposition or audit.</p>
       </div>
       <div class="step-card">
         <div class="step-num">3</div>
@@ -412,7 +412,8 @@
           let rl='LOW',rc='#1A7F37';if(hi>15){rl='NEEDS ATTENTION';rc='#CF222E'}else if(hi>5){rl='NEEDS REVIEW';rc='#9A6700'}else if(hi>0){rl='REVIEW SUGGESTED';rc='#9A6700'}
           const res=document.getElementById('scan-result');res.style.display='block';
           const rptUrl=d.report_url?(API_BASE_URL+d.report_url):'#';
-          res.innerHTML='<div style="font-size:18px;font-weight:700;color:'+rc+'">'+rl+'</div><div style="margin:8px 0;color:#E6EDF3">'+hi+' areas for review &middot; '+(sm.medium_risk||0)+' additional observations &middot; '+((sm.frameworks||[]).length||'?')+' frameworks</div><a href="'+rptUrl+'" style="display:inline-block;padding:8px 20px;background:#0052CC;color:#fff;border-radius:4px;font-weight:600;text-decoration:none">View Full Report &rarr;</a>';
+          const examined=sm.findings_total||((sm.high_risk||0)+(sm.medium_risk||0)+(sm.concern||0)+(sm.ok||0));
+          res.innerHTML='<div style="font-size:18px;font-weight:700;color:'+rc+'">'+rl+'</div><div style="margin:8px 0;color:#E6EDF3">'+examined+' areas examined &middot; '+hi+' priority findings &middot; '+((sm.frameworks||[]).length||'?')+' frameworks</div><a href="'+rptUrl+'" style="display:inline-block;padding:8px 20px;background:#0052CC;color:#fff;border-radius:4px;font-weight:600;text-decoration:none">View Full Report &rarr;</a>';
         }else if(d.status==='failed'){
           clearInterval(scanTimer);
           document.getElementById('scan-btn').disabled=false;
@@ -443,7 +444,7 @@
         if(!rows||!rows.length){tbody.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:20px">No scans yet. Scan a repository above.</td></tr>';return;}
         tbody.innerHTML=rows.map(r=>{
           const hi=r.finding_high||0;
-          const total=(r.finding_high||0)+(r.finding_medium||0)+(r.finding_concern||0)+(r.finding_ok||0);
+          const total=r.findings_total||(r.finding_high||0)+(r.finding_medium||0)+(r.finding_concern||0)+(r.finding_ok||0);
           let rl='Low',rc='var(--green)',dot='low';
           if(hi>10){rl='Needs Attention';rc='var(--red)';dot='critical';}
           else if(hi>3){rl='Needs Review';rc='var(--orange)';dot='elevated';}

@@ -86,34 +86,35 @@ os.makedirs(MD_REPORTS_DIR, exist_ok=True)
 
 
 def _migrate_reports_to_volume():
-    """One-time migration: copy reports from ephemeral paths to persistent volume.
+    """Copy reports from ephemeral container paths to persistent volume.
 
-    On deploy, the container has the old reports in docs/reports/ and reports/
-    from the previous run. Copy them to the volume so they survive future deploys.
-    Only copies files that don't already exist on the volume (no overwrites).
+    Only copies if the volume is empty (no reports yet). Once the volume has
+    reports from actual scans, the old git-committed files are ignored.
     """
     import shutil
     _root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    # Skip migration if the volume already has reports (from real scans)
+    existing = [f for f in os.listdir(REPORTS_DIR) if f.endswith(".html")]
+    if existing:
+        print(f"[Migration] Volume already has {len(existing)} reports, skipping migration")
+        return
 
     # HTML reports: docs/reports/ -> REPORTS_DIR
     old_html = os.path.join(_root, "docs", "reports")
     if os.path.isdir(old_html):
         for f in os.listdir(old_html):
             if f.endswith(".html"):
-                dest = os.path.join(REPORTS_DIR, f)
-                if not os.path.exists(dest):
-                    shutil.copy2(os.path.join(old_html, f), dest)
-                    print(f"[Migration] Copied {f} to persistent volume")
+                shutil.copy2(os.path.join(old_html, f), os.path.join(REPORTS_DIR, f))
+                print(f"[Migration] Copied {f} to persistent volume")
 
     # Markdown reports: reports/ -> MD_REPORTS_DIR
     old_md = os.path.join(_root, "reports")
     if os.path.isdir(old_md):
         for f in os.listdir(old_md):
             if f.endswith(".md"):
-                dest = os.path.join(MD_REPORTS_DIR, f)
-                if not os.path.exists(dest):
-                    shutil.copy2(os.path.join(old_md, f), dest)
-                    print(f"[Migration] Copied {f} to persistent volume")
+                shutil.copy2(os.path.join(old_md, f), os.path.join(MD_REPORTS_DIR, f))
+                print(f"[Migration] Copied {f} to persistent volume")
 
 
 _migrate_reports_to_volume()
@@ -670,7 +671,8 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
             total_llm_calls = sum(r.llm_calls for r in agent_results)
 
             duration = time.time() - start_time
-            _log(scan_id, f"Scan complete — score {score}, {high} priority findings, {duration:.0f}s, {total_llm_calls} LLM calls, {total_tokens_in+total_tokens_out} tokens")
+            judge_confirmed_count = sum(1 for f in all_findings if f.review_verdict in ("CONFIRMED", "ADDITIONAL RISK"))
+            _log(scan_id, f"Scan complete — {len(all_findings)} examined, {judge_confirmed_count} confirmed, {high} priority — score {score}, {duration:.0f}s, {total_llm_calls} LLM calls")
             update_scan_status(
                 scan_id, "complete",
                 progress="Scan complete",
@@ -679,6 +681,7 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
                 finding_medium=med,
                 finding_concern=concern,
                 finding_ok=ok,
+                findings_total=len(all_findings),
                 scan_duration_seconds=duration,
                 tokens_in=total_tokens_in,
                 tokens_out=total_tokens_out,
@@ -778,6 +781,7 @@ def start_scan():
                 "score": cached.get("opendocket_score", 0),
                 "high_risk": cached.get("finding_high", 0),
                 "medium_risk": cached.get("finding_medium", 0),
+                "findings_total": cached.get("findings_total", 0),
                 "frameworks": cached.get("frameworks_triggered", []),
             },
         })
@@ -876,6 +880,7 @@ def get_scan_status(scan_id):
             "medium_risk": scan.get("finding_medium", 0),
             "concern": scan.get("finding_concern", 0),
             "ok": scan.get("finding_ok", 0),
+            "findings_total": scan.get("findings_total", 0),
             "frameworks": scan.get("frameworks_triggered", []),
             "domains": scan.get("domains_detected", []),
             "duration_seconds": scan.get("scan_duration_seconds", 0),
@@ -1047,12 +1052,15 @@ def delete_scan_endpoint(scan_id):
     if scan["status"] in ("queued", "running"):
         return jsonify({"error": "Cannot delete a running scan — stop it first"}), 400
 
-    # Delete report files if they exist
-    repo_name = scan.get("repo_name", "").replace("/", "_")
-    if repo_name:
+    # Delete report files — use repo slug (last part of owner/repo)
+    repo_slug = scan.get("repo_name", "").split("/")[-1]
+    if repo_slug:
         for path in [
-            os.path.join("docs", "reports", f"{repo_name}_report.html"),
-            os.path.join("reports", f"{repo_name}_report.md"),
+            os.path.join(REPORTS_DIR, f"{repo_slug}_report.html"),
+            os.path.join(MD_REPORTS_DIR, f"{repo_slug}_report.md"),
+            # Legacy paths
+            os.path.join("docs", "reports", f"{repo_slug}_report.html"),
+            os.path.join("reports", f"{repo_slug}_report.md"),
         ]:
             if os.path.exists(path):
                 os.remove(path)
@@ -1076,7 +1084,7 @@ def api_stats():
             SELECT
                 COUNT(*) as total_scans,
                 COALESCE(SUM(finding_high), 0) as confirmed_high,
-                COALESCE(SUM(finding_high + finding_medium + finding_concern + finding_ok), 0) as total_findings,
+                COALESCE(SUM(CASE WHEN findings_total > 0 THEN findings_total ELSE finding_high + finding_medium + finding_concern + finding_ok END), 0) as total_findings,
                 COALESCE(SUM(lines_of_code), 0) as total_lines
             FROM scans WHERE status = 'complete'
         """).fetchone()
