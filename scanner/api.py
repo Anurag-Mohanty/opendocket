@@ -28,7 +28,7 @@ from scanner.database import (
 )
 from scanner.repo_fetcher import fetch_and_qualify, cleanup_repo
 from scanner.domain_detector import detect_domains
-from scanner.compliance_mapper import map_frameworks
+from scanner.compliance_mapper import map_frameworks, filter_frameworks_by_relevance
 from scanner.report_generator import (
     generate_html_report, generate_markdown_report,
     generate_failed_gate_html, calculate_score,
@@ -450,7 +450,19 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
             frameworks = map_frameworks(domains)
             if not frameworks:
                 frameworks = ["soc2"]
-            _log(scan_id, f"Frameworks triggered: {', '.join(f.upper() for f in frameworks)}")
+            _log(scan_id, f"Keyword detection triggered: {', '.join(f.upper() for f in frameworks)}")
+
+            # Relevance gate — Claude evaluates if each framework genuinely applies
+            _log(scan_id, "Running relevance gate — Claude evaluating framework applicability...")
+            frameworks = filter_frameworks_by_relevance(
+                frameworks,
+                repo_name=repo_ctx.name,
+                readme_content=repo_ctx.readme_content,
+                file_index=repo_ctx.file_index,
+                domains=domains,
+                log_fn=lambda msg: _log(scan_id, msg),
+            )
+            _log(scan_id, f"Frameworks to scan: {', '.join(f.upper() for f in frameworks)}")
 
             # Log what the system learned from previous scans
             try:

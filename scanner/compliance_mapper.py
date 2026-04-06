@@ -169,3 +169,128 @@ def map_frameworks(domains: list[DomainResult]) -> list[str]:
         frameworks.add("eu_ai_act")
 
     return sorted(frameworks)
+
+
+# Framework descriptions for the relevance gate prompt
+FRAMEWORK_DESCRIPTIONS = {
+    "hipaa": "HIPAA — applies when the system stores/processes/transmits Protected Health Information (PHI) like patient records, diagnoses, prescriptions",
+    "soc2": "SOC2 — applies to any SaaS or cloud service that stores customer data and needs to demonstrate security controls",
+    "pci_dss": "PCI-DSS — applies when the system stores, processes, or transmits credit card/payment card data",
+    "gdpr": "GDPR — applies when the system processes personal data of EU residents (names, emails, behavioral data, etc.)",
+    "tcpa": "TCPA — applies when the system sends SMS messages, makes automated phone calls, or manages telemarketing communications",
+    "sox": "SOX — applies when the system processes financial reporting data, general ledger entries, or internal controls over financial statements",
+    "ccpa": "CCPA/CPRA — applies when the system collects personal information from California residents (broadly applicable to consumer-facing SaaS)",
+    "coppa": "COPPA — applies when the system knowingly collects data from children under 13 (age-gated apps, educational platforms for kids)",
+    "ferpa": "FERPA — applies when the system processes student education records (grades, transcripts, enrollment) for educational institutions",
+    "glba": "GLBA — applies when the system is operated by a financial institution (bank, credit union, broker) handling customer financial data",
+    "nist_csf": "NIST CSF — applies to systems that need a cybersecurity governance framework (common for SaaS, fintech, healthcare)",
+    "iso27001": "ISO 27001 — applies to systems implementing an information security management system (common for enterprise SaaS)",
+    "dora": "DORA — applies to EU financial entities and their ICT service providers for digital operational resilience",
+    "psd2": "PSD2 — applies to payment service providers in the EU that handle Strong Customer Authentication (3DS, SCA)",
+    "bipa": "BIPA — applies when the system collects or stores biometric identifiers (fingerprints, facial recognition, iris scans)",
+    "eu_ai_act": "EU AI Act — applies when the system IS an AI/ML system making predictions or classifications that affect people",
+    "hitrust": "HITRUST — applies to healthcare systems that need a comprehensive security certification framework",
+}
+
+
+def filter_frameworks_by_relevance(
+    frameworks: list[str],
+    repo_name: str,
+    readme_content: str,
+    file_index: list[str],
+    domains: list[DomainResult],
+    log_fn=None,
+) -> list[str]:
+    """Use Claude to evaluate whether each triggered framework genuinely applies.
+
+    Sends a single prompt with all candidate frameworks and the repo context.
+    Claude returns only the frameworks that are genuinely relevant — filtering
+    out frameworks that triggered due to the repo merely referencing compliance
+    terms (e.g. a compliance platform listing "HIPAA" in its UI).
+
+    Returns the filtered list of framework keys.
+    """
+    import os
+
+    api_key = os.environ.get("ANTHROPIC_API_KEY", "")
+    if not api_key or len(frameworks) <= 2:
+        # Skip gate if no API key or very few frameworks (not worth the call)
+        return frameworks
+
+    try:
+        from anthropic import Anthropic
+        client = Anthropic(api_key=api_key)
+    except Exception:
+        return frameworks
+
+    # Build context
+    readme_excerpt = (readme_content or "")[:1500]
+    sample_files = "\n".join(file_index[:80])
+    domain_summary = ", ".join(
+        f"{d.domain} ({d.confidence}%)" for d in domains[:8]
+    )
+    framework_list = "\n".join(
+        f"- {fw}: {FRAMEWORK_DESCRIPTIONS.get(fw, fw)}"
+        for fw in frameworks
+    )
+
+    prompt = f"""You are evaluating which compliance frameworks genuinely apply to a software repository.
+
+REPOSITORY: {repo_name}
+
+README (excerpt):
+{readme_excerpt}
+
+DETECTED DOMAINS: {domain_summary}
+
+SAMPLE FILES:
+{sample_files}
+
+CANDIDATE FRAMEWORKS:
+{framework_list}
+
+TASK: For each candidate framework, decide if it GENUINELY applies to this codebase.
+
+Key distinction: A compliance management platform that HELPS OTHERS manage HIPAA compliance is NOT itself subject to HIPAA — unless it also stores/processes actual PHI. Similarly, a platform that lists "COPPA" as a supported framework doesn't need COPPA compliance unless it collects children's data.
+
+Ask yourself for each framework:
+- Does this codebase actually handle the regulated data type? (PHI, payment cards, children's data, etc.)
+- Or does it merely reference the framework name in UI/docs/config?
+
+Return ONLY the framework keys that genuinely apply, one per line. No explanations, no bullets, just the framework keys like:
+soc2
+gdpr
+ccpa"""
+
+    try:
+        response = client.messages.create(
+            model="claude-sonnet-4-20250514",
+            max_tokens=256,
+            temperature=0,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        response_text = response.content[0].text.strip()
+
+        # Parse response — each line should be a framework key
+        approved = []
+        for line in response_text.splitlines():
+            fw = line.strip().lower().replace("-", "_")
+            if fw in frameworks:
+                approved.append(fw)
+
+        if log_fn:
+            removed = [fw for fw in frameworks if fw not in approved]
+            log_fn(f"[RELEVANCE GATE] Claude approved {len(approved)}/{len(frameworks)} frameworks")
+            if removed:
+                log_fn(f"[RELEVANCE GATE] Filtered out: {', '.join(fw.upper() for fw in removed)} (not relevant to this codebase)")
+
+        # Safety: always keep at least soc2 if nothing was approved
+        if not approved:
+            approved = ["soc2"]
+
+        return sorted(approved)
+
+    except Exception as e:
+        if log_fn:
+            log_fn(f"[RELEVANCE GATE] Skipped — {e}")
+        return frameworks
