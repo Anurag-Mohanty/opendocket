@@ -74,6 +74,7 @@ AGENTS = {
 # ── Scan cancellation flags and params for restart ──
 _cancel_flags: dict[str, threading.Event] = {}
 _scan_params: dict[str, dict] = {}
+_pending_emails: dict[str, str] = {}  # scan_id -> email for late-registered notifications
 
 # ── Scan queue system ──
 MAX_CONCURRENT_SCANS = int(os.environ.get("MAX_CONCURRENT_SCANS", 1))
@@ -140,8 +141,8 @@ def _queue_worker():
         def _run_and_cleanup(j):
             try:
                 _run_scan(j["scan_id"], j["repo_url"], j.get("api_key"), j.get("gemini_key"))
-                # Send email notification if provided
-                email = j.get("email")
+                # Send email notification if provided (from initial submit or late registration)
+                email = j.get("email") or _pending_emails.pop(j["scan_id"], None)
                 if email:
                     _send_completion_email(j["scan_id"], email)
             except Exception as e:
@@ -239,10 +240,13 @@ def _send_completion_email(scan_id: str, email: str):
                     "Content-Type": "application/json",
                 },
             )
-            urllib.request.urlopen(req, timeout=10)
-            print(f"[Email] Sent via Resend to {email}")
+            resp = urllib.request.urlopen(req, timeout=10)
+            resp_body = resp.read().decode()
+            print(f"[Email] Sent via Resend to {email} — response: {resp_body}")
         except Exception as e:
             print(f"[Email] Resend failed: {e}")
+            import traceback
+            traceback.print_exc()
     else:
         # SMTP fallback
         smtp_host = os.environ.get("SMTP_HOST")
@@ -311,7 +315,7 @@ RATE_LIMIT = 3
 RATE_WINDOW = 3600  # 1 hour
 
 # Daily/monthly cost protection
-DAILY_SCAN_LIMIT = int(os.environ.get("DAILY_SCAN_LIMIT", 200))
+DAILY_SCAN_LIMIT = int(os.environ.get("DAILY_SCAN_LIMIT", 20))
 MONTHLY_SCAN_LIMIT = int(os.environ.get("MONTHLY_SCAN_LIMIT", 2000))
 
 GITHUB_URL_RE = re.compile(r"^https://github\.com/[\w.\-]+/[\w.\-]+/?$")
@@ -1085,6 +1089,36 @@ def delete_scan_endpoint(scan_id):
     _scan_params.pop(scan_id, None)
 
     return jsonify({"ok": True, "message": f"Scan {scan_id[:8]}... deleted"})
+
+
+@app.route("/api/scan/<scan_id>/notify", methods=["POST"])
+def api_scan_notify(scan_id):
+    """Register an email for notification when a queued/running scan completes."""
+    data = request.get_json(silent=True) or {}
+    email = data.get("email", "").strip()
+    if not email or "@" not in email:
+        return jsonify({"error": "Valid email required"}), 400
+
+    # Update the email on the queued job
+    with _queue_lock:
+        for job in _scan_queue:
+            if job["scan_id"] == scan_id:
+                job["email"] = email
+                return jsonify({"ok": True, "message": "You'll be notified when your scan completes"})
+
+    # If the scan is already running (active), store email for post-completion send
+    # We use a simple dict keyed by scan_id
+    if scan_id in _active_scans:
+        _pending_emails[scan_id] = email
+        return jsonify({"ok": True, "message": "You'll be notified when your scan completes"})
+
+    # If the scan is already complete, send immediately
+    scan = get_scan(scan_id)
+    if scan and scan.get("status") == "complete":
+        _send_completion_email(scan_id, email)
+        return jsonify({"ok": True, "message": "Report sent to your email"})
+
+    return jsonify({"error": "Scan not found"}), 404
 
 
 @app.route("/api/stats", methods=["GET"])

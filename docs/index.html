@@ -128,7 +128,7 @@
   </div>
   <div class="dir-table-card">
     <table class="dir-table" id="dir-table">
-      <thead><tr><th onclick="sortDir(0)">Repository</th><th>Domain</th><th>Frameworks</th><th onclick="sortDir(3)" style="text-align:center">Confirmed</th><th onclick="sortDir(4)" style="text-align:center">Examined</th><th onclick="sortDir(5)" style="text-align:center">Status</th><th>Report</th><th></th></tr></thead>
+      <thead><tr><th onclick="sortDir(0)">Repository</th><th>Domain</th><th>Frameworks</th><th onclick="sortDir(3)" style="text-align:center">Findings Breakdown</th><th onclick="sortDir(4)" style="text-align:center">Examined</th><th onclick="sortDir(5)" style="text-align:center">Status</th><th>Report</th><th></th></tr></thead>
       <tbody id="dir-body">
         <tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:20px">Loading directory...</td></tr>
       </tbody>
@@ -364,9 +364,13 @@
     function submitQueueEmail(){
       const email=document.getElementById('queue-email-input').value.trim();
       if(!email||!currentScanId)return;
-      // Re-submit the scan with the email to register notification
-      fetch(API_BASE_URL+'/api/feedback',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({scan_id:currentScanId,framework:'SYSTEM',question_id:'EMAIL_NOTIFY',verdict:'correct',reason:email})}).catch(()=>{});
-      document.getElementById('queue-email-prompt').innerHTML='<span style="color:#1A7F37;font-weight:600">We\'ll email you at '+email+' when ready.</span>';
+      fetch(API_BASE_URL+'/api/scan/'+currentScanId+'/notify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email})})
+      .then(r=>r.json()).then(d=>{
+        if(d.error){document.getElementById('queue-email-prompt').innerHTML='<span style="color:var(--red)">'+d.error+'</span>';return;}
+        document.getElementById('queue-email-prompt').innerHTML='<span style="color:#1A7F37;font-weight:600">We\'ll email you at '+email+' when ready.</span>';
+      }).catch(()=>{
+        document.getElementById('queue-email-prompt').innerHTML='<span style="color:var(--red)">Could not register email</span>';
+      });
     }
 
     function deleteCachedScan(scanId){
@@ -443,12 +447,21 @@
         const tbody=document.getElementById('dir-body');
         if(!rows||!rows.length){tbody.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:20px">No scans yet. Scan a repository above.</td></tr>';return;}
         tbody.innerHTML=rows.map(r=>{
-          const hi=r.confirmed_total||r.finding_high||0;
-          const total=r.findings_total||(r.finding_high||0)+(r.finding_medium||0)+(r.finding_concern||0)+(r.finding_ok||0);
+          const hi=r.finding_high||0;
+          const med=r.finding_medium||0;
+          const concern=r.finding_concern||0;
+          const confirmed=r.confirmed_total||(hi+med+concern);
+          const total=r.findings_total||(hi+med+concern+(r.finding_ok||0));
           let rl='Low',rc='var(--green)',dot='low';
           if(hi>20){rl='Needs Attention';rc='var(--red)';dot='critical';}
           else if(hi>5){rl='Needs Review';rc='var(--orange)';dot='elevated';}
           else if(hi>0){rl='Moderate';rc='var(--amber)';dot='moderate';}
+          // Build severity breakdown pills
+          const pills=[];
+          if(hi>0) pills.push('<span style="color:var(--red);font-weight:700" title="Priority findings">'+hi+' Priority</span>');
+          if(concern>0) pills.push('<span style="color:var(--amber);font-weight:600" title="Patterns of concern">'+concern+' Concern</span>');
+          if(med>0) pills.push('<span style="color:var(--orange);font-weight:600" title="Review findings">'+med+' Review</span>');
+          const breakdownHtml=pills.length?pills.join(' <span style="color:var(--text-muted)">·</span> ')+'<div style="font-size:11px;color:var(--text-muted);margin-top:2px">'+confirmed+' confirmed / '+total+' total</div>':'<span style="color:var(--green)">Clean</span>';
 
           // Domain from domains_detected — use primary (highest confidence) domain
           const domains=r.domains_detected||[];
@@ -477,8 +490,7 @@
             return '<tr style="color:var(--text-muted);font-style:italic"><td class="repo-name">'+r.repo_name+'</td><td>—</td><td>—</td><td style="text-align:center">—</td><td style="text-align:center">—</td><td style="text-align:center">Did not qualify</td><td>'+(r.report_url?'<a href="'+API_BASE_URL+r.report_url+'">Gate</a>':'—')+'</td><td><button onclick="deleteFromDir(\''+r.scan_id+'\')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:13px" title="Delete scan">&#10005;</button></td></tr>';
           }
 
-          const hiColor=hi>0?'var(--red)':'var(--green)';
-          return '<tr data-cat="'+filterCat+'"><td class="repo-name"><a href="https://github.com/'+r.repo_name+'" target="_blank">'+r.repo_name+'</a></td><td>'+domain+'</td><td>'+fwText+'</td><td style="text-align:center;color:'+hiColor+';font-weight:700">'+hi+'</td><td style="text-align:center;color:var(--text-muted)">'+total+'</td><td style="text-align:center"><span class="score-dot '+dot+'"></span>'+rl+'</td><td>'+(r.report_url?'<a href="'+API_BASE_URL+r.report_url+'">View</a>':'—')+'</td><td><button onclick="deleteFromDir(\''+r.scan_id+'\')" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:13px" title="Delete scan">&#10005;</button></td></tr>';
+          return '<tr data-cat="'+filterCat+'"><td class="repo-name"><a href="https://github.com/'+r.repo_name+'" target="_blank">'+r.repo_name+'</a></td><td>'+domain+'</td><td>'+fwText+'</td><td style="text-align:center;font-size:13px">'+breakdownHtml+'</td><td style="text-align:center;color:var(--text-muted)">'+total+'</td><td style="text-align:center"><span class="score-dot '+dot+'"></span>'+rl+'</td><td>'+(r.report_url?'<a href="'+API_BASE_URL+r.report_url+'">View</a>':'—')+'</td><td><button onclick="deleteFromDir(\''+r.scan_id+'\')" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:13px" title="Delete scan">&#10005;</button></td></tr>';
         }).join('');
       }).catch(()=>{
         document.getElementById('dir-body').innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:20px">Could not load directory</td></tr>';
