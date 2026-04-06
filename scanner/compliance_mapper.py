@@ -30,7 +30,9 @@ DOMAIN_FRAMEWORK_MAP: dict[str, list[str]] = {
 }
 
 # Minimum confidence to trigger a framework scan
-CONFIDENCE_THRESHOLD = 10.0
+# Higher threshold reduces false triggers from repos that merely reference
+# compliance frameworks (e.g. a compliance platform listing "HIPAA" in its UI)
+CONFIDENCE_THRESHOLD = 30.0
 
 # Signals that indicate EU presence (triggers GDPR)
 EU_SIGNALS = {
@@ -91,13 +93,19 @@ EU_FINTECH_SIGNALS = {
 }
 
 
-def _has_signals(domains: list[DomainResult], signal_set: set) -> bool:
-    """Check if any detected domain contains signals from the given set."""
+def _has_signals(domains: list[DomainResult], signal_set: set, min_count: int = 3) -> bool:
+    """Check if detected domains contain enough signals from the given set.
+
+    Requires min_count distinct signal matches to reduce false triggers from
+    repos that merely reference compliance terms (e.g. a compliance platform
+    listing framework names in its UI without actually processing that data).
+    """
+    matched = set()
     for domain in domains:
         for signal in domain.signals_found:
             if signal.lower() in signal_set:
-                return True
-    return False
+                matched.add(signal.lower())
+    return len(matched) >= min_count
 
 
 def map_frameworks(domains: list[DomainResult]) -> list[str]:
@@ -121,7 +129,7 @@ def map_frameworks(domains: list[DomainResult]) -> list[str]:
     if _has_signals(domains, SMS_SIGNALS):
         frameworks.add("tcpa")
 
-    if _has_signals(domains, CHILDREN_SIGNALS):
+    if _has_signals(domains, CHILDREN_SIGNALS, min_count=5):
         frameworks.add("coppa")
 
     if _has_signals(domains, EDUCATION_SIGNALS):
