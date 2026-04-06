@@ -72,6 +72,7 @@ def init_db():
                 finding_concern INTEGER DEFAULT 0,
                 finding_ok INTEGER DEFAULT 0,
                 findings_total INTEGER DEFAULT 0,
+                confirmed_total INTEGER DEFAULT 0,
                 used_byok INTEGER DEFAULT 0,
                 tokens_in INTEGER DEFAULT 0,
                 tokens_out INTEGER DEFAULT 0,
@@ -221,10 +222,11 @@ def init_db():
             )
 
         # Migrations for existing databases
-        try:
-            conn.execute("ALTER TABLE scans ADD COLUMN findings_total INTEGER DEFAULT 0")
-        except Exception:
-            pass  # Column already exists
+        for col in ["findings_total", "confirmed_total"]:
+            try:
+                conn.execute(f"ALTER TABLE scans ADD COLUMN {col} INTEGER DEFAULT 0")
+            except Exception:
+                pass  # Column already exists
 
 
 def create_scan(repo_url: str, repo_name: str, used_byok: bool = False) -> str:
@@ -251,7 +253,7 @@ def update_scan_status(scan_id: str, status: str, progress: str = "", **kwargs):
             if key in (
                 "domains_detected", "frameworks_triggered", "lines_of_code",
                 "files_scanned", "scan_duration_seconds", "opendocket_score",
-                "finding_high", "finding_medium", "finding_concern", "finding_ok", "findings_total",
+                "finding_high", "finding_medium", "finding_concern", "finding_ok", "findings_total", "confirmed_total",
                 "tokens_in", "tokens_out", "llm_calls",
                 "error_message", "report_url",
             ):
@@ -349,7 +351,7 @@ def get_directory_with_scores() -> list[dict]:
         rows = conn.execute(
             """SELECT scan_id, repo_name, frameworks_triggered, domains_detected,
                       opendocket_score, finding_high, finding_medium, finding_concern,
-                      finding_ok, findings_total, report_url, timestamp, error_message
+                      finding_ok, findings_total, confirmed_total, report_url, timestamp, error_message
                FROM scans
                WHERE status = 'complete'
                ORDER BY timestamp DESC"""

@@ -425,7 +425,7 @@ def generate_html_report(
     top_fw_by_confirmed = []
     for r in agent_results:
         if has_judge:
-            ch = sum(1 for f in r.findings if f.review_verdict in ("CONFIRMED", "ADDITIONAL RISK"))
+            ch = sum(1 for f in r.findings if f.review_verdict == "CONFIRMED")
         else:
             ch = sum(1 for f in r.findings if f.finding_level == "High Risk")
         if ch > 0:
@@ -469,7 +469,7 @@ def generate_html_report(
     # Scorecard rows — when judge ran, show confirmed as the primary risk column
     scorecard_html = ""
     for result in agent_results:
-        conf = sum(1 for f in result.findings if f.review_verdict in ("CONFIRMED", "ADDITIONAL RISK"))
+        conf = sum(1 for f in result.findings if f.review_verdict == "CONFIRMED")
         fp = sum(1 for f in result.findings if f.review_verdict == "POSSIBLE FALSE POSITIVE")
         m = sum(1 for f in result.findings if f.finding_level == "Medium Risk")
         c = sum(1 for f in result.findings if f.finding_level == "Pattern of Concern")

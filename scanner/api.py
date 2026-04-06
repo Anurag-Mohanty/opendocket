@@ -573,6 +573,8 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
                 med = sum(1 for f in all_findings if f.finding_level == "Medium Risk")
             concern = sum(1 for f in all_findings if f.finding_level == "Pattern of Concern")
             ok = sum(1 for f in all_findings if f.finding_level == "No Issue Found")
+            # Total confirmed by Gemini (the primary number shown everywhere)
+            judge_confirmed_total = sum(1 for f in all_findings if f.review_verdict == "CONFIRMED") if has_judge else high
             score = calculate_score(agent_results)
 
             # Generate reports
@@ -671,8 +673,7 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
             total_llm_calls = sum(r.llm_calls for r in agent_results)
 
             duration = time.time() - start_time
-            judge_confirmed_count = sum(1 for f in all_findings if f.review_verdict in ("CONFIRMED", "ADDITIONAL RISK"))
-            _log(scan_id, f"Scan complete — {len(all_findings)} examined, {judge_confirmed_count} confirmed, {high} priority — score {score}, {duration:.0f}s, {total_llm_calls} LLM calls")
+            _log(scan_id, f"Scan complete — {len(all_findings)} examined, {judge_confirmed_total} confirmed, {high} priority — score {score}, {duration:.0f}s, {total_llm_calls} LLM calls")
             update_scan_status(
                 scan_id, "complete",
                 progress="Scan complete",
@@ -682,6 +683,7 @@ def _run_scan(scan_id: str, repo_url: str, api_key: str | None = None, gemini_ke
                 finding_concern=concern,
                 finding_ok=ok,
                 findings_total=len(all_findings),
+                confirmed_total=judge_confirmed_total,
                 scan_duration_seconds=duration,
                 tokens_in=total_tokens_in,
                 tokens_out=total_tokens_out,
@@ -876,10 +878,8 @@ def get_scan_status(scan_id):
         response["report_url"] = scan.get("report_url", "")
         response["summary"] = {
             "score": scan.get("opendocket_score", 0),
+            "confirmed": scan.get("confirmed_total", 0) or scan.get("finding_high", 0),
             "high_risk": scan.get("finding_high", 0),
-            "medium_risk": scan.get("finding_medium", 0),
-            "concern": scan.get("finding_concern", 0),
-            "ok": scan.get("finding_ok", 0),
             "findings_total": scan.get("findings_total", 0),
             "frameworks": scan.get("frameworks_triggered", []),
             "domains": scan.get("domains_detected", []),
@@ -1083,7 +1083,7 @@ def api_stats():
         row = conn.execute("""
             SELECT
                 COUNT(*) as total_scans,
-                COALESCE(SUM(finding_high), 0) as confirmed_high,
+                COALESCE(SUM(CASE WHEN confirmed_total > 0 THEN confirmed_total ELSE finding_high END), 0) as confirmed_high,
                 COALESCE(SUM(CASE WHEN findings_total > 0 THEN findings_total ELSE finding_high + finding_medium + finding_concern + finding_ok END), 0) as total_findings,
                 COALESCE(SUM(lines_of_code), 0) as total_lines
             FROM scans WHERE status = 'complete'

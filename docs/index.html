@@ -88,7 +88,7 @@
   <div class="stat-item"><div class="stat-num" id="stat-scans">--</div><div class="stat-label">repos scanned</div></div>
   <div class="stat-item"><div class="stat-num" id="stat-lines">--</div><div class="stat-label">lines of code evaluated</div></div>
   <div class="stat-item"><div class="stat-num" id="stat-findings">--</div><div class="stat-label">findings analyzed</div></div>
-  <div class="stat-item"><div class="stat-num" id="stat-confirmed">--</div><div class="stat-label">areas for review</div></div>
+  <div class="stat-item"><div class="stat-num" id="stat-confirmed">--</div><div class="stat-label">confirmed findings</div></div>
 </div>
 
 <!-- How It Works -->
@@ -128,7 +128,7 @@
   </div>
   <div class="dir-table-card">
     <table class="dir-table" id="dir-table">
-      <thead><tr><th onclick="sortDir(0)">Repository</th><th>Domain</th><th>Frameworks</th><th onclick="sortDir(3)" style="text-align:center">Review Areas</th><th onclick="sortDir(4)" style="text-align:center">Examined</th><th onclick="sortDir(5)" style="text-align:center">Status</th><th>Report</th><th></th></tr></thead>
+      <thead><tr><th onclick="sortDir(0)">Repository</th><th>Domain</th><th>Frameworks</th><th onclick="sortDir(3)" style="text-align:center">Confirmed</th><th onclick="sortDir(4)" style="text-align:center">Examined</th><th onclick="sortDir(5)" style="text-align:center">Status</th><th>Report</th><th></th></tr></thead>
       <tbody id="dir-body">
         <tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:20px">Loading directory...</td></tr>
       </tbody>
@@ -408,12 +408,12 @@
           document.getElementById('scan-progress').style.display='none';
           document.getElementById('scan-btn').disabled=false;
           showControls('done');
-          const sm=d.summary||{};const hi=sm.high_risk||0;
-          let rl='LOW',rc='#1A7F37';if(hi>15){rl='NEEDS ATTENTION';rc='#CF222E'}else if(hi>5){rl='NEEDS REVIEW';rc='#9A6700'}else if(hi>0){rl='REVIEW SUGGESTED';rc='#9A6700'}
+          const sm=d.summary||{};const confirmed=sm.confirmed||sm.high_risk||0;
+          let rl='LOW',rc='#1A7F37';if(confirmed>15){rl='NEEDS ATTENTION';rc='#CF222E'}else if(confirmed>5){rl='NEEDS REVIEW';rc='#9A6700'}else if(confirmed>0){rl='REVIEW SUGGESTED';rc='#9A6700'}
           const res=document.getElementById('scan-result');res.style.display='block';
           const rptUrl=d.report_url?(API_BASE_URL+d.report_url):'#';
-          const examined=sm.findings_total||((sm.high_risk||0)+(sm.medium_risk||0)+(sm.concern||0)+(sm.ok||0));
-          res.innerHTML='<div style="font-size:18px;font-weight:700;color:'+rc+'">'+rl+'</div><div style="margin:8px 0;color:#E6EDF3">'+examined+' areas examined &middot; '+hi+' priority findings &middot; '+((sm.frameworks||[]).length||'?')+' frameworks</div><a href="'+rptUrl+'" style="display:inline-block;padding:8px 20px;background:#0052CC;color:#fff;border-radius:4px;font-weight:600;text-decoration:none">View Full Report &rarr;</a>';
+          const examined=sm.findings_total||0;
+          res.innerHTML='<div style="font-size:18px;font-weight:700;color:'+rc+'">'+rl+'</div><div style="margin:8px 0;color:#E6EDF3">'+examined+' areas examined &middot; '+confirmed+' confirmed findings &middot; '+((sm.frameworks||[]).length||'?')+' frameworks</div><a href="'+rptUrl+'" style="display:inline-block;padding:8px 20px;background:#0052CC;color:#fff;border-radius:4px;font-weight:600;text-decoration:none">View Full Report &rarr;</a>';
         }else if(d.status==='failed'){
           clearInterval(scanTimer);
           document.getElementById('scan-btn').disabled=false;
@@ -443,11 +443,11 @@
         const tbody=document.getElementById('dir-body');
         if(!rows||!rows.length){tbody.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:20px">No scans yet. Scan a repository above.</td></tr>';return;}
         tbody.innerHTML=rows.map(r=>{
-          const hi=r.finding_high||0;
+          const hi=r.confirmed_total||r.finding_high||0;
           const total=r.findings_total||(r.finding_high||0)+(r.finding_medium||0)+(r.finding_concern||0)+(r.finding_ok||0);
           let rl='Low',rc='var(--green)',dot='low';
-          if(hi>10){rl='Needs Attention';rc='var(--red)';dot='critical';}
-          else if(hi>3){rl='Needs Review';rc='var(--orange)';dot='elevated';}
+          if(hi>20){rl='Needs Attention';rc='var(--red)';dot='critical';}
+          else if(hi>5){rl='Needs Review';rc='var(--orange)';dot='elevated';}
           else if(hi>0){rl='Moderate';rc='var(--amber)';dot='moderate';}
 
           // Domain from domains_detected — use primary (highest confidence) domain
